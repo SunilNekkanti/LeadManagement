@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Implementation-Title: LeadManagement
+Implementation-Version: 1.0.0
+Built-By: sarath
+Implementation-Vendor-Id: com.pfchoice.springboot
+Build-Jdk: 1.8.0_101
+Implementation-URL: http://projects.spring.io/spring-boot/LeadManageme
+ nt/
+Created-By: Maven Integration for Eclipse
+Implementation-Vendor: Pivotal Software, Inc.
+

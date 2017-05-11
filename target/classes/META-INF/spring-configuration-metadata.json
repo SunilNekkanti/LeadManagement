@@ -1,0 +1,124 @@
+{
+  "groups": [
+    {
+      "name": "datasource.leadManagement",
+      "type": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties",
+      "sourceType": "com.pfchoice.springboot.configuration.JpaConfiguration",
+      "sourceMethod": "public org.springframework.boot.autoconfigure.jdbc.DataSourceProperties dataSourceProperties() "
+    },
+    {
+      "name": "datasource.leadManagement.xa",
+      "type": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties$Xa",
+      "sourceType": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties",
+      "sourceMethod": "public org.springframework.boot.autoconfigure.jdbc.DataSourceProperties.Xa getXa() "
+    }
+  ],
+  "properties": [
+    {
+      "name": "datasource.leadManagement.continue-on-error",
+      "type": "java.lang.Boolean",
+      "sourceType": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties"
+    },
+    {
+      "name": "datasource.leadManagement.data",
+      "type": "java.lang.String",
+      "sourceType": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties"
+    },
+    {
+      "name": "datasource.leadManagement.data-password",
+      "type": "java.lang.String",
+      "sourceType": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties"
+    },
+    {
+      "name": "datasource.leadManagement.data-username",
+      "type": "java.lang.String",
+      "sourceType": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties"
+    },
+    {
+      "name": "datasource.leadManagement.driver-class-name",
+      "type": "java.lang.String",
+      "sourceType": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties"
+    },
+    {
+      "name": "datasource.leadManagement.generate-unique-name",
+      "type": "java.lang.Boolean",
+      "sourceType": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties"
+    },
+    {
+      "name": "datasource.leadManagement.initialize",
+      "type": "java.lang.Boolean",
+      "sourceType": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties"
+    },
+    {
+      "name": "datasource.leadManagement.jndi-name",
+      "type": "java.lang.String",
+      "sourceType": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties"
+    },
+    {
+      "name": "datasource.leadManagement.name",
+      "type": "java.lang.String",
+      "sourceType": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties"
+    },
+    {
+      "name": "datasource.leadManagement.password",
+      "type": "java.lang.String",
+      "sourceType": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties"
+    },
+    {
+      "name": "datasource.leadManagement.platform",
+      "type": "java.lang.String",
+      "sourceType": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties"
+    },
+    {
+      "name": "datasource.leadManagement.schema",
+      "type": "java.lang.String",
+      "sourceType": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties"
+    },
+    {
+      "name": "datasource.leadManagement.schema-password",
+      "type": "java.lang.String",
+      "sourceType": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties"
+    },
+    {
+      "name": "datasource.leadManagement.schema-username",
+      "type": "java.lang.String",
+      "sourceType": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties"
+    },
+    {
+      "name": "datasource.leadManagement.separator",
+      "type": "java.lang.String",
+      "sourceType": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties"
+    },
+    {
+      "name": "datasource.leadManagement.sql-script-encoding",
+      "type": "java.nio.charset.Charset",
+      "sourceType": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties"
+    },
+    {
+      "name": "datasource.leadManagement.type",
+      "type": "java.lang.Class<? extends javax.sql.DataSource>",
+      "sourceType": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties"
+    },
+    {
+      "name": "datasource.leadManagement.url",
+      "type": "java.lang.String",
+      "sourceType": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties"
+    },
+    {
+      "name": "datasource.leadManagement.username",
+      "type": "java.lang.String",
+      "sourceType": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties"
+    },
+    {
+      "name": "datasource.leadManagement.xa.data-source-class-name",
+      "type": "java.lang.String",
+      "sourceType": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties$Xa"
+    },
+    {
+      "name": "datasource.leadManagement.xa.properties",
+      "type": "java.util.Map<java.lang.String,java.lang.String>",
+      "sourceType": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties$Xa"
+    }
+  ],
+  "hints": []
+}
