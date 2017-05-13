@@ -10,7 +10,6 @@
 </head>
 
 <body>
-  <h1>Hello Navbar</h1>
   <div ng-app="my-app">
     <div ng-controller="treeController">
       <nav class="navbar navbar-default" role="navigation">
@@ -30,7 +29,7 @@
         <ul class="nav navbar-nav">
           <li dropdown>
             <a href="#" dropdown-toggle>
-              Dropdown
+              Admin
               <b class='caret'></b>
             </a>
             <tree tree='tree'></tree>

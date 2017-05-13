@@ -46,9 +46,6 @@ public class Provider extends RecordDetails implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "prvdr")
 	private Set<ReferenceContact> refContacts = new HashSet<>();
 
-	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "prvdr")
-	private Set<ReferenceContract> refContracts = new HashSet<>();
 
 	/**
 	 * 
@@ -123,21 +120,6 @@ public class Provider extends RecordDetails implements Serializable {
 	 */
 	public void setRefContacts(Set<ReferenceContact> refContacts) {
 		this.refContacts = refContacts;
-	}
-
-	/**
-	 * @return the refContracts
-	 */
-	public Set<ReferenceContract> getRefContracts() {
-		return refContracts;
-	}
-
-	/**
-	 * @param refContracts
-	 *            the refContracts to set
-	 */
-	public void setRefContracts(Set<ReferenceContract> refContracts) {
-		this.refContracts = refContracts;
 	}
 
 	@Override

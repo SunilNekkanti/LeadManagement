@@ -1,9 +1,10 @@
-package com.pfchoice.springboot.service;
+package com.pfchoice.springboot.service.impl;
 
 import java.util.List;
 
 import com.pfchoice.springboot.model.User;
 import com.pfchoice.springboot.repositories.UserRepository;
+import com.pfchoice.springboot.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private UserRepository userRepository;
 
-	public User findById(Long id) {
+	public User findById(Integer id) {
 		return userRepository.findOne(id);
 	}
 
@@ -34,7 +35,7 @@ public class UserServiceImpl implements UserService{
 		saveUser(user);
 	}
 
-	public void deleteUserById(Long id){
+	public void deleteUserById(Integer id){
 		userRepository.delete(id);
 	}
 

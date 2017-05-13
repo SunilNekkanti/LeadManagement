@@ -44,12 +44,6 @@ public class LeadMembershipProblem extends RecordDetails implements Serializable
 	private LeadMembership leadMbr;
 
 	
-	@OneToOne(fetch = FetchType.EAGER)
-	@NotNull(message = "Select Problem")
-	@JoinColumn(name = "pbm_id", nullable = false, referencedColumnName = "pbm_id")
-	private Problem pbm;
-
-	
 	@NotNull(message = "Diagnose date must not be null")
 	@Column(name = "start_date", nullable = false)
 	@Temporal(TemporalType.DATE)
@@ -110,20 +104,6 @@ public class LeadMembershipProblem extends RecordDetails implements Serializable
 		this.leadMbr = leadMbr;
 	}
 
-	/**
-	 * @return the pbm
-	 */
-	public Problem getPbm() {
-		return pbm;
-	}
-
-	/**
-	 * @param pbm
-	 *            the pbm to set
-	 */
-	public void setPbm(Problem pbm) {
-		this.pbm = pbm;
-	}
 
 	/**
 	 * @return the startDate

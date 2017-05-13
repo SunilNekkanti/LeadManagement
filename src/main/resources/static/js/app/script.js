@@ -13,7 +13,7 @@ app.controller('treeController', function($scope) {
       link: "#"
     }]
   }, {
-    name: "Jon",
+    name: "John",
     link: "#",
     subtree: [{
       name: "Mary",
@@ -23,8 +23,8 @@ app.controller('treeController', function($scope) {
     name: "divider",
     link: "#"
   }, {
-    name: "Another person",
-    link: "#"
+    name: "User Accounts",
+    link: "/api/user"
   }, {
     name: "divider",
     link: "#"

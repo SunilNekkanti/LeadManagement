@@ -47,9 +47,6 @@ public class Insurance extends RecordDetails implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "ins")
 	private Set<ReferenceContact> refInsContacts = new HashSet<>();
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "prvdr")
-	private Set<ReferenceContract> refContracts = new HashSet<>();
-	
 	/**
 	 * 
 	 */
@@ -125,20 +122,6 @@ public class Insurance extends RecordDetails implements Serializable {
 	}
 
 	
-	/**
-	 * @return refContracts
-	 */
-	public Set<ReferenceContract> getRefContracts() {
-		return refContracts;
-	}
-
-	/**
-	 * @param refContracts
-	 */
-	public void setRefContracts(Set<ReferenceContract> refContracts) {
-		this.refContracts = refContracts;
-	}
-
 	@Override
 	public int hashCode() {
 		int hash = 0;

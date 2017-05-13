@@ -7,7 +7,7 @@ import com.pfchoice.springboot.model.User;
 
 public interface UserService {
 	
-	User findById(Long id);
+	User findById(Integer id);
 
 	User findByUsername(String name);
 
@@ -15,7 +15,7 @@ public interface UserService {
 
 	void updateUser(User user);
 
-	void deleteUserById(Long id);
+	void deleteUserById(Integer id);
 
 	void deleteAllUsers();
 

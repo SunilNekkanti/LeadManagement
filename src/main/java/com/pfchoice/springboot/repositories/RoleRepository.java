@@ -3,12 +3,11 @@ package com.pfchoice.springboot.repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.pfchoice.springboot.model.User;
+import com.pfchoice.springboot.model.Role;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface RoleRepository extends JpaRepository<Role, Long> {
 
-    User findByUsername(String name);
 
 }
 

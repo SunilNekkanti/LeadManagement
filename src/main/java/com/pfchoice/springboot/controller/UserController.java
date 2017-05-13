@@ -22,9 +22,9 @@ import com.pfchoice.springboot.util.CustomErrorType;
 @RestController
 @RequestMapping("/api")
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public class RestApiController {
+public class UserController {
 
-	public static final Logger logger = LoggerFactory.getLogger(RestApiController.class);
+	public static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
 	UserService userService; //Service which will do all data retrieval/manipulation work
@@ -46,7 +46,7 @@ public class RestApiController {
 	// -------------------Retrieve Single User------------------------------------------
 
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-	public ResponseEntity<?> getUser(@PathVariable("id") long id) {
+	public ResponseEntity<?> getUser(@PathVariable("id") int id) {
 		logger.info("Fetching User with id {}", id);
 		User user = userService.findById(id);
 		if (user == null) {
@@ -78,7 +78,7 @@ public class RestApiController {
 	// ------------------- Update a User ------------------------------------------------
 
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<?> updateUser(@PathVariable("id") long id, @RequestBody User user) {
+	public ResponseEntity<?> updateUser(@PathVariable("id") int id, @RequestBody User user) {
 		logger.info("Updating User with id {}", id);
 
 		User currentUser = userService.findById(id);
@@ -98,7 +98,7 @@ public class RestApiController {
 	// ------------------- Delete a User-----------------------------------------
 
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<?> deleteUser(@PathVariable("id") long id) {
+	public ResponseEntity<?> deleteUser(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting User with id {}", id);
 
 		User user = userService.findById(id);

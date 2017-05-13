@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,8 +18,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-
 
 /**
  *
@@ -36,73 +33,61 @@ public class LeadMembership extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	
+	@ManyToOne
+	@JoinColumn(name = "lead_Mbr_CountyCode", referencedColumnName = "code")
+	private County countyCode;
+
+	@Column(name = "lead_Mbr_DOB")
+	@Temporal(TemporalType.DATE)
+	private Date dob;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "lead_Mbr_ethinic_code", referencedColumnName = "code")
+	private Ethinicity ethinicCode;
+
+	@Column(name = "file_id")
+	private Integer fileId;
+
+	@Column(name = "lead_Mbr_FirstName")
+	private String firstName;
+
+	@ManyToOne
+	@JoinColumn(name = "lead_Mbr_GenderID", referencedColumnName = "gender_id")
+	private Gender genderId;
+
+	@Column(name = "has_medicaid", insertable = false)
+	private Character hasMedicaid;
+
+	@Column(name = "has_medicare", insertable = false)
+	private Character hasMedicare;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
 	@Column(name = "lead_Mbr_id", nullable = false)
 	private Integer id;
 
-	
-	@Column(name = "lead_Mbr_FirstName")
-	private String firstName;
-
-	
 	@Column(name = "lead_Mbr_LastName")
 	private String lastName;
 
-	
-	@ManyToOne
-	@JoinColumn(name = "lead_Mbr_GenderID", referencedColumnName = "gender_id")
-	private Gender genderId;
-
-	
-	@ManyToOne
-	@JoinColumn(name = "lead_Mbr_CountyCode", referencedColumnName = "code")
-	private County countyCode;
-
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "lead_Mbr_ethinic_code", referencedColumnName = "code")
-	private Ethinicity ethinicCode;
-
-	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "leadMbr")
-	private List<LeadMembershipProvider> leadMbrProviderList;
-
-	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "leadMbr")
 	private List<LeadMembershipInsurance> leadMbrInsuranceList;
 
-	
-	@Column(name = "lead_Mbr_DOB")
-	@Temporal(TemporalType.DATE)
-	private Date dob;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "leadMbr")
+	private List<LeadMembershipProvider> leadMbrProviderList;
 
-	
 	@Column(name = "lead_Mbr_MedicaidNo")
 	private String medicaidNo;
 
-	
 	@Column(name = "lead_Mbr_MedicareNo")
 	private String medicareNo;
 
-	
-	@Column(name = "file_id")
-	private Integer fileId;
+	@OneToMany(mappedBy = "leadMbr", fetch = FetchType.LAZY)
+	private List<ReferenceContact> refContactList;
 
-	
 	@OneToOne
 	@JoinColumn(name = "lead_Mbr_Status", referencedColumnName = "code")
 	private MembershipStatus status;
-
-	
-	@OneToMany(mappedBy = "leadMbr", fetch = FetchType.LAZY)
-	private List<ReferenceContact> refContactList; 
-
-	
-	@OneToMany(mappedBy = "leadMbr", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<LeadMembershipHedisMeasure> leadMbrHedisMeasureList;
 
 	/**
 	 * 
@@ -119,18 +104,44 @@ public class LeadMembership extends RecordDetails implements Serializable {
 		this.id = id;
 	}
 
-	/**
-	 * @return
-	 */
-	public Integer getId() {
-		return id;
+	@Override
+	public boolean equals(Object object) {
+		if (!(object instanceof LeadMembership)) {
+			return false;
+		}
+		LeadMembership other = (LeadMembership) object;
+		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+			return false;
+		}
+		return true;
 	}
 
 	/**
-	 * @param id
+	 * @return the countyCode
 	 */
-	public void setId(final Integer id) {
-		this.id = id;
+	public County getCountyCode() {
+		return countyCode;
+	}
+
+	/**
+	 * @return the dob
+	 */
+	public Date getDob() {
+		return dob;
+	}
+
+	/**
+	 * @return the ethinicCode
+	 */
+	public Ethinicity getEthinicCode() {
+		return ethinicCode;
+	}
+
+	/**
+	 * @return the fileId
+	 */
+	public Integer getFileId() {
+		return fileId;
 	}
 
 	/**
@@ -141,11 +152,31 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param firstName
-	 *            the firstName to set
+	 * @return the genderId
 	 */
-	public void setFirstName(final String firstName) {
-		this.firstName = firstName;
+	public Gender getGenderId() {
+		return genderId;
+	}
+
+	/**
+	 * @return the hasMedicaid
+	 */
+	public Character getHasMedicaid() {
+		return hasMedicaid;
+	}
+
+	/**
+	 * @return the hasMedicare
+	 */
+	public Character getHasMedicare() {
+		return hasMedicare;
+	}
+
+	/**
+	 * @return
+	 */
+	public Integer getId() {
+		return id;
 	}
 
 	/**
@@ -156,33 +187,52 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param lastName
-	 *            the lastName to set
+	 * @return
 	 */
-	public void setLastName(final String lastName) {
-		this.lastName = lastName;
+	public List<LeadMembershipInsurance> getLeadMbrInsuranceList() {
+		return leadMbrInsuranceList;
 	}
 
 	/**
-	 * @return the genderId
+	 * @return the mbrProviderList
 	 */
-	public Gender getGenderId() {
-		return genderId;
+	public List<LeadMembershipProvider> getLeadMbrProviderList() {
+		return leadMbrProviderList;
 	}
 
 	/**
-	 * @param genderId
-	 *            the genderId to set
+	 * @return the medicaidNo
 	 */
-	public void setGenderId(final Gender genderId) {
-		this.genderId = genderId;
+	public String getMedicaidNo() {
+		return medicaidNo;
 	}
 
 	/**
-	 * @return the countyCode
+	 * @return the medicareNo
 	 */
-	public County getCountyCode() {
-		return countyCode;
+	public String getMedicareNo() {
+		return medicareNo;
+	}
+
+	/**
+	 * @return the refContactList
+	 */
+	public List<ReferenceContact> getRefContactList() {
+		return refContactList;
+	}
+
+	/**
+	 * @return the status
+	 */
+	public MembershipStatus getStatus() {
+		return status;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 0;
+		hash += (id != null ? id.hashCode() : 0);
+		return hash;
 	}
 
 	/**
@@ -194,55 +244,11 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @return the mbrProviderList
-	 */
-	public List<LeadMembershipProvider> getLeadMbrProviderList() {
-		return leadMbrProviderList;
-	}
-
-	/**
-	 * @param mbrProviderList
-	 *            the mbrProviderList to set
-	 */
-	public void setLeadMbrProviderList(List<LeadMembershipProvider> leadMbrProviderList) {
-		this.leadMbrProviderList = leadMbrProviderList;
-	}
-
-	
-	/**
-	 * @return
-	 */
-	public List<LeadMembershipInsurance> getLeadMbrInsuranceList() {
-		return leadMbrInsuranceList;
-	}
-
-	/**
-	 * @param leadMbrInsuranceList
-	 */
-	public void setLeadMbrInsuranceList(List<LeadMembershipInsurance> leadMbrInsuranceList) {
-		this.leadMbrInsuranceList = leadMbrInsuranceList;
-	}
-
-	/**
-	 * @return the dob
-	 */
-	public Date getDob() {
-		return dob;
-	}
-
-	/**
 	 * @param dob
 	 *            the dob to set
 	 */
 	public void setDob(Date dob) {
 		this.dob = dob;
-	}
-
-	/**
-	 * @return the ethinicCode
-	 */
-	public Ethinicity getEthinicCode() {
-		return ethinicCode;
 	}
 
 	/**
@@ -254,25 +260,72 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @return the status
+	 * @param fileId
+	 *            the fileId to set
 	 */
-	public MembershipStatus getStatus() {
-		return status;
+	public void setFileId(final Integer fileId) {
+		this.fileId = fileId;
 	}
 
 	/**
-	 * @param status
-	 *            the status to set
+	 * @param firstName
+	 *            the firstName to set
 	 */
-	public void setStatus(final MembershipStatus status) {
-		this.status = status;
+	public void setFirstName(final String firstName) {
+		this.firstName = firstName;
 	}
 
 	/**
-	 * @return the medicaidNo
+	 * @param genderId
+	 *            the genderId to set
 	 */
-	public String getMedicaidNo() {
-		return medicaidNo;
+	public void setGenderId(final Gender genderId) {
+		this.genderId = genderId;
+	}
+
+	/**
+	 * @param hasMedicaid the hasMedicaid to set
+	 */
+	public void setHasMedicaid(Character hasMedicaid) {
+		this.hasMedicaid = hasMedicaid;
+	}
+
+	/**
+	 * @param hasMedicare the hasMedicare to set
+	 */
+	public void setHasMedicare(Character hasMedicare) {
+		this.hasMedicare = hasMedicare;
+	}
+
+	/**
+	 * @param id
+	 */
+	public void setId(final Integer id) {
+		this.id = id;
+	}
+
+	/**
+	 * @param lastName
+	 *            the lastName to set
+	 */
+	public void setLastName(final String lastName) {
+		this.lastName = lastName;
+	}
+
+	
+	/**
+	 * @param leadMbrInsuranceList
+	 */
+	public void setLeadMbrInsuranceList(List<LeadMembershipInsurance> leadMbrInsuranceList) {
+		this.leadMbrInsuranceList = leadMbrInsuranceList;
+	}
+
+	/**
+	 * @param mbrProviderList
+	 *            the mbrProviderList to set
+	 */
+	public void setLeadMbrProviderList(List<LeadMembershipProvider> leadMbrProviderList) {
+		this.leadMbrProviderList = leadMbrProviderList;
 	}
 
 	/**
@@ -284,13 +337,6 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @return the medicareNo
-	 */
-	public String getMedicareNo() {
-		return medicareNo;
-	}
-
-	/**
 	 * @param medicareNo
 	 *            the medicareNo to set
 	 */
@@ -299,80 +345,19 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @return the fileId
-	 */
-	public Integer getFileId() {
-		return fileId;
-	}
-
-	/**
-	 * @param fileId
-	 *            the fileId to set
-	 */
-	public void setFileId(final Integer fileId) {
-		this.fileId = fileId;
-	}
-
-	
-	/**
-	 * @return
-	 */
-	/*public List<Contact> getContactList() {
-		return contactList;
-	}*/
-
-	/**
-	 * @param contactList
-	 */
-	/*public void setContactList(List<Contact> contactList) {
-		this.contactList = contactList;
-	}*/
-	
-	/**
-	 * @return
-	 */
-	public List<LeadMembershipHedisMeasure> getLeadMbrHedisMeasureList() {
-		return leadMbrHedisMeasureList;
-	}
-
-	/**
-	 * @param leadMbrHedisMeasureList
-	 */
-	public void setLeadMbrHedisMeasureList(List<LeadMembershipHedisMeasure> leadMbrHedisMeasureList) {
-		this.leadMbrHedisMeasureList = leadMbrHedisMeasureList;
-	}
-
-	/**
-	 * @return the refContactList
-	 */
-	public List<ReferenceContact> getRefContactList() {
-		return refContactList;
-	}
-
-	/**
-	 * @param refContactList the refContactList to set
+	 * @param refContactList
+	 *            the refContactList to set
 	 */
 	public void setRefContactList(List<ReferenceContact> refContactList) {
 		this.refContactList = refContactList;
 	}
 
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		hash += (id != null ? id.hashCode() : 0);
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		if (!(object instanceof LeadMembership)) {
-			return false;
-		}
-		LeadMembership other = (LeadMembership) object;
-		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-			return false;
-		}
-		return true;
+	/**
+	 * @param status
+	 *            the status to set
+	 */
+	public void setStatus(final MembershipStatus status) {
+		this.status = status;
 	}
 
 	@Override

@@ -31,10 +31,6 @@ public class ReferenceContact extends RecordDetails implements Serializable {
 	private Integer id;
 	
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "mbr_id", referencedColumnName = "mbr_id", nullable=true)
-	private Membership mbr;
-	
-	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lead_Mbr_Id", referencedColumnName = "lead_Mbr_Id", nullable=true)
 	private LeadMembership leadMbr;
 
@@ -78,21 +74,6 @@ public class ReferenceContact extends RecordDetails implements Serializable {
 	 */
 	public void setId(final Integer id) {
 		this.id = id;
-	}
-
-	/**
-	 * @return the mbr
-	 */
-	public Membership getMbr() {
-		return mbr;
-	}
-
-	/**
-	 * @param mbr
-	 *            the mbr to set
-	 */
-	public void setMbr(final Membership mbr) {
-		this.mbr = mbr;
 	}
 
 	/**
