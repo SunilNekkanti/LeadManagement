@@ -37,9 +37,11 @@ public class UserController {
 	public ResponseEntity<List<User>> listAllUsers() {
 		List<User> users = userService.findAllUsers();
 		if (users.isEmpty()) {
+			System.out.println("no users");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
+		System.out.println("there are users");
 		return new ResponseEntity<List<User>>(users, HttpStatus.OK);
 	}
 
@@ -68,6 +70,8 @@ public class UserController {
 			return new ResponseEntity(new CustomErrorType("Unable to create. A User with name " + 
 			user.getUsername() + " already exist."),HttpStatus.CONFLICT);
 		}
+		user.setCreatedBy("sarath");
+		user.setUpdatedBy("sarath");
 		userService.saveUser(user);
 
 		HttpHeaders headers = new HttpHeaders();
@@ -90,6 +94,7 @@ public class UserController {
 		}
 
 		currentUser.setUsername(user.getUsername());
+		currentUser.setPassword(user.getPassword());
 
 		userService.updateUser(currentUser);
 		return new ResponseEntity<User>(currentUser, HttpStatus.OK);

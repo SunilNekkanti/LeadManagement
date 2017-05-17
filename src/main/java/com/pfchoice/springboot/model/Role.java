@@ -13,6 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+
 
 
 /**
@@ -39,6 +42,7 @@ public class Role extends RecordDetails implements Serializable {
 	@JoinTable(name = "user_roles", joinColumns = {
 			@JoinColumn(name = "role_id", referencedColumnName = "id") }, inverseJoinColumns = {
 					@JoinColumn(name = "user_id", referencedColumnName = "id") })
+	@JsonIgnore
 	private User user;
 
 	/**

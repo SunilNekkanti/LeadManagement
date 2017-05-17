@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('crudApp').factory('UserService',
+app.service('UserService',
     ['$localStorage', '$http', '$q', 'urls',
         function ($localStorage, $http, $q, urls) {
 
@@ -34,6 +34,7 @@ angular.module('crudApp').factory('UserService',
             }
 
             function getAllUsers(){
+            	console.log('$localStorage.users'+$localStorage.users);
                 return $localStorage.users;
             }
 

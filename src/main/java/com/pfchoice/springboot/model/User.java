@@ -15,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 
 /**
  *
@@ -44,11 +46,10 @@ public class User extends RecordDetails implements Serializable {
 	@JoinTable(name = "user_roles", joinColumns = {
 			@JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = {
 					@JoinColumn(name = "role_id", referencedColumnName = "id") })
+	//@JsonView(User.class)
 	public Set<Role> roles;
 
 	
-	@Column(name = "effective_year")
-	private Integer effectiveYear;
 
 	/**
 	 * 
@@ -124,20 +125,6 @@ public class User extends RecordDetails implements Serializable {
 		this.roles = roles;
 	}
 
-	/**
-	 * @return the effectiveYear
-	 */
-	public Integer getEffectiveYear() {
-		return effectiveYear;
-	}
-
-	/**
-	 * @param effectiveYear
-	 *            the effectiveYear to set
-	 */
-	public void setEffectiveYear(Integer effectiveYear) {
-		this.effectiveYear = effectiveYear;
-	}
 
 	@Override
 	public int hashCode() {

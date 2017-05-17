@@ -1,5 +1,5 @@
-<div class="generic-container">
-    <div class="panel panel-default">
+<div class="generic-container" >
+    <div class="panel panel-default" ng-show="ctrl.display">
         <!-- Default panel contents -->
         <div class="panel-heading"><span class="lead">User </span></div>
 		<div class="panel-body">
@@ -12,28 +12,20 @@
 	                    <div class="form-group col-md-12">
 	                        <label class="col-md-2 control-lable" for="uname">Name</label>
 	                        <div class="col-md-7">
-	                            <input type="text" ng-model="ctrl.user.name" id="uname" class="username form-control input-sm" placeholder="Enter your name" required ng-minlength="3"/>
+	                            <input type="text" ng-model="ctrl.user.username" id="uname" class="username form-control input-sm" placeholder="Enter your name" required ng-minlength="5"/>
 	                        </div>
 	                    </div>
 	                </div>
 
 	                <div class="row">
 	                    <div class="form-group col-md-12">
-	                        <label class="col-md-2 control-lable" for="age">Age</label>
+	                        <label class="col-md-2 control-lable" for="age">Password</label>
 	                        <div class="col-md-7">
-	                            <input type="text" ng-model="ctrl.user.age" id="age" class="form-control input-sm" placeholder="Enter your Age." required ng-pattern="ctrl.onlyIntegers"/>
+	                            <input type="text" ng-model="ctrl.user.password" id="age" class="form-control input-sm" placeholder="Enter your Password." required ng-minlength="6"/>
 	                        </div>
 	                    </div>
 	                </div>
 	
-	                <div class="row">
-	                    <div class="form-group col-md-12">
-	                        <label class="col-md-2 control-lable" for="salary">Salary</label>
-	                        <div class="col-md-7">
-	                            <input type="text" ng-model="ctrl.user.salary" id="salary" class="form-control input-sm" placeholder="Enter your Salary." required ng-pattern="ctrl.onlyNumbers"/>
-	                        </div>
-	                    </div>
-	                </div>
 
 	                <div class="row">
 	                    <div class="form-actions floatRight">
@@ -45,7 +37,7 @@
     	    </div>
 		</div>	
     </div>
-    <div class="panel panel-default">
+    <div class="panel panel-default" ng-hide="ctrl.display">
         <!-- Default panel contents -->
         <div class="panel-heading"><span class="lead">List of Users </span></div>
 		<div class="panel-body">
@@ -55,8 +47,7 @@
 		            <tr>
 		                <th>ID</th>
 		                <th>NAME</th>
-		                <th>AGE</th>
-		                <th>SALARY</th>
+		                <th>password</th>
 		                <th width="100"></th>
 		                <th width="100"></th>
 		            </tr>
@@ -64,9 +55,8 @@
 		            <tbody>
 		            <tr ng-repeat="u in ctrl.getAllUsers()">
 		                <td>{{u.id}}</td>
-		                <td>{{u.name}}</td>
-		                <td>{{u.age}}</td>
-		                <td>{{u.salary}}</td>
+		                <td>{{u.username}}</td>
+		                <td>{{u.password}}</td>
 		                <td><button type="button" ng-click="ctrl.editUser(u.id)" class="btn btn-success custom-width">Edit</button></td>
 		                <td><button type="button" ng-click="ctrl.removeUser(u.id)" class="btn btn-danger custom-width">Remove</button></td>
 		            </tr>

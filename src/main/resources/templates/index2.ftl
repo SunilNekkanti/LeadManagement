@@ -92,7 +92,7 @@
   </md-content></div>
  
  
-        <div ui-view></div>
+ <div ui-view></div>
         <script src="js/lib/angular.min.js" ></script>
         <script src="js/lib/angular-ui-router.min.js" ></script>
         <script src="js/lib/localforage.min.js" ></script>

@@ -1,12 +1,14 @@
 'use strict';
 
-angular.module('crudApp').controller('UserController',
+app.controller('UserController',
     ['UserService', '$scope',  function( UserService, $scope) {
 
+
+    	
         var self = this;
         self.user = {};
         self.users=[];
-
+        self.display =false;
         self.submit = submit;
         self.getAllUsers = getAllUsers;
         self.createUser = createUser;
@@ -42,6 +44,7 @@ angular.module('crudApp').controller('UserController',
                         self.successMessage = 'User created successfully';
                         self.errorMessage='';
                         self.done = true;
+                        self.display =false;
                         self.user={};
                         $scope.myForm.$setPristine();
                     },
@@ -63,6 +66,7 @@ angular.module('crudApp').controller('UserController',
                         self.successMessage='User updated successfully';
                         self.errorMessage='';
                         self.done = true;
+                        self.display =false;
                         $scope.myForm.$setPristine();
                     },
                     function(errResponse){
@@ -93,11 +97,13 @@ angular.module('crudApp').controller('UserController',
         }
 
         function editUser(id) {
+        	alert('inside edit');
             self.successMessage='';
             self.errorMessage='';
             UserService.getUser(id).then(
                 function (user) {
                     self.user = user;
+                    self.display =true;
                 },
                 function (errResponse) {
                     console.error('Error while removing user ' + id + ', Error :' + errResponse.data);
