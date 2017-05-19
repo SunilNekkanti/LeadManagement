@@ -3,9 +3,9 @@ package com.pfchoice.springboot.model;
 import java.io.Serializable;
 
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,7 +14,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonView;
 
 
 
@@ -38,13 +37,13 @@ public class Role extends RecordDetails implements Serializable {
 	@Column(name = "role")
 	private String role;
 
-	@OneToOne(cascade = CascadeType.ALL)
+ 	@JsonIgnore
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles", joinColumns = {
 			@JoinColumn(name = "role_id", referencedColumnName = "id") }, inverseJoinColumns = {
 					@JoinColumn(name = "user_id", referencedColumnName = "id") })
-	@JsonIgnore
 	private User user;
-
+ 
 	/**
 	 * 
 	 */
@@ -92,17 +91,17 @@ public class Role extends RecordDetails implements Serializable {
 	/**
 	 * @return the user
 	 */
-	public User getUser() {
+ 	public User getUser() {
 		return user;
 	}
-
+ 
 	/**
 	 * @param user
 	 *            the user to set
 	 */
-	public void setUser(User user) {
+ 	public void setUser(User user) {
 		this.user = user;
-	}
+	} 
 
 	@Override
 	public int hashCode() {

@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 
 /**
@@ -30,6 +32,7 @@ public class ReferenceContact extends RecordDetails implements Serializable {
 	@Column(name = "ref_cnt_Id", nullable = false)
 	private Integer id;
 	
+	@JsonIgnore	
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lead_Mbr_Id", referencedColumnName = "lead_Mbr_Id", nullable=true)
 	private LeadMembership leadMbr;

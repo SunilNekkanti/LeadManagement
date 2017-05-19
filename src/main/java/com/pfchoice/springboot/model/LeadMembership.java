@@ -19,6 +19,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  *
  * @author sarath
@@ -55,12 +57,15 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@JoinColumn(name = "lead_Mbr_GenderID", referencedColumnName = "gender_id")
 	private Gender genderId;
 
-	@Column(name = "has_medicaid", insertable = false)
-	private Character hasMedicaid;
+	@Column(name = "has_medicaid")
+	private Character hasMedicaid = new Character('N');
 
-	@Column(name = "has_medicare", insertable = false)
-	private Character hasMedicare;
+	@Column(name = "has_medicare")
+	private Character hasMedicare  = new Character('N');
 
+	@Column(name = "has_disability")
+	private Character hasDisability  = new Character('N') ;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
@@ -70,9 +75,11 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@Column(name = "lead_Mbr_LastName")
 	private String lastName;
 
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "leadMbr")
 	private List<LeadMembershipInsurance> leadMbrInsuranceList;
 
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "leadMbr")
 	private List<LeadMembershipProvider> leadMbrProviderList;
 
@@ -82,6 +89,7 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@Column(name = "lead_Mbr_MedicareNo")
 	private String medicareNo;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "leadMbr", fetch = FetchType.LAZY)
 	private List<ReferenceContact> refContactList;
 
@@ -345,6 +353,20 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
+	 * @return the hasDisability
+	 */
+	public Character getHasDisability() {
+		return hasDisability;
+	}
+
+	/**
+	 * @param hasDisability the hasDisability to set
+	 */
+	public void setHasDisability(Character hasDisability) {
+		this.hasDisability = hasDisability;
+	}
+
+	/**
 	 * @param refContactList
 	 *            the refContactList to set
 	 */
@@ -362,7 +384,7 @@ public class LeadMembership extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.Membership[ id=" + id + " ]";
+		return "com.pfchoice.core.entity.LeadMembership[ id=" + id + " ]";
 	}
 
 }

@@ -26,7 +26,15 @@
 	                    </div>
 	                </div>
 	
-
+ 				  <div class="row">
+	                    <div class="form-group col-md-12">
+	                        <label class="col-md-2 control-lable" for="uname">Role</label>
+	                        <div class="col-md-7">
+	                        <select ng-model="ctrl.user.roles" ng-options="role.role for role in ctrl.roles track by role.role" multiple></select>
+	                        </div>
+	                    </div>
+	                </div>
+	               
 	                <div class="row">
 	                    <div class="form-actions floatRight">
 	                        <input type="submit"  value="{{!ctrl.user.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid || myForm.$pristine">
@@ -39,7 +47,7 @@
     </div>
     <div class="panel panel-default" ng-hide="ctrl.display">
         <!-- Default panel contents -->
-        <div class="panel-heading"><span class="lead">List of Users </span></div>
+        <div class="panel-heading"><span class="lead">List of Users </span>   <button type="button"   ng-click="ctrl.addUser()" class="btn btn-success  custom-width floatRight"> Add </button></div>
 		<div class="panel-body">
 			<div class="table-responsive">
 		        <table class="table table-hover">

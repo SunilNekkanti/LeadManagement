@@ -1,7 +1,7 @@
 'use strict';
 
 app.controller('UserController',
-    ['UserService', '$scope',  function( UserService, $scope) {
+    ['UserService', 'RoleService', '$scope',  function( UserService, RoleService, $scope) {
 
 
     	
@@ -10,20 +10,21 @@ app.controller('UserController',
         self.users=[];
         self.display =false;
         self.submit = submit;
+        self.roles=[];
         self.getAllUsers = getAllUsers;
         self.createUser = createUser;
         self.updateUser = updateUser;
         self.removeUser = removeUser;
         self.editUser = editUser;
         self.reset = reset;
-
+        self.addUser = addUser;
         self.successMessage = '';
         self.errorMessage = '';
         self.done = false;
 
         self.onlyIntegers = /^\d+$/;
         self.onlyNumbers = /^\d+([,.]\d+)?$/;
-
+        self.roles = RoleService.getAllRoles();
         function submit() {
             console.log('Submitting');
             if (self.user.id === undefined || self.user.id === null) {
@@ -58,7 +59,7 @@ app.controller('UserController',
 
 
         function updateUser(user, id){
-            console.log('About to update user');
+            console.log('About to update user'+user);
             UserService.updateUser(user, id)
                 .then(
                     function (response){
@@ -96,26 +97,38 @@ app.controller('UserController',
             return UserService.getAllUsers();
         }
 
+        function getAllRoles(){
+            return RoleService.getAllRoles();
+        }
+        
         function editUser(id) {
-        	alert('inside edit');
             self.successMessage='';
             self.errorMessage='';
             UserService.getUser(id).then(
                 function (user) {
                     self.user = user;
-                    self.display =true;
+                    self.display = true;
                 },
                 function (errResponse) {
                     console.error('Error while removing user ' + id + ', Error :' + errResponse.data);
                 }
             );
         }
+        
         function reset(){
             self.successMessage='';
             self.errorMessage='';
             self.user={};
             $scope.myForm.$setPristine(); //reset Form
         }
+       
+        function addUser() {
+            self.successMessage='';
+            self.errorMessage='';
+            self.display =true;
+        }
+        
+            
     }
 
 

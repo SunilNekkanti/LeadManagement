@@ -6,8 +6,10 @@ import org.springframework.stereotype.Repository;
 import com.pfchoice.springboot.model.Gender;
 
 @Repository
-public interface GenderRepository extends JpaRepository<Gender, Long> {
+public interface GenderRepository extends JpaRepository<Gender, Byte> {
 
-
+	public Gender findByCode(char code);
+	
+	public Gender findByDescription(String code);
 }
 

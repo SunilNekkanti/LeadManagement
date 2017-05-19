@@ -70,6 +70,7 @@ public class UserController {
 			return new ResponseEntity(new CustomErrorType("Unable to create. A User with name " + 
 			user.getUsername() + " already exist."),HttpStatus.CONFLICT);
 		}
+		logger.info(" user.getRoles().size() :{} ", user.getRoles().size());
 		user.setCreatedBy("sarath");
 		user.setUpdatedBy("sarath");
 		userService.saveUser(user);
@@ -92,10 +93,15 @@ public class UserController {
 			return new ResponseEntity(new CustomErrorType("Unable to upate. User with id " + id + " not found."),
 					HttpStatus.NOT_FOUND);
 		}
-
+		
 		currentUser.setUsername(user.getUsername());
 		currentUser.setPassword(user.getPassword());
+		currentUser.getRoles().clear();
+		currentUser.setRoles(user.getRoles());
 
+		logger.info("Updating User - currentUser.getRoles().size()  {}", currentUser.getRoles().size());
+
+		
 		userService.updateUser(currentUser);
 		return new ResponseEntity<User>(currentUser, HttpStatus.OK);
 	}

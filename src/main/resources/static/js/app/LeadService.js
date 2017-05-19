@@ -1,106 +1,105 @@
 'use strict';
 
-app.service('UserService',
+app.service('LeadService',
     ['$localStorage', '$http', '$q', 'urls',
         function ($localStorage, $http, $q, urls) {
 
             var factory = {
-                loadAllUsers: loadAllUsers,
-                getAllUsers: getAllUsers,
-                getUser: getUser,
-                createUser: createUser,
-                updateUser: updateUser,
-                removeUser: removeUser
+                loadAllLeads: loadAllLeads,
+                getAllLeads: getAllLeads,
+                getLead: getLead,
+                createLead: createLead,
+                updateLead: updateLead,
+                removeLead: removeLead
             };
 
             return factory;
 
-            function loadAllUsers() {
-                console.log('Fetching all users');
+            function loadAllLeads() {
+                console.log('Fetching all leads');
                 var deferred = $q.defer();
-                $http.get(urls.USER_SERVICE_API)
+                $http.get(urls.LEAD_SERVICE_API)
                     .then(
                         function (response) {
-                            console.log('Fetched successfully all users');
-                            $localStorage.users = response.data;
+                            console.log('Fetched successfully all leads');
+                            $localStorage.leads = response.data;
                             deferred.resolve(response);
                         },
                         function (errResponse) {
-                            console.error('Error while loading users');
+                            console.error('Error while loading leads');
                             deferred.reject(errResponse);
                         }
                     );
                 return deferred.promise;
             }
 
-            function getAllUsers(){
-            	console.log('$localStorage.users'+$localStorage.users);
-                return $localStorage.users;
+            function getAllLeads(){
+            	console.log('$localStorage.leads'+$localStorage.leads);
+                return $localStorage.leads;
             }
 
-            function getUser(id) {
-                console.log('Fetching User with id :'+id);
+            function getLead(id) {
+                console.log('Fetching Lead with id :'+id);
                 var deferred = $q.defer();
-                $http.get(urls.USER_SERVICE_API + id)
+                $http.get(urls.LEAD_SERVICE_API + id)
                     .then(
                         function (response) {
-                            console.log('Fetched successfully User with id :'+id);
+                            console.log('Fetched successfully Lead with id :'+id);
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
-                            console.error('Error while loading user with id :'+id);
+                            console.error('Error while loading lead with id :'+id);
                             deferred.reject(errResponse);
                         }
                     );
                 return deferred.promise;
             }
 
-            function createUser(user) {
-                console.log('Creating User');
+            function createLead(lead) {
+                console.log('Creating Lead');
                 var deferred = $q.defer();
-                $http.post(urls.USER_SERVICE_API, user)
+                $http.post(urls.LEAD_SERVICE_API, lead)
                     .then(
                         function (response) {
-                            loadAllUsers();
+                            loadAllLeads();
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
-                           console.error('Error while creating User : '+errResponse.data.errorMessage);
+                           console.error('Error while creating Lead : '+errResponse.data.errorMessage);
                            deferred.reject(errResponse);
                         }
                     );
                 return deferred.promise;
             }
 
-            function updateUser(user, id) {
-                console.log('Updating User with id '+id);
-                console.log('About to update user'+JSON.stringify(user));
+            function updateLead(lead, id) {
+                console.log('Updating Lead with id '+id);
                 var deferred = $q.defer();
-                $http.put(urls.USER_SERVICE_API + id, user)
+                $http.put(urls.LEAD_SERVICE_API + id, lead)
                     .then(
                         function (response) {
-                            loadAllUsers();
+                            loadAllLeads();
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
-                            console.error('Error while updating User with id :'+id);
+                            console.error('Error while updating Lead with id :'+id);
                             deferred.reject(errResponse);
                         }
                     );
                 return deferred.promise;
             }
 
-            function removeUser(id) {
-                console.log('Removing User with id '+id);
+            function removeLead(id) {
+                console.log('Removing Lead with id '+id);
                 var deferred = $q.defer();
-                $http.delete(urls.USER_SERVICE_API + id)
+                $http.delete(urls.LEAD_SERVICE_API + id)
                     .then(
                         function (response) {
-                            loadAllUsers();
+                            loadAllLeads();
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
-                            console.error('Error while removing User with id :'+id);
+                            console.error('Error while removing Lead with id :'+id);
                             deferred.reject(errResponse);
                         }
                     );

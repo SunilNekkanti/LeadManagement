@@ -5,8 +5,7 @@
   <link href="css/app.css" rel="stylesheet" />
   <link href="css/bootstrap.css" rel="stylesheet" />
   <link href="css/ui-navbar.css" rel="stylesheet" />
-        <script src="js/lib/localforage.min.js" ></script>
-        <script src="js/lib/ngStorage.min.js"></script>
+  <link data-require="bootstrap-css@3.3.1" data-semver="3.3.1" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
         
   <script data-require="angular.js@1.3.13" data-semver="1.3.13" src="https://code.angularjs.org/1.3.13/angular.js"></script>
   <script data-require="ui-router@1.0.0-beta.2" data-semver="1.0.0-beta.2" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.0-beta.2/angular-ui-router.js"></script>
@@ -15,7 +14,11 @@
   <script src="js/app/app.js"></script>
   <script src="js/app/UserService.js"></script>
   <script src="js/app/UserController.js"></script>
-  <link data-require="bootstrap-css@3.3.1" data-semver="3.3.1" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+  <script src="js/app/GenderService.js"></script>
+  <script src="js/app/LeadService.js"></script>
+  <script src="js/app/LeadController.js"></script>
+    <script src="js/app/RoleService.js"></script>
+  <script src="js/app/RoleController.js"></script>
 
 
 </head>
@@ -38,11 +41,12 @@
           <li class="dropdown" dropdown>
             <a href="#" class="dropdown-toggle" dropdown-toggle role="button" aria-expanded="false">Admin <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
+              <li><a href="#" ng-click="callMe('lead')">Leads</a>
+              </li>
+               <li class="divider"></li>
+              <li><a href="#" ng-click="callMe('role')">Roles</a>
+              </li>
               <li><a href="#" ng-click="callMe('home')">User Accounts</a>
-              </li>
-              <li><a href="#">Another action</a>
-              </li>
-              <li><a href="#">Something else here</a>
               </li>
               <li class="divider"></li>
               <li><a href="#">Separated link</a>

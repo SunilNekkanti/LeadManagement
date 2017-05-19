@@ -1,106 +1,106 @@
 'use strict';
 
-app.service('UserService',
+app.service('RoleService',
     ['$localStorage', '$http', '$q', 'urls',
         function ($localStorage, $http, $q, urls) {
 
             var factory = {
-                loadAllUsers: loadAllUsers,
-                getAllUsers: getAllUsers,
-                getUser: getUser,
-                createUser: createUser,
-                updateUser: updateUser,
-                removeUser: removeUser
+                loadAllRoles: loadAllRoles,
+                getAllRoles: getAllRoles,
+                getRole: getRole,
+                createRole: createRole,
+                updateRole: updateRole,
+                removeRole: removeRole
             };
 
             return factory;
 
-            function loadAllUsers() {
-                console.log('Fetching all users');
+            function loadAllRoles() {
+                console.log('Fetching all roles');
                 var deferred = $q.defer();
-                $http.get(urls.USER_SERVICE_API)
+                $http.get(urls.ROLE_SERVICE_API)
                     .then(
                         function (response) {
-                            console.log('Fetched successfully all users');
-                            $localStorage.users = response.data;
+                            console.log('Fetched successfully all roles');
+                            console.log('response.data '+JSON.stringify(response.data));
+                            $localStorage.roles = response.data;
                             deferred.resolve(response);
                         },
                         function (errResponse) {
-                            console.error('Error while loading users');
+                            console.error('Error while loading roles');
                             deferred.reject(errResponse);
                         }
                     );
                 return deferred.promise;
             }
 
-            function getAllUsers(){
-            	console.log('$localStorage.users'+$localStorage.users);
-                return $localStorage.users;
+            function getAllRoles(){
+            	console.log('$localStorage.roles'+$localStorage.roles);
+                return $localStorage.roles;
             }
 
-            function getUser(id) {
-                console.log('Fetching User with id :'+id);
+            function getRole(id) {
+                console.log('Fetching Role with id :'+id);
                 var deferred = $q.defer();
-                $http.get(urls.USER_SERVICE_API + id)
+                $http.get(urls.ROLE_SERVICE_API + id)
                     .then(
                         function (response) {
-                            console.log('Fetched successfully User with id :'+id);
+                            console.log('Fetched successfully Role with id :'+id);
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
-                            console.error('Error while loading user with id :'+id);
+                            console.error('Error while loading role with id :'+id);
                             deferred.reject(errResponse);
                         }
                     );
                 return deferred.promise;
             }
 
-            function createUser(user) {
-                console.log('Creating User');
+            function createRole(role) {
+                console.log('Creating Role');
                 var deferred = $q.defer();
-                $http.post(urls.USER_SERVICE_API, user)
+                $http.post(urls.ROLE_SERVICE_API, role)
                     .then(
                         function (response) {
-                            loadAllUsers();
+                            loadAllRoles();
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
-                           console.error('Error while creating User : '+errResponse.data.errorMessage);
+                           console.error('Error while creating Role : '+errResponse.data.errorMessage);
                            deferred.reject(errResponse);
                         }
                     );
                 return deferred.promise;
             }
 
-            function updateUser(user, id) {
-                console.log('Updating User with id '+id);
-                console.log('About to update user'+JSON.stringify(user));
+            function updateRole(role, id) {
+                console.log('Updating Role with id '+id);
                 var deferred = $q.defer();
-                $http.put(urls.USER_SERVICE_API + id, user)
+                $http.put(urls.ROLE_SERVICE_API + id, role)
                     .then(
                         function (response) {
-                            loadAllUsers();
+                            loadAllRoles();
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
-                            console.error('Error while updating User with id :'+id);
+                            console.error('Error while updating Role with id :'+id);
                             deferred.reject(errResponse);
                         }
                     );
                 return deferred.promise;
             }
 
-            function removeUser(id) {
-                console.log('Removing User with id '+id);
+            function removeRole(id) {
+                console.log('Removing Role with id '+id);
                 var deferred = $q.defer();
-                $http.delete(urls.USER_SERVICE_API + id)
+                $http.delete(urls.ROLE_SERVICE_API + id)
                     .then(
                         function (response) {
-                            loadAllUsers();
+                            loadAllRoles();
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
-                            console.error('Error while removing User with id :'+id);
+                            console.error('Error while removing Role with id :'+id);
                             deferred.reject(errResponse);
                         }
                     );
