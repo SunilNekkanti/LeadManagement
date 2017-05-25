@@ -1,6 +1,6 @@
 //Code goes here
 'use strict';
-var app = angular.module('my-app', ['ui.bootstrap','ui.router','ngStorage']);
+var app = angular.module('my-app', ['ui.bootstrap','ui.router','ngStorage','datatables']);
 
 
 app.constant('urls', {

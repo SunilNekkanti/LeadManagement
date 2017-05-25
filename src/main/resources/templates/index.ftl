@@ -11,6 +11,16 @@
   <script data-require="ui-router@1.0.0-beta.2" data-semver="1.0.0-beta.2" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.0-beta.2/angular-ui-router.js"></script>
   <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.0.js"></script>
   <script data-require="ngStorage@0.3.0" data-semver="0.3.0" src="http://rawgit.com/gsklee/ngStorage/0.3.0/ngStorage.min.js"></script>
+
+
+    <script data-require="jquery@1.10.1" data-semver="1.10.1" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>  
+    <script src="https://rawgithub.com/vivendi/angular-datatables/master/src/angular-datatables.js"></script>
+	<script src="https://rawgithub.com/vivendi/angular-datatables/master/src/angular-datatables.directive.js"></script>
+	<script src="https://rawgithub.com/vivendi/angular-datatables/master/src/angular-datatables.factory.js"></script>
+	<script src="https://rawgithub.com/vivendi/angular-datatables/master/src/angular-datatables.bootstrap.js"></script>
+    
+    
   <script src="js/app/app.js"></script>
   <script src="js/app/UserService.js"></script>
   <script src="js/app/UserController.js"></script>
@@ -24,7 +34,7 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-default" ng-controller="NavbarController">
+  <nav class="navbar navbar-default myNavbar" ng-controller="NavbarController">
     <div class="container-fluid">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" ng-click="isCollapsed = !isCollapsed" aria-expanded="true">

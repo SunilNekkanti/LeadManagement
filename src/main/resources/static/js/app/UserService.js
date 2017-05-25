@@ -14,15 +14,24 @@ app.service('UserService',
             };
 
             return factory;
+         
 
             function loadAllUsers() {
                 console.log('Fetching all users');
                 var deferred = $q.defer();
-                $http.get(urls.USER_SERVICE_API)
+                var pageable = {
+               		 page:0, size:10
+               		};
+
+               		var config = {
+               		 params: pageable,
+               		 headers : {'Accept' : 'application/json'}
+               		};
+                $http.get( urls.USER_SERVICE_API,  config)
                     .then(
                         function (response) {
                             console.log('Fetched successfully all users');
-                            $localStorage.users = response.data;
+                            $localStorage.users = response.data.content;
                             deferred.resolve(response);
                         },
                         function (errResponse) {

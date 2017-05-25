@@ -1,12 +1,12 @@
 package com.pfchoice.springboot.service.impl;
 
-import java.util.List;
-
 import com.pfchoice.springboot.model.User;
 import com.pfchoice.springboot.repositories.UserRepository;
 import com.pfchoice.springboot.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,12 +43,12 @@ public class UserServiceImpl implements UserService{
 		userRepository.deleteAll();
 	}
 
-	public List<User> findAllUsers(){
-		return userRepository.findAll();
+	public Page<User> findAllUsersByPage(Pageable pageable){
+		return userRepository.findAll(pageable);
 	}
 
 	public boolean isUserExist(User user) {
 		return findByUsername(user.getUsername()) != null;
 	}
-
+	
 }

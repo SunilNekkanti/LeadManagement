@@ -1,7 +1,8 @@
 package com.pfchoice.springboot.service;
 
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.pfchoice.springboot.model.User;
 
@@ -19,7 +20,8 @@ public interface UserService {
 
 	void deleteAllUsers();
 
-	List<User> findAllUsers();
+	Page<User> findAllUsersByPage(Pageable pageable);
 
 	boolean isUserExist(User user);
+	
 }

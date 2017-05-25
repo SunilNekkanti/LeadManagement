@@ -1,7 +1,7 @@
 'use strict';
 
 app.controller('UserController',
-    ['UserService', 'RoleService', '$scope',  function( UserService, RoleService, $scope) {
+    ['UserService', 'RoleService', '$scope', 'DTOptionsBuilder', 'DTColumnBuilder', function( UserService, RoleService, $scope, DTOptionsBuilder, DTColumnBuilder) {
 
 
     	
@@ -16,12 +16,13 @@ app.controller('UserController',
         self.updateUser = updateUser;
         self.removeUser = removeUser;
         self.editUser = editUser;
+        self.buildDatatable = buildDatatable;
         self.reset = reset;
         self.addUser = addUser;
         self.successMessage = '';
         self.errorMessage = '';
         self.done = false;
-
+        buildDatatable();
         self.onlyIntegers = /^\d+$/;
         self.onlyNumbers = /^\d+([,.]\d+)?$/;
         self.roles = RoleService.getAllRoles();
@@ -126,6 +127,22 @@ app.controller('UserController',
             self.successMessage='';
             self.errorMessage='';
             self.display =true;
+        }
+        
+        function buildDatatable(){
+        	self.dtColumns = [
+                //here We will add .withOption('name','column_name') for send column name to the server 
+                DTColumnBuilder.newColumn("id", "User ID").withOption('name', 'id'),
+                DTColumnBuilder.newColumn("username", "UserName").withOption('name', 'username'),
+                DTColumnBuilder.newColumn("password", "Password").withOption('name', 'password'),
+            ]
+     
+            self.dtOptions = DTOptionsBuilder.newOptions().withOption( self.users)
+            .withOption('processing', true) //for show progress bar
+            .withOption('serverSide', true) // for server side processing
+            .withPaginationType('full_numbers') // for get full pagination options // first / last / prev / next and page numbers
+            .withDisplayLength(10) // Page size
+            .withOption('aaSorting',[0,'asc']) // for default sorting column // here 0 means first column
         }
         
             

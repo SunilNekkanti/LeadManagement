@@ -73,4 +73,8 @@
 			</div>
 		</div>
     </div>
+    
+        <div class="panel panel-default">
+	        <table id="entry-grid" datatable="" dt-options="ctrl.dtOptions" dt-columns="ctrl.dtColumns" class="table table-hover"></table> 
+    </div>
 </div>
