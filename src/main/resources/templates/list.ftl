@@ -1,4 +1,13 @@
+  
+    
 <div class="generic-container" >
+
+
+ <div class="panel panel-default">
+	        <table datatable="" id="content"   dt-options="ctrl.dtOptions"  dt-columns="ctrl.dtColumns" dt-instance="ctrl.dtInstance" class="table table-hover table-responsive"></table> 
+    </div>
+    
+    
     <div class="panel panel-default" ng-show="ctrl.display">
         <!-- Default panel contents -->
         <div class="panel-heading"><span class="lead">User </span></div>
@@ -74,7 +83,4 @@
 		</div>
     </div>
     
-        <div class="panel panel-default">
-	        <table id="entry-grid" datatable="" dt-options="ctrl.dtOptions" dt-columns="ctrl.dtColumns" class="table table-hover"></table> 
-    </div>
 </div>

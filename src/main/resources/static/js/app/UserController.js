@@ -1,7 +1,7 @@
 'use strict';
 
 app.controller('UserController',
-    ['UserService', 'RoleService', '$scope', 'DTOptionsBuilder', 'DTColumnBuilder', function( UserService, RoleService, $scope, DTOptionsBuilder, DTColumnBuilder) {
+    ['UserService', 'RoleService', '$scope', 'DTOptionsBuilder', 'DTColumnBuilder', function( UserService, RoleService, $scope,  DTOptionsBuilder, DTColumnBuilder) {
 
 
     	
@@ -16,16 +16,31 @@ app.controller('UserController',
         self.updateUser = updateUser;
         self.removeUser = removeUser;
         self.editUser = editUser;
-        self.buildDatatable = buildDatatable;
         self.reset = reset;
         self.addUser = addUser;
         self.successMessage = '';
         self.errorMessage = '';
         self.done = false;
-        buildDatatable();
         self.onlyIntegers = /^\d+$/;
         self.onlyNumbers = /^\d+([,.]\d+)?$/;
         self.roles = RoleService.getAllRoles();
+        self.dtInstance = null;
+        self.dtColumns = [
+            DTColumnBuilder.newColumn('id').withTitle('ID'),
+            DTColumnBuilder.newColumn('username').withTitle('user name'),
+            DTColumnBuilder.newColumn('password').withTitle('Password')
+          ];
+     
+       
+        self.dtOptions = DTOptionsBuilder.fromFnPromise(UserService.loadAllUsers())
+        .withDataProp('response.data.content')
+ .withPaginationType('full_numbers');
+        
+        self.dtIntanceCallback = function (instance) {
+            self.dtInstance = instance;
+        }
+        
+       
         function submit() {
             console.log('Submitting');
             if (self.user.id === undefined || self.user.id === null) {
@@ -95,7 +110,9 @@ app.controller('UserController',
 
 
         function getAllUsers(){
-            return UserService.getAllUsers();
+             self.users = UserService.getAllUsers();
+   
+            return self.users;
         }
 
         function getAllRoles(){
@@ -129,24 +146,8 @@ app.controller('UserController',
             self.display =true;
         }
         
-        function buildDatatable(){
-        	self.dtColumns = [
-                //here We will add .withOption('name','column_name') for send column name to the server 
-                DTColumnBuilder.newColumn("id", "User ID").withOption('name', 'id'),
-                DTColumnBuilder.newColumn("username", "UserName").withOption('name', 'username'),
-                DTColumnBuilder.newColumn("password", "Password").withOption('name', 'password'),
-            ]
-     
-            self.dtOptions = DTOptionsBuilder.newOptions().withOption( self.users)
-            .withOption('processing', true) //for show progress bar
-            .withOption('serverSide', true) // for server side processing
-            .withPaginationType('full_numbers') // for get full pagination options // first / last / prev / next and page numbers
-            .withDisplayLength(10) // Page size
-            .withOption('aaSorting',[0,'asc']) // for default sorting column // here 0 means first column
-        }
-        
-            
-    }
+        	
 
+    }
 
     ]);
