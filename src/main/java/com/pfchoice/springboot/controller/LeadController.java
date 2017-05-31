@@ -1,10 +1,10 @@
 package com.pfchoice.springboot.controller;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -34,15 +35,17 @@ public class LeadController {
 	
 	
 	@RequestMapping(value = "/lead/", method = RequestMethod.GET)
-	public ResponseEntity<List<LeadMembership>> listAllLeadMemberships() {
-		List<LeadMembership> leads = leadService.findAllLeadMemberships();
-		if (leads.isEmpty()) {
+	public ResponseEntity<Page<LeadMembership>> listAllLeadMemberships(@RequestParam("page") int pageNo,  @RequestParam("size") int pageSize) {
+		
+		PageRequest pageRequest = new PageRequest(pageNo,pageSize );
+		Page<LeadMembership> leads = leadService.findAllLeadMembershipsByPage(pageRequest);
+		if (leads.getTotalElements() == 0) {
 			System.out.println("no leads");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
 		System.out.println("there are leads");
-		return new ResponseEntity<List<LeadMembership>>(leads, HttpStatus.OK);
+		return new ResponseEntity<Page<LeadMembership>>(leads, HttpStatus.OK);
 	}
 
 	// -------------------Retrieve Single LeadMembership------------------------------------------

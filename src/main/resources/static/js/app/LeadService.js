@@ -18,12 +18,20 @@ app.service('LeadService',
             function loadAllLeads() {
                 console.log('Fetching all leads');
                 var deferred = $q.defer();
-                $http.get(urls.LEAD_SERVICE_API)
+                var pageable = {
+                  		 page:0, size:10
+                  		};
+
+                  		var config = {
+                  		 params: pageable,
+                  		 headers : {'Accept' : 'application/json'}
+                  		};
+                $http.get(urls.LEAD_SERVICE_API,  config)
                     .then(
                         function (response) {
                             console.log('Fetched successfully all leads');
-                            $localStorage.leads = response.data;
-                            deferred.resolve(response);
+                            $localStorage.leads = response.data.content;
+                            deferred.resolve(response.data.content);
                         },
                         function (errResponse) {
                             console.error('Error while loading leads');

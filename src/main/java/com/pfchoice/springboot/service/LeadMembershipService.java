@@ -2,7 +2,9 @@ package com.pfchoice.springboot.service;
 
 
 import java.util.Date;
-import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.pfchoice.springboot.model.LeadMembership;
 
@@ -18,7 +20,7 @@ public interface LeadMembershipService {
 
 	void deleteAllLeadMemberships();
 
-	List<LeadMembership> findAllLeadMemberships();
+	Page<LeadMembership> findAllLeadMembershipsByPage(Pageable pageable);
 
 	boolean isLeadMembershipExists(String leadFirstName, String leadLastName, Date dob);
 }

@@ -1,4 +1,21 @@
 <div class="generic-container" >
+
+   <div class="panel panel-default" ng-hide="ctrl.display">
+        <!-- Default panel contents -->
+        <div class="panel-heading"><span class="user">List of Leads </span> 
+               <button type="button"   ng-click="ctrl.addLead()" ng-hide="ctrl.displayEditButton" class="btn btn-success custom-width floatRight"> Add </button>   
+               <button type="button" ng-click="ctrl.editLead(l.id)" ng-show="ctrl.displayEditButton" class="btn btn-primary custom-width floatRight">Edit</button>  
+              <button type="button" ng-click="ctrl.removeLead(l.id)"  ng-show="ctrl.displayEditButton" class="btn btn-danger custom-width floatRight">Remove</button>  
+        </div>
+		<div class="panel-body">
+			<div class="table-responsive">
+	        <table datatable="" id="content"   dt-options="ctrl.dtOptions"  dt-columns="ctrl.dtColumns" dt-instance="ctrl.dtInstance" class="table-responsive table  bordered table-striped table-condensed datatable "></table>
+	        
+          </div>
+		</div>
+    </div>
+     
+     
     <div class="panel panel-default" ng-show="ctrl.display">
         <!-- Default panel contents -->
         <div class="panel-heading"><span class="lead">Lead </span></div>
@@ -83,7 +100,7 @@
 		                <th>FIRSTNAME</th>
 		                <th>LASTNAME</th>
 		                <th width="100">GENDER</th>
-		                <th width="100">DOB</th>
+		                <th width="150">Date Of Birth</th>
 		                <th width="100">MEDICAID</th>
 		                <th width="100">MEDICARE</th>
 		                <th width="100">DISABILITY</th>

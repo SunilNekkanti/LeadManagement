@@ -1,13 +1,14 @@
 package com.pfchoice.springboot.service.impl;
 
 import java.util.Date;
-import java.util.List;
 
 import com.pfchoice.springboot.model.LeadMembership;
 import com.pfchoice.springboot.repositories.LeadMembershipRepository;
 import com.pfchoice.springboot.service.LeadMembershipService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,10 +41,10 @@ public class LeadMembershipServiceImpl implements LeadMembershipService{
 		leadMembershipRepository.deleteAll();
 	}
 
-	public List<LeadMembership> findAllLeadMemberships(){
-		return leadMembershipRepository.findAll();
+	public Page<LeadMembership> findAllLeadMembershipsByPage(Pageable pageable){
+		return leadMembershipRepository.findAll(pageable);
 	}
-
+	
 	public boolean isLeadMembershipExists(String leadFirstName, String leadLastName, Date dob) {
 		return !leadMembershipRepository.findLeadMembershipByLastNameFirstNameDob( leadFirstName, leadLastName, dob ).isEmpty() ;
 	}

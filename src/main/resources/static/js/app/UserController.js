@@ -1,14 +1,13 @@
 'use strict';
 
 app.controller('UserController',
-    ['UserService', 'RoleService', '$scope', 'DTOptionsBuilder', 'DTColumnBuilder', function( UserService, RoleService, $scope,  DTOptionsBuilder, DTColumnBuilder) {
+    ['UserService', 'RoleService', '$scope', '$compile','DTOptionsBuilder', 'DTColumnBuilder', function( UserService, RoleService, $scope,$compile,  DTOptionsBuilder, DTColumnBuilder) {
 
-
-    	
         var self = this;
         self.user = {};
         self.users=[];
         self.display =false;
+        self.displayEditButton = false;
         self.submit = submit;
         self.roles=[];
         self.getAllUsers = getAllUsers;
@@ -24,22 +23,45 @@ app.controller('UserController',
         self.onlyIntegers = /^\d+$/;
         self.onlyNumbers = /^\d+([,.]\d+)?$/;
         self.roles = RoleService.getAllRoles();
-        self.dtInstance = null;
+        self.dtInstance = {};
+        self.checkBoxChange = checkBoxChange;
         self.dtColumns = [
-            DTColumnBuilder.newColumn('id').withTitle('ID'),
-            DTColumnBuilder.newColumn('username').withTitle('user name'),
+            DTColumnBuilder.newColumn('id').withTitle('ID')
+            .renderWith(function (data, type, full, meta) {
+              return '<input type="checkbox" ng-model="ctrl.displayEditButton"  ng-change="ctrl.checkBoxChange(ctrl.displayEditButton, '+data+')" />';
+            }).withClass("text-center"),
+            DTColumnBuilder.newColumn('username').withTitle('username'),
             DTColumnBuilder.newColumn('password').withTitle('Password')
           ];
      
        
         self.dtOptions = DTOptionsBuilder.fromFnPromise(UserService.loadAllUsers())
         .withDataProp('response.data.content')
+        .withOption('columnDefs', [ {
+            orderable: false,
+            className: 'select-checkbox',
+            targets:   0
+        } ])
+        .withOption('select', {
+                style:    'os',
+                selector: 'td:first-child'
+            })
+    .withOption('createdRow', createdRow)
  .withPaginationType('full_numbers');
         
-        self.dtIntanceCallback = function (instance) {
-            self.dtInstance = instance;
+       
+       function createdRow(row, data, dataIndex) {
+            // Recompiling so we can bind Angular directive to the DT
+            $compile(angular.element(row).contents())($scope);
+      console.log("test");
         }
         
+       function checkBoxChange(displayButton, userId){
+    	   
+    	   alert('displayButton '+displayButton + 'userId '+userId );
+    	  
+    		   
+       }
        
         function submit() {
             console.log('Submitting');
@@ -146,8 +168,8 @@ app.controller('UserController',
             self.display =true;
         }
         
-        	
-
+    
     }
+    
 
     ]);

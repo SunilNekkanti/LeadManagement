@@ -1,12 +1,21 @@
   
     
 <div class="generic-container" >
-
-
- <div class="panel panel-default">
-	        <table datatable="" id="content"   dt-options="ctrl.dtOptions"  dt-columns="ctrl.dtColumns" dt-instance="ctrl.dtInstance" class="table table-hover table-responsive"></table> 
+   <div class="panel panel-default" ng-hide="ctrl.display">
+        <!-- Default panel contents -->
+        <div class="panel-heading"><span class="user">List of Users </span> 
+               <button type="button"   ng-click="ctrl.addUser()" ng-hide="ctrl.displayEditButton" class="btn btn-success custom-width floatRight"> Add </button>   
+               <button type="button" ng-click="ctrl.editUser(u.id)" ng-show="ctrl.displayEditButton" class="btn btn-primary custom-width floatRight">Edit</button>  
+              <button type="button" ng-click="ctrl.removeUser(u.id)"  ng-show="ctrl.displayEditButton" class="btn btn-danger custom-width floatRight">Remove</button>  
+        </div>
+		<div class="panel-body">
+			<div class="table-responsive">
+	        <table datatable="" id="content"   dt-options="ctrl.dtOptions"  dt-columns="ctrl.dtColumns" dt-instance="ctrl.dtInstance" class="table-responsive table  bordered table-striped table-condensed datatable "></table>
+	        
+          </div>
+		</div>
     </div>
-    
+     
     
     <div class="panel panel-default" ng-show="ctrl.display">
         <!-- Default panel contents -->

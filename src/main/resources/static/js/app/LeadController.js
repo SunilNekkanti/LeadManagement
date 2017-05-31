@@ -1,15 +1,14 @@
 'use strict';
 
 app.controller('LeadController',
-    ['LeadService', 'GenderService', '$scope',  function( LeadService, GenderService, $scope) {
+    ['LeadService', 'GenderService', '$scope','$compile', 'DTOptionsBuilder', 'DTColumnBuilder',  function( LeadService, GenderService, $scope,$compile, DTOptionsBuilder, DTColumnBuilder) {
 
-
-    	
         var self = this;
         self.lead = {};
         self.leads=[];
         self.genders=[];
         self.display =false;
+        self.displayEditButton = false;
         self.submit = submit;
         self.addLead = addLead;
         self.getAllLeads = getAllLeads;
@@ -17,6 +16,7 @@ app.controller('LeadController',
         self.updateLead = updateLead;
         self.removeLead = removeLead;
         self.editLead = editLead;
+        self.dtInstance = {};
         
         self.getAllGenders = getAllGenders;
         self.reset = reset;
@@ -27,7 +27,46 @@ app.controller('LeadController',
 
         self.onlyIntegers = /^\d+$/;
         self.onlyNumbers = /^\d+([,.]\d+)?$/;
-
+        self.checkBoxChange = checkBoxChange;
+        
+        self.dtColumns = [
+            DTColumnBuilder.newColumn('id').withTitle('ID')
+            .renderWith(function (data, type, full, meta) {
+              return '<input type="checkbox" ng-model="ctrl.displayEditButton"  ng-change="ctrl.checkBoxChange(ctrl.displayEditButton, '+data+')" />';
+            }).withClass("text-center"),
+            DTColumnBuilder.newColumn('firstName').withTitle('First Name'),
+            DTColumnBuilder.newColumn('lastName').withTitle('Last Name'),
+            DTColumnBuilder.newColumn('lastName').withTitle('Last Name'),
+                DTColumnBuilder.newColumn('dob').withTitle('Date Of Birth')
+          ];
+     
+       
+        self.dtOptions = DTOptionsBuilder.fromFnPromise(LeadService.loadAllLeads())
+        .withDataProp('response.data.content')
+        .withOption('columnDefs', [ {
+            orderable: false,
+            className: 'select-checkbox',
+            targets:   0
+        } ])
+        .withOption('select', {
+                style:    'os',
+                selector: 'td:first-child'
+            })
+    .withOption('createdRow', createdRow)
+ .withPaginationType('full_numbers');
+        
+       
+       function createdRow(row, data, dataIndex) {
+            // Recompiling so we can bind Angular directive to the DT
+            $compile(angular.element(row).contents())($scope);
+      console.log("test");
+        }
+        
+       function checkBoxChange(displayButton, leadId){
+    	   alert('displayButton '+displayButton + 'leadId '+leadId );
+    		   
+       }
+       
         function submit() {
             console.log('Submitting');
             if (self.lead.id === undefined || self.lead.id === null) {
