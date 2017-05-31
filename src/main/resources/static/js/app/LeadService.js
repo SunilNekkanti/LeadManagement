@@ -6,6 +6,7 @@ app.service('LeadService',
 
             var factory = {
                 loadAllLeads: loadAllLeads,
+                loadLeads: loadLeads,
                 getAllLeads: getAllLeads,
                 getLead: getLead,
                 createLead: createLead,
@@ -39,6 +40,29 @@ app.service('LeadService',
                         }
                     );
                 return deferred.promise;
+            }
+            
+            function loadLeads(draw, length, search, order) {
+                console.log('Fetching  leads');
+                var pageable = {
+                  		 page:draw, size:length
+                  		};
+
+                  		var config = {
+                  		 params: pageable,
+                  		 headers : {'Accept' : 'application/json'}
+                  		};
+            return     $http.get(urls.LEAD_SERVICE_API,  config)
+                    .then(
+                        function (response) {
+                            console.log('Fetched successfully  leads');
+                         return     response ;
+                        },
+                        function (errResponse) {
+                            console.error('Error while loading leads');
+                            return   errResponse ;
+                        }
+                    );
             }
 
             function getAllLeads(){
