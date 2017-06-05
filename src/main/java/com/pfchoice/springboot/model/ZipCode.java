@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -30,7 +31,7 @@ public class ZipCode extends RecordDetails implements Serializable {
 	@Column(name = "zipcode", nullable = false)
 	private Integer code;
 
-	
+	@JsonIgnore
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "statecode", referencedColumnName = "code")
 	private State stateCode;
@@ -79,12 +80,6 @@ public class ZipCode extends RecordDetails implements Serializable {
 		this.stateCode = stateCode;
 	}
 
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		hash += (code != null ? code.hashCode() : 0);
-		return hash;
-	}
 
 	@Override
 	public boolean equals(Object object) {

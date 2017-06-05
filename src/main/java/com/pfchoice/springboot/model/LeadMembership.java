@@ -1,6 +1,7 @@
 package com.pfchoice.springboot.model;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -22,11 +23,7 @@ import javax.persistence.TemporalType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- *
  * @author sarath
- */
-/**
- * @author MS
  *
  */
 @Entity
@@ -35,6 +32,29 @@ public class LeadMembership extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Basic(optional = false)
+	@Column(name = "lead_Mbr_id", nullable = false)
+	private Integer id;
+
+	@Column(name = "lead_Mbr_LastName")
+	private String lastName;
+
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "leadMbr")
+	private List<LeadMembershipInsurance> leadMbrInsuranceList;
+
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "leadMbr")
+	private List<LeadMembershipProvider> leadMbrProviderList;
+
+	@Column(name = "lead_Mbr_MedicaidNo")
+	private String medicaidNo;
+
+	@Column(name = "lead_Mbr_MedicareNo")
+	private String medicareNo;
+
 	@ManyToOne
 	@JoinColumn(name = "lead_Mbr_CountyCode", referencedColumnName = "code")
 	private County countyCode;
@@ -42,6 +62,11 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@Column(name = "lead_Mbr_DOB")
 	@Temporal(TemporalType.DATE)
 	private Date dob;
+	
+	@Column(name = "bestTimeToCall", nullable= true)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Calendar  bestTimeToCall;
+	
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lead_Mbr_ethinic_code", referencedColumnName = "code")
@@ -66,36 +91,41 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@Column(name = "has_disability")
 	private Character hasDisability  = new Character('N') ;
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Basic(optional = false)
-	@Column(name = "lead_Mbr_id", nullable = false)
-	private Integer id;
-
-	@Column(name = "lead_Mbr_LastName")
-	private String lastName;
-
-	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "leadMbr")
-	private List<LeadMembershipInsurance> leadMbrInsuranceList;
-
-	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "leadMbr")
-	private List<LeadMembershipProvider> leadMbrProviderList;
-
-	@Column(name = "lead_Mbr_MedicaidNo")
-	private String medicaidNo;
-
-	@Column(name = "lead_Mbr_MedicareNo")
-	private String medicareNo;
-
-	@JsonIgnore
-	@OneToMany(mappedBy = "leadMbr", fetch = FetchType.LAZY)
-	private List<ReferenceContact> refContactList;
-
-	@OneToOne
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "lead_Mbr_languageId", referencedColumnName = "code")
+	private LeadLanguage language;
+	
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "lead_Mbr_Status", referencedColumnName = "code")
-	private MembershipStatus status;
+	private LeadStatus status;
+	
+	@Column(name = "home_phone")
+	private String homePhone;
+
+	@Column(name = "mobile_phone")
+	private String mobilePhone;
+
+	@Column(name = "email")
+	private String email;
+	
+	@Column(name = "address1")
+	private String address1;
+	
+	@Column(name = "address2")
+	private String address2;
+
+	@Column(name = "city")
+	private String city;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "statecode", referencedColumnName = "code")
+	private State stateCode;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "zipcode", referencedColumnName = "zipcode")
+	private ZipCode zipCode;
+
+	
 
 	/**
 	 * 
@@ -223,16 +253,9 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @return the refContactList
-	 */
-	public List<ReferenceContact> getRefContactList() {
-		return refContactList;
-	}
-
-	/**
 	 * @return the status
 	 */
-	public MembershipStatus getStatus() {
+	public LeadStatus getStatus() {
 		return status;
 	}
 
@@ -367,19 +390,152 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param refContactList
-	 *            the refContactList to set
-	 */
-	public void setRefContactList(List<ReferenceContact> refContactList) {
-		this.refContactList = refContactList;
-	}
-
-	/**
 	 * @param status
 	 *            the status to set
 	 */
-	public void setStatus(final MembershipStatus status) {
+	public void setStatus(final LeadStatus status) {
 		this.status = status;
+	}
+
+	/**
+	 * @return the homePhone
+	 */
+	public String getHomePhone() {
+		return homePhone;
+	}
+
+	/**
+	 * @param homePhone the homePhone to set
+	 */
+	public void setHomePhone(String homePhone) {
+		this.homePhone = homePhone;
+	}
+
+	/**
+	 * @return the mobilePhone
+	 */
+	public String getMobilePhone() {
+		return mobilePhone;
+	}
+
+	/**
+	 * @param mobilePhone the mobilePhone to set
+	 */
+	public void setMobilePhone(String mobilePhone) {
+		this.mobilePhone = mobilePhone;
+	}
+
+	/**
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	/**
+	 * @return the address1
+	 */
+	public String getAddress1() {
+		return address1;
+	}
+
+	/**
+	 * @param address1 the address1 to set
+	 */
+	public void setAddress1(String address1) {
+		this.address1 = address1;
+	}
+
+	/**
+	 * @return the address2
+	 */
+	public String getAddress2() {
+		return address2;
+	}
+
+	/**
+	 * @param address2 the address2 to set
+	 */
+	public void setAddress2(String address2) {
+		this.address2 = address2;
+	}
+
+	/**
+	 * @return the city
+	 */
+	public String getCity() {
+		return city;
+	}
+
+	/**
+	 * @param city the city to set
+	 */
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	/**
+	 * @return the stateCode
+	 */
+	public State getStateCode() {
+		return stateCode;
+	}
+
+	/**
+	 * @param stateCode the stateCode to set
+	 */
+	public void setStateCode(State stateCode) {
+		this.stateCode = stateCode;
+	}
+
+	/**
+	 * @return the zipCode
+	 */
+	public ZipCode getZipCode() {
+		return zipCode;
+	}
+
+	/**
+	 * @param zipCode the zipCode to set
+	 */
+	public void setZipCode(ZipCode zipCode) {
+		this.zipCode = zipCode;
+	}
+
+	/**
+	 * @return the language
+	 */
+	public LeadLanguage getLanguage() {
+		return language;
+	}
+
+	/**
+	 * @param language the language to set
+	 */
+	public void setLanguage(LeadLanguage language) {
+		this.language = language;
+	}
+
+	
+	/**
+	 * @return the bestTimeToCall
+	 */
+	public Calendar getBestTimeToCall() {
+		return bestTimeToCall;
+	}
+
+	/**
+	 * @param bestTimeToCall the bestTimeToCall to set
+	 */
+	public void setBestTimeToCall(Calendar bestTimeToCall) {
+		this.bestTimeToCall = bestTimeToCall;
 	}
 
 	@Override

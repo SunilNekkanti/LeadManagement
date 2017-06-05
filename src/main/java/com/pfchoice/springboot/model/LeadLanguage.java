@@ -12,11 +12,11 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Mohanasundharam
+ * @author sarath
  */
 @Entity
-@Table(name = "lu_membership_status")
-public class MembershipStatus extends RecordDetails implements Serializable {
+@Table(name = "lu_language")
+public class LeadLanguage extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -34,14 +34,14 @@ public class MembershipStatus extends RecordDetails implements Serializable {
 	/**
 	 * 
 	 */
-	public MembershipStatus() {
+	public LeadLanguage() {
 		super();
 	}
 
 	/**
 	 * @param id
 	 */
-	public MembershipStatus(final Byte id) {
+	public LeadLanguage(final Byte id) {
 		super();
 		this.id = id;
 	}
@@ -84,10 +84,10 @@ public class MembershipStatus extends RecordDetails implements Serializable {
 
 	@Override
 	public boolean equals(Object object) {
-		if (!(object instanceof MembershipStatus)) {
+		if (!(object instanceof LeadLanguage)) {
 			return false;
 		}
-		MembershipStatus other = (MembershipStatus) object;
+		LeadLanguage other = (LeadLanguage) object;
 		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
 			return false;
 		}
@@ -96,7 +96,7 @@ public class MembershipStatus extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.Membership[ id=" + id + " ]";
+		return "com.pfchoice.core.entity.Language[ id=" + id + " ]";
 	}
 
 }

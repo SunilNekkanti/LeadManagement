@@ -70,7 +70,7 @@ public class UserController {
 			return new ResponseEntity(new CustomErrorType("Unable to create. A User with name " + 
 			user.getUsername() + " already exist."),HttpStatus.CONFLICT);
 		}
-		logger.info(" user.getRoles().size() :{} ", user.getRoles().size());
+		//logger.info(" user.getRoles().size() :{} ", user.getRoles().size());
 		user.setCreatedBy("sarath");
 		user.setUpdatedBy("sarath");
 		userService.saveUser(user);

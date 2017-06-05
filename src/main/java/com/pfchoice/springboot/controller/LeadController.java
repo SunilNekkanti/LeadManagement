@@ -95,7 +95,7 @@ public class LeadController {
 			return new ResponseEntity(new CustomErrorType("Unable to upate. LeadMembership with id " + id + " not found."),
 					HttpStatus.NOT_FOUND);
 		}
-
+      
 		currentLeadMembership.setFirstName(lead.getFirstName());
 		currentLeadMembership.setLastName(lead.getLastName());
 		currentLeadMembership.setCountyCode(lead.getCountyCode());
@@ -106,6 +106,18 @@ public class LeadController {
 		currentLeadMembership.setHasMedicare(lead.getHasMedicare());
 		currentLeadMembership.setHasDisability(lead.getHasDisability());
 		currentLeadMembership.setStatus(lead.getStatus());
+		currentLeadMembership.setLanguage(lead.getLanguage());
+		currentLeadMembership.setStatus(lead.getStatus());
+		currentLeadMembership.setEmail(lead.getEmail());
+		currentLeadMembership.setHomePhone(lead.getHomePhone());
+		currentLeadMembership.setMobilePhone(lead.getMobilePhone());
+		currentLeadMembership.setAddress1(lead.getAddress1());
+		currentLeadMembership.setAddress2(lead.getAddress2());
+		currentLeadMembership.setCity(lead.getCity());
+		currentLeadMembership.setStateCode(lead.getStateCode());
+		currentLeadMembership.setZipCode(lead.getZipCode());
+		
+		
 		leadService.updateLeadMembership(currentLeadMembership);
 		return new ResponseEntity<LeadMembership>(currentLeadMembership, HttpStatus.OK);
 	}

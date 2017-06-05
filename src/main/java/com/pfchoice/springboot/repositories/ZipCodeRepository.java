@@ -6,8 +6,8 @@ import org.springframework.stereotype.Repository;
 import com.pfchoice.springboot.model.ZipCode;
 
 @Repository
-public interface ZipCodeRepository extends JpaRepository<ZipCode, Long> {
+public interface ZipCodeRepository extends JpaRepository<ZipCode, Integer> {
 
-
+	public ZipCode findByCode(Integer code);
 }
 

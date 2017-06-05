@@ -11,8 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-
-
 /**
  *
  * @author sarath
@@ -115,12 +113,6 @@ public class State extends RecordDetails implements Serializable {
 		this.zipCodes = zipCodes;
 	}
 
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		hash += (code != null ? code.hashCode() : 0);
-		return hash;
-	}
 
 	@Override
 	public boolean equals(Object object) {

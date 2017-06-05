@@ -1,19 +1,13 @@
 package com.pfchoice.springboot.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
@@ -40,13 +34,10 @@ public class Insurance extends RecordDetails implements Serializable {
 	private String name;
 
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	/*@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "plan_type_id", referencedColumnName = "plan_type_id")
 	private PlanType planTypeId;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "ins")
-	private Set<ReferenceContact> refInsContacts = new HashSet<>();
-
+*/
 	/**
 	 * 
 	 */
@@ -94,32 +85,17 @@ public class Insurance extends RecordDetails implements Serializable {
 	/**
 	 * @return the planTypeId
 	 */
-	public PlanType getPlanTypeId() {
+	/*public PlanType getPlanTypeId() {
 		return planTypeId;
-	}
+	}*/
 
 	/**
 	 * @param planTypeId
 	 *            the planTypeId to set
 	 */
-	public void setPlanTypeId(PlanType planTypeId) {
+	/*public void setPlanTypeId(PlanType planTypeId) {
 		this.planTypeId = planTypeId;
-	}
-
-	/**
-	 * @return the refInsContacts
-	 */
-	public Set<ReferenceContact> getRefInsContacts() {
-		return refInsContacts;
-	}
-
-	/**
-	 * @param refInsContacts
-	 *            the refInsContacts to set
-	 */
-	public void setRefInsContacts(Set<ReferenceContact> refInsContacts) {
-		this.refInsContacts = refInsContacts;
-	}
+	}*/
 
 	
 	@Override

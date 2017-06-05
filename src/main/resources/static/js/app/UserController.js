@@ -26,12 +26,12 @@ app.controller('UserController',
         self.dtInstance = {};
         self.checkBoxChange = checkBoxChange;
         self.dtColumns = [
-            DTColumnBuilder.newColumn('id').withTitle('ID')
+            DTColumnBuilder.newColumn('id').withTitle('ACTION')
             .renderWith(function (data, type, full, meta) {
               return '<input type="checkbox" ng-model="ctrl.displayEditButton"  ng-change="ctrl.checkBoxChange(ctrl.displayEditButton, '+data+')" />';
             }).withClass("text-center"),
-            DTColumnBuilder.newColumn('username').withTitle('username'),
-            DTColumnBuilder.newColumn('password').withTitle('Password')
+            DTColumnBuilder.newColumn('username').withTitle('USERNAME'),
+            DTColumnBuilder.newColumn('password').withTitle('PASSWORD')
           ];
      
        

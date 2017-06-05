@@ -1,6 +1,6 @@
 //Code goes here
 'use strict';
-var app = angular.module('my-app', ['ui.bootstrap','ui.router','ngStorage','datatables']);
+var app = angular.module('my-app', ['ui.bootstrap','ui.router','ngStorage','datatables','ngAnimate', 'ngSanitize']);
 
 
 app.constant('urls', {
@@ -9,6 +9,11 @@ app.constant('urls', {
     LEAD_SERVICE_API : 'http://localhost:8080/LeadManagement/api/lead/',
     GENDER_SERVICE_API : 'http://localhost:8080/LeadManagement/api/gender/',
     ROLE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/role/',
+    STATE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/state/',
+    STATUS_SERVICE_API : 'http://localhost:8080/LeadManagement/api/leadStatus/',
+    LANGUAGE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/leadLanguage/',
+    PLANTYPE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/planType/',
+    INSURANCE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/insurance/'
 });
 
 app.controller('NavbarController', ['$scope', '$state', function($scope, $state){
@@ -20,7 +25,7 @@ app.controller('NavbarController', ['$scope', '$state', function($scope, $state)
 }]);
 
 
-
+ 
 
 
 app.config(['$stateProvider', '$urlRouterProvider',
@@ -29,8 +34,8 @@ app.config(['$stateProvider', '$urlRouterProvider',
 	
     // Now set up the states
     $stateProvider
-       .state('home', {
-          url: '/',
+       .state('user', {
+          url: '/user',
           templateUrl: 'partials/list',
           controller:'UserController',
           controllerAs:'ctrl',
@@ -47,20 +52,69 @@ app.config(['$stateProvider', '$urlRouterProvider',
           }
       })
       .state('lead', {
-          url: '/lead',
+          url: '/',
           templateUrl: 'partials/lead_list',
           controller:'LeadController',
           controllerAs:'ctrl',
           resolve: {
-              users: function ($q, LeadService, GenderService) {
+              leads: function ($q, LeadService) {
                   console.log('Load all leads');
                   var deferred = $q.defer();
-                  GenderService.loadAllGenders().then(deferred.resolve, deferred.resolve);
                   LeadService.loadAllLeads().then(deferred.resolve, deferred.resolve);
-                  
                   console.log('deferred.promise'+deferred.promise);
                   return deferred.promise;
-              }
+              },
+      
+      		  states: function ($q,  StateService) {
+		          console.log('Load all leads');
+		          var deferred = $q.defer();
+		          StateService.loadAllStates().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise;
+		      },
+              
+              genders: function ($q,  GenderService) {
+		          console.log('Load all leads');
+		          var deferred = $q.defer();
+		          GenderService.loadAllGenders().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise;
+		      },
+		      statuses: function ($q,  LeadStatusService) {
+		          console.log('Load all leadStatuses');
+		          var deferred = $q.defer();
+		          LeadStatusService.loadAllLeadStatuses().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise;
+		      },
+		      languages: function ($q,  LeadLanguageService) {
+		          console.log('Load all leadLanguages');
+		          var deferred = $q.defer();
+		          LeadLanguageService.loadAllLeadLanguages().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise;
+		      },
+		      insurances: function ($q,  InsuranceService) {
+		          console.log('Load all leadInsurances');
+		          var deferred = $q.defer();
+		          InsuranceService.loadAllInsurances().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise;
+		      },
+		      users: function ($q,  UserService) {
+		          console.log('Load all users');
+		          var deferred = $q.defer();
+		          UserService.loadAllUsers().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise;
+		      },
+		      planTypes: function ($q,  PlanTypeService) {
+		          console.log('Load all users');
+		          var deferred = $q.defer();
+		          PlanTypeService.loadAllPlanTypes().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise;
+		      }
           }
       })
       .state('role', {
@@ -82,51 +136,45 @@ app.config(['$stateProvider', '$urlRouterProvider',
         $urlRouterProvider.otherwise('/');
     }]);
 
-
-app.directive('datatables', function () {
+// DatePicker -> NgModel
+app.directive('datePicker', function () {
     return {
-        restrict: 'E, A, C',
-        link: function (scope, element, attrs, controller) {
-            //scope - directive internal scope
+        require: 'ngModel',
+        link: function (scope, element, attr, ngModel) {
+            $(element).datetimepicker({
+                locale: 'en-us',
+                format: 'MM/DD/YYYY HH:mm',
+                parseInputDate: function (data) {
+                    if (data instanceof Date) {
+                        return moment(data);
+                    } else {
+                        return moment(new Date(data));
+                    }
+                },
+                maxDate: new Date()
+            });
 
-            var dataTable = element.dataTable(scope.options); //init plugin
-            
-            var mapToDatatableFormat = function (data) {
-            	return data.map(scope.options.columnMap)
-            }
-            
-            scope.$watch('items', function (newData) {
-                console.log("new items:", scope.options);
-                if (newData) {
-                    dataTable.fnClearTable();
-                    dataTable.fnAddData( mapToDatatableFormat(newData) )
+            $(element).on("dp.change", function (e) {
+                ngModel.$viewValue = e.date;
+                ngModel.$commitViewValue();
+            });
+        }
+    };
+});
+
+// DatePicker Input NgModel->DatePicker
+app.directive('datePickerInput', function() {
+    return {
+        require: 'ngModel',
+        link: function (scope, element, attr, ngModel) {
+            // Trigger the Input Change Event, so the Datepicker gets refreshed
+            scope.$watch(attr.ngModel, function (value) {
+                if (value) {
+                    element.trigger("change");
                 }
-            }, true);
-            
-            dataTable.on('select', function (e, dt, type, indexes) {
-                var rowData = table.rows( indexes ).data().toArray();
             });
-            dataTable.on('deselect', function (e, dt, type, indexes) {
-                var rowData = table.rows( indexes ).data().toArray();
-            });
-            
-        },
-        scope: {
-            options: "=",
-            items: "="
         }
     };
 });
 
 
-app.filter('getByProperty', function() {
-    return function(propertyName, propertyValue, collection) {
-        var i=0, len=collection.length;
-        for (; i<len; i++) {
-            if (collection[i][propertyName] == +propertyValue) {
-                return collection[i];
-            }
-        }
-        return null;
-    }
-});
