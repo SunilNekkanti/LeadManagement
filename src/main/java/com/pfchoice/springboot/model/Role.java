@@ -14,6 +14,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 
@@ -22,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @author sarath
  */
 @Entity(name = "role")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Role extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;

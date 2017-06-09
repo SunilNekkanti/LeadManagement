@@ -16,6 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 
 /**
@@ -23,6 +25,7 @@ import javax.persistence.OneToMany;
  * @author sarath
  */
 @Entity(name = "user")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;

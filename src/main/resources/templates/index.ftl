@@ -37,6 +37,7 @@
   <script src="js/app/LeadLanguageService.js"></script>
   <script src="js/app/InsuranceService.js"></script>
   <script src="js/app/PlanTypeService.js"></script>
+  <script src="js/app/ProviderService.js"></script>
   <script src="js/app/LeadService.js"></script>
   <script src="js/app/LeadController.js"></script>
   <script src="js/app/RoleService.js"></script>

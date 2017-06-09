@@ -13,7 +13,8 @@ app.constant('urls', {
     STATUS_SERVICE_API : 'http://localhost:8080/LeadManagement/api/leadStatus/',
     LANGUAGE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/leadLanguage/',
     PLANTYPE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/planType/',
-    INSURANCE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/insurance/'
+    INSURANCE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/insurance/',
+    PROVIDER_SERVICE_API : 'http://localhost:8080/LeadManagement/api/provider/'
 });
 
 app.controller('NavbarController', ['$scope', '$state', function($scope, $state){
@@ -112,6 +113,13 @@ app.config(['$stateProvider', '$urlRouterProvider',
 		          console.log('Load all users');
 		          var deferred = $q.defer();
 		          PlanTypeService.loadAllPlanTypes().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise;
+		      },
+		      providers: function ($q,  ProviderService) {
+		          console.log('Load all users');
+		          var deferred = $q.defer();
+		          ProviderService.loadAllProviders().then(deferred.resolve, deferred.resolve);
 		          console.log('deferred.promise'+deferred.promise);
 		          return deferred.promise;
 		      }

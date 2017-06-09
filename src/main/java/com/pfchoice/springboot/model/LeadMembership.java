@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,6 +22,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * @author sarath
@@ -28,6 +30,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @Entity
 @Table(name = "lead_membership")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class LeadMembership extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -48,10 +51,13 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "leadMbr")
 	private List<LeadMembershipProvider> leadMbrProviderList;
+	
+	@OneToMany(cascade={ CascadeType.ALL },fetch = FetchType.LAZY, mappedBy = "lead")
+	private List<AgentLeadAppointment> agentLeadAppointmentList;
 
 	@Column(name = "lead_Mbr_MedicaidNo")
 	private String medicaidNo;
-
+	
 	@Column(name = "lead_Mbr_MedicareNo")
 	private String medicareNo;
 
@@ -536,6 +542,25 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	 */
 	public void setBestTimeToCall(Calendar bestTimeToCall) {
 		this.bestTimeToCall = bestTimeToCall;
+	}
+	
+	/**
+	 * @return the agentLeadAppointmentList
+	 */
+	public List<AgentLeadAppointment> getAgentLeadAppointmentList() {
+		return agentLeadAppointmentList;
+	}
+
+	/**
+	 * @param agentLeadAppointmentList the agentLeadAppointmentList to set
+	 */
+	public void setAgentLeadAppointmentList(List<AgentLeadAppointment> agentLeadAppointmentList) {
+		for (AgentLeadAppointment agentLeadAppointment : agentLeadAppointmentList) {
+			agentLeadAppointment.setLead(this);
+			agentLeadAppointment.setCreatedBy("Sarath"); 
+			agentLeadAppointment.setUpdatedBy("Sarath");
+    }
+		this.agentLeadAppointmentList = agentLeadAppointmentList;
 	}
 
 	@Override

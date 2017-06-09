@@ -2,17 +2,13 @@ package com.pfchoice.springboot.model;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
@@ -43,9 +39,6 @@ public class Provider extends RecordDetails implements Serializable {
 	private String name;
 
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "prvdr")
-	private Set<ReferenceContact> refContacts = new HashSet<>();
-
 
 	/**
 	 * 
@@ -107,20 +100,6 @@ public class Provider extends RecordDetails implements Serializable {
 		this.name = name;
 	}
 
-	/**
-	 * @return the refContact
-	 */
-	public Set<ReferenceContact> getRefContacts() {
-		return refContacts;
-	}
-
-	/**
-	 * @param refContact
-	 *            the refContact to set
-	 */
-	public void setRefContacts(Set<ReferenceContact> refContacts) {
-		this.refContacts = refContacts;
-	}
 
 	@Override
 	public int hashCode() {

@@ -11,11 +11,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 
@@ -24,7 +26,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @author sarath
  */
 @Entity(name = "agent_lead_appointments")
-public class AgentLeadAppointments extends RecordDetails implements Serializable {
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class AgentLeadAppointment extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -38,17 +41,17 @@ public class AgentLeadAppointments extends RecordDetails implements Serializable
 	
 	@Column(name = "notes", length = 65535, columnDefinition = "TEXT")
 	private String notes;
-
- 	@JsonIgnore
-	@OneToOne(fetch = FetchType.LAZY)
+	
+	@ManyToOne(fetch = FetchType.LAZY)
  	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	private User user;
  	
  	@JsonIgnore
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
  	@JoinColumn(name = "lead_mbr_id", referencedColumnName = "lead_mbr_id")
 	private LeadMembership lead;
  
+ 	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
  	@Column(name = "appointment_time", nullable= true)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar  appointmentTime;
@@ -56,14 +59,14 @@ public class AgentLeadAppointments extends RecordDetails implements Serializable
 	/**
 	 * 
 	 */
-	public AgentLeadAppointments() {
+	public AgentLeadAppointment() {
 		super();
 	}
 
 	/**
 	 * @param id
 	 */
-	public AgentLeadAppointments(final Integer id) {
+	public AgentLeadAppointment(final Integer id) {
 		super();
 		this.id = id;
 	}
@@ -147,10 +150,10 @@ public class AgentLeadAppointments extends RecordDetails implements Serializable
 
 	@Override
 	public boolean equals(Object object) {
-		if (!(object instanceof AgentLeadAppointments)) {
+		if (!(object instanceof AgentLeadAppointment)) {
 			return false;
 		}
-		AgentLeadAppointments other = (AgentLeadAppointments) object;
+		AgentLeadAppointment other = (AgentLeadAppointment) object;
 		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
 			return false;
 		}
@@ -159,7 +162,7 @@ public class AgentLeadAppointments extends RecordDetails implements Serializable
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.Role[ id=" + id + " ]";
+		return "com.pfchoice.core.entity.AgentLeadAppointment[ id=" + id + " user_id = "+user.getId()+" ]";
 	}
 
 }

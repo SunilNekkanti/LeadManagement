@@ -1,5 +1,7 @@
 package com.pfchoice.springboot.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.pfchoice.springboot.model.AgentLeadAppointment;
 import com.pfchoice.springboot.model.LeadMembership;
 import com.pfchoice.springboot.service.LeadMembershipService;
 import com.pfchoice.springboot.util.CustomErrorType;
@@ -117,6 +120,16 @@ public class LeadController {
 		currentLeadMembership.setStateCode(lead.getStateCode());
 		currentLeadMembership.setZipCode(lead.getZipCode());
 		
+		List<AgentLeadAppointment> agntLeadAppointList = lead.getAgentLeadAppointmentList();
+	
+		agntLeadAppointList.forEach(agntleadAppt -> {System.out.println("testing agntleadAppt"+agntleadAppt);	
+		System.out.println("testing agntleadAppt"+agntleadAppt.toString());}
+		);
+		
+		//currentLeadMembership.getAgentLeadAppointmentList().clear();
+		
+		currentLeadMembership.setAgentLeadAppointmentList(agntLeadAppointList);  
+		System.out.println("currentLeadMembership.getAgentLeadAppointmentList().size() =====3step" +currentLeadMembership.getAgentLeadAppointmentList().size());
 		
 		leadService.updateLeadMembership(currentLeadMembership);
 		return new ResponseEntity<LeadMembership>(currentLeadMembership, HttpStatus.OK);

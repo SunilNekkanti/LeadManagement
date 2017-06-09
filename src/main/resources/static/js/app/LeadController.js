@@ -11,6 +11,7 @@ app
 						'LeadLanguageService',
 						'InsuranceService',
 						'PlanTypeService',
+						'ProviderService',
 						'UserService',
 						'$scope',
 						'$compile',
@@ -19,7 +20,7 @@ app
 						'DTColumnBuilder',
 						function(LeadService, GenderService, StateService,
 								LeadStatusService, LeadLanguageService,
-								InsuranceService, PlanTypeService, UserService, $scope, $compile, $filter,
+								InsuranceService, PlanTypeService, ProviderService, UserService, $scope, $compile, $filter,
 								DTOptionsBuilder, DTColumnBuilder) {
 
 							var self = this;
@@ -31,7 +32,9 @@ app
 							self.languages = [];
 							self.statuses = [];
 							self.insurances = [];
+							self.providers = [];
 							self.planTypes = [];
+							self.selectedAgentLeadAppointment = {};
 							self.users = [];
 							self.display = false;
 							self.displayEditButton = false;
@@ -51,6 +54,8 @@ app
 							self.getAllInsurances = getAllInsurances;
 							self.getAllAgents = getAllAgents;
 							self.getAllPlanTypes = getAllPlanTypes;
+							self.getAllProviders = getAllProviders;
+							self.addAgentLeadAppointment = addAgentLeadAppointment;
 							self.reset = reset;
 							self.today = today;
 							self.toggleMin = toggleMin;
@@ -130,8 +135,6 @@ app
 											.withTitle('ZIPCODE').withOption(
 													'defaultContent', '') ];
 
-							// self.dtOptions =
-							// DTOptionsBuilder.fromFnPromise(LeadService.loadAllLeads())
 							self.dtOptions = DTOptionsBuilder
 									.newOptions()
 									.withOption(
@@ -170,7 +173,7 @@ app
 							}
 
 							function checkBoxChange(checkStatus, leadId) {
-								self.displayEditButton = !self.displayEditButton;
+								self.displayEditButton = checkStatus;
 								self.leadId = leadId
 
 							}
@@ -214,6 +217,12 @@ app
 
 							function submit() {
 								console.log('Submitting');
+								self.lead.agentLeadAppointmentList = self.lead.agentLeadAppointmentList.filter(function( obj ) {
+									  return obj.id !== self.selectedAgentLeadAppointment.id;
+									});
+								
+								self.lead.agentLeadAppointmentList.push(self.selectedAgentLeadAppointment);
+								console.log('self.lead.agentLeadAppointmentList '+JSON.stringify(self.lead.agentLeadAppointmentList));
 								if (self.lead.id === undefined
 										|| self.lead.id === null) {
 									console.log('Saving New Lead', self.lead);
@@ -223,6 +232,7 @@ app
 									console.log('Lead updated with id ',
 											self.lead.id);
 								}
+								self.displayEditButton = false;
 							}
 
 							function createLead(lead) {
@@ -303,13 +313,24 @@ app
 								self.statuses = getAllLeadStatuses();
 								self.insurances = getAllInsurances();
 								self.planTypes = getAllPlanTypes();
+								self.providers = getAllProviders();
 								self.users = getAllAgents();
-								LeadService
+									LeadService
 										.getLead(id)
 										.then(
 												function(lead) {
 													self.lead = lead;
 													self.display = true;
+														if(self.lead.agentLeadAppointmentList === undefined){
+															self.selectedAgentLeadAppointment= {} ;
+														} 			
+														else{
+															self.selectedAgentLeadAppointments = $filter("filter")(self.lead.agentLeadAppointmentList, {activeInd :'Y'});	
+															if(self.selectedAgentLeadAppointments.length>0){
+																self.selectedAgentLeadAppointment = self.selectedAgentLeadAppointments[0];
+															}
+														}
+												
 												},
 												function(errResponse) {
 													console
@@ -330,6 +351,7 @@ app
 								self.statuses = getAllLeadStatuses();
 								self.insurances = getAllInsurances();
 								self.planTypes = getAllPlanTypes();
+								self.providers = getAllProviders();
 								self.users = getAllAgents();
 							}
 
@@ -340,6 +362,10 @@ app
 								$scope.myForm.$setPristine(); // reset Form
 							}
 
+							
+							function addAgentLeadAppointment() {
+								self.lead.agentLeadAppointments.push(self.selectedAgentLeadAppointment);
+							}
 							function getAllLeads() {
 								return LeadService.getAllLeads();
 							}
@@ -375,6 +401,12 @@ app
 								return PlanTypeService
 										.getAllPlanTypes();
 							}
+							
+							function getAllProviders() {
+								return ProviderService
+										.getAllProviders();
+							}
+							
 							function today() {
 								    self.bestTimeToCall = new Date();
 							}
