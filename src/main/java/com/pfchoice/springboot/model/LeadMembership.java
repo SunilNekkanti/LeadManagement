@@ -97,11 +97,11 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@Column(name = "has_disability")
 	private Character hasDisability  = new Character('N') ;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lead_Mbr_languageId", referencedColumnName = "code")
 	private LeadLanguage language;
 	
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lead_Mbr_Status", referencedColumnName = "code")
 	private LeadStatus status;
 	
@@ -123,15 +123,17 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@Column(name = "city")
 	private String city;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "statecode", referencedColumnName = "code")
 	private State stateCode;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "zipcode", referencedColumnName = "zipcode")
 	private ZipCode zipCode;
 
-	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "event_id", referencedColumnName = "event_id")
+	private Event event;
 
 	/**
 	 * 
@@ -559,8 +561,22 @@ public class LeadMembership extends RecordDetails implements Serializable {
 			agentLeadAppointment.setLead(this);
 			agentLeadAppointment.setCreatedBy("Sarath"); 
 			agentLeadAppointment.setUpdatedBy("Sarath");
-    }
+		}
 		this.agentLeadAppointmentList = agentLeadAppointmentList;
+	}
+	
+	/**
+	 * @return the event
+	 */
+	public Event getEvent() {
+		return event;
+	}
+
+	/**
+	 * @param event the event to set
+	 */
+	public void setEvent(Event event) {
+		this.event = event;
 	}
 
 	@Override

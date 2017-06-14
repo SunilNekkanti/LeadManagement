@@ -2,6 +2,7 @@ package com.pfchoice.springboot.model;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -56,6 +57,21 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar  appointmentTime;
  	
+ 	
+ 	@ManyToOne(fetch = FetchType.LAZY)
+ 	@JoinColumn(name = "prvdr_id", referencedColumnName = "prvdr_id")
+	private Provider prvdr;
+ 	
+	@ManyToOne(fetch = FetchType.LAZY)
+ 	@JoinColumn(name = "plan_type_id", referencedColumnName = "plan_type_id")
+	private PlanType planType;
+	
+ 	 
+	@Column(name = "effective_from")
+	@Temporal(TemporalType.DATE)
+	private Date effectiveFrom;
+	
+ 	 
 	/**
 	 * 
 	 */
@@ -139,6 +155,48 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 	 */
 	public void setAppointmentTime(Calendar appointmentTime) {
 		this.appointmentTime = appointmentTime;
+	}
+
+	/**
+	 * @return the prvdr
+	 */
+	public Provider getPrvdr() {
+		return prvdr;
+	}
+
+	/**
+	 * @param prvdr the prvdr to set
+	 */
+	public void setPrvdr(Provider prvdr) {
+		this.prvdr = prvdr;
+	}
+
+	/**
+	 * @return the planType
+	 */
+	public PlanType getPlanType() {
+		return planType;
+	}
+
+	/**
+	 * @param planType the planType to set
+	 */
+	public void setPlanType(PlanType planType) {
+		this.planType = planType;
+	}
+
+	/**
+	 * @return the effectiveFrom
+	 */
+	public Date getEffectiveFrom() {
+		return effectiveFrom;
+	}
+
+	/**
+	 * @param effectiveFrom the effectiveFrom to set
+	 */
+	public void setEffectiveFrom(Date effectiveFrom) {
+		this.effectiveFrom = effectiveFrom;
 	}
 
 	@Override

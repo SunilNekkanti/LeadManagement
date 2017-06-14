@@ -14,13 +14,20 @@ app.constant('urls', {
     LANGUAGE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/leadLanguage/',
     PLANTYPE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/planType/',
     INSURANCE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/insurance/',
-    PROVIDER_SERVICE_API : 'http://localhost:8080/LeadManagement/api/provider/'
+    PROVIDER_SERVICE_API : 'http://localhost:8080/LeadManagement/api/provider/',
+    FACILITYTYPE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/facilityType/',
+    BROKERAGE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/brokerage/',
+    EVENT_SERVICE_API : 'http://localhost:8080/LeadManagement/api/event/'
 });
 
 app.controller('NavbarController', ['$scope', '$state', function($scope, $state){
   $scope.isCollapsed = true;
+  $scope.displayNavbar = true;
   
   $scope.callMe = function(url){
+	  if(url == 'logout'){
+		  $scope.displayNavbar = false;
+	  }
 	  $state.go(url);
   }
 }]);
@@ -35,6 +42,11 @@ app.config(['$stateProvider', '$urlRouterProvider',
 	
     // Now set up the states
     $stateProvider
+    .state('home', {
+        url: '/home',
+        templateUrl: 'home'
+    })
+    
        .state('user', {
           url: '/user',
           templateUrl: 'partials/list',
@@ -53,7 +65,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
           }
       })
       .state('lead', {
-          url: '/',
+          url: '/lead',
           templateUrl: 'partials/lead_list',
           controller:'LeadController',
           controllerAs:'ctrl',
@@ -140,6 +152,74 @@ app.config(['$stateProvider', '$urlRouterProvider',
                   return deferred.promise;
               }
           }
+      })
+      .state('facilityType', {
+          url: '/facilityType',
+          templateUrl: 'partials/facilityType_list',
+          controller:'FacilityTypeController',
+          controllerAs:'ctrl',
+          resolve: {
+              users: function ($q,FacilityTypeService) {
+                  console.log('Load all facilityTypes');
+                  var deferred = $q.defer();
+                  FacilityTypeService.loadAllFacilityTypes().then(deferred.resolve, deferred.resolve);
+                  
+                  console.log('deferred.promise'+deferred.promise);
+                  return deferred.promise;
+              }
+          }
+      })
+      .state('brokerage', {
+          url: '/brokerage',
+          templateUrl: 'partials/brokerage_list',
+          controller:'BrokerageController',
+          controllerAs:'ctrl',
+          resolve: {
+              brokerages: function ($q,BrokerageService) {
+                  console.log('Load all brokerages');
+                  var deferred = $q.defer();
+                  BrokerageService.loadAllBrokerages().then(deferred.resolve, deferred.resolve);
+                  
+                  console.log('deferred.promise'+deferred.promise);
+                  return deferred.promise;
+              }
+          }
+      })
+      .state('event', {
+          url: '/event',
+          templateUrl: 'partials/event_list',
+          controller:'EventController',
+          controllerAs:'ctrl',
+          resolve: {
+              events: function ($q,EventService) {
+                  console.log('Load all events');
+                  var deferred = $q.defer();
+                  EventService.loadAllEvents().then(deferred.resolve, deferred.resolve);
+                  
+                  console.log('deferred.promise'+deferred.promise);
+                  return deferred.promise;
+              },
+              brokerages: function ($q,BrokerageService) {
+                  console.log('Load all brokerages');
+                  var deferred = $q.defer();
+                  BrokerageService.loadAllBrokerages().then(deferred.resolve, deferred.resolve);
+                  
+                  console.log('deferred.promise'+deferred.promise);
+                  return deferred.promise;
+              },
+              facilityTypes: function ($q,FacilityTypeService) {
+                  console.log('Load all facilityTypes');
+                  var deferred = $q.defer();
+                  FacilityTypeService.loadAllFacilityTypes().then(deferred.resolve, deferred.resolve);
+                  
+                  console.log('deferred.promise'+deferred.promise);
+                  return deferred.promise;
+              }
+          }
+      })
+      .state('logout', {
+          url: '/logout',
+          templateUrl: 'login'
       })
         $urlRouterProvider.otherwise('/');
     }]);

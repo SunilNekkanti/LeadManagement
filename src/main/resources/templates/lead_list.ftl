@@ -131,18 +131,18 @@
 	                    <div class="form-group col-sm-12">
 	                        <label class="col-sm-1    control-label" for="uname">PCP Name</label>
 	                        <div class="col-sm-3">
-	                           <select ng-model="ctrl.lead.leadMbrPrvdrList" ng-options="prvdr.name for prvdr in ctrl.providers track by prvdr.name" required="ctrl.lead.status.id == 2"></select>
+	                           <select ng-model="ctrl.selectedAgentLeadAppointment.prvdr" ng-options="prvdr.name for prvdr in ctrl.providers track by prvdr.name" required="ctrl.lead.status.id == 2"></select>
 	                        </div>
 	                        
 	                          <label class="col-sm-1  control-label" for="uname">Plan</label>
 	                        <div class="col-sm-2">
-	                            <select ng-model="ctrl.lead.leadMbrPlanTypeList" ng-options="planType.description for planType in ctrl.planTypes track by planType.description" required="ctrl.lead.status.id == 2"></select>
+	                            <select ng-model="ctrl.selectedAgentLeadAppointment.planType" ng-options="planType.description for planType in ctrl.planTypes track by planType.description" required="ctrl.lead.status.id == 2"></select>
 	                        </div>
 	                        
 	                        <label class="col-sm-2  control-label" for="uname">Effective Date</label>
 	                        <div class="col-sm-3">
-	                           <div class="input-group date" id="besttime"  ng-model="ctrl.lead.bestTimeToCall" date-picker>
-         							<input type="text" class="form-control netto-input"  ng-model="ctrl.lead.bestTimeToCall" date-picker-input required="ctrl.lead.status.id == 2">
+	                           <div class="input-group date" id="besttime"  ng-model="ctrl.selectedAgentLeadAppointment.effectiveFrom" date-picker>
+         							<input type="text" class="form-control netto-input"  ng-model="ctrl.selectedAgentLeadAppointment.effectiveFrom" date-picker-input required="ctrl.lead.status.id == 2">
 
          							<span class="input-group-addon">
            								<span class="glyphicon glyphicon-calendar"></span>
@@ -242,7 +242,7 @@
 	                    <div class="form-group col-sm-12">
 	                        <label class="col-sm-1  control-label" for="uname">Source</label>
 	                        <div class="col-sm-3">
-	                        <select ng-model="ctrl.lead.zipCode" ng-options="zipCode.code for zipCode in ctrl.lead.stateCode.zipCodes track by zipCode.code" required></select>
+	                        <select ng-model="ctrl.lead.event" ng-options="event.eventName for event in ctrl.events track by event.eventName" required></select>
 	                        </div>
 	                    </div>
 	                </div>

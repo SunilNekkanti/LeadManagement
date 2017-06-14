@@ -12,6 +12,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 /**
@@ -20,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @Entity
 @Table(name = "lu_state_zip")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ZipCode extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;

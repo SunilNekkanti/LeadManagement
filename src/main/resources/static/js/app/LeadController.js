@@ -13,6 +13,7 @@ app
 						'PlanTypeService',
 						'ProviderService',
 						'UserService',
+						'EventService',
 						'$scope',
 						'$compile',
 						'$filter',
@@ -20,7 +21,7 @@ app
 						'DTColumnBuilder',
 						function(LeadService, GenderService, StateService,
 								LeadStatusService, LeadLanguageService,
-								InsuranceService, PlanTypeService, ProviderService, UserService, $scope, $compile, $filter,
+								InsuranceService, PlanTypeService, ProviderService, UserService, EventService, $scope, $compile, $filter,
 								DTOptionsBuilder, DTColumnBuilder) {
 
 							var self = this;
@@ -36,6 +37,7 @@ app
 							self.planTypes = [];
 							self.selectedAgentLeadAppointment = {};
 							self.users = [];
+							self.events = [];
 							self.display = false;
 							self.displayEditButton = false;
 							self.submit = submit;
@@ -55,6 +57,7 @@ app
 							self.getAllAgents = getAllAgents;
 							self.getAllPlanTypes = getAllPlanTypes;
 							self.getAllProviders = getAllProviders;
+							self.getAllEvents = getAllEvents;
 							self.addAgentLeadAppointment = addAgentLeadAppointment;
 							self.reset = reset;
 							self.today = today;
@@ -315,6 +318,7 @@ app
 								self.planTypes = getAllPlanTypes();
 								self.providers = getAllProviders();
 								self.users = getAllAgents();
+								self.events = getAllEvents();
 									LeadService
 										.getLead(id)
 										.then(
@@ -353,6 +357,7 @@ app
 								self.planTypes = getAllPlanTypes();
 								self.providers = getAllProviders();
 								self.users = getAllAgents();
+								self.events = getAllEvents();
 							}
 
 							function reset() {
@@ -405,6 +410,10 @@ app
 							function getAllProviders() {
 								return ProviderService
 										.getAllProviders();
+							}
+							function getAllEvents() {
+								return EventService
+										.getAllEvents();
 							}
 							
 							function today() {

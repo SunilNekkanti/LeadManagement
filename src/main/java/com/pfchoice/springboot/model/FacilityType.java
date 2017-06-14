@@ -36,10 +36,6 @@ public class FacilityType extends RecordDetails implements Serializable {
 	private String description;
 
 	
-	@Size(min = 3, max = 50, message = "The shortName must be between {min} and {max} characters long")
-	@Column(name = "shortName")
-	private String shortName;
-
 	/**
 	 * 
 	 */
@@ -83,21 +79,6 @@ public class FacilityType extends RecordDetails implements Serializable {
 	 */
 	public void setDescription(final String description) {
 		this.description = description;
-	}
-
-	/**
-	 * @return the shortName
-	 */
-	public String getShortName() {
-		return shortName;
-	}
-
-	/**
-	 * @param shortName
-	 *            the shortName to set
-	 */
-	public void setShortName(String shortName) {
-		this.shortName = shortName;
 	}
 
 	@Override

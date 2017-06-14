@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 
 /**
@@ -18,6 +20,7 @@ import javax.validation.constraints.Size;
  * @author sarath
  */
 @Entity(name = "lu_plan_type")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class PlanType extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
