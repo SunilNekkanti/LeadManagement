@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +33,7 @@ public class BrokerageController {
 	// -------------------Retrieve All Brokerages---------------------------------------------
 
 	
-	
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT" })
 	@RequestMapping(value = "/brokerage/", method = RequestMethod.GET)
 	public ResponseEntity<List<Brokerage>> listAllBrokerages() {
 		List<Brokerage> brokerages = brokerageService.findAllBrokerages();
@@ -46,7 +47,7 @@ public class BrokerageController {
 	}
 
 	// -------------------Retrieve Single Brokerage------------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/brokerage/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getBrokerage(@PathVariable("id") int id) {
 		logger.info("Fetching Brokerage with id {}", id);
@@ -60,7 +61,7 @@ public class BrokerageController {
 	}
 
 	// -------------------Create a Brokerage-------------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/brokerage/", method = RequestMethod.POST)
 	public ResponseEntity<?> createBrokerage(@RequestBody Brokerage brokerage, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating Brokerage : {}", brokerage);
@@ -80,7 +81,7 @@ public class BrokerageController {
 	}
 
 	// ------------------- Update a Brokerage ------------------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/brokerage/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateBrokerage(@PathVariable("id") int id, @RequestBody Brokerage brokerage) {
 		logger.info("Updating Brokerage with id {}", id);
@@ -101,7 +102,7 @@ public class BrokerageController {
 	}
 
 	// ------------------- Delete a Brokerage-----------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/brokerage/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteBrokerage(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting Brokerage with id {}", id);
@@ -117,7 +118,7 @@ public class BrokerageController {
 	}
 
 	// ------------------- Delete All Brokerages-----------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/brokerage/", method = RequestMethod.DELETE)
 	public ResponseEntity<Brokerage> deleteAllBrokerages() {
 		logger.info("Deleting All Brokerages");

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,9 +31,7 @@ public class ProviderController {
 	ProviderService providerService; //Service which will do all data retrieval/manipulation work
 
 	// -------------------Retrieve All Providers---------------------------------------------
-
-	
-	
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT"  })
 	@RequestMapping(value = "/provider/", method = RequestMethod.GET)
 	public ResponseEntity<List<Provider>> listAllProviders() {
 		List<Provider> providers = providerService.findAllProviders();
@@ -46,7 +45,7 @@ public class ProviderController {
 	}
 
 	// -------------------Retrieve Single Provider------------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/provider/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getProvider(@PathVariable("id") int id) {
 		logger.info("Fetching Provider with id {}", id);
@@ -60,7 +59,7 @@ public class ProviderController {
 	}
 
 	// -------------------Create a Provider-------------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/provider/", method = RequestMethod.POST)
 	public ResponseEntity<?> createProvider(@RequestBody Provider provider, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating Provider : {}", provider);
@@ -80,7 +79,7 @@ public class ProviderController {
 	}
 
 	// ------------------- Update a Provider ------------------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/provider/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateProvider(@PathVariable("id") int id, @RequestBody Provider provider) {
 		logger.info("Updating Provider with id {}", id);
@@ -100,7 +99,7 @@ public class ProviderController {
 	}
 
 	// ------------------- Delete a Provider-----------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/provider/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteProvider(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting Provider with id {}", id);
@@ -116,7 +115,7 @@ public class ProviderController {
 	}
 
 	// ------------------- Delete All Providers-----------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/provider/", method = RequestMethod.DELETE)
 	public ResponseEntity<Provider> deleteAllProviders() {
 		logger.info("Deleting All Providers");

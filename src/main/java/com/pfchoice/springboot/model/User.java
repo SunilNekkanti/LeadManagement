@@ -14,7 +14,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -26,6 +29,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 @Entity(name = "user")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class User extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -46,10 +50,10 @@ public class User extends RecordDetails implements Serializable {
 	private String password;
 
 
-	@OneToMany( cascade={ CascadeType.MERGE  ,   CascadeType.REMOVE },fetch = FetchType.LAZY)
+	@ManyToMany( cascade={ CascadeType.MERGE  ,   CascadeType.REMOVE },fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles", joinColumns = {
-			@JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = {
-					@JoinColumn(name = "role_id", referencedColumnName = "id") })
+			@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "role_id", referencedColumnName = "id",nullable = false, updatable = false) })
 	public Set<Role> roles;
 
 	

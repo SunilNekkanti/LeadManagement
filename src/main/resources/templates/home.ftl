@@ -5,17 +5,23 @@
   <link href="css/app.css" rel="stylesheet" />
   <link href="css/bootstrap.css" rel="stylesheet" />
   <link href="css/ui-navbar.css" rel="stylesheet" />
-  <link data-require="bootstrap-css@3.3.1" data-semver="3.3.1" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="//cdn.datatables.net/1.10.1/css/jquery.dataTables.css" />
-  <link href="http://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css" />
+  <link rel="stylesheet" href="https://rawgithub.com/l-lin/angular-datatables/master/dist/plugins/bootstrap/datatables.bootstrap.min.css" />
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css" />
+   
+   
+   <script data-require="jquery@1.10.1" data-semver="1.10.1" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script src="//cdn.datatables.net/1.10.1/js/jquery.dataTables.js"></script>
+  <script src="http://code.angularjs.org/1.3.5/angular.js"></script>
+  <script src="https://code.angularjs.org/1.3.5/angular-resource.js"></script>
+  <script type="text/javascript" src="https://rawgit.com/vivendi/angular-datatables/master/src/angular-datatables.bootstrap.js"></script>
   
    <script   src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
-   <script data-require="jquery@1.10.1" data-semver="1.10.1" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>      
    <script   src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-   <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>   
    <script src="http://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script> 
    <script data-require="angular.js@1.3.13" data-semver="1.3.13" src="https://code.angularjs.org/1.3.13/angular.js"></script>
    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
@@ -48,8 +54,8 @@
   <script src="js/app/EventService.js"></script>
 </head>
 
-<body>
-  <nav class="navbar navbar-default myNavbar" ng-controller="NavbarController" ng-show="displayNavbar">
+<body class="ng-cloak">
+  <nav class="navbar navbar-default myNavbar" ng-controller="NavbarController" ng-show="displayNavbar" role="navigation">
     <div class="container-fluid" >
     
       <div class="navbar-collapse collapse in" collapse="isCollapsed" aria-expanded="true" >
@@ -82,7 +88,7 @@
           <button type="submit" class="btn btn-default">Submit</button>
         </form>
         <ul class="nav navbar-nav navbar-right">
-        	<li> <a href="#"> <span class="glyphicon glyphicon-user"></span> {{username}}</a></li>
+        	<li> <a href="#"> <span class="glyphicon glyphicon-user"></span> ${username}</a></li>
         	<li> <a href="#" ng-click="callMe('logout')"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
         </ul>
       </div>

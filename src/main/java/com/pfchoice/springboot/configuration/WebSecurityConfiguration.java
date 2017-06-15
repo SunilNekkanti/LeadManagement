@@ -33,7 +33,7 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
     	com.pfchoice.springboot.model.User user = userRepository.findByUsername(username);
         if(user != null) {
         return new User(user.getUsername(), user.getPassword(), true, true, true, true,
-                AuthorityUtils.createAuthorityList("ROLE_AGENT", "ROLE_ADMIN","ROLE_SELECTOR"));
+                AuthorityUtils.createAuthorityList("ROLE_AGENT"));
         } else {
           throw new UsernameNotFoundException("could not find the user '"
                   + username + "'");

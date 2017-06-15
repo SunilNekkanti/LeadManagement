@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,9 +31,7 @@ public class LeadLanguageController {
 	LeadLanguageService leadLanguageService; //Service which will do all data retrieval/manipulation work
 
 	// -------------------Retrieve All LeadLanguages---------------------------------------------
-
-	
-	
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT"  })
 	@RequestMapping(value = "/leadLanguage/", method = RequestMethod.GET)
 	public ResponseEntity<List<LeadLanguage>> listAllLeadLanguages() {
 		List<LeadLanguage> leadLanguages = leadLanguageService.findAllLeadLanguages();
@@ -46,7 +45,7 @@ public class LeadLanguageController {
 	}
 
 	// -------------------Retrieve Single LeadLanguage------------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/leadLanguage/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getLeadLanguage(@PathVariable("id") byte id) {
 		logger.info("Fetching LeadLanguage with id {}", id);
@@ -60,7 +59,7 @@ public class LeadLanguageController {
 	}
 
 	// -------------------Create a LeadLanguage-------------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/leadLanguage/", method = RequestMethod.POST)
 	public ResponseEntity<?> createLeadLanguage(@RequestBody LeadLanguage leadLanguage, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating LeadLanguage : {}", leadLanguage);
@@ -80,7 +79,7 @@ public class LeadLanguageController {
 	}
 
 	// ------------------- Update a LeadLanguage ------------------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/leadLanguage/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateLeadLanguage(@PathVariable("id") byte id, @RequestBody LeadLanguage leadLanguage) {
 		logger.info("Updating LeadLanguage with id {}", id);
@@ -100,7 +99,7 @@ public class LeadLanguageController {
 	}
 
 	// ------------------- Delete a LeadLanguage-----------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/leadLanguage/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteLeadLanguage(@PathVariable("id") byte id) {
 		logger.info("Fetching & Deleting LeadLanguage with id {}", id);
@@ -116,7 +115,7 @@ public class LeadLanguageController {
 	}
 
 	// ------------------- Delete All LeadLanguages-----------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/leadLanguage/", method = RequestMethod.DELETE)
 	public ResponseEntity<LeadLanguage> deleteAllLeadLanguages() {
 		logger.info("Deleting All LeadLanguages");

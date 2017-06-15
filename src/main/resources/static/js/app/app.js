@@ -17,13 +17,13 @@ app.constant('urls', {
     PROVIDER_SERVICE_API : 'http://localhost:8080/LeadManagement/api/provider/',
     FACILITYTYPE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/facilityType/',
     BROKERAGE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/brokerage/',
-    EVENT_SERVICE_API : 'http://localhost:8080/LeadManagement/api/event/'
+    EVENT_SERVICE_API : 'http://localhost:8080/LeadManagement/api/event/',
+    LOGIN_USER : 'http://localhost:8080/LeadManagement/getloginInfo'
 });
 
-app.controller('NavbarController', ['$scope', '$state', function($scope, $state){
+app.controller('NavbarController',  ['$scope', '$state', function($scope, $state){
   $scope.isCollapsed = true;
   $scope.displayNavbar = true;
-  
   $scope.callMe = function(url){
 	  if(url == 'logout'){
 		  $scope.displayNavbar = false;
@@ -221,8 +221,14 @@ app.config(['$stateProvider', '$urlRouterProvider',
           url: '/logout',
           templateUrl: 'login'
       })
-        $urlRouterProvider.otherwise('/');
-    }]);
+        $urlRouterProvider.otherwise('/lead');
+    
+    function run() {
+        FastClick.attach(document.body);
+    }
+    }
+
+]);
 
 // DatePicker -> NgModel
 app.directive('datePicker', function () {

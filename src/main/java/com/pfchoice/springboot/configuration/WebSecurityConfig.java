@@ -18,7 +18,7 @@ import com.pfchoice.springboot.security.RestAuthenticationEntryPoint;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired

@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,9 +35,7 @@ public class LeadController {
 	LeadMembershipService leadService; //Service which will do all data retrieval/manipulation work
 
 	// -------------------Retrieve All LeadMemberships---------------------------------------------
-
-	
-	
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT"  })
 	@RequestMapping(value = "/lead/", method = RequestMethod.GET)
 	public ResponseEntity<Page<LeadMembership>> listAllLeadMemberships(@RequestParam("page") int pageNo,  @RequestParam("size") int pageSize) {
 		
@@ -52,7 +51,7 @@ public class LeadController {
 	}
 
 	// -------------------Retrieve Single LeadMembership------------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT"  })
 	@RequestMapping(value = "/lead/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getLeadMembership(@PathVariable("id") int id) {
 		logger.info("Fetching LeadMembership with id {}", id);
@@ -66,7 +65,7 @@ public class LeadController {
 	}
 
 	// -------------------Create a LeadMembership-------------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/lead/", method = RequestMethod.POST)
 	public ResponseEntity<?> createLeadMembership(@RequestBody LeadMembership lead, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating LeadMembership : {}", lead);
@@ -86,7 +85,7 @@ public class LeadController {
 	}
 
 	// ------------------- Update a LeadMembership ------------------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT" })
 	@RequestMapping(value = "/lead/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateLeadMembership(@PathVariable("id") int id, @RequestBody LeadMembership lead) {
 		logger.info("Updating LeadMembership with id {}", id);
@@ -136,7 +135,7 @@ public class LeadController {
 	}
 
 	// ------------------- Delete a LeadMembership-----------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/lead/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteLeadMembership(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting LeadMembership with id {}", id);
@@ -152,7 +151,7 @@ public class LeadController {
 	}
 
 	// ------------------- Delete All LeadMemberships-----------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/lead/", method = RequestMethod.DELETE)
 	public ResponseEntity<LeadMembership> deleteAllLeadMemberships() {
 		logger.info("Deleting All LeadMemberships");

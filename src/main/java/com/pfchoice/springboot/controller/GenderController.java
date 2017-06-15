@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,9 +31,8 @@ public class GenderController {
 	GenderService genderService; //Service which will do all data retrieval/manipulation work
 
 	// -------------------Retrieve All Genders---------------------------------------------
-
 	
-	
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT"  })
 	@RequestMapping(value = "/gender/", method = RequestMethod.GET)
 	public ResponseEntity<List<Gender>> listAllGenders() {
 		List<Gender> genders = genderService.findAllGenders();
@@ -46,7 +46,7 @@ public class GenderController {
 	}
 
 	// -------------------Retrieve Single Gender------------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/gender/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getGender(@PathVariable("id") byte id) {
 		logger.info("Fetching Gender with id {}", id);
@@ -60,7 +60,7 @@ public class GenderController {
 	}
 
 	// -------------------Create a Gender-------------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/gender/", method = RequestMethod.POST)
 	public ResponseEntity<?> createGender(@RequestBody Gender gender, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating Gender : {}", gender);
@@ -80,7 +80,7 @@ public class GenderController {
 	}
 
 	// ------------------- Update a Gender ------------------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/gender/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateGender(@PathVariable("id") byte id, @RequestBody Gender gender) {
 		logger.info("Updating Gender with id {}", id);
@@ -101,7 +101,7 @@ public class GenderController {
 	}
 
 	// ------------------- Delete a Gender-----------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/gender/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteGender(@PathVariable("id") byte id) {
 		logger.info("Fetching & Deleting Gender with id {}", id);
@@ -117,7 +117,7 @@ public class GenderController {
 	}
 
 	// ------------------- Delete All Genders-----------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/gender/", method = RequestMethod.DELETE)
 	public ResponseEntity<Gender> deleteAllGenders() {
 		logger.info("Deleting All Genders");

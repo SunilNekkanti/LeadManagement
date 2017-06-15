@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,9 +31,7 @@ public class PlanTypeController {
 	PlanTypeService planTypeService; //Service which will do all data retrieval/manipulation work
 
 	// -------------------Retrieve All PlanTypes---------------------------------------------
-
-	
-	
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT"  })
 	@RequestMapping(value = "/planType/", method = RequestMethod.GET)
 	public ResponseEntity<List<PlanType>> listAllPlanTypes() {
 		List<PlanType> planTypes = planTypeService.findAllPlanTypes();
@@ -46,7 +45,7 @@ public class PlanTypeController {
 	}
 
 	// -------------------Retrieve Single PlanType------------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/planType/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getPlanType(@PathVariable("id") int id) {
 		logger.info("Fetching PlanType with id {}", id);
@@ -60,7 +59,7 @@ public class PlanTypeController {
 	}
 
 	// -------------------Create a PlanType-------------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/planType/", method = RequestMethod.POST)
 	public ResponseEntity<?> createPlanType(@RequestBody PlanType planType, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating PlanType : {}", planType);
@@ -80,7 +79,7 @@ public class PlanTypeController {
 	}
 
 	// ------------------- Update a PlanType ------------------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/planType/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updatePlanType(@PathVariable("id") int id, @RequestBody PlanType planType) {
 		logger.info("Updating PlanType with id {}", id);
@@ -101,7 +100,7 @@ public class PlanTypeController {
 	}
 
 	// ------------------- Delete a PlanType-----------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/planType/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deletePlanType(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting PlanType with id {}", id);
@@ -117,7 +116,7 @@ public class PlanTypeController {
 	}
 
 	// ------------------- Delete All PlanTypes-----------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/planType/", method = RequestMethod.DELETE)
 	public ResponseEntity<PlanType> deleteAllPlanTypes() {
 		logger.info("Deleting All PlanTypes");

@@ -1,17 +1,20 @@
 package com.pfchoice.springboot.model;
 
-import javax.annotation.Resource;
+import org.springframework.stereotype.Component;
 
 /**
  * @author sarath
  *
  */
-@Resource
+@Component
 public class LoginForm {
 
 	
 	private String username;
 	private String password;
+	private String roleName;
+	private Integer roleId;
+	private Integer userId;
 
 	/**
 	 * @return the username
@@ -41,6 +44,48 @@ public class LoginForm {
 	 */
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	/**
+	 * @return the roleName
+	 */
+	public String getRoleName() {
+		return roleName;
+	}
+
+	/**
+	 * @param roleName the roleName to set
+	 */
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+	/**
+	 * @return the roleId
+	 */
+	public Integer getRoleId() {
+		return roleId;
+	}
+
+	/**
+	 * @param roleId the roleId to set
+	 */
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
+	}
+
+	/**
+	 * @return the userId
+	 */
+	public Integer getUserId() {
+		return userId;
+	}
+
+	/**
+	 * @param userId the userId to set
+	 */
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 
 }

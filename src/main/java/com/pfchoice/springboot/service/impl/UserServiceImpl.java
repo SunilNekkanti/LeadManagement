@@ -24,6 +24,8 @@ public class UserServiceImpl implements UserService{
 	}
 
 	public User findByUsername(String name) {
+		
+		System.out.println("you are in findByUsername");
 		return userRepository.findByUsername(name);
 	}
 

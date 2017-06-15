@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,9 +31,8 @@ public class InsurnaceController {
 	InsuranceService insuranceService; //Service which will do all data retrieval/manipulation work
 
 	// -------------------Retrieve All Insurances---------------------------------------------
-
 	
-	
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT"  })
 	@RequestMapping(value = "/insurance/", method = RequestMethod.GET)
 	public ResponseEntity<List<Insurance>> listAllInsurances() {
 		List<Insurance> insurances = insuranceService.findAllInsurances();
@@ -46,7 +46,7 @@ public class InsurnaceController {
 	}
 
 	// -------------------Retrieve Single Insurance------------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/insurance/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getInsurance(@PathVariable("id") int id) {
 		logger.info("Fetching Insurance with id {}", id);
@@ -60,7 +60,7 @@ public class InsurnaceController {
 	}
 
 	// -------------------Create a Insurance-------------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/insurance/", method = RequestMethod.POST)
 	public ResponseEntity<?> createInsurance(@RequestBody Insurance insurance, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating Insurance : {}", insurance);
@@ -80,7 +80,7 @@ public class InsurnaceController {
 	}
 
 	// ------------------- Update a Insurance ------------------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/insurance/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateInsurance(@PathVariable("id") int id, @RequestBody Insurance insurance) {
 		logger.info("Updating Insurance with id {}", id);
@@ -100,7 +100,7 @@ public class InsurnaceController {
 	}
 
 	// ------------------- Delete a Insurance-----------------------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/insurance/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteInsurance(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting Insurance with id {}", id);
@@ -116,7 +116,7 @@ public class InsurnaceController {
 	}
 
 	// ------------------- Delete All Insurances-----------------------------
-
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/insurance/", method = RequestMethod.DELETE)
 	public ResponseEntity<Insurance> deleteAllInsurances() {
 		logger.info("Deleting All Insurances");

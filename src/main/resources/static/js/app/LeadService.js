@@ -11,11 +11,32 @@ app.service('LeadService',
                 getLead: getLead,
                 createLead: createLead,
                 updateLead: updateLead,
-                removeLead: removeLead
+                removeLead: removeLead,
+                loginUser : loginUser
+               
             };
 
             return factory;
 
+            function loginUser() {
+                console.log('Fetching loginUser');
+                var deferred = $q.defer();
+                
+                $http.get(urls.LOGIN_USER)
+                    .then(
+                        function (response) {
+                            console.log('Fetched successfully loginUser');
+                            $localStorage.loginUser = response.data;
+                            deferred.resolve(response.data);
+                        },
+                        function (errResponse) {
+                            console.error('Error while fetching loginUser');
+                            deferred.reject(errResponse);
+                        }
+                    );
+                return deferred.promise;
+            }
+            
             function loadAllLeads() {
                 console.log('Fetching all leads');
                 var deferred = $q.defer();

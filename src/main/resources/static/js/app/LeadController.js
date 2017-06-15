@@ -25,6 +25,7 @@ app
 								DTOptionsBuilder, DTColumnBuilder) {
 
 							var self = this;
+							self.loginUser = {};
 							self.lead = {};
 							self.lead.bestTimeToCall = "1988-04-21T18:25:43-05:00";
 							self.leads = [];
@@ -60,15 +61,17 @@ app
 							self.getAllEvents = getAllEvents;
 							self.addAgentLeadAppointment = addAgentLeadAppointment;
 							self.reset = reset;
+							loginUser : loginUser;
 							self.today = today;
 							self.toggleMin = toggleMin;
 							self.successMessage = '';
 							self.errorMessage = '';
 							self.done = false;
-
+							loginUser();
 							self.onlyIntegers = /^\d+$/;
 							self.onlyNumbers = /^\d+([,.]\d+)?$/;
 							self.checkBoxChange = checkBoxChange;
+							self.reloadData = reloadData;
 							self.dtColumns = [
 									DTColumnBuilder
 											.newColumn('id')
@@ -86,11 +89,11 @@ app
 																+ data
 																+ ')" />';
 													}).withClass("text-center"),
-									DTColumnBuilder.newColumn('FIRST NAME')
-											.withTitle('First Name')
+									DTColumnBuilder.newColumn('firstName')
+											.withTitle('FIRSTNAME')
 											.withOption('defaultContent', ''),
 									DTColumnBuilder.newColumn('lastName')
-											.withTitle('LAST NAME').withOption(
+											.withTitle('LASTNAME').withOption(
 													'defaultContent', ''),
 									DTColumnBuilder.newColumn(
 											'genderId.description').withTitle(
@@ -145,27 +148,25 @@ app
 											{
 												url : 'http://localhost:8080/LeadManagement/api/lead/',
 												type : 'GET'
-											}).withDataProp('data').withOption(
-											'serverSide', true).withOption(
-											"bLengthChange", false).withOption(
-											"bPaginate", true).withOption(
-											'processing', true).withOption(
-											'saveState', true)
-									.withDisplayLength(10).withOption(
-											'columnDefs', [ {
-												orderable : false,
-												className : 'select-checkbox',
-												targets : 0,
-												sortable : false,
-												aTargets : [ 0, 1 ]
-											} ]).withOption('select', {
-										style : 'os',
-										selector : 'td:first-child'
-									}).withOption('createdRow', createdRow)
-									.withPaginationType('full_numbers')
-									.withFnServerData(serverData);
+											}).withDataProp('data').withOption('serverSide', true)
+											.withOption("bLengthChange", false)
+											.withOption("bPaginate", true)
+											.withOption("bServerSide", true)
+											.withOption('bProcessing', true)
+											.withOption('bSaveState', true)
+									        .withDisplayLength(10).withOption( 'columnDefs', [ {
+												                                orderable : false,
+																				className : 'select-checkbox',
+																				targets : 0,
+																				sortable : false,
+																				aTargets : [ 0, 1 ] } ])
+											.withOption('select', {
+																	style : 'os',
+																	selector : 'td:first-child' })
+										    .withOption('createdRow', createdRow)
+									        .withPaginationType('full_numbers')
+									        .withFnServerData(serverData);
 
-							self.reloadData = reloadData;
 
 							function createdRow(row, data, dataIndex) {
 								// Recompiling so we can bind Angular directive
@@ -208,11 +209,11 @@ app
 												});
 							}
 
-							function reloadData() {
+							 function reloadData() {
 								var resetPaging = false;
 								self.dtInstance.reloadData(callback,
 										resetPaging);
-							}
+							} 
 
 							function callback(json) {
 								console.log(json);
@@ -236,6 +237,22 @@ app
 											self.lead.id);
 								}
 								self.displayEditButton = false;
+							}
+							function loginUser() {
+								console.log('About to fetch loginUser');
+								LeadService
+										.loginUser()
+										.then(
+												function(loginUser) {
+													console
+															.log('fetched loginUser details successfully');
+													
+													self.loginUser = loginUser;
+												},
+												function(errResponse) {
+													console
+															.error('Error while fetching loginUser');
+												});
 							}
 
 							function createLead(lead) {

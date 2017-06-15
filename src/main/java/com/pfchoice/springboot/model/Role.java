@@ -5,15 +5,10 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
@@ -39,13 +34,13 @@ public class Role extends RecordDetails implements Serializable {
 	@Column(name = "role")
 	private String role;
 
- 	@JsonIgnore
-	@OneToOne(fetch = FetchType.LAZY)
+ 	/*@JsonIgnore
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles", joinColumns = {
-			@JoinColumn(name = "role_id", referencedColumnName = "id") }, inverseJoinColumns = {
-					@JoinColumn(name = "user_id", referencedColumnName = "id") })
-	private User user;
- 
+			@JoinColumn(name = "role_id", referencedColumnName = "id",nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, updatable = false) })
+	private Set<User> users;
+ */
 	/**
 	 * 
 	 */
@@ -93,17 +88,17 @@ public class Role extends RecordDetails implements Serializable {
 	/**
 	 * @return the user
 	 */
- 	public User getUser() {
-		return user;
+ /*	public Set<User> getUsers() {
+		return users;
 	}
- 
+ */
 	/**
 	 * @param user
 	 *            the user to set
 	 */
- 	public void setUser(User user) {
-		this.user = user;
-	} 
+ /*	public void setUsers(Set<User> users) {
+		this.users = users;
+	} */
 
 	@Override
 	public int hashCode() {

@@ -1,5 +1,6 @@
 package com.pfchoice.springboot.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -7,17 +8,19 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
+import com.pfchoice.springboot.repositories.UserRepository;
+import com.pfchoice.springboot.service.UserService;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler
 		implements AuthenticationSuccessHandler {
 
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -36,13 +39,7 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
 			redirectUrl = (String) session.getAttribute("LAST_PAGE");
 		}
 		User authUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		session.setAttribute("ID", authUser.getUsername());
-		if (authentication.getAuthorities() != null) {
-			List<GrantedAuthority> adminauthorities = authentication.getAuthorities().stream()
-					.filter(grantedAuthority -> "ROLE_ADMIN".equals(grantedAuthority.getAuthority())
-							|| "ROLE_SELECTOR".equals(grantedAuthority.getAuthority()) || "ROLE_AGENT".equals(grantedAuthority.getAuthority()))
-					.collect(Collectors.toList());
-		}
+		session.setAttribute("username", authUser.getUsername());
 		session.setMaxInactiveInterval(30 * 60);
 		// set our response to OK status
 		httpServletResponse.setStatus(HttpServletResponse.SC_OK);

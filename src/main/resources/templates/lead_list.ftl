@@ -3,7 +3,7 @@
    <div class="panel panel-default" ng-hide="ctrl.display">
         <!-- Default panel contents -->
         <div class="panel-heading"><span class="user">List of Leads </span> 
-               <button type="button"   ng-click="ctrl.addLead()" ng-hide="ctrl.displayEditButton" class="btn btn-success custom-width floatRight"> Add </button>   
+               <button type="button"   ng-click="ctrl.addLead()" ng-hide="ctrl.displayEditButton" ng-show="ctrl.loginUser.roleName != 'ROLE_AGENT'" class="btn btn-success custom-width floatRight"> Add </button>   
                <button type="button" ng-click="ctrl.editLead(ctrl.leadId)" ng-show="ctrl.displayEditButton" class="btn btn-primary custom-width floatRight">Edit</button>  
               <button type="button" ng-click="ctrl.removeLead(ctrl.leadId)"  ng-show="ctrl.displayEditButton" class="btn btn-danger custom-width floatRight">Remove</button>  
         </div>
@@ -238,7 +238,7 @@
 	                    </div>
 	                </div>
 	                
-	                   <div class="row">
+	                   <div class="row" ng-show="ctrl.loginUser.roleName != 'ROLE_AGENT'">
 	                    <div class="form-group col-sm-12">
 	                        <label class="col-sm-1  control-label" for="uname">Source</label>
 	                        <div class="col-sm-3">
@@ -248,7 +248,7 @@
 	                </div>
 	                
 	                <div class="row">
-	                    <div class="form-group col-sm-12">
+	                    <div class="form-group col-sm-12" ng-show="ctrl.loginUser.roleName != 'ROLE_AGENT'">
 	                        <label class="col-sm-1  control-label" for="homePhone">Agent</label>
 	                        <div class="col-sm-3">
 	                         <select ng-model="ctrl.selectedAgentLeadAppointment.user"  ng-options="agent.username for agent in ctrl.users | filter :{roles:{role:'ROLE_AGENT'}}  track by agent.username"  required></select>
