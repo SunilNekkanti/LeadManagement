@@ -15,7 +15,7 @@
 		</div>
     </div>
      
-     
+      <form ng-submit="ctrl.submit()" name="myForm" class="form-horizontal">
     <div class="panel panel-default" ng-show="ctrl.display">
         <!-- Default panel contents -->
         <div class="panel-heading"><span class="lead">Lead Information</span></div>
@@ -23,7 +23,7 @@
 	        <div class="formcontainer">
 	            <div class="alert alert-success" role="alert" ng-if="ctrl.successMessage">{{ctrl.successMessage}}</div>
 	            <div class="alert alert-danger" role="alert" ng-if="ctrl.errorMessage">{{ctrl.errorMessage}}</div>
-	            <form ng-submit="ctrl.submit()" name="myForm" class="form-horizontal">
+	           
 	                <input type="hidden" ng-model="ctrl.lead.id" />
 	                <div class="row">
 	                    <div class="form-group col-sm-4">
@@ -110,7 +110,7 @@
 	                      <div class="form-group col-sm-4">
 	                        <label class="col-sm-5  control-label" for="status">Status</label>
 	                        <div class="col-sm-7">
-	                        <select ng-model="ctrl.lead.status" ng-options="status.description for status in ctrl.statuses track by status.description" required></select>
+	                        <select ng-model="ctrl.lead.status"  ng-options="status.description for status in ctrl.statuses track by status.description" required></select>
 	                        </div>
 	                    </div>
 
@@ -194,15 +194,16 @@
 	                    <div class="form-group col-sm-4">
 	                        <label class="col-sm-5  control-label" for="homePhone">Home Phone</label>
 	                        <div class="col-sm-7">
-	                        <input type="text" ng-model="ctrl.lead.homePhone" id="homePhone" class="username form-control input-sm" placeholder="Enter Home phone" required ng-minlength="10" ng-maxlength="15"/>
+	                        <input type="text" ng-model="ctrl.lead.homePhone" id="homePhone" class="username form-control input-sm" placeholder="Enter Home phone" required phone-input ng-minlength="10"/>
 	                        </div>
 	                        
 	                    </div>
 	                
+	                
 	                    <div class="form-group col-sm-4">
 	                        <label class="col-sm-5  control-label" for="mobilePhone">Mobile Phone</label>
 	                        <div class="col-sm-7">
-	                        <input type="text" ng-model="ctrl.lead.mobilePhone" id="mobilePhone" class="username form-control input-sm" placeholder="Enter Mobile phone"   ng-minlength="10" ng-maxlength="15"/>
+	                        <input type="text" ng-model="ctrl.lead.mobilePhone" id="mobilePhone" class="username form-control input-sm" placeholder="Enter Mobile phone"  phone-input ng-minlength="10" />
 	                        </div>
 	                    </div>
 	                    
@@ -221,13 +222,19 @@
 	               	</div>	
 	                
 	               <div class="row">
-	                    <div class="form-group col-sm-4">
-	                        <label class="col-sm-5  control-label" for="email">Email</label>
+	                   
+	                
+	                <div class="form-group col-sm-4">
+	                          <label class="col-sm-5  control-label" require for="email" require>Email </label>  
 	                        <div class="col-sm-7">
-	                        <input type="text" ng-model="ctrl.lead.email" id="email" class="username form-control input-sm" placeholder="Enter Email"   ng-minlength="6" ng-maxlength="100"/>
+	                            <input type="email" ng-model="ctrl.lead.email" id="email" name="email" class="username form-control input-sm" placeholder="Enter email"  ng-minlength="5"/>
+	                             <div class="has-error" ng-show="myForm.$dirty">
+                                      <span ng-show="myForm.email.$error.minlength">Minimum length required is 5</span>
+                                      <span ng-show="myForm.email.$invalid">This field is invalid </span>
+                                  </div>
 	                        </div>
 	                    </div>
-	                
+	                    
 	                    <div class="form-group col-sm-4">
 	                        <label class="col-sm-5  control-label" for="address1">Address 1</label>
 	                        <div class="col-sm-7">
