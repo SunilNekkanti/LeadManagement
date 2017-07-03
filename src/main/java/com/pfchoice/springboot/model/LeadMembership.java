@@ -62,6 +62,10 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	private String medicareNo;
 
 	@ManyToOne
+	@JoinColumn(name = "insurance_type_id", referencedColumnName = "plan_type_id")
+	private PlanType planType;
+	
+	@ManyToOne
 	@JoinColumn(name = "lead_Mbr_CountyCode", referencedColumnName = "code")
 	private County countyCode;
 
@@ -94,12 +98,9 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@Column(name = "has_medicare")
 	private Character hasMedicare  = new Character('N');
 
-	@Column(name = "has_disability")
-	private Character hasDisability  = new Character('N') ;
-	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lead_Mbr_languageId", referencedColumnName = "code")
-	private LeadLanguage language;
+	private Language language;
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lead_Mbr_Status", referencedColumnName = "code")
@@ -135,6 +136,13 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@JoinColumn(name = "event_id", referencedColumnName = "event_id")
 	private Event event;
 
+	@Column(name = "consent_form_signed")
+	private Character consentFormSigned  = new Character('N');
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "file_upload_id", referencedColumnName = "file_upload_id", nullable =false)
+	private FileUpload fileUpload ;
+	
 	/**
 	 * 
 	 */
@@ -384,20 +392,6 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @return the hasDisability
-	 */
-	public Character getHasDisability() {
-		return hasDisability;
-	}
-
-	/**
-	 * @param hasDisability the hasDisability to set
-	 */
-	public void setHasDisability(Character hasDisability) {
-		this.hasDisability = hasDisability;
-	}
-
-	/**
 	 * @param status
 	 *            the status to set
 	 */
@@ -520,14 +514,14 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	/**
 	 * @return the language
 	 */
-	public LeadLanguage getLanguage() {
+	public Language getLanguage() {
 		return language;
 	}
 
 	/**
 	 * @param language the language to set
 	 */
-	public void setLanguage(LeadLanguage language) {
+	public void setLanguage(Language language) {
 		this.language = language;
 	}
 
@@ -577,6 +571,48 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	 */
 	public void setEvent(Event event) {
 		this.event = event;
+	}
+
+	/**
+	 * @return the consentFormSigned
+	 */
+	public Character getConsentFormSigned() {
+		return consentFormSigned;
+	}
+
+	/**
+	 * @param consentFormSigned the consentFormSigned to set
+	 */
+	public void setConsentFormSigned(Character consentFormSigned) {
+		this.consentFormSigned = consentFormSigned;
+	}
+
+	/**
+	 * @return the fileUpload
+	 */
+	public FileUpload getFileUpload() {
+		return fileUpload;
+	}
+
+	/**
+	 * @param fileUpload the fileUpload to set
+	 */
+	public void setFileUpload(FileUpload fileUpload) {
+		this.fileUpload = fileUpload;
+	}
+
+	/**
+	 * @return the planType
+	 */
+	public PlanType getPlanType() {
+		return planType;
+	}
+
+	/**
+	 * @param planType the planType to set
+	 */
+	public void setPlanType(PlanType planType) {
+		this.planType = planType;
 	}
 
 	@Override

@@ -107,8 +107,13 @@ public class EventController {
 		currentEvent.setEventDateTime(event.getEventDateTime());
 		currentEvent.setFacilityType(event.getFacilityType());
 		currentEvent.setNotes(event.getNotes());
-		currentEvent.setVenue(event.getVenue());
-		
+		currentEvent.setAddress1(event.getAddress1());
+		currentEvent.setAddress2(event.getAddress2());
+		currentEvent.setCity(event.getCity());
+		currentEvent.setState(event.getState());
+		currentEvent.setZipCode(event.getZipCode());
+		currentEvent.setContactPerson(event.getContactPerson());
+		currentEvent.setContactPhone(event.getContactPhone());
 		eventService.updateEvent(currentEvent);
 		
 		return new ResponseEntity<Event>(currentEvent, HttpStatus.OK);

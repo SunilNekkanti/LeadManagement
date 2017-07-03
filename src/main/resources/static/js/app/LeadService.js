@@ -63,10 +63,10 @@ app.service('LeadService',
                 return deferred.promise;
             }
             
-            function loadLeads(draw, length, search, order) {
+            function loadLeads(pageNo, length, search, order) {
                 console.log('Fetching  leads');
                 var pageable = {
-                  		 page:draw, size:length
+                  		 page:pageNo, size:length,search: search||''
                   		};
 
                   		var config = {

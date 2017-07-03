@@ -1,50 +1,50 @@
 'use strict';
 
-app.service('LeadLanguageService',
+app.service('LanguageService',
     ['$localStorage', '$http', '$q', 'urls',
         function ($localStorage, $http, $q, urls) {
 
             var factory = {
-                loadAllLeadLanguages: loadAllLeadLanguages,
-                getAllLeadLanguages: getAllLeadLanguages,
-                getLeadLanguage: getLeadLanguage,
-                createLeadLanguage: createLeadLanguage,
-                updateLeadLanguage: updateLeadLanguage,
-                removeLeadLanguage: removeLeadLanguage
+                loadAllLanguages: loadAllLanguages,
+                getAllLanguages: getAllLanguages,
+                getLanguage: getLanguage,
+                createLanguage: createLanguage,
+                updateLanguage: updateLanguage,
+                removeLanguage: removeLanguage
             };
 
             return factory;
 
-            function loadAllLeadLanguages() {
-                console.log('Fetching all LeadLanguages');
+            function loadAllLanguages() {
+                console.log('Fetching all Languages');
                 var deferred = $q.defer();
                 $http.get(urls.LANGUAGE_SERVICE_API)
                     .then(
                         function (response) {
-                            console.log('Fetched successfully all LeadLanguages');
-                            $localStorage.LeadLanguages = response.data;
+                            console.log('Fetched successfully all Languages');
+                            $localStorage.Languages = response.data;
                             deferred.resolve(response);
                         },
                         function (errResponse) {
-                            console.error('Error while loading LeadLanguages');
+                            console.error('Error while loading Languages');
                             deferred.reject(errResponse);
                         }
                     );
                 return deferred.promise;
             }
 
-            function getAllLeadLanguages(){
-            	console.log('$localStorage.LeadLanguages'+$localStorage.LeadLanguages);
-                return $localStorage.LeadLanguages;
+            function getAllLanguages(){
+            	console.log('$localStorage.Languages'+$localStorage.Languages);
+                return $localStorage.Languages;
             }
 
-            function getLeadLanguage(id) {
-                console.log('Fetching LeadLanguage with id :'+id);
+            function getLanguage(id) {
+                console.log('Fetching Language with id :'+id);
                 var deferred = $q.defer();
                 $http.get(urls.LANGUAGE_SERVICE_API + id)
                     .then(
                         function (response) {
-                            console.log('Fetched successfully LeadLanguage with id :'+id);
+                            console.log('Fetched successfully Language with id :'+id);
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
@@ -55,51 +55,51 @@ app.service('LeadLanguageService',
                 return deferred.promise;
             }
 
-            function createLeadLanguage(user) {
-                console.log('Creating LeadLanguage');
+            function createLanguage(user) {
+                console.log('Creating Language');
                 var deferred = $q.defer();
                 $http.post(urls.LANGUAGE_SERVICE_API, user)
                     .then(
                         function (response) {
-                            loadAllLeadLanguages();
+                            loadAllLanguages();
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
-                           console.error('Error while creating LeadLanguage : '+errResponse.data.errorMessage);
+                           console.error('Error while creating Language : '+errResponse.data.errorMessage);
                            deferred.reject(errResponse);
                         }
                     );
                 return deferred.promise;
             }
 
-            function updateLeadLanguage(user, id) {
-                console.log('Updating LeadLanguage with id '+id);
+            function updateLanguage(user, id) {
+                console.log('Updating Language with id '+id);
                 var deferred = $q.defer();
                 $http.put(urls.LANGUAGE_SERVICE_API + id, user)
                     .then(
                         function (response) {
-                            loadAllLeadLanguages();
+                            loadAllLanguages();
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
-                            console.error('Error while updating LeadLanguage with id :'+id);
+                            console.error('Error while updating Language with id :'+id);
                             deferred.reject(errResponse);
                         }
                     );
                 return deferred.promise;
             }
 
-            function removeLeadLanguage(id) {
-                console.log('Removing LeadLanguage with id '+id);
+            function removeLanguage(id) {
+                console.log('Removing Language with id '+id);
                 var deferred = $q.defer();
                 $http.delete(urls.LANGUAGE_SERVICE_API + id)
                     .then(
                         function (response) {
-                            loadAllLeadLanguages();
+                            loadAllLanguages();
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
-                            console.error('Error while removing LeadLanguage with id :'+id);
+                            console.error('Error while removing Language with id :'+id);
                             deferred.reject(errResponse);
                         }
                     );

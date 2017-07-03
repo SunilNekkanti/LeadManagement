@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 
 /**
@@ -19,6 +21,7 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "lu_brokerage")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Brokerage extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;

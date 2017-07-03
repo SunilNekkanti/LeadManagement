@@ -8,26 +8,29 @@ app
 						'GenderService',
 						'StateService',
 						'LeadStatusService',
-						'LeadLanguageService',
+						'LanguageService',
 						'InsuranceService',
 						'PlanTypeService',
 						'ProviderService',
 						'UserService',
 						'EventService',
+						'FileUploadService',
 						'$scope',
 						'$compile',
 						'$filter',
 						'DTOptionsBuilder',
 						'DTColumnBuilder',
 						function(LeadService, GenderService, StateService,
-								LeadStatusService, LeadLanguageService,
-								InsuranceService, PlanTypeService, ProviderService, UserService, EventService, $scope, $compile, $filter,
+								LeadStatusService, LanguageService,
+								InsuranceService, PlanTypeService, ProviderService, UserService, EventService, FileUploadService, $scope, $compile, $filter,
 								DTOptionsBuilder, DTColumnBuilder) {
 
 							var self = this;
+							self.myFile;
+							self.serverResponse = {};
 							self.loginUser = {};
 							self.lead = {};
-							self.lead.bestTimeToCall = "1988-04-21T18:25:43-05:00";
+							//self.lead.bestTimeToCall = "1988-04-21T18:25:43-05:00";
 							self.leads = [];
 							self.genders = [];
 							self.states = [];
@@ -53,12 +56,14 @@ app
 							self.getAllGenders = getAllGenders;
 							self.getAllStates = getAllStates;
 							self.getAllLeadStatuses = getAllLeadStatuses;
-							self.getAllLeadLanguages = getAllLeadLanguages;
+							self.getAllLanguages = getAllLanguages;
 							self.getAllInsurances = getAllInsurances;
 							self.getAllAgents = getAllAgents;
 							self.getAllPlanTypes = getAllPlanTypes;
+							self.getAllInsuranceTypes = getAllInsuranceTypes;
 							self.getAllProviders = getAllProviders;
 							self.getAllEvents = getAllEvents;
+							self.uploadFile = uploadFile;
 							self.addAgentLeadAppointment = addAgentLeadAppointment;
 							self.reset = reset;
 							loginUser : loginUser;
@@ -104,8 +109,6 @@ app
 											.withTitle('MEDICAID'),
 									DTColumnBuilder.newColumn('hasMedicare')
 											.withTitle('MEDICARE'),
-									DTColumnBuilder.newColumn('hasDisability')
-											.withTitle('DISABILITY'),
 									DTColumnBuilder.newColumn(
 											'language.description').withTitle(
 											'LANGUAGE'),
@@ -139,7 +142,10 @@ app
 											'defaultContent', ''),
 									DTColumnBuilder.newColumn('zipCode.code')
 											.withTitle('ZIPCODE').withOption(
-													'defaultContent', '') ];
+													'defaultContent', ''),
+									DTColumnBuilder.newColumn('event.eventName')
+											.withTitle('SOURCE').withOption(
+															'with', '20%')];
 
 							self.dtOptions = DTOptionsBuilder
 									.newOptions()
@@ -148,10 +154,9 @@ app
 											{
 												url : 'http://localhost:8080/LeadManagement/api/lead/',
 												type : 'GET'
-											}).withDataProp('data').withOption('serverSide', true)
+											}).withDataProp('data').withOption('bServerSide', true)
 											.withOption("bLengthChange", false)
 											.withOption("bPaginate", true)
-											.withOption("bServerSide", true)
 											.withOption('bProcessing', true)
 											.withOption('bSaveState', true)
 									        .withDisplayLength(10).withOption( 'columnDefs', [ {
@@ -165,6 +170,7 @@ app
 																	selector : 'td:first-child' })
 										    .withOption('createdRow', createdRow)
 									        .withPaginationType('full_numbers')
+									        
 									        .withFnServerData(serverData);
 
 
@@ -183,24 +189,22 @@ app
 							}
 
 							function serverData(sSource, aoData, fnCallback) {
+								
+								
 								// All the parameters you need is in the aoData
 								// variable
-
-								var draw = parseInt("1");
 								var order = aoData[2].value;
 								var page = aoData[3].value / aoData[4].value;
 								var length = aoData[4].value;
 								var search = aoData[5].value;
 
-								console.log(JSON.stringify(aoData));
 								// Then just call your service to get the
 								// records from server side
 								LeadService
-										.loadLeads(page, length, search, order)
+										.loadLeads(page, length, search.value, order)
 										.then(
 												function(result) {
 													var records = {
-														'draw' : (parseInt(result.data.number) + 1),
 														'recordsTotal' : result.data.totalElements,
 														'recordsFiltered' : result.data.totalElements,
 														'data' : result.data.content
@@ -329,7 +333,7 @@ app
 								self.errorMessage = '';
 								self.genders = getAllGenders();
 								self.states = getAllStates();
-								self.languages = getAllLeadLanguages();
+								self.languages = getAllLanguages();
 								self.statuses = getAllLeadStatuses();
 								self.insurances = getAllInsurances();
 								self.planTypes = getAllPlanTypes();
@@ -368,7 +372,7 @@ app
 								self.display = true;
 								self.genders = getAllGenders();
 								self.states = getAllStates();
-								self.languages = getAllLeadLanguages();
+								self.languages = getAllLanguages();
 								self.statuses = getAllLeadStatuses();
 								self.insurances = getAllInsurances();
 								self.planTypes = getAllPlanTypes();
@@ -384,6 +388,16 @@ app
 								$scope.myForm.$setPristine(); // reset Form
 							}
 
+							function uploadFile() {
+						           var file = self.myFile;
+						           promise = FileUploadService.uploadFileToUrl(file);
+
+						            promise.then(function (response) {
+						                self.serverResponse = response;
+						            }, function () {
+						                self.serverResponse = 'An error has occurred';
+						            })
+						        };
 							
 							function addAgentLeadAppointment() {
 								self.lead.agentLeadAppointments.push(self.selectedAgentLeadAppointment);
@@ -404,14 +418,18 @@ app
 								return LeadStatusService.getAllLeadStatuses();
 							}
 
-							function getAllLeadLanguages() {
-								return LeadLanguageService
-										.getAllLeadLanguages();
+							function getAllLanguages() {
+								return LanguageService
+										.getAllLanguages();
 							}
 							
 							function getAllInsurances() {
 								return InsuranceService
 										.getAllInsurances();
+							}
+							function getAllInsuranceTypes() {
+								return InsuranceTypeService
+										.getAllInsuranceTypes();
 							}
 							
 							function getAllAgents() {

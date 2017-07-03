@@ -6,6 +6,7 @@ app.service('UserService',
 
             var factory = {
                 loadAllUsers: loadAllUsers,
+                loadUsers: loadUsers,
                 getAllUsers: getAllUsers,
                 getUser: getUser,
                 createUser: createUser,
@@ -16,6 +17,29 @@ app.service('UserService',
             return factory;
          
 
+            function loadUsers(pageNo, length, search, order) {
+                console.log('Fetching  users');
+                var pageable = {
+                  		 page:pageNo, size:length,search: search||''
+                  		};
+
+                  		var config = {
+                  		 params: pageable,
+                  		 headers : {'Accept' : 'application/json'}
+                  		};
+            return     $http.get(urls.USER_SERVICE_API,  config)
+                    .then(
+                        function (response) {
+                            console.log('Fetched successfully  leads');
+                         return     response ;
+                        },
+                        function (errResponse) {
+                            console.error('Error while loading leads');
+                            return   errResponse ;
+                        }
+                    );
+            }
+            
             function loadAllUsers() {
                 console.log('Fetching all users');
                 var deferred = $q.defer();

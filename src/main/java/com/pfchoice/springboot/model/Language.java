@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(name = "lu_language")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class LeadLanguage extends RecordDetails implements Serializable {
+public class Language extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -37,14 +37,14 @@ public class LeadLanguage extends RecordDetails implements Serializable {
 	/**
 	 * 
 	 */
-	public LeadLanguage() {
+	public Language() {
 		super();
 	}
 
 	/**
 	 * @param id
 	 */
-	public LeadLanguage(final Byte id) {
+	public Language(final Byte id) {
 		super();
 		this.id = id;
 	}
@@ -87,10 +87,10 @@ public class LeadLanguage extends RecordDetails implements Serializable {
 
 	@Override
 	public boolean equals(Object object) {
-		if (!(object instanceof LeadLanguage)) {
+		if (!(object instanceof Language)) {
 			return false;
 		}
-		LeadLanguage other = (LeadLanguage) object;
+		Language other = (Language) object;
 		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
 			return false;
 		}

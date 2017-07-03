@@ -56,7 +56,7 @@
 	                
 	                <div class="row">
 	                    <div class="form-group col-sm-12">
-	                        <label class="col-sm-2  control-label" for="gender">Brokerage</label>
+	                        <label class="col-sm-2  control-label" for="brokerage">Brokerage</label>
 	                        <div class="col-sm-3">
 	                        <select ng-model="ctrl.event.brokerage" ng-options="brokerage.description for brokerage in ctrl.brokerages track by brokerage.description" required></select>
 	                        </div>
@@ -66,7 +66,7 @@
 	                
 	                 <div class="row">
 	                    <div class="form-group col-sm-12">
-	                        <label class="col-sm-2  control-label" for="language">Facility Type</label>
+	                        <label class="col-sm-2  control-label" for="facilityType">Facility Type</label>
 	                        <div class="col-sm-3">
 	                        <select ng-model="ctrl.event.facilityType" ng-options="facilityType.description for facilityType in ctrl.facilityTypes track by facilityType.description" required></select>
 	                        </div>
@@ -75,28 +75,102 @@
 	               
 	                 <div class="row">
 	                    <div class="form-group col-sm-12">
-	                        <label class="col-sm-2  control-label" for="homePhone">Representative</label>
+	                        <label class="col-sm-2  control-label" for="agent">Representative</label>
 	                        <div class="col-sm-3">
-	                         <select ng-model="ctrl.event.agent"  ng-options="agent.username for agent in ctrl.users | filter :{roles:{role:'ROLE_AGENT'}}  track by agent.username"  required></select>
+	                         <select ng-model="ctrl.event.agent"  ng-options="agent.username for agent in ctrl.users | filter:{roles:[{role:'ROLE_AGENT'}]}   track by agent.username"  required></select>
 	                        </div>
 	                    </div>
 	                </div>
 	              
-	                	 <div class="row">
+	                <div class="row">
 	                    <div class="form-group col-sm-12">
-	                        <div  require>  <label class="col-sm-2  control-label" for="venue">Venue Name</label></div>
+	                        <div  require>  <label class="col-sm-2  control-label" for="address1">Venue Address1</label></div>
 	                        <div class="col-sm-3">
-	                            <input type="text" ng-model="ctrl.event.venue" id="venue" name="venue" class="username  form-control input-sm" placeholder="Enter your name" required ng-minlength="5"/>
+	                            <input type="text" ng-model="ctrl.event.address1" id="address1" name="address1" class="username  form-control input-sm" placeholder="Enter venue address1" required ng-minlength="5"/>
 	                  			<div class="has-error" ng-show="myForm.$dirty">
-                                      <span ng-show="myForm.venue.$error.required">This is a required field</span>
-                                      <span ng-show="myForm.venue.$error.minlength">Minimum length required is 5</span>
-                                      <span ng-show="myForm.venue.$invalid">This field is invalid </span>
+                                      <span ng-show="myForm.address1.$error.required">This is a required field</span>
+                                      <span ng-show="myForm.address1.$error.minlength">Minimum length required is 5</span>
+                                      <span ng-show="myForm.address1.$invalid">This field is invalid </span>
                                   </div>      
 	                        </div>
 	                    </div>
 	                </div>
 	                
+	                <div class="row">
+	                    <div class="form-group col-sm-12">
+	                        <div  require>  <label class="col-sm-2  control-label" for="address2">Venue Address2</label></div>
+	                        <div class="col-sm-3">
+	                            <input type="text" ng-model="ctrl.event.address2" id="address2" name="address2" class="username  form-control input-sm" placeholder="Enter venue address2" required ng-minlength="5"/>
+	                  			<div class="has-error" ng-show="myForm.$dirty">
+                                      <span ng-show="myForm.address2.$error.required">This is a required field</span>
+                                      <span ng-show="myForm.address2.$error.minlength">Minimum length required is 5</span>
+                                      <span ng-show="myForm.address2.$invalid">This field is invalid </span>
+                                  </div>      
+	                        </div>
+	                    </div>
+	                </div>
+	                
+	                <div class="row">
+	                    <div class="form-group col-sm-12">
+	                        <div  require>  <label class="col-sm-2  control-label" for="city">Venue City</label></div>
+	                        <div class="col-sm-3">
+	                            <input type="text" ng-model="ctrl.event.city" id="city" name="city" class="username  form-control input-sm" placeholder="Enter city" required ng-minlength="5"/>
+	                  			<div class="has-error" ng-show="myForm.$dirty">
+                                      <span ng-show="myForm.city.$error.required">This is a required field</span>
+                                      <span ng-show="myForm.city.$error.minlength">Minimum length required is 5</span>
+                                      <span ng-show="myForm.city.$invalid">This field is invalid </span>
+                                  </div>      
+	                        </div>
+	                    </div>
+	                </div>
 	             
+	             <div class="row">
+	                   <div class="form-group col-sm-4">
+	                        <label class="col-sm-5  control-label" for="uname">Venue State</label>
+	                        <div class="col-sm-7">
+	                        <select ng-model="ctrl.event.state" ng-options="state.description for state in ctrl.states track by state.description" required></select>
+	                        </div>
+	                    </div>
+	                </div>
+	                
+	                <div class="row">
+	                   <div class="form-group col-sm-4">
+	                        <label class="col-sm-5  control-label" for="uname">Zipcode</label>
+	                        <div class="col-sm-7">
+	                        <select ng-model="ctrl.event.zipCode" ng-options="zipCode.code for zipCode in ctrl.event.state.zipCodes track by zipCode.code" required></select>
+	                        </div>
+	                    </div>
+	                </div>
+	                
+	                <div class="row">
+	                    <div class="form-group col-sm-12">
+	                        <div  require>  <label class="col-sm-2  control-label" for="contactPerson">Contact Person</label></div>
+	                        <div class="col-sm-3">
+	                            <input type="text" ng-model="ctrl.event.contactPerson" id="contactPerson" name="contactPerson" class="username  form-control input-sm" placeholder="Enter venue contactPerson" required ng-minlength="5"/>
+	                  			<div class="has-error" ng-show="myForm.$dirty">
+                                      <span ng-show="myForm.contactPerson.$error.required">This is a required field</span>
+                                      <span ng-show="myForm.contactPerson.$error.minlength">Minimum length required is 5</span>
+                                      <span ng-show="myForm.contactPerson.$invalid">This field is invalid </span>
+                                  </div>      
+	                        </div>
+	                    </div>
+	                </div>
+	                
+	                <div class="row">
+	                    <div class="form-group col-sm-12">
+	                        <div  require>  <label class="col-sm-2  control-label" for="contactPhone">Contact Phone</label></div>
+	                        <div class="col-sm-3">
+	                            <input type="text" ng-model="ctrl.event.contactPhone" id="contactPhone" name="contactPhone" class="username  form-control input-sm" placeholder="Enter venue contactPhone" required ng-minlength="5"/>
+	                  			<div class="has-error" ng-show="myForm.$dirty">
+                                      <span ng-show="myForm.contactPhone.$error.required">This is a required field</span>
+                                      <span ng-show="myForm.contactPhone.$error.minlength">Minimum length required is 5</span>
+                                      <span ng-show="myForm.contactPhone.$invalid">This field is invalid </span>
+                                  </div>      
+	                        </div>
+	                    </div>
+	                </div>
+	                
+	                {{myForm.$invalid  }} {{ myForm.$pristine}}
 	                <div class="row">
 	                    <div class="form-actions floatCenter col-sm-offset-8">
 	                        <input type="submit"  value="{{!ctrl.event.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid || myForm.$pristine">

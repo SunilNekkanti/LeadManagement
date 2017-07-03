@@ -99,9 +99,15 @@ public class UserController {
 		currentUser.setPassword(user.getPassword());
 		currentUser.getRoles().clear();
 		currentUser.setRoles(user.getRoles());
+		currentUser.getCounties().clear();
+		currentUser.setCounties(user.getCounties());
+		currentUser.setBrokerage(user.getBrokerage());
+		currentUser.setEmail(user.getEmail());
+		currentUser.setPhone(user.getPhone());
+		currentUser.setLanguage(user.getLanguage());
+		currentUser.setLicenseNo(user.getLicenseNo());
 
 		logger.info("Updating User - currentUser.getRoles().size()  {}", currentUser.getRoles().size());
-
 		
 		userService.updateUser(currentUser);
 		return new ResponseEntity<User>(currentUser, HttpStatus.OK);

@@ -11,14 +11,16 @@ app.constant('urls', {
     ROLE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/role/',
     STATE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/state/',
     STATUS_SERVICE_API : 'http://localhost:8080/LeadManagement/api/leadStatus/',
-    LANGUAGE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/leadLanguage/',
+    LANGUAGE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/language/',
     PLANTYPE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/planType/',
     INSURANCE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/insurance/',
     PROVIDER_SERVICE_API : 'http://localhost:8080/LeadManagement/api/provider/',
     FACILITYTYPE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/facilityType/',
     BROKERAGE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/brokerage/',
     EVENT_SERVICE_API : 'http://localhost:8080/LeadManagement/api/event/',
-    LOGIN_USER : 'http://localhost:8080/LeadManagement/getloginInfo'
+    LOGIN_USER : 'http://localhost:8080/LeadManagement/getloginInfo',
+    FILE_UPLOADER : 'http://localhost:8080/LeadManagement/api/fileUpload/fileProcessing.do' ,
+    COUNTY_SERVICE_API : 'http://localhost:8080/LeadManagement/api/county/' 
 });
 
 app.controller('NavbarController',  ['$scope', '$state', function($scope, $state){
@@ -33,8 +35,6 @@ app.controller('NavbarController',  ['$scope', '$state', function($scope, $state
 }]);
 
 
- 
-
 
 app.config(['$stateProvider', '$urlRouterProvider',
     function($stateProvider, $urlRouterProvider) {
@@ -42,26 +42,52 @@ app.config(['$stateProvider', '$urlRouterProvider',
 	
     // Now set up the states
     $stateProvider
-    .state('home', {
+      .state('home', {
         url: '/home',
         templateUrl: 'home'
-    })
-    
+       })
        .state('user', {
           url: '/user',
           templateUrl: 'partials/list',
           controller:'UserController',
           controllerAs:'ctrl',
           resolve: {
-              users: function ($q, UserService, RoleService) {
+              users: function ($q, UserService) {
+                  console.log('Load all users');
+                  var deferred = $q.defer();
+                  UserService.loadAllUsers().then(deferred.resolve, deferred.resolve);
+                  console.log('deferred.promise'+deferred.promise);
+                  return deferred.promise;
+              },
+              roles: function ($q, RoleService) {
                   console.log('Load all users');
                   var deferred = $q.defer();
                   RoleService.loadAllRoles().then(deferred.resolve, deferred.resolve);
-                  UserService.loadAllUsers().then(deferred.resolve, deferred.resolve);
+                  console.log('deferred.promise'+deferred.promise);
+                  return deferred.promise;
+              },
+		      languages: function ($q,  LanguageService) {
+		          console.log('Load all languages');
+		          var deferred = $q.defer();
+		          LanguageService.loadAllLanguages().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise;
+		      },
+		      counties: function ($q,  CountyService) {
+		          console.log('Load all languages');
+		          var deferred = $q.defer();
+		          CountyService.loadAllCounties().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise;
+		      },
+              brokerages: function ($q,BrokerageService) {
+                  console.log('Load all brokerages');
+                  var deferred = $q.defer();
+                  BrokerageService.loadAllBrokerages().then(deferred.resolve, deferred.resolve);
                   
                   console.log('deferred.promise'+deferred.promise);
                   return deferred.promise;
-              }
+              },
           }
       })
       .state('lead', {
@@ -100,10 +126,10 @@ app.config(['$stateProvider', '$urlRouterProvider',
 		          console.log('deferred.promise'+deferred.promise);
 		          return deferred.promise;
 		      },
-		      languages: function ($q,  LeadLanguageService) {
-		          console.log('Load all leadLanguages');
+		      languages: function ($q,  LanguageService) {
+		          console.log('Load all languages');
 		          var deferred = $q.defer();
-		          LeadLanguageService.loadAllLeadLanguages().then(deferred.resolve, deferred.resolve);
+		          LanguageService.loadAllLanguages().then(deferred.resolve, deferred.resolve);
 		          console.log('deferred.promise'+deferred.promise);
 		          return deferred.promise;
 		      },
@@ -134,7 +160,15 @@ app.config(['$stateProvider', '$urlRouterProvider',
 		          ProviderService.loadAllProviders().then(deferred.resolve, deferred.resolve);
 		          console.log('deferred.promise'+deferred.promise);
 		          return deferred.promise;
+		      },
+		      events: function ($q,  EventService) {
+		          console.log('Load all events');
+		          var deferred = $q.defer();
+		          EventService.loadAllEvents().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise;
 		      }
+		      
           }
       })
       .state('role', {
@@ -214,14 +248,28 @@ app.config(['$stateProvider', '$urlRouterProvider',
                   
                   console.log('deferred.promise'+deferred.promise);
                   return deferred.promise;
-              }
+              },
+              users: function ($q,  UserService) {
+		          console.log('Load all users');
+		          var deferred = $q.defer();
+		          UserService.loadAllUsers().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise;
+		      },
+      		  states: function ($q,  StateService) {
+		          console.log('Load all leads');
+		          var deferred = $q.defer();
+		          StateService.loadAllStates().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise;
+		      }
           }
       })
       .state('logout', {
           url: '/logout',
           templateUrl: 'login'
       })
-        $urlRouterProvider.otherwise('/lead');
+        $urlRouterProvider.otherwise('lead');
     
     function run() {
         FastClick.attach(document.body);
@@ -256,6 +304,33 @@ app.directive('datePicker', function () {
     };
 });
 
+//DatePicker -> NgModel
+app.directive('date1Picker', function () {
+    return {
+        require: 'ngModel',
+        link: function (scope, element, attr, ngModel) {
+            $(element).datetimepicker({
+                locale: 'en-us',
+                format: 'MM/DD/YYYY',
+                parseInputDate: function (data) {
+                    if (data instanceof Date) {
+                        return moment(data);
+                    } else {
+                        return moment(new Date(data));
+                    }
+                },
+                maxDate: new Date()
+            });
+
+            $(element).on("dp.change", function (e) {
+                ngModel.$viewValue = e.date;
+                ngModel.$commitViewValue();
+            });
+        }
+    };
+});
+
+
 // DatePicker Input NgModel->DatePicker
 app.directive('datePickerInput', function() {
     return {
@@ -272,3 +347,34 @@ app.directive('datePickerInput', function() {
 });
 
 
+/*
+A directive to enable two way binding of file field
+*/
+app.directive('fileModel', function ($parse) {
+   return {
+       restrict: 'A', //the directive can be used as an attribute only
+
+       /*
+        link is a function that defines functionality of directive
+        scope: scope associated with the element
+        element: element on which this directive used
+        attrs: key value pair of element attributes
+        */
+       link: function (scope, element, attrs, ngModel) {
+           var model = $parse(attrs.fileModel),
+               modelSetter = model.assign; //define a setter for demoFileModel
+           
+           //Bind change event on the element
+           element.bind('change', function (e) {
+        	   
+        	   alert(JSON.stringify(e));
+               //Call apply on scope, it checks for value changes and reflect them on UI
+               scope.$apply(function () {
+                   //set the model value
+                   modelSetter(scope, element[0].files[0]);
+               });
+               
+           });
+       }
+   };
+});

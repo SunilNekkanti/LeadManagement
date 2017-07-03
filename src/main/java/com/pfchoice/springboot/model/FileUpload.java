@@ -9,12 +9,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  *
  * @author sarath
  */
-@Entity(name = "files_upload")
-public class FilesUpload extends RecordDetails implements Serializable {
+@Entity(name = "file_upload")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class FileUpload extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -36,7 +39,7 @@ public class FilesUpload extends RecordDetails implements Serializable {
 	/**
 	 * 
 	 */
-	public FilesUpload() {
+	public FileUpload() {
 		super();
 	}
 
@@ -44,7 +47,7 @@ public class FilesUpload extends RecordDetails implements Serializable {
 	 * 
 	 * @param id
 	 */
-	public FilesUpload(final Integer id) {
+	public FileUpload(final Integer id) {
 		super();
 		this.id = id;
 	}
@@ -119,10 +122,10 @@ public class FilesUpload extends RecordDetails implements Serializable {
 
 	@Override
 	public boolean equals(Object object) {
-		if (!(object instanceof FilesUpload)) {
+		if (!(object instanceof FileUpload)) {
 			return false;
 		}
-		FilesUpload other = (FilesUpload) object;
+		FileUpload other = (FileUpload) object;
 		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
 			return false;
 		}

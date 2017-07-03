@@ -6,8 +6,8 @@ import org.springframework.stereotype.Repository;
 import com.pfchoice.springboot.model.County;
 
 @Repository
-public interface CountyRepository extends JpaRepository<County, Long> {
+public interface CountyRepository extends JpaRepository<County, Integer> {
 
-
+	public County findByDescription(String code);
 }
 

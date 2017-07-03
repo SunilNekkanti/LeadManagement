@@ -9,6 +9,7 @@ import com.pfchoice.springboot.service.LeadMembershipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,8 +42,8 @@ public class LeadMembershipServiceImpl implements LeadMembershipService{
 		leadMembershipRepository.deleteAll();
 	}
 
-	public Page<LeadMembership> findAllLeadMembershipsByPage(Pageable pageable){
-		return leadMembershipRepository.findAll(pageable);
+	public Page<LeadMembership> findAllLeadMembershipsByPage(Specification<LeadMembership>spec, Pageable pageable){
+		return leadMembershipRepository.findAll(spec, pageable);
 	}
 	
 	public boolean isLeadMembershipExists(String leadFirstName, String leadLastName, Date dob) {

@@ -27,13 +27,13 @@ public class RecordDetails {
 	private Date updatedDate = new Date();
 
 	@Column(name = "created_by")
-	private String createdBy;
+	private String createdBy = "sarath";
 
 	@Column(name = "updated_by")
-	private String updatedBy;
+	private String updatedBy = "sarath";
 
 	@Column(name = "active_ind", insertable = false)
-	private Character activeInd;
+	private Character activeInd = new Character('Y');
 
 	/**
 	 * 

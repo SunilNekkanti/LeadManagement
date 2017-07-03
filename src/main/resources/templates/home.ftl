@@ -23,7 +23,6 @@
    <script   src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
    <script src="http://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script> 
-   <script data-require="angular.js@1.3.13" data-semver="1.3.13" src="https://code.angularjs.org/1.3.13/angular.js"></script>
    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
@@ -38,7 +37,7 @@
   <script src="js/app/GenderService.js"></script>
   <script src="js/app/StateService.js"></script>
   <script src="js/app/LeadStatusService.js"></script>
-  <script src="js/app/LeadLanguageService.js"></script>
+  <script src="js/app/LanguageService.js"></script>
   <script src="js/app/InsuranceService.js"></script>
   <script src="js/app/PlanTypeService.js"></script>
   <script src="js/app/ProviderService.js"></script>
@@ -52,6 +51,10 @@
   <script src="js/app/BrokerageService.js"></script>
   <script src="js/app/EventController.js"></script>
   <script src="js/app/EventService.js"></script>
+  <script src="js/app/FileUploadService.js"></script>
+  <script src="js/app/LanguageService.js"></script>
+  <script src="js/app/CountyService.js"></script>
+   <script src="js/app/CountyController.js"></script>
 </head>
 
 <body class="ng-cloak">

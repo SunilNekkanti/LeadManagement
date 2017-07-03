@@ -5,9 +5,12 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
@@ -34,10 +37,10 @@ public class Insurance extends RecordDetails implements Serializable {
 	private String name;
 
 	
-	/*@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "plan_type_id", referencedColumnName = "plan_type_id")
-	private PlanType planTypeId;
-*/
+	private PlanType planType;
+
 	/**
 	 * 
 	 */
@@ -85,17 +88,17 @@ public class Insurance extends RecordDetails implements Serializable {
 	/**
 	 * @return the planTypeId
 	 */
-	/*public PlanType getPlanTypeId() {
-		return planTypeId;
-	}*/
+	public PlanType getPlanType() {
+		return planType;
+	}
 
 	/**
 	 * @param planTypeId
 	 *            the planTypeId to set
 	 */
-	/*public void setPlanTypeId(PlanType planTypeId) {
-		this.planTypeId = planTypeId;
-	}*/
+	public void setPlanType(PlanType planType) {
+		this.planType = planType;
+	}
 
 	
 	@Override

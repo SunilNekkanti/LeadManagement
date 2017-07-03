@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -48,7 +49,10 @@ public class User extends RecordDetails implements Serializable {
 	
 	@Column(name = "password")
 	private String password;
-
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "language_id", referencedColumnName = "code")
+	private Language language;
 
 	@ManyToMany( cascade={ CascadeType.MERGE  ,   CascadeType.REMOVE },fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles", joinColumns = {
@@ -56,8 +60,25 @@ public class User extends RecordDetails implements Serializable {
 					@JoinColumn(name = "role_id", referencedColumnName = "id",nullable = false, updatable = false) })
 	public Set<Role> roles;
 
+	@ManyToMany( cascade={ CascadeType.MERGE  ,   CascadeType.REMOVE },fetch = FetchType.LAZY)
+	@JoinTable(name = "user_counties", joinColumns = {
+			@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "county_id", referencedColumnName = "code",nullable = false, updatable = false) })
+	private Set<County> counties;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "brokerage_id", referencedColumnName = "code")
+	private Brokerage brokerage;
+	
+	@Column(name = "email")
+	private String email;
+	
+	@Column(name = "phone")
+	private String phone;
 
+	@Column(name = "license_no")
+	private String licenseNo;
+	
 	/**
 	 * 
 	 */
@@ -132,6 +153,89 @@ public class User extends RecordDetails implements Serializable {
 		this.roles = roles;
 	}
 
+	/**
+	 * @return the language
+	 */
+	public Language getLanguage() {
+		return language;
+	}
+
+	/**
+	 * @param language the language to set
+	 */
+	public void setLanguage(Language language) {
+		this.language = language;
+	}
+
+	/**
+	 * @return the counties
+	 */
+	public Set<County> getCounties() {
+		return counties;
+	}
+
+	/**
+	 * @param counties the counties to set
+	 */
+	public void setCounties(Set<County> counties) {
+		this.counties = counties;
+	}
+
+	/**
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	/**
+	 * @return the phone
+	 */
+	public String getPhone() {
+		return phone;
+	}
+
+	/**
+	 * @param phone the phone to set
+	 */
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	/**
+	 * @return the licenseNo
+	 */
+	public String getLicenseNo() {
+		return licenseNo;
+	}
+
+	/**
+	 * @param licenseNo the licenseNo to set
+	 */
+	public void setLicenseNo(String licenseNo) {
+		this.licenseNo = licenseNo;
+	}
+
+	/**
+	 * @return the brokerage
+	 */
+	public Brokerage getBrokerage() {
+		return brokerage;
+	}
+
+	/**
+	 * @param brokerage the brokerage to set
+	 */
+	public void setBrokerage(Brokerage brokerage) {
+		this.brokerage = brokerage;
+	}
 
 	@Override
 	public int hashCode() {

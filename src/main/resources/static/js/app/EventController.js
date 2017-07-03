@@ -8,12 +8,13 @@ app
 						'BrokerageService',
 						'FacilityTypeService',
 						'UserService',
+						'StateService',
 						'$scope',
 						'$compile',
 						'$filter',
 						'DTOptionsBuilder',
 						'DTColumnBuilder',
-						function(EventService, BrokerageService,  FacilityTypeService, UserService, $scope, $compile, $filter,
+						function(EventService, BrokerageService,  FacilityTypeService, UserService, StateService, $scope, $compile, $filter,
 								DTOptionsBuilder, DTColumnBuilder) {
 
 							var self = this;
@@ -23,6 +24,7 @@ app
 							self.facilityTypes = [];
 							self.users = [];
 							self.display = false;
+							self.states = [];
 							self.displayEditButton = false;
 							self.submit = submit;
 							self.addEvent = addEvent;
@@ -31,6 +33,8 @@ app
 							self.updateEvent = updateEvent;
 							self.removeEvent = removeEvent;
 							self.editEvent = editEvent;
+							self.getAllAgents = getAllAgents;
+							self.getAllStates = getAllStates;
 							self.getAllBrokerages = getAllBrokerages;
 							self.getAllFacilityTypes = getAllFacilityTypes;
 							self.dtInstance = {};
@@ -71,14 +75,32 @@ app
 									DTColumnBuilder.newColumn(
 											'brokerage.description').withTitle(
 											'BROKERAGE').withOption('defaultContent', ''),
-									DTColumnBuilder.newColumn('facilityType1.description').withTitle(
+									DTColumnBuilder.newColumn('facilityType.description').withTitle(
 											'FACILITY TYPE').withOption('defaultContent', ''),
 									DTColumnBuilder.newColumn(
 											'agent.username').withTitle(
 											'REPRESENTATIVE').withOption('defaultContent', ''),
-									DTColumnBuilder.newColumn('venue')
-											.withTitle('VENUE').withOption(
-													'defaultContent', '')];
+									DTColumnBuilder.newColumn('address1')
+											.withTitle('ADDRESS1').withOption(
+												'defaultContent', ''),
+									DTColumnBuilder.newColumn('address2')
+													.withTitle('ADDRESS2').withOption(
+													'defaultContent', ''),
+									DTColumnBuilder.newColumn('city')
+												.withTitle('CITY').withOption(
+													'defaultContent', ''),
+									DTColumnBuilder.newColumn('state.shortName')
+														.withTitle('STATE').withOption(
+														'defaultContent', ''),
+									DTColumnBuilder.newColumn('zipCode.code')
+														.withTitle('ZIPCODE').withOption(
+														'defaultContent', ''),
+									DTColumnBuilder.newColumn('contactPerson')
+															.withTitle('CONTACT PERSON').withOption(
+															'defaultContent', ''),
+									DTColumnBuilder.newColumn('contactPhone')
+																.withTitle('CONTACT PHONE').withOption(
+																'defaultContent', '')];
 
 							self.dtOptions = DTOptionsBuilder
 									.newOptions()
@@ -248,6 +270,7 @@ app
 								self.successMessage = '';
 								self.errorMessage = '';
 								self.users = getAllAgents();
+								self.states = getAllStates();
 								self.brokerages = getAllBrokerages();
 								self.facilityTypes = getAllFacilityTypes();
 									EventService
@@ -271,6 +294,7 @@ app
 								self.errorMessage = '';
 								self.display = true;
 								self.users = getAllAgents();
+								self.states = getAllStates();
 								self.brokerages = getAllBrokerages();
 								self.facilityTypes = getAllFacilityTypes();
 							}
@@ -293,6 +317,10 @@ app
 							function getAllAgents() {
 								return UserService
 										.getAllUsers();
+							}
+							
+							function getAllStates() {
+								return StateService.getAllStates();
 							}
 							
 							function getAllBrokerages() {

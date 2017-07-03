@@ -6,6 +6,7 @@ import java.util.Calendar;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,6 +38,10 @@ public class Event extends RecordDetails implements Serializable {
 	@Column(name = "event_name")
 	private String eventName;
 
+	@Column(name = "event_date_time", nullable= true)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Calendar  eventDateTime;
+	
 	@ManyToOne
 	@JoinColumn(name = "brokerage_id", referencedColumnName = "code")
 	private Brokerage brokerage;
@@ -48,12 +53,29 @@ public class Event extends RecordDetails implements Serializable {
 	@Column(name = "notes", length = 65535, columnDefinition = "TEXT")
 	private String notes;
 	
-	@Column(name = "venue")
-	private String venue;
+	@Column(name = "address1")
+	private String address1;
 	
-	@Column(name = "event_date_time", nullable= true)
-	@Temporal(TemporalType.TIMESTAMP)
-	private Calendar  eventDateTime;
+	@Column(name = "address2")
+	private String address2;
+
+	@Column(name = "city")
+	private String city;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "state", referencedColumnName = "code")
+	private State state;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "zipcode", referencedColumnName = "zipcode")
+	private ZipCode zipCode;
+	
+	@Column(name = "contact")
+	private String contactPerson;
+	
+	@Column(name = "contact_phone")
+	private String contactPhone;
+
 	
 	@ManyToOne
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -149,20 +171,6 @@ public class Event extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @return the venue
-	 */
-	public String getVenue() {
-		return venue;
-	}
-
-	/**
-	 * @param venue the venue to set
-	 */
-	public void setVenue(String venue) {
-		this.venue = venue;
-	}
-
-	/**
 	 * @return the eventDateTime
 	 */
 	public Calendar getEventDateTime() {
@@ -188,6 +196,104 @@ public class Event extends RecordDetails implements Serializable {
 	 */
 	public void setAgent(User agent) {
 		this.agent = agent;
+	}
+
+	/**
+	 * @return the address1
+	 */
+	public String getAddress1() {
+		return address1;
+	}
+
+	/**
+	 * @param address1 the address1 to set
+	 */
+	public void setAddress1(String address1) {
+		this.address1 = address1;
+	}
+
+	/**
+	 * @return the address2
+	 */
+	public String getAddress2() {
+		return address2;
+	}
+
+	/**
+	 * @param address2 the address2 to set
+	 */
+	public void setAddress2(String address2) {
+		this.address2 = address2;
+	}
+
+	/**
+	 * @return the city
+	 */
+	public String getCity() {
+		return city;
+	}
+
+	/**
+	 * @param city the city to set
+	 */
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	/**
+	 * @return the stateCode
+	 */
+	public State getState() {
+		return state;
+	}
+
+	/**
+	 * @param stateCode the stateCode to set
+	 */
+	public void setState(State state) {
+		this.state = state;
+	}
+
+	/**
+	 * @return the zipCode
+	 */
+	public ZipCode getZipCode() {
+		return zipCode;
+	}
+
+	/**
+	 * @param zipCode the zipCode to set
+	 */
+	public void setZipCode(ZipCode zipCode) {
+		this.zipCode = zipCode;
+	}
+
+	/**
+	 * @return the contactPerson
+	 */
+	public String getContactPerson() {
+		return contactPerson;
+	}
+
+	/**
+	 * @param contactPerson the contactPerson to set
+	 */
+	public void setContactPerson(String contactPerson) {
+		this.contactPerson = contactPerson;
+	}
+
+	/**
+	 * @return the contactPhone
+	 */
+	public String getContactPhone() {
+		return contactPhone;
+	}
+
+	/**
+	 * @param contactPhone the contactPhone to set
+	 */
+	public void setContactPhone(String contactPhone) {
+		this.contactPhone = contactPhone;
 	}
 
 	@Override
