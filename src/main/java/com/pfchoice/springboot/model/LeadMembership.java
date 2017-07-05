@@ -92,12 +92,6 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@JoinColumn(name = "lead_Mbr_GenderID", referencedColumnName = "gender_id")
 	private Gender genderId;
 
-	@Column(name = "has_medicaid")
-	private Character hasMedicaid = new Character('N');
-
-	@Column(name = "has_medicare")
-	private Character hasMedicare  = new Character('N');
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lead_Mbr_languageId", referencedColumnName = "code")
 	private Language language;
@@ -213,20 +207,6 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @return the hasMedicaid
-	 */
-	public Character getHasMedicaid() {
-		return hasMedicaid;
-	}
-
-	/**
-	 * @return the hasMedicare
-	 */
-	public Character getHasMedicare() {
-		return hasMedicare;
-	}
-
-	/**
 	 * @return
 	 */
 	public Integer getId() {
@@ -330,19 +310,6 @@ public class LeadMembership extends RecordDetails implements Serializable {
 		this.genderId = genderId;
 	}
 
-	/**
-	 * @param hasMedicaid the hasMedicaid to set
-	 */
-	public void setHasMedicaid(Character hasMedicaid) {
-		this.hasMedicaid = hasMedicaid;
-	}
-
-	/**
-	 * @param hasMedicare the hasMedicare to set
-	 */
-	public void setHasMedicare(Character hasMedicare) {
-		this.hasMedicare = hasMedicare;
-	}
 
 	/**
 	 * @param id

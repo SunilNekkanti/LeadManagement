@@ -7,6 +7,9 @@ import com.pfchoice.springboot.repositories.LanguageRepository;
 import com.pfchoice.springboot.service.LanguageService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,39 +20,43 @@ import org.springframework.transaction.annotation.Transactional;
 public class LanguageServiceImpl implements LanguageService{
 
 	@Autowired
-	private LanguageRepository LanguageRepository;
+	private LanguageRepository languageRepository;
 
 
 	public Language findById(Byte id) {
-		return LanguageRepository.findById(id);
+		return languageRepository.findById(id);
 	}
 
 	public Language findByDescription(String description) {
-		return LanguageRepository.findByDescription(description);
+		return languageRepository.findByDescription(description);
 	}
 
-	public void saveLanguage(Language Language) {
-		LanguageRepository.save(Language);
+	public void saveLanguage(Language language) {
+		languageRepository.save(language);
 	}
 
-	public void updateLanguage(Language Language){
-		saveLanguage(Language);
+	public void updateLanguage(Language language){
+		saveLanguage(language);
 	}
 
 	public void deleteLanguageById(Byte id){
-		LanguageRepository.delete(id);
+		languageRepository.delete(id);
 	}
 
 	public void deleteAllLanguages(){
-		LanguageRepository.deleteAll();
+		languageRepository.deleteAll();
 	}
 
 	public List<Language> findAllLanguages(){
-		return LanguageRepository.findAll();
+		return (List<Language>) languageRepository.findAll();
 	}
 
-	public boolean isLanguageExist(Language Language) {
-		return findByDescription(Language.getDescription()) != null;
+	public Page<Language> findAllLanguagesByPage(Specification<Language> spec,Pageable pageable){
+		return languageRepository.findAll(spec, pageable);
+	}
+	
+	public boolean isLanguageExist(Language language) {
+		return findByDescription(language.getDescription()) != null;
 	}
 
 }

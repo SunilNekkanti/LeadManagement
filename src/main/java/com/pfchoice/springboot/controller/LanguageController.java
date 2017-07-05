@@ -1,10 +1,11 @@
 package com.pfchoice.springboot.controller;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +14,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.pfchoice.springboot.model.Language;
+import com.pfchoice.springboot.repositories.specifications.LanguageSpecifications;
 import com.pfchoice.springboot.service.LanguageService;
 import com.pfchoice.springboot.util.CustomErrorType;
 
@@ -28,20 +31,27 @@ public class LanguageController {
 	public static final Logger logger = LoggerFactory.getLogger(LanguageController.class);
 
 	@Autowired
-	LanguageService LanguageService; //Service which will do all data retrieval/manipulation work
+	LanguageService languageService; //Service which will do all data retrieval/manipulation work
 
 	// -------------------Retrieve All Languages---------------------------------------------
 	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT"  })
 	@RequestMapping(value = "/language/", method = RequestMethod.GET)
-	public ResponseEntity<List<Language>> listAllLanguages() {
-		List<Language> Languages = LanguageService.findAllLanguages();
-		if (Languages.isEmpty()) {
+	public ResponseEntity<Page<Language>> listAllLanguages(@RequestParam(value = "page", required = false) Integer pageNo,  @RequestParam(value = "size", required = false) Integer pageSize,@RequestParam(value = "search", required = false) String search) {
+		pageNo = (pageNo == null)?0:pageNo;
+		pageSize = (pageSize == null)?1000:pageSize;
+		
+		PageRequest pageRequest = new PageRequest(pageNo,pageSize );
+		Specification<Language> spec =null ;
+		if(!"".equals(search))
+		 spec = new LanguageSpecifications(search);
+		Page<Language> languages = languageService.findAllLanguagesByPage(spec, pageRequest);
+		if (languages.getTotalElements() == 0) {
 			System.out.println("no Languages");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
 		System.out.println("there are Languages");
-		return new ResponseEntity<List<Language>>(Languages, HttpStatus.OK);
+		return new ResponseEntity<Page<Language>>(languages, HttpStatus.OK);
 	}
 
 	// -------------------Retrieve Single Language------------------------------------------
@@ -49,7 +59,7 @@ public class LanguageController {
 	@RequestMapping(value = "/language/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getLanguage(@PathVariable("id") byte id) {
 		logger.info("Fetching Language with id {}", id);
-		Language Language = LanguageService.findById(id);
+		Language Language = languageService.findById(id);
 		if (Language == null) {
 			logger.error("Language with id {} not found.", id);
 			return new ResponseEntity(new CustomErrorType("Language with id " + id 
@@ -61,30 +71,28 @@ public class LanguageController {
 	// -------------------Create a Language-------------------------------------------
 	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/language/", method = RequestMethod.POST)
-	public ResponseEntity<?> createLanguage(@RequestBody Language Language, UriComponentsBuilder ucBuilder) {
-		logger.info("Creating Language : {}", Language);
+	public ResponseEntity<?> createLanguage(@RequestBody Language language, UriComponentsBuilder ucBuilder) {
+		logger.info("Creating Language : {}", language);
 
-		if (LanguageService.isLanguageExist(Language)) {
-			logger.error("Unable to create. A Language with name {} already exist", Language.getId());
+		if (languageService.isLanguageExist(language)) {
+			logger.error("Unable to create. A Language with name {} already exist", language.getId());
 			return new ResponseEntity(new CustomErrorType("Unable to create. A Language with name " + 
-			Language.getId() + " already exist."),HttpStatus.CONFLICT);
+			language.getId() + " already exist."),HttpStatus.CONFLICT);
 		}
-		Language.setCreatedBy("sarath");
-		Language.setUpdatedBy("sarath");
-		LanguageService.saveLanguage(Language);
+		languageService.saveLanguage(language);
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(ucBuilder.path("/api/Language/{id}").buildAndExpand(Language.getId()).toUri());
+		headers.setLocation(ucBuilder.path("/api/Language/{id}").buildAndExpand(language.getId()).toUri());
 		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
 	}
 
 	// ------------------- Update a Language ------------------------------------------------
 	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/language/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<?> updateLanguage(@PathVariable("id") byte id, @RequestBody Language Language) {
+	public ResponseEntity<?> updateLanguage(@PathVariable("id") byte id, @RequestBody Language language) {
 		logger.info("Updating Language with id {}", id);
 
-		Language currentLanguage = LanguageService.findById(id);
+		Language currentLanguage = languageService.findById(id);
 
 		if (currentLanguage == null) {
 			logger.error("Unable to update. Language with id {} not found.", id);
@@ -92,9 +100,9 @@ public class LanguageController {
 					HttpStatus.NOT_FOUND);
 		}
 
-		currentLanguage.setDescription(Language.getDescription());
+		currentLanguage.setDescription(language.getDescription());
 
-		LanguageService.updateLanguage(currentLanguage);
+		languageService.updateLanguage(currentLanguage);
 		return new ResponseEntity<Language>(currentLanguage, HttpStatus.OK);
 	}
 
@@ -104,13 +112,13 @@ public class LanguageController {
 	public ResponseEntity<?> deleteLanguage(@PathVariable("id") byte id) {
 		logger.info("Fetching & Deleting Language with id {}", id);
 
-		Language Language = LanguageService.findById(id);
+		Language Language = languageService.findById(id);
 		if (Language == null) {
 			logger.error("Unable to delete. Language with id {} not found.", id);
 			return new ResponseEntity(new CustomErrorType("Unable to delete. Language with id " + id + " not found."),
 					HttpStatus.NOT_FOUND);
 		}
-		LanguageService.deleteLanguageById(id);
+		languageService.deleteLanguageById(id);
 		return new ResponseEntity<Language>(HttpStatus.NO_CONTENT);
 	}
 
@@ -120,7 +128,7 @@ public class LanguageController {
 	public ResponseEntity<Language> deleteAllLanguages() {
 		logger.info("Deleting All Languages");
 
-		LanguageService.deleteAllLanguages();
+		languageService.deleteAllLanguages();
 		return new ResponseEntity<Language>(HttpStatus.NO_CONTENT);
 	}
 

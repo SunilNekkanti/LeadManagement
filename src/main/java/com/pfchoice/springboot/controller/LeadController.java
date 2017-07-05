@@ -106,9 +106,8 @@ public class LeadController {
 		currentLeadMembership.setCountyCode(lead.getCountyCode());
 		currentLeadMembership.setDob(lead.getDob());
 		currentLeadMembership.setEthinicCode(lead.getEthinicCode());
+		currentLeadMembership.setPlanType(lead.getPlanType());
 		currentLeadMembership.setGenderId(lead.getGenderId());
-		currentLeadMembership.setHasMedicaid(lead.getHasMedicaid());
-		currentLeadMembership.setHasMedicare(lead.getHasMedicare());
 		currentLeadMembership.setStatus(lead.getStatus());
 		currentLeadMembership.setLanguage(lead.getLanguage());
 		currentLeadMembership.setStatus(lead.getStatus());

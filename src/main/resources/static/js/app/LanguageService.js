@@ -6,6 +6,7 @@ app.service('LanguageService',
 
             var factory = {
                 loadAllLanguages: loadAllLanguages,
+                loadLanguages: loadLanguages,
                 getAllLanguages: getAllLanguages,
                 getLanguage: getLanguage,
                 createLanguage: createLanguage,
@@ -22,7 +23,7 @@ app.service('LanguageService',
                     .then(
                         function (response) {
                             console.log('Fetched successfully all Languages');
-                            $localStorage.Languages = response.data;
+                            $localStorage.Languages = response.data.content;
                             deferred.resolve(response);
                         },
                         function (errResponse) {
@@ -33,6 +34,30 @@ app.service('LanguageService',
                 return deferred.promise;
             }
 
+            function loadLanguages(pageNo, length, search, order) {
+                console.log('Fetching  Languages');
+                var pageable = {
+                  		 page:pageNo, size:length,search: search||''
+                  		};
+
+                  		var config = {
+                  		 params: pageable,
+                  		 headers : {'Accept' : 'application/json'}
+                  		};
+            return     $http.get(urls.LANGUAGE_SERVICE_API,  config)
+                    .then(
+                        function (response) {
+                        	
+                            console.log('Fetched successfully  languages');
+                         return     response ;
+                        },
+                        function (errResponse) {
+                            console.error('Error while loading languages');
+                            return   errResponse ;
+                        }
+                    );
+            }
+            
             function getAllLanguages(){
             	console.log('$localStorage.Languages'+$localStorage.Languages);
                 return $localStorage.Languages;
@@ -55,10 +80,11 @@ app.service('LanguageService',
                 return deferred.promise;
             }
 
-            function createLanguage(user) {
-                console.log('Creating Language');
+            function createLanguage(language) {
+                console.log('Creating Language:'+JSON.stringify(language));
                 var deferred = $q.defer();
-                $http.post(urls.LANGUAGE_SERVICE_API, user)
+                
+                $http.post(urls.LANGUAGE_SERVICE_API, language)
                     .then(
                         function (response) {
                             loadAllLanguages();

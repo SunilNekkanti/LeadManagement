@@ -52,9 +52,12 @@
   <script src="js/app/EventController.js"></script>
   <script src="js/app/EventService.js"></script>
   <script src="js/app/FileUploadService.js"></script>
+  <script src="js/app/LanguageController.js"></script>
   <script src="js/app/LanguageService.js"></script>
   <script src="js/app/CountyService.js"></script>
-   <script src="js/app/CountyController.js"></script>
+  <script src="js/app/CountyController.js"></script>
+  <script src="js/app/ProviderService.js"></script>
+  <script src="js/app/ProviderController.js"></script>
 </head>
 
 <body class="ng-cloak">
@@ -77,6 +80,8 @@
               <li><a href="#" ng-click="callMe('facilityType')">Facility Types</a>
               <li><a href="#" ng-click="callMe('brokerage')">Brokerages</a>
               <li><a href="#" ng-click="callMe('event')">Events</a>
+              <li><a href="#" ng-click="callMe('provider')">Providers</a>
+              <li><a href="#" ng-click="callMe('language')">Languages</a>
               </li>
               <li class="divider"></li>
               <li><a href="#">One more separated link</a>

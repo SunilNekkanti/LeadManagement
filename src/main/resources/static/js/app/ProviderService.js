@@ -6,6 +6,7 @@ app.service('ProviderService',
 
             var factory = {
                 loadAllProviders: loadAllProviders,
+                loadProviders: loadProviders,
                 getAllProviders: getAllProviders,
                 getProvider: getProvider,
                 createProvider: createProvider,
@@ -33,6 +34,29 @@ app.service('ProviderService',
                 return deferred.promise;
             }
 
+            function loadProviders(pageNo, length, search, order) {
+                console.log('Fetching  Providers');
+                var pageable = {
+                  		 page:pageNo, size:length,search: search||''
+                  		};
+
+                  		var config = {
+                  		 params: pageable,
+                  		 headers : {'Accept' : 'application/json'}
+                  		};
+            return     $http.get(urls.PROVIDER_SERVICE_API,  config)
+                    .then(
+                        function (response) {
+                            console.log('Fetched successfully  providers');
+                         return     response ;
+                        },
+                        function (errResponse) {
+                            console.error('Error while loading providers');
+                            return   errResponse ;
+                        }
+                    );
+            }
+            
             function getAllProviders(){
             	console.log('$localStorage.providers'+$localStorage.providers);
                 return $localStorage.providers;

@@ -114,6 +114,13 @@
 	                        </div>
 	                    </div>
 
+
+ 						 <div class="form-group col-sm-4" ng-show="ctrl.loginUser.roleName != 'ROLE_AGENT'">
+	                        <label class="col-sm-5  control-label" for="eventName">Source</label>
+	                        <div class="col-sm-7">
+	                        <select ng-model="ctrl.lead.event" ng-options="event.eventName for event in ctrl.events track by event.eventName" required></select>
+	                        </div>
+	                    </div>
 	                </div>
 	                
 	                 
@@ -146,16 +153,15 @@
 					   
 	             </div>
 	             
-	                 
 	                
-	             <div class="row col-sm-offset-1 col-sm-10" ng-show="ctrl.lead.status.id == 2">
+	             <div class="row col-sm-offset-1 col-sm-10" ng-show="ctrl.lead.status.id != 1">
 	             	<div class="panel panel-default">
 					    <div class="panel-heading">More Details for Converted</div>
 					    <div class="panel-body">
 					    		<div class="form-group col-sm-4">
 					    			<label class="col-sm-5    control-label" for="uname">PCP Name</label>
 	                        		<div class="col-sm-7">
-	                           			<select ng-model="ctrl.selectedAgentLeadAppointment.prvdr" ng-options="prvdr.name for prvdr in ctrl.providers track by prvdr.name" required="ctrl.lead.status.id == 2"></select>
+	                           			<select ng-model="ctrl.selectedAgentLeadAppointment.prvdr" ng-options="prvdr.name for prvdr in ctrl.providers | orderBy:'name' track by prvdr.name" required="ctrl.lead.status.id == 2"></select>
 	                       			 </div>
 					    	   </div>
 					    	   
@@ -178,6 +184,14 @@
        							</div>
 	                       			 </div>
 					    	   </div>
+					    	   
+					    	  <div class="form-group col-sm-4">
+					    			<label class="col-sm-5    control-label" for="notes">Notes</label>
+	                        		<div class="col-sm-7">
+					                    <textarea class="col-sm-12  control-label" name="notes"   class="form-control" id ="notes" ng-model="ctrl.selectedAgentLeadAppointment.notes"  ></textarea
+					                    
+					               </div>
+	                         </div>
 					    	   
 					    </div>
 					</div>
@@ -281,12 +295,6 @@
 		<div class="panel-body">
 		
 	                <div class="row" ng-show="ctrl.loginUser.roleName != 'ROLE_AGENT'">
-	                    <div class="form-group col-sm-4">
-	                        <label class="col-sm-5  control-label" for="eventName">Source</label>
-	                        <div class="col-sm-7">
-	                        <select ng-model="ctrl.lead.event" ng-options="event.eventName for event in ctrl.events track by event.eventName" required></select>
-	                        </div>
-	                    </div>
 	                
 	                    <div class="form-group col-sm-4">
 	                        <label class="col-sm-5  control-label" for="homePhone">Agent</label>
