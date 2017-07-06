@@ -55,7 +55,7 @@ public class ProviderServiceImpl implements ProviderService{
 	}
 
 	public boolean isProviderExist(Provider provider) {
-		return findById(provider.getId()) != null;
+		return findByName(provider.getName()) != null;
 	}
 
 }

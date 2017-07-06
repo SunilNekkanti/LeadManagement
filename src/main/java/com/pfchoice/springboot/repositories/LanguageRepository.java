@@ -7,9 +7,9 @@ import org.springframework.stereotype.Repository;
 import com.pfchoice.springboot.model.Language;
 
 @Repository
-public interface LanguageRepository extends PagingAndSortingRepository<Language, Byte>, JpaSpecificationExecutor<Language>  {
+public interface LanguageRepository extends PagingAndSortingRepository<Language, Short>, JpaSpecificationExecutor<Language>  {
 
-	public Language findById(Byte id);
+	public Language findById(Short id);
 	
 	public Language findByDescription(String description);
 

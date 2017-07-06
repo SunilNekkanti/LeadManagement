@@ -57,7 +57,7 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar  appointmentTime;
  	
- 	
+ 	@JsonIgnore
  	@ManyToOne(fetch = FetchType.LAZY)
  	@JoinColumn(name = "prvdr_id", referencedColumnName = "prvdr_id")
 	private Provider prvdr;

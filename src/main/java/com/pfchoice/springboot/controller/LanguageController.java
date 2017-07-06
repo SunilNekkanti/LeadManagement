@@ -57,7 +57,7 @@ public class LanguageController {
 	// -------------------Retrieve Single Language------------------------------------------
 	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/language/{id}", method = RequestMethod.GET)
-	public ResponseEntity<?> getLanguage(@PathVariable("id") byte id) {
+	public ResponseEntity<?> getLanguage(@PathVariable("id") short id) {
 		logger.info("Fetching Language with id {}", id);
 		Language Language = languageService.findById(id);
 		if (Language == null) {
@@ -89,7 +89,7 @@ public class LanguageController {
 	// ------------------- Update a Language ------------------------------------------------
 	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/language/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<?> updateLanguage(@PathVariable("id") byte id, @RequestBody Language language) {
+	public ResponseEntity<?> updateLanguage(@PathVariable("id") short id, @RequestBody Language language) {
 		logger.info("Updating Language with id {}", id);
 
 		Language currentLanguage = languageService.findById(id);
@@ -109,7 +109,7 @@ public class LanguageController {
 	// ------------------- Delete a Language-----------------------------------------
 	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/language/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<?> deleteLanguage(@PathVariable("id") byte id) {
+	public ResponseEntity<?> deleteLanguage(@PathVariable("id") short id) {
 		logger.info("Fetching & Deleting Language with id {}", id);
 
 		Language Language = languageService.findById(id);

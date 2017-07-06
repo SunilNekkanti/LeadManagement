@@ -58,6 +58,7 @@
   <script src="js/app/CountyController.js"></script>
   <script src="js/app/ProviderService.js"></script>
   <script src="js/app/ProviderController.js"></script>
+  <script src="js/app/LeadStatusController.js"></script>
 </head>
 
 <body class="ng-cloak">
@@ -69,23 +70,19 @@
           <li class="dropdown" dropdown>
             <a href="#" class="dropdown-toggle" dropdown-toggle role="button" aria-expanded="false">Admin <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a href="#" ng-click="callMe('lead')">Leads</a>
-              </li>
+              <li><a href="#" ng-click="callMe('lead')">Leads</a></li>
+              <li><a href="#" ng-click="callMe('event')">Events</a> </li>
                <li class="divider"></li>
-              <li><a href="#" ng-click="callMe('role')">Roles</a>
-              </li>
-              <li><a href="#" ng-click="callMe('user')">User Accounts</a>
-              </li>
+              <li><a href="#" ng-click="callMe('role')">Roles</a> </li>
+              <li><a href="#" ng-click="callMe('user')">User Accounts</a> </li>
               <li class="divider"></li>
-              <li><a href="#" ng-click="callMe('facilityType')">Facility Types</a>
-              <li><a href="#" ng-click="callMe('brokerage')">Brokerages</a>
-              <li><a href="#" ng-click="callMe('event')">Events</a>
-              <li><a href="#" ng-click="callMe('provider')">Providers</a>
-              <li><a href="#" ng-click="callMe('language')">Languages</a>
-              </li>
+              <li><a href="#" ng-click="callMe('facilityType')">Facility Types</a></li>
+              <li><a href="#" ng-click="callMe('brokerage')">Brokerages</a></li>
+              <li><a href="#" ng-click="callMe('provider')">Providers</a></li>
+              <li><a href="#" ng-click="callMe('language')">Languages</a></li>
+               <li><a href="#" ng-click="callMe('leadStatus')">Lead Statuses</a></li>
               <li class="divider"></li>
-              <li><a href="#">One more separated link</a>
-              </li>
+              <li><a href="#">One more separated link</a>   </li>
             </ul>
           </li>
         </ul>

@@ -11,7 +11,7 @@ import com.pfchoice.springboot.model.Language;
 
 public interface LanguageService {
 	
-	Language findById(Byte id);
+	Language findById(Short id);
 	
 	Language findByDescription(String description);
 
@@ -19,7 +19,7 @@ public interface LanguageService {
 
 	void updateLanguage(Language language);
 
-	void deleteLanguageById(Byte id);
+	void deleteLanguageById(Short id);
 
 	void deleteAllLanguages();
 

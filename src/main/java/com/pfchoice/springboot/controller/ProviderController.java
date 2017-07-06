@@ -81,9 +81,10 @@ public class ProviderController {
 			return new ResponseEntity(new CustomErrorType("Unable to create. A Provider with name " + 
 			provider.getId() + " already exist."),HttpStatus.CONFLICT);
 		}
-		provider.setCreatedBy("sarath");
-		provider.setUpdatedBy("sarath");
+		
+		logger.info("Creating Provider : before save");
 		providerService.saveProvider(provider);
+		logger.info("Creating Provider : after save");
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(ucBuilder.path("/api/provider/{id}").buildAndExpand(provider.getId()).toUri());
@@ -111,6 +112,8 @@ public class ProviderController {
 		currentProvider.setAgeSeen(provider.getAgeSeen());
 		currentProvider.getLanguages().clear();
 		currentProvider.setLanguages(provider.getLanguages());
+		currentProvider.getBrokerages().clear();
+		currentProvider.setBrokerages(provider.getBrokerages());
 
 		providerService.updateProvider(currentProvider);
 		return new ResponseEntity<Provider>(currentProvider, HttpStatus.OK);

@@ -35,7 +35,7 @@ public class Provider extends RecordDetails implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
-	@Column(name = "prvdr_Id", unique = true, nullable = false)
+	@Column(name = "prvdr_Id",  nullable = false)
 	private Integer id;
 
 	

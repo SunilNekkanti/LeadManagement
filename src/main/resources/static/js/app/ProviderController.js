@@ -146,8 +146,7 @@ app.controller('ProviderController',
                         self.errorMessage='';
                         self.done = true;
                         self.display =false;
-                        self.languages = getAllLanguages();
-                        self.brokerages = getAllBrokerages();
+                        self.prvdrs = getAllProviders();
                         self.prvdr={};
                         $scope.myForm.$setPristine();
                     },

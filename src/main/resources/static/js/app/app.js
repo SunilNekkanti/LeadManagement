@@ -203,6 +203,22 @@ app.config(['$stateProvider', '$urlRouterProvider',
               }
           }
       })
+      .state('leadStatus', {
+          url: '/leadStatus',
+          templateUrl: 'partials/leadStatus_list',
+          controller:'LeadStatusController',
+          controllerAs:'ctrl',
+          resolve: {
+              leadStatuses: function ($q,LeadStatusService) {
+                  console.log('Load all leadStatuses');
+                  var deferred = $q.defer();
+                  LeadStatusService.loadAllLeadStatuses().then(deferred.resolve, deferred.resolve);
+                  
+                  console.log('deferred.promise'+deferred.promise);
+                  return deferred.promise;
+              }
+          }
+      })
       .state('brokerage', {
           url: '/brokerage',
           templateUrl: 'partials/brokerage_list',

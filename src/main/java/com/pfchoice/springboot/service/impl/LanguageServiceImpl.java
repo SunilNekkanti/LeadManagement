@@ -23,7 +23,7 @@ public class LanguageServiceImpl implements LanguageService{
 	private LanguageRepository languageRepository;
 
 
-	public Language findById(Byte id) {
+	public Language findById(Short id) {
 		return languageRepository.findById(id);
 	}
 
@@ -39,7 +39,7 @@ public class LanguageServiceImpl implements LanguageService{
 		saveLanguage(language);
 	}
 
-	public void deleteLanguageById(Byte id){
+	public void deleteLanguageById(Short id){
 		languageRepository.delete(id);
 	}
 

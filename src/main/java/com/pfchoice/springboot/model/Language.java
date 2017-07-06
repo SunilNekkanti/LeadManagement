@@ -29,8 +29,8 @@ public class Language extends RecordDetails implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
-	@Column(name = "code", nullable = false)
-	private Byte id;
+	@Column(name = "code", columnDefinition = "TINYINT",  nullable = false)
+	private Short id;
 
 	
 	@Column(name = "description")
@@ -46,7 +46,7 @@ public class Language extends RecordDetails implements Serializable {
 	/**
 	 * @param id
 	 */
-	public Language(final Byte id) {
+	public Language(final Short id) {
 		super();
 		this.id = id;
 	}
@@ -54,14 +54,14 @@ public class Language extends RecordDetails implements Serializable {
 	/**
 	 * @return
 	 */
-	public Byte getId() {
+	public Short getId() {
 		return id;
 	}
 
 	/**
 	 * @param id
 	 */
-	public void setId(final Byte id) {
+	public void setId(final Short id) {
 		this.id = id;
 	}
 
