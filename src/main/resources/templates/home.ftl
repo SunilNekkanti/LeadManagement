@@ -67,12 +67,13 @@
     
       <div class="navbar-collapse collapse in" collapse="isCollapsed" aria-expanded="true" >
         <ul class="nav navbar-nav">
+        <li><a href="#" ng-click="callMe('lead')">Leads</a></li>
+         
           <li class="dropdown" dropdown>
             <a href="#" class="dropdown-toggle" dropdown-toggle role="button" aria-expanded="false">Admin <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a href="#" ng-click="callMe('lead')">Leads</a></li>
-              <li><a href="#" ng-click="callMe('event')">Events</a> </li>
-               <li class="divider"></li>
+             <li><a href="#" ng-click="callMe('event')">Events</a> </li>
+              <li class="divider"></li>
               <li><a href="#" ng-click="callMe('role')">Roles</a> </li>
               <li><a href="#" ng-click="callMe('user')">User Accounts</a> </li>
               <li class="divider"></li>

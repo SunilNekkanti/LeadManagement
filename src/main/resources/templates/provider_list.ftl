@@ -30,7 +30,12 @@
 	                    <div class="form-group col-md-12">
 	                        <label class="col-md-2 control-lable" for="uname">Name</label>
 	                        <div class="col-md-7">
-	                            <input type="text" ng-model="ctrl.prvdr.name" id="uname" class="username form-control input-sm" placeholder="Enter your name" required ng-minlength="5"/>
+	                            <input type="text" ng-model="ctrl.prvdr.name" name="name" class="username form-control input-sm" placeholder="Enter your name" required ng-minlength="5"/>
+	                             <div class="has-error" ng-show="myForm.$dirty">
+	                                  <span ng-show="myForm.name.$error.required">This is a required field</span>
+                                      <span ng-show="myForm.name.$error.minlength">Minimum length required is 5</span>
+                                      <span ng-show="myForm.name.$invalid">This field is invalid </span>
+                                  </div>
 	                        </div>
 	                    </div>
 	                </div>
@@ -39,7 +44,12 @@
 	                    <div class="form-group col-md-12">
 	                        <label class="col-md-2 control-lable" for="ageseen">Age Seen</label>
 	                        <div class="col-md-7">
-	                            <input type="text" ng-model="ctrl.prvdr.ageSeen" id="ageSeen" class="form-control input-sm" placeholder="Enter Age Seen." required ng-minlength="6"/>
+	                            <input type="text" ng-model="ctrl.prvdr.ageSeen" name="ageSeen" class="form-control input-sm" placeholder="Enter Age Seen." required ng-minlength="6"/>
+	                            <div class="has-error" ng-show="myForm.$dirty">
+	                                  <span ng-show="myForm.ageSeen.$error.required">This is a required field</span>
+                                      <span ng-show="myForm.ageSeen.$error.minlength">Minimum length required is 5</span>
+                                      <span ng-show="myForm.ageSeen.$invalid">This field is invalid </span>
+                                 </div>
 	                        </div>
 	                    </div>
 	                </div>
@@ -48,7 +58,12 @@
 	                    <div class="form-group col-md-12">
 	                        <label class="col-md-2 control-lable" for="address">Address</label>
 	                        <div class="col-md-7">
-	                            <input type="text" ng-model="ctrl.prvdr.address" id="address" class="form-control input-sm" placeholder="Enter address" required ng-minlength="6"/>
+	                            <input type="text" ng-model="ctrl.prvdr.address" name="address" class="form-control input-sm" placeholder="Enter address" required ng-minlength="6"/>
+	                            <div class="has-error" ng-show="myForm.$dirty">
+	                                  <span ng-show="myForm.address.$error.required">This is a required field</span>
+                                      <span ng-show="myForm.address.$error.minlength">Minimum length required is 5</span>
+                                      <span ng-show="myForm.address.$invalid">This field is invalid </span>
+                                 </div>
 	                        </div>
 	                    </div>
 	                </div>
@@ -57,7 +72,12 @@
 	                    <div class="form-group col-md-12">
 	                        <label class="col-md-2 control-lable" for="hoursOfOperation">Hours of Operation</label>
 	                        <div class="col-md-7">
-	                            <input type="text" ng-model="ctrl.prvdr.hoursOfOperation" id="hoursOfOperation" class="form-control input-sm" placeholder="Enter Hours Of Operation" required ng-minlength="6"/>
+	                            <input type="text" ng-model="ctrl.prvdr.hoursOfOperation" name="hoursOfOperation" class="form-control input-sm" placeholder="Enter Hours Of Operation" required ng-minlength="10"/>
+	                            <div class="has-error" ng-show="myForm.$dirty">
+	                                  <span ng-show="myForm.hoursOfOperation.$error.required">This is a required field</span>
+                                      <span ng-show="myForm.hoursOfOperation.$error.minlength">Minimum length required is 5</span>
+                                      <span ng-show="myForm.hoursOfOperation.$invalid">This field is invalid </span>
+                                 </div>
 	                        </div>
 	                    </div>
 	                </div>
@@ -66,7 +86,12 @@
 	                    <div class="form-group col-md-12">
 	                        <label class="col-md-2 control-lable" for="phone">Office Number</label>
 	                        <div class="col-md-7">
-	                            <input type="text" ng-model="ctrl.prvdr.phone" id="phone" class="form-control input-sm" placeholder="Enter Office Phone Number" required ng-minlength="6"/>
+	                            <input type="text" ng-model="ctrl.prvdr.phone" name="phone" class="form-control input-sm" placeholder="Enter Office Phone Number" required phone-input  ng-minlength="10" ng-maxlength="14"/>
+	                            <div class="has-error" ng-show="myForm.$dirty">
+	                                  <span ng-show="myForm.phone.$error.required">This is a required field</span>
+                                      <span ng-show="myForm.phone.$error.minlength">Minimum length required is 5</span>
+                                      <span ng-show="myForm.phone.$invalid">This field is invalid </span>
+                                 </div>
 	                        </div>
 	                    </div>
 	                </div>
@@ -88,9 +113,9 @@
 	                    <div class="form-group col-md-12">
 	                        <label class="col-md-2 control-lable" for="brokerage">Brokerage</label>
 	                        <div class="col-md-7">
-	                        <select ng-model="ctrl.prvdr.brokerages" ng-options="brokerage.description for brokerage in ctrl.brokerages track by brokerage.description" required multiple></select>
+	                        <select ng-model="ctrl.prvdr.brokerages" name="brokerages"  ng-options="brokerage.description for brokerage in ctrl.brokerages track by brokerage.description" required multiple></select>
 	                           <div class="has-error" ng-show="myForm.$dirty">
-	                                      <span ng-show="myForm.brokerage.$error.required">This is a required field</span>
+	                                      <span ng-show="myForm.brokerages.$error.required">This is a required field</span>
 	                            </div>
 	                        </div>
 	                    </div>

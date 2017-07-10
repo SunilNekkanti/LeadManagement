@@ -7,32 +7,32 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import com.pfchoice.springboot.model.Provider;
+import com.pfchoice.springboot.model.User;
 
-public  class ProviderSpecifications  implements Specification<Provider> {
+public  class UserSpecifications  implements Specification<User> {
  
     
     private String searchTerm;
 
-    public ProviderSpecifications( String searchTerm) {
+    public UserSpecifications( String searchTerm) {
         super();
         this.searchTerm = searchTerm;
     }
     
-    public Predicate toPredicate(Root<Provider> root, CriteriaQuery<?> cq,
+    public Predicate toPredicate(Root<User> root, CriteriaQuery<?> cq,
             CriteriaBuilder cb) {
 
     	  String containsLikePattern = getContainsLikePattern(searchTerm);
-    	 
     	  cq.distinct(true);
           return cb.or(
-                  cb.like(cb.lower(root.get("name")), containsLikePattern),
+                  cb.like(cb.lower(root.get("username")), containsLikePattern),
                   cb.like(cb.lower(root.get("phone")), containsLikePattern),
-                  cb.like(cb.lower(root.get("hoursOfOperation")), containsLikePattern),
-                  cb.like(cb.lower(root.get("address")), containsLikePattern),
-                  cb.like(cb.lower(root.get("ageSeen")), containsLikePattern), 
+                  cb.like(cb.lower(root.get("email")), containsLikePattern),
+                  cb.like(cb.lower(root.get("licenseNo")), containsLikePattern),
                   cb.like(root.join("languages").get("description"), containsLikePattern),
-                  cb.like(root.join("brokerages").get("description"), containsLikePattern)
+                  cb.like(root.join("brokerages").get("description"), containsLikePattern),
+                  cb.like(root.join("counties").get("description"), containsLikePattern),
+                  cb.like(root.join("roles").get("role"), containsLikePattern)
           );
     }
  

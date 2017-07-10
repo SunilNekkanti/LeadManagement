@@ -77,9 +77,9 @@ public class ProviderController {
 		logger.info("Creating Provider : {}", provider);
 
 		if (providerService.isProviderExist(provider)) {
-			logger.error("Unable to create. A Provider with name {} already exist", provider.getId());
+			logger.error("Unable to create. A Provider with name {} already exist", provider.getName());
 			return new ResponseEntity(new CustomErrorType("Unable to create. A Provider with name " + 
-			provider.getId() + " already exist."),HttpStatus.CONFLICT);
+			provider.getName() + " already exist."),HttpStatus.CONFLICT);
 		}
 		
 		logger.info("Creating Provider : before save");

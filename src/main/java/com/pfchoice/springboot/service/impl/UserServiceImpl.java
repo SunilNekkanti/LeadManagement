@@ -7,6 +7,7 @@ import com.pfchoice.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,8 +46,8 @@ public class UserServiceImpl implements UserService{
 		userRepository.deleteAll();
 	}
 
-	public Page<User> findAllUsersByPage(Pageable pageable){
-		return userRepository.findAll(pageable);
+	public Page<User> findAllUsersByPage(Specification<User> spec, Pageable pageable){
+		return userRepository.findAll(spec, pageable);
 	}
 
 	public boolean isUserExist(User user) {

@@ -15,13 +15,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 
 
 /**
@@ -50,9 +48,7 @@ public class User extends RecordDetails implements Serializable {
 	@Column(name = "password")
 	private String password;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "language_id", referencedColumnName = "code")
-	private Language language;
+	
 
 	@ManyToMany( cascade={ CascadeType.MERGE  ,   CascadeType.REMOVE },fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles", joinColumns = {
@@ -66,9 +62,17 @@ public class User extends RecordDetails implements Serializable {
 					@JoinColumn(name = "county_id", referencedColumnName = "code",nullable = false, updatable = false) })
 	private Set<County> counties;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "brokerage_id", referencedColumnName = "code")
-	private Brokerage brokerage;
+	@ManyToMany( cascade={ CascadeType.MERGE  ,   CascadeType.REMOVE },fetch = FetchType.LAZY)
+	@JoinTable(name = "user_brokerages", joinColumns = {
+			@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "brokerage_id", referencedColumnName = "code",nullable = false, updatable = false) })
+	public Set<Brokerage> brokerages;
+	
+	@ManyToMany( cascade={ CascadeType.MERGE  ,   CascadeType.REMOVE },fetch = FetchType.LAZY)
+	@JoinTable(name = "user_languages", joinColumns = {
+			@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "language_id", referencedColumnName = "code",nullable = false, updatable = false) })
+	public Set<Language> languages;
 	
 	@Column(name = "email")
 	private String email;
@@ -78,6 +82,9 @@ public class User extends RecordDetails implements Serializable {
 
 	@Column(name = "license_no")
 	private String licenseNo;
+	
+	@Column(name = "position")
+	private String position;
 	
 	/**
 	 * 
@@ -154,20 +161,6 @@ public class User extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @return the language
-	 */
-	public Language getLanguage() {
-		return language;
-	}
-
-	/**
-	 * @param language the language to set
-	 */
-	public void setLanguage(Language language) {
-		this.language = language;
-	}
-
-	/**
 	 * @return the counties
 	 */
 	public Set<County> getCounties() {
@@ -224,17 +217,45 @@ public class User extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @return the brokerage
+	 * @return the languages
 	 */
-	public Brokerage getBrokerage() {
-		return brokerage;
+	public Set<Language> getLanguages() {
+		return languages;
 	}
 
 	/**
-	 * @param brokerage the brokerage to set
+	 * @param languages the languages to set
 	 */
-	public void setBrokerage(Brokerage brokerage) {
-		this.brokerage = brokerage;
+	public void setLanguages(Set<Language> languages) {
+		this.languages = languages;
+	}
+
+	/**
+	 * @return the brokerages
+	 */
+	public Set<Brokerage> getBrokerages() {
+		return brokerages;
+	}
+
+	/**
+	 * @param brokerages the brokerages to set
+	 */
+	public void setBrokerages(Set<Brokerage> brokerages) {
+		this.brokerages = brokerages;
+	}
+
+	/**
+	 * @return the position
+	 */
+	public String getPosition() {
+		return position;
+	}
+
+	/**
+	 * @param position the position to set
+	 */
+	public void setPosition(String position) {
+		this.position = position;
 	}
 
 	@Override

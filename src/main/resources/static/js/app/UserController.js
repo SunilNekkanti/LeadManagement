@@ -54,7 +54,8 @@ app.controller('UserController',
             DTColumnBuilder.newColumn('counties[].description').withTitle('COUNTY').withOption('defaultContent', ''),
             DTColumnBuilder.newColumn('brokerage.description').withTitle('BROKERAGE').withOption('defaultContent', ''),
             DTColumnBuilder.newColumn('phone').withTitle('CELL').withOption('defaultContent', ''),
-            DTColumnBuilder.newColumn('email').withTitle('EMAIL').withOption('defaultContent', '')
+            DTColumnBuilder.newColumn('email').withTitle('EMAIL').withOption('defaultContent', ''),
+            DTColumnBuilder.newColumn('position').withTitle('POSITION').withOption('defaultContent', '')
           ];
      
         
