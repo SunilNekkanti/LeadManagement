@@ -118,9 +118,6 @@ app
 									DTColumnBuilder.newColumn('homePhone')
 											.withTitle('HOME PHONE')
 											.withOption('defaultContent', ''),
-									DTColumnBuilder.newColumn('homePhone')
-											.withTitle('HOME PHONE')
-											.withOption('defaultContent', ''),
 									DTColumnBuilder.newColumn('mobilePhone')
 											.withTitle('MOBILE PHONE')
 											.withOption('defaultContent', ''),
@@ -225,16 +222,22 @@ app
 
 							function submit() {
 								console.log('Submitting');
-								self.lead.agentLeadAppointmentList = self.lead.agentLeadAppointmentList.filter(function( obj ) {
-									  return obj.id !== self.selectedAgentLeadAppointment.id;
-									});
+								if(self.lead.agentLeadAppointmentList){
+									self.lead.agentLeadAppointmentList = self.lead.agentLeadAppointmentList.filter(function( obj ) {
+										  return obj.id !== self.selectedAgentLeadAppointment.id;
+										});
+									
+									self.lead.agentLeadAppointmentList.push(self.selectedAgentLeadAppointment);
+									console.log('self.lead.agentLeadAppointmentList '+JSON.stringify(self.lead.agentLeadAppointmentList));
+								}
 								
-								self.lead.agentLeadAppointmentList.push(self.selectedAgentLeadAppointment);
-								console.log('self.lead.agentLeadAppointmentList '+JSON.stringify(self.lead.agentLeadAppointmentList));
 								if (self.lead.id === undefined
 										|| self.lead.id === null) {
 									console.log('Saving New Lead', self.lead);
-									createLead(self.lead);
+									
+									uploadFile();
+									
+									
 								} else {
 									updateLead(self.lead, self.lead.id);
 									console.log('Lead updated with id ',
@@ -242,6 +245,8 @@ app
 								}
 								self.displayEditButton = false;
 							}
+							
+							
 							function loginUser() {
 								console.log('About to fetch loginUser');
 								LeadService
@@ -390,10 +395,17 @@ app
 
 							function uploadFile() {
 						           var file = self.myFile;
-						           promise = FileUploadService.uploadFileToUrl(file);
+						           var  promise = FileUploadService.uploadFileToUrl(file, self.lead);
 
 						            promise.then(function (response) {
-						                self.serverResponse = response;
+						            	
+						            	console.log('serverResponse ============='+JSON.stringify(response));
+						            	if(!self.lead.fileUpload){
+						            		self.lead.fileUpload = {};
+						            	}
+						                self.lead.fileUpload.id = response;
+						                console.log('self.serverResponse ============='+self.lead.fileUpload.id);
+						                createLead(self.lead);
 						            }, function () {
 						                self.serverResponse = 'An error has occurred';
 						            })

@@ -23,7 +23,7 @@ app.service('ProviderService',
                     .then(
                         function (response) {
                             console.log('Fetched successfully all providers');
-                            $localStorage.providers = response.data;
+                            $localStorage.providers = response.data.content;
                             deferred.resolve(response);
                         },
                         function (errResponse) {

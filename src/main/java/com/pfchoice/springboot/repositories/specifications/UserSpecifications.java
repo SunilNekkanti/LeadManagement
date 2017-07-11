@@ -2,6 +2,7 @@ package com.pfchoice.springboot.repositories.specifications;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -29,9 +30,9 @@ public  class UserSpecifications  implements Specification<User> {
                   cb.like(cb.lower(root.get("phone")), containsLikePattern),
                   cb.like(cb.lower(root.get("email")), containsLikePattern),
                   cb.like(cb.lower(root.get("licenseNo")), containsLikePattern),
-                  cb.like(root.join("languages").get("description"), containsLikePattern),
-                  cb.like(root.join("brokerages").get("description"), containsLikePattern),
-                  cb.like(root.join("counties").get("description"), containsLikePattern),
+                  cb.like(root.join("languages", JoinType.LEFT).get("description"), containsLikePattern),
+                  cb.like(root.join("brokerages", JoinType.LEFT).get("description"), containsLikePattern),
+                  cb.like(root.join("counties", JoinType.LEFT).get("description"), containsLikePattern),
                   cb.like(root.join("roles").get("role"), containsLikePattern)
           );
     }

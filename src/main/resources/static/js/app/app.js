@@ -30,6 +30,7 @@ app.controller('NavbarController',  ['$scope', '$state', function($scope, $state
 	  if(url == 'logout'){
 		  $scope.displayNavbar = false;
 	  }
+	  alert("url before state.go is "+url);
 	  $state.go(url);
   }
 }]);

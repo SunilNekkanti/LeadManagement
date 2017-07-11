@@ -137,13 +137,14 @@ public class FileUploadController {
 
 	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT"  })
 	@RequestMapping(value = { "/fileUpload/fileProcessing.do"}, method = RequestMethod.POST)
-	public String  uploadFileProcessing(Model model,
+	public Integer  uploadFileProcessing(Model model,
 			@RequestParam(required = true, value = "file") MultipartFile fileUpload,
-			@RequestParam(required = true, value = "lead") LeadMembership lead,
+			@RequestParam(required = false, value = "lead") LeadMembership lead,
 			HttpServletRequest request) throws  IOException {
 		logger.info("started file processsing");
+		
+		logger.info("started file processsing lead"+lead);
 
-		String forwardToAging = null;
 		logger.info("fileUpload :"+fileUpload);
 		logger.info("fileUpload.getOriginalFilename() :"+fileUpload.getOriginalFilename());
 		if (fileUpload != null && !"".equals(fileUpload.getOriginalFilename())) {
@@ -159,6 +160,8 @@ public class FileUploadController {
 				fileUploads.setContentType(fileUpload.getContentType());
 				fileUploads.setData(fileUpload.getBytes());
 				fileUploadService.saveFileUpload(fileUploads);
+				
+				return fileUploads.getId();
 			} catch (IOException e) {
 				logger.warn(e.getCause().getMessage());
 			} 
@@ -167,6 +170,6 @@ public class FileUploadController {
 			
 		}
 
-		return forwardToAging;
+		return null;
 	}
 }
