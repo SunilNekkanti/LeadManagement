@@ -35,7 +35,6 @@ public class AppController {
 	@RequestMapping(value={"/","/login"})
 	String login(ModelMap modal) {
 		modal.addAttribute("title","CRUD Example");
-		System.out.println("inside app");
 		LoginForm loginForm = new LoginForm();
 		modal.addAttribute("loginForm", loginForm);
 		return "login";

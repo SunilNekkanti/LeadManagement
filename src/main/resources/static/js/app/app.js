@@ -30,7 +30,6 @@ app.controller('NavbarController',  ['$scope', '$state', function($scope, $state
 	  if(url == 'logout'){
 		  $scope.displayNavbar = false;
 	  }
-	  alert("url before state.go is "+url);
 	  $state.go(url);
   }
 }]);
@@ -314,6 +313,30 @@ app.config(['$stateProvider', '$urlRouterProvider',
               }
           }
       })
+      .state('insurance', {
+          url: '/insurance',
+          templateUrl: 'partials/insurance_list',
+          controller:'InsuranceController',
+          controllerAs:'ctrl',
+          resolve: {
+        	  insurances: function ($q,InsuranceService) {
+                  console.log('Load all insurances');
+                  var deferred = $q.defer();
+                  InsuranceService.loadAllInsurances().then(deferred.resolve, deferred.resolve);
+                  
+                  console.log('deferred.promise'+deferred.promise);
+                  return deferred.promise;
+              },
+              planTypes: function ($q,PlanTypeService) {
+                  console.log('Load all planTypes');
+                  var deferred = $q.defer();
+                  PlanTypeService.loadAllPlanTypes().then(deferred.resolve, deferred.resolve);
+                  
+                  console.log('deferred.promise'+deferred.promise);
+                  return deferred.promise;
+              }
+          }
+      })
       .state('language', {
           url: '/language',
           templateUrl: 'partials/language_list',
@@ -432,7 +455,6 @@ app.directive('fileModel', function ($parse) {
            //Bind change event on the element
            element.bind('change', function (e) {
         	   
-        	   alert(JSON.stringify(e));
                //Call apply on scope, it checks for value changes and reflect them on UI
                scope.$apply(function () {
                    //set the model value

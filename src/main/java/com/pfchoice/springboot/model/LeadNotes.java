@@ -8,17 +8,20 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  *
  * @author sarath
  */
 @Entity
-@Table(name = "lu_bill_type")
-public class BillType extends RecordDetails implements Serializable {
+@Table(name = "lead_notes")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class LeadNotes extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -26,28 +29,29 @@ public class BillType extends RecordDetails implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
-	@Column(name = "code", nullable = false)
+	@Column(name = "lead_notes_id", nullable = false)
 	private Integer id;
 
+	@ManyToOne
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	private User user;
 	
-	@Column(name = "description")
-	private String description;
+	@Column(name = "notes", length = 65535, columnDefinition = "TEXT")
+	private String notes;
+	
 
 	
-	@Column(name = "shortName")
-	private String shortName;
-
 	/**
 	 * 
 	 */
-	public BillType() {
+	public LeadNotes() {
 		super();
 	}
 
 	/**
 	 * @param id
 	 */
-	public BillType(final Integer id) {
+	public LeadNotes(final Integer id) {
 		super();
 		this.id = id;
 	}
@@ -68,48 +72,39 @@ public class BillType extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @return the description
+	 * @return the user
 	 */
-	public String getDescription() {
-		return description;
+	public User getUser() {
+		return user;
 	}
 
 	/**
-	 * @param description
-	 *            the description to set
+	 * @param user the user to set
 	 */
-	public void setDescription(final String description) {
-		this.description = description;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	/**
-	 * @return the shortName
+	 * @return the notes
 	 */
-	public String getShortName() {
-		return shortName;
+	public String getNotes() {
+		return notes;
 	}
 
 	/**
-	 * @param shortName
-	 *            the shortName to set
+	 * @param notes the notes to set
 	 */
-	public void setShortName(String shortName) {
-		this.shortName = shortName;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		hash += (id != null ? id.hashCode() : 0);
-		return hash;
+	public void setNotes(String notes) {
+		this.notes = notes;
 	}
 
 	@Override
 	public boolean equals(Object object) {
-		if (!(object instanceof BillType)) {
+		if (!(object instanceof LeadNotes)) {
 			return false;
 		}
-		BillType other = (BillType) object;
+		LeadNotes other = (LeadNotes) object;
 		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
 			return false;
 		}
@@ -118,7 +113,7 @@ public class BillType extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.FrequencyType[ id=" + id + " ]";
+		return "com.pfchoice.core.entity.Brokerage[ id=" + id + " ]";
 	}
 
 }

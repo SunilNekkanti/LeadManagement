@@ -7,6 +7,9 @@ import com.pfchoice.springboot.repositories.InsuranceRepository;
 import com.pfchoice.springboot.service.InsuranceService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,9 +47,12 @@ public class InsuranceServiceImpl implements InsuranceService{
 	}
 
 	public List<Insurance> findAllInsurances(){
-		return insuranceRepository.findAll();
+		return (List<Insurance>)  insuranceRepository.findAll();
 	}
-
+	public Page<Insurance> findAllInsurancesByPage(Specification<Insurance> spec,Pageable pageable){
+		return insuranceRepository.findAll(spec, pageable);
+	}
+	
 	public boolean isInsuranceExist(Insurance insurance) {
 		return findById(insurance.getId()) != null;
 	}

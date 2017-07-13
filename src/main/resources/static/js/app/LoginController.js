@@ -23,7 +23,6 @@ loginapp.controller('LoginController',
         	alert("hi");
         }
         function submit() {
-        	alert("aaaa");
             console.log('Login Submitting');
             if (self.login.username === undefined || self.login.username === null || self.login.password === undefined || self.login.password === null) {
             	 console.error('Error while entering  Login credentials');

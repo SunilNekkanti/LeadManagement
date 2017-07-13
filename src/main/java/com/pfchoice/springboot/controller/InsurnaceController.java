@@ -5,6 +5,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +16,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.pfchoice.springboot.model.Insurance;
+import com.pfchoice.springboot.model.Provider;
+import com.pfchoice.springboot.repositories.specifications.InsuranceSpecifications;
+import com.pfchoice.springboot.repositories.specifications.ProviderSpecifications;
 import com.pfchoice.springboot.service.InsuranceService;
 import com.pfchoice.springboot.util.CustomErrorType;
 
@@ -34,15 +41,23 @@ public class InsurnaceController {
 	
 	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT"  })
 	@RequestMapping(value = "/insurance/", method = RequestMethod.GET)
-	public ResponseEntity<List<Insurance>> listAllInsurances() {
-		List<Insurance> insurances = insuranceService.findAllInsurances();
-		if (insurances.isEmpty()) {
+	public ResponseEntity<?> listAllInsurances(@RequestParam(value = "page", required = false) Integer pageNo,  @RequestParam(value = "size", required = false) Integer pageSize,@RequestParam(value = "search", required = false) String search) {
+		
+		pageNo = (pageNo == null)?0:pageNo;
+		pageSize = (pageSize == null)?1000:pageSize;
+		
+		PageRequest pageRequest = new PageRequest(pageNo,pageSize );
+		Specification<Insurance> spec =null ;
+		if(!"".equals(search))
+		 spec = new InsuranceSpecifications(search);
+		Page<Insurance> insurances = insuranceService.findAllInsurancesByPage(spec, pageRequest);
+		if (insurances.getTotalElements() == 0) {
 			System.out.println("no insurances");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
 		System.out.println("there are insurances");
-		return new ResponseEntity<List<Insurance>>(insurances, HttpStatus.OK);
+		return new ResponseEntity<Page<Insurance>>(insurances, HttpStatus.OK);
 	}
 
 	// -------------------Retrieve Single Insurance------------------------------------------

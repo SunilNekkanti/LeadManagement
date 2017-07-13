@@ -59,6 +59,7 @@
   <script src="js/app/ProviderService.js"></script>
   <script src="js/app/ProviderController.js"></script>
   <script src="js/app/LeadStatusController.js"></script>
+  <script src="js/app/InsuranceController.js"></script>
 </head>
 
 <body class="ng-cloak">
@@ -80,6 +81,7 @@
               <li><a  ng-click="callMe('facilityType')">Facility Types</a></li>
               <li><a   ng-click="callMe('brokerage')">Brokerages</a></li>
               <li><a   ng-click="callMe('provider')">Providers</a></li>
+               <li><a   ng-click="callMe('insurance')">Insurances</a></li>
               <li><a   ng-click="callMe('language')">Languages</a></li>
                <li><a   ng-click="callMe('leadStatus')">Lead Statuses</a></li>
               <li class="divider"></li>

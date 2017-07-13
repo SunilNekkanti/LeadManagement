@@ -3,6 +3,10 @@ package com.pfchoice.springboot.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+
 import com.pfchoice.springboot.model.Insurance;
 
 public interface InsuranceService {
@@ -20,6 +24,8 @@ public interface InsuranceService {
 	void deleteAllInsurances();
 
 	List<Insurance> findAllInsurances();
+	
+	Page<Insurance> findAllInsurancesByPage(Specification<Insurance> spec,Pageable pageable);
 
 	boolean isInsuranceExist(Insurance insurance);
 }

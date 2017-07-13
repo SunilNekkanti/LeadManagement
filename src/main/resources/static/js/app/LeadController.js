@@ -102,24 +102,29 @@ app
 													'defaultContent', ''),
 									DTColumnBuilder.newColumn(
 											'genderId.description').withTitle(
-											'GENDER'),
+											'GENDER').withOption(
+													'defaultContent', ''),
 									DTColumnBuilder.newColumn('dob').withTitle(
-											'BIRTHDAY'),
-									DTColumnBuilder.newColumn('hasMedicaid')
-											.withTitle('MEDICAID'),
-									DTColumnBuilder.newColumn('hasMedicare')
-											.withTitle('MEDICARE'),
+											'BIRTHDAY').withOption(
+													'defaultContent', ''),
+									DTColumnBuilder.newColumn('planType.description')
+											.withTitle('MEDICAID/MEDICARE').withOption(
+													'defaultContent', ''),
 									DTColumnBuilder.newColumn(
 											'language.description').withTitle(
-											'LANGUAGE'),
+											'LANGUAGE').withOption(
+													'defaultContent', ''),
 									DTColumnBuilder.newColumn(
 											'status.description').withTitle(
-											'STATUS'),
+											'STATUS').withOption(
+													'defaultContent', ''),
 									DTColumnBuilder.newColumn('homePhone')
-											.withTitle('HOME PHONE')
+											.withTitle('HOME_PHONE').withOption(
+													'defaultContent', '')
 											.withOption('defaultContent', ''),
 									DTColumnBuilder.newColumn('mobilePhone')
-											.withTitle('MOBILE PHONE')
+											.withTitle('MOBILE_PHONE').withOption(
+													'defaultContent', '')
 											.withOption('defaultContent', ''),
 									DTColumnBuilder.newColumn('email')
 											.withTitle('EMAIL').withOption(
@@ -142,7 +147,7 @@ app
 													'defaultContent', ''),
 									DTColumnBuilder.newColumn('event.eventName')
 											.withTitle('SOURCE').withOption(
-															'with', '20%')];
+															'width', '10%')];
 
 							self.dtOptions = DTOptionsBuilder
 									.newOptions()

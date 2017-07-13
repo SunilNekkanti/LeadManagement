@@ -105,25 +105,6 @@
 	                    </div>
 	                </div>
 	               
-	               <div class="row">
-	                      
-	                      <div class="form-group col-sm-4">
-	                        <label class="col-sm-5  control-label" for="status">Status</label>
-	                        <div class="col-sm-7">
-	                        <select ng-model="ctrl.lead.status"  ng-options="status.description for status in ctrl.statuses track by status.description" required></select>
-	                        </div>
-	                    </div>
-
-
- 						 <div class="form-group col-sm-4" ng-show="ctrl.loginUser.roleName != 'ROLE_AGENT'">
-	                        <label class="col-sm-5  control-label" for="eventName">Source</label>
-	                        <div class="col-sm-7">
-	                        <select ng-model="ctrl.lead.event" ng-options="event.eventName for event in ctrl.events track by event.eventName" required></select>
-	                        </div>
-	                    </div>
-	                </div>
-	                
-	                 
 	                
 	              <div class="row">
 	                  
@@ -153,46 +134,87 @@
 					   
 	             </div>
 	             
+	                <div class="row">
 	                
+	                     <div class="form-group col-sm-4" ng-show="ctrl.loginUser.roleName != 'ROLE_AGENT'">
+	                        <label class="col-sm-5  control-label" for="eventName">Source1</label>
+	                        <div class="col-sm-7">
+	                        <select ng-model="ctrl.lead.event" ng-options="event.eventName for event in ctrl.events track by event.eventName" required></select>
+	                        </div>
+	                    </div>
+	                    
+	                     <div class="form-group col-sm-4" ng-show="ctrl.loginUser.roleName != 'ROLE_AGENT'">
+	                        <label class="col-sm-5  control-label" for="eventName">Source2</label>
+	                        <div class="col-sm-7">
+	                        <select ng-model="ctrl.event.user"  ng-options="agent.username for agent in ctrl.users  | filter:{roles:[{role:'ROLE_AGENT'}]} track by agent.username"  required></select>
+	                        </div>
+	                    </div>
+	                    
+	                      <div class="form-group col-sm-4">
+	                        <label class="col-sm-5  control-label" for="status">Status</label>
+	                        <div class="col-sm-7">
+	                        <select ng-model="ctrl.lead.status"  ng-options="status.description for status in ctrl.statuses track by status.description" required></select>
+	                        </div>
+	                    </div>
+
+	                </div>
+	                  
 	             <div class="row col-sm-offset-1 col-sm-10" ng-show="ctrl.lead.status.id != 1">
 	             	<div class="panel panel-default">
 					    <div class="panel-heading">More Details for Converted</div>
 					    <div class="panel-body">
+					    
+					    <div class="row">
 					    		<div class="form-group col-sm-4">
-					    			<label class="col-sm-5    control-label" for="uname">PCP Name</label>
-	                        		<div class="col-sm-7">
-	                           			<select ng-model="ctrl.selectedAgentLeadAppointment.prvdr" ng-options="prvdr.name for prvdr in ctrl.providers | orderBy:'name' track by prvdr.name" required="ctrl.lead.status.id == 2"></select>
-	                       			 </div>
+					    			<label class="col-sm-4    control-label" for="uname">PCP </label>
+	                           		<select class="col-sm-8"  ng-model="ctrl.selectedAgentLeadAppointment.prvdr" ng-options="prvdr.name for prvdr in ctrl.providers | orderBy:'name' track by prvdr.name" required="ctrl.lead.status.id == 2"></select>
+	                       			  
+					    	    </div>
+					    	    
+					    	   
+					    	   <div class="form-group col-sm-3">
+					    			<label class="col-sm-4    control-label" for="plan">Plan</label>
+	                           		<select class="col-sm-8" ng-model="ctrl.selectedAgentLeadAppointment.planType" ng-options="planType.description for planType in ctrl.planTypes track by planType.description" required="ctrl.lead.status.id == 2"></select>
 					    	   </div>
 					    	   
-					    	   <div class="form-group col-sm-4">
-					    			<label class="col-sm-5    control-label" for="Plan">Plan</label>
-	                        		<div class="col-sm-7">
-	                           			<select ng-model="ctrl.selectedAgentLeadAppointment.planType" ng-options="planType.description for planType in ctrl.planTypes track by planType.description" required="ctrl.lead.status.id == 2"></select>
-	                       			 </div>
+					    	   <div class="form-group col-sm-5">
+					    			<label class="col-sm-5    control-label" for="effectiveDate">Effective From</label>
+	                           			<div class="input-group date col-sm-7"  id="besttime"  ng-model="ctrl.selectedAgentLeadAppointment.effectiveFrom" date-picker>
+         									<input type="text" class="form-control netto-input"  ng-model="ctrl.selectedAgentLeadAppointment.effectiveFrom" date-picker-input required="ctrl.lead.status.id == 2">
+         									 <span class="input-group-addon">
+           										<span class="glyphicon glyphicon-calendar"></span>
+         									</span>
+       								    </div>
 					    	   </div>
-					    	   
-					    	   <div class="form-group col-sm-4">
-					    			<label class="col-sm-5    control-label" for="effectiveDate">Effective Date</label>
-	                        		<div class="col-sm-7">
-	                           			<div class="input-group date" id="besttime"  ng-model="ctrl.selectedAgentLeadAppointment.effectiveFrom" date-picker>
-         								<input type="text" class="form-control netto-input"  ng-model="ctrl.selectedAgentLeadAppointment.effectiveFrom" date-picker-input required="ctrl.lead.status.id == 2">
-
-         							<span class="input-group-addon">
-           								<span class="glyphicon glyphicon-calendar"></span>
-         							</span>
-       							</div>
-	                       			 </div>
-					    	   </div>
-					    	   
-					    	  <div class="form-group col-sm-4">
-					    			<label class="col-sm-5    control-label" for="notes">Notes</label>
-	                        		<div class="col-sm-7">
-					                    <textarea class="col-sm-12  control-label" name="notes"   class="form-control" id ="notes" ng-model="ctrl.selectedAgentLeadAppointment.notes"  ></textarea
-					                    
-					               </div>
-	                         </div>
-					    	   
+					    	  </div>
+					    	  
+					    	 <div class="row">  
+						    
+		                         <div class="form-group col-sm-3">
+		                           		<label class=" col-sm-6 col-sm-offset-2 control-lable" for="transportation">Transporation</label>
+		                        		<input type="checkbox" class=" col-sm-4 " ng-model="ctrl.selectedAgentLeadAppointment.transportation"   name="transportation"     ng-true-value="'Y'"     ng-false-value="'N'" />
+		                        </div>
+		                        		
+						    	 <div class="form-group col-sm-4">
+					    			 <label class=" col-sm-6 control-label" for="drappointment">Dr Appointment</label>
+	                           			<div class="input-group date col-sm-6" name="drappointment"  ng-model="ctrl.selectedAgentLeadAppointment.drappointment" date-picker>
+         									<input type="text" class="form-control netto-input"  ng-model="ctrl.selectedAgentLeadAppointment.drappointment" date-picker-input required="ctrl.lead.status.id == 2">
+         									 <span class="input-group-addon">
+           										<span class="glyphicon glyphicon-calendar"></span>
+         									</span>
+       								    </div>
+	                       		</div>
+	                       			 
+						    	<div class="form-group col-sm-5">
+						    			<label class="col-sm-4    control-label" for="notes">Notes</label>
+						                <textarea  class="col-sm-8 control-label" name="notes"   class="form-control" id ="notes" ng-model="ctrl.selectedAgentLeadAppointment.notes"  ></textarea
+						                    
+		                         </div>
+		                         
+					    	  </div>
+					    	  
+					    	  
+					    	  
 					    </div>
 					</div>
 	             
@@ -275,14 +297,14 @@
 	                    <div class="form-group col-sm-4">
 	                        <label class="col-sm-5  control-label" for="uname">State</label>
 	                        <div class="col-sm-7">
-	                        <select ng-model="ctrl.lead.stateCode" ng-options="state.description for state in ctrl.states track by state.description" required></select>
+	                        <select ng-model="ctrl.lead.stateCode" ng-options="state.description for state in ctrl.states | orderBy:'description' track by state.description" required></select>
 	                        </div>
 	                    </div>
 	                
 	                    <div class="form-group col-sm-4">
 	                        <label class="col-sm-5  control-label" for="zipCode">Zipcode</label>
 	                        <div class="col-sm-7">
-	                        <select ng-model="ctrl.lead.zipCode" ng-options="zipCode.code for zipCode in ctrl.lead.stateCode.zipCodes track by zipCode.code" required></select>
+	                        <select ng-model="ctrl.lead.zipCode" ng-options="zipCode.code for zipCode in ctrl.lead.stateCode.zipCodes | orderBy:'code'  track by zipCode.code" required></select>
 	                        </div>
 	                    </div>
 	                </div>

@@ -21,7 +21,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
@@ -44,26 +43,16 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@Column(name = "lead_Mbr_LastName")
 	private String lastName;
 
-	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "leadMbr")
-	private List<LeadMembershipInsurance> leadMbrInsuranceList;
-
-	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "leadMbr")
-	private List<LeadMembershipProvider> leadMbrProviderList;
-	
 	@OneToMany(cascade={ CascadeType.ALL },fetch = FetchType.LAZY, mappedBy = "lead")
 	private List<AgentLeadAppointment> agentLeadAppointmentList;
-
-	@Column(name = "lead_Mbr_MedicaidNo")
-	private String medicaidNo;
-	
-	@Column(name = "lead_Mbr_MedicareNo")
-	private String medicareNo;
 
 	@ManyToOne
 	@JoinColumn(name = "insurance_type_id", referencedColumnName = "plan_type_id")
 	private PlanType planType;
+	
+	@ManyToOne
+	@JoinColumn(name = "ins_id", referencedColumnName = "insurance_id")
+	private Insurance insurance;
 	
 	@ManyToOne
 	@JoinColumn(name = "lead_Mbr_CountyCode", referencedColumnName = "code")
@@ -74,8 +63,7 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	private Date dob;
 	
 	@Column(name = "bestTimeToCall", nullable= true)
-	@Temporal(TemporalType.TIMESTAMP)
-	private Calendar  bestTimeToCall;
+	private String  bestTimeToCall;
 	
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -136,6 +124,9 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "file_upload_id", referencedColumnName = "file_upload_id", nullable =false)
 	private FileUpload fileUpload ;
+	
+	@Column(name = "is_homeless")
+	private Character isHomeless  = new Character('N');
 	
 	/**
 	 * 
@@ -220,33 +211,6 @@ public class LeadMembership extends RecordDetails implements Serializable {
 		return lastName;
 	}
 
-	/**
-	 * @return
-	 */
-	public List<LeadMembershipInsurance> getLeadMbrInsuranceList() {
-		return leadMbrInsuranceList;
-	}
-
-	/**
-	 * @return the mbrProviderList
-	 */
-	public List<LeadMembershipProvider> getLeadMbrProviderList() {
-		return leadMbrProviderList;
-	}
-
-	/**
-	 * @return the medicaidNo
-	 */
-	public String getMedicaidNo() {
-		return medicaidNo;
-	}
-
-	/**
-	 * @return the medicareNo
-	 */
-	public String getMedicareNo() {
-		return medicareNo;
-	}
 
 	/**
 	 * @return the status
@@ -327,37 +291,6 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	
-	/**
-	 * @param leadMbrInsuranceList
-	 */
-	public void setLeadMbrInsuranceList(List<LeadMembershipInsurance> leadMbrInsuranceList) {
-		this.leadMbrInsuranceList = leadMbrInsuranceList;
-	}
-
-	/**
-	 * @param mbrProviderList
-	 *            the mbrProviderList to set
-	 */
-	public void setLeadMbrProviderList(List<LeadMembershipProvider> leadMbrProviderList) {
-		this.leadMbrProviderList = leadMbrProviderList;
-	}
-
-	/**
-	 * @param medicaidNo
-	 *            the medicaidNo to set
-	 */
-	public void setMedicaidNo(final String medicaidNo) {
-		this.medicaidNo = medicaidNo;
-	}
-
-	/**
-	 * @param medicareNo
-	 *            the medicareNo to set
-	 */
-	public void setMedicareNo(final String medicareNo) {
-		this.medicareNo = medicareNo;
-	}
-
 	/**
 	 * @param status
 	 *            the status to set
@@ -496,14 +429,14 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	/**
 	 * @return the bestTimeToCall
 	 */
-	public Calendar getBestTimeToCall() {
+	public String getBestTimeToCall() {
 		return bestTimeToCall;
 	}
 
 	/**
 	 * @param bestTimeToCall the bestTimeToCall to set
 	 */
-	public void setBestTimeToCall(Calendar bestTimeToCall) {
+	public void setBestTimeToCall(String bestTimeToCall) {
 		this.bestTimeToCall = bestTimeToCall;
 	}
 	
@@ -580,6 +513,34 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	 */
 	public void setPlanType(PlanType planType) {
 		this.planType = planType;
+	}
+
+	/**
+	 * @return the isHomeless
+	 */
+	public Character getIsHomeless() {
+		return isHomeless;
+	}
+
+	/**
+	 * @param isHomeless the isHomeless to set
+	 */
+	public void setIsHomeless(Character isHomeless) {
+		this.isHomeless = isHomeless;
+	}
+
+	/**
+	 * @return the insurance
+	 */
+	public Insurance getInsurance() {
+		return insurance;
+	}
+
+	/**
+	 * @param insurance the insurance to set
+	 */
+	public void setInsurance(Insurance insurance) {
+		this.insurance = insurance;
 	}
 
 	@Override

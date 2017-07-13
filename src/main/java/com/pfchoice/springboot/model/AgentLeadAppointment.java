@@ -71,7 +71,15 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 	@Temporal(TemporalType.DATE)
 	private Date effectiveFrom;
 	
- 	 
+ 	
+	@Column(name = "transportation", insertable = false)
+	private Character transportation = new Character('N');
+	
+	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
+ 	@Column(name = "dr_appointment_time", nullable= true)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Calendar  drAppointmentTime;
+	
 	/**
 	 * 
 	 */
@@ -197,6 +205,34 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 	 */
 	public void setEffectiveFrom(Date effectiveFrom) {
 		this.effectiveFrom = effectiveFrom;
+	}
+
+	/**
+	 * @return the transportation
+	 */
+	public Character getTransportation() {
+		return transportation;
+	}
+
+	/**
+	 * @param transportation the transportation to set
+	 */
+	public void setTransportation(Character transportation) {
+		this.transportation = transportation;
+	}
+
+	/**
+	 * @return the drAppointmentTime
+	 */
+	public Calendar getDrAppointmentTime() {
+		return drAppointmentTime;
+	}
+
+	/**
+	 * @param drAppointmentTime the drAppointmentTime to set
+	 */
+	public void setDrAppointmentTime(Calendar drAppointmentTime) {
+		this.drAppointmentTime = drAppointmentTime;
 	}
 
 	@Override

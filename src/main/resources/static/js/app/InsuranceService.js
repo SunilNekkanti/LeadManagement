@@ -6,6 +6,7 @@ app.service('InsuranceService',
 
             var factory = {
                 loadAllInsurances: loadAllInsurances,
+                loadInsurances: loadInsurances,
                 getAllInsurances: getAllInsurances,
                 getInsurance: getInsurance,
                 createInsurance: createInsurance,
@@ -33,6 +34,29 @@ app.service('InsuranceService',
                 return deferred.promise;
             }
 
+            function loadInsurances(pageNo, length, search, order) {
+                console.log('Fetching  Insurances');
+                var pageable = {
+                  		 page:pageNo, size:length,search: search||''
+                  		};
+
+                  		var config = {
+                  		 params: pageable,
+                  		 headers : {'Accept' : 'application/json'}
+                  		};
+            return     $http.get(urls.INSURANCE_SERVICE_API,  config)
+                    .then(
+                        function (response) {
+                            console.log('Fetched successfully  providers');
+                         return     response ;
+                        },
+                        function (errResponse) {
+                            console.error('Error while loading providers');
+                            return   errResponse ;
+                        }
+                    );
+            }
+            
             function getAllInsurances(){
             	console.log('$localStorage.insurances'+$localStorage.insurances);
                 return $localStorage.insurances;

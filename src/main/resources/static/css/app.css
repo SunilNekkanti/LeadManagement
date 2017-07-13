@@ -118,3 +118,8 @@ body, .form-control{
     border-radius: 6px 0 6px 6px;
 }
 
+.dataTable td {
+	 clear: both;
+    white-space: nowrap;
+    word-break: break-all;
+}
