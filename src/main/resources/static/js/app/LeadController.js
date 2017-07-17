@@ -385,6 +385,7 @@ app
 								self.languages = getAllLanguages();
 								self.statuses = getAllLeadStatuses();
 								self.insurances = getAllInsurances();
+								console.log("self.insurances"+self.insurances);
 								self.planTypes = getAllPlanTypes();
 								self.providers = getAllProviders();
 								self.users = getAllAgents();

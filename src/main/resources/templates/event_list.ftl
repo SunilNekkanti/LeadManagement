@@ -58,7 +58,10 @@
 	                    <div class="form-group col-sm-12">
 	                        <label class="col-sm-2  control-label" for="brokerage">Brokerage</label>
 	                        <div class="col-sm-3">
-	                        <select ng-model="ctrl.event.brokerage" ng-options="brokerage.description for brokerage in ctrl.brokerages track by brokerage.description" required></select>
+	                        <select ng-model="ctrl.event.brokerage" name="brokerage" ng-options="brokerage.description for brokerage in ctrl.brokerages track by brokerage.description" required></select>
+	                         <div class="has-error" ng-show="myForm.$dirty">
+                                      <span ng-show="myForm.brokerage.$error.required">This is a required field</span>
+                                  </div>
 	                        </div>
 	                    </div>
 	                </div>
@@ -68,7 +71,11 @@
 	                    <div class="form-group col-sm-12">
 	                        <label class="col-sm-2  control-label" for="facilityType">Facility Type</label>
 	                        <div class="col-sm-3">
-	                        <select ng-model="ctrl.event.facilityType" ng-options="facilityType.description for facilityType in ctrl.facilityTypes track by facilityType.description" required></select>
+	                        <select ng-model="ctrl.event.facilityType" name="facilityType" ng-options="facilityType.description for facilityType in ctrl.facilityTypes track by facilityType.description" required></select>
+	                        <div class="has-error" ng-show="myForm.$dirty">
+                                      <span ng-show="myForm.facilityType.$error.required">This is a required field</span>
+                                  </div>
+	                        </div>
 	                        </div>
 	                    </div>
 	                </div>
@@ -100,12 +107,7 @@
 	                    <div class="form-group col-sm-12">
 	                        <div  require>  <label class="col-sm-2  control-label" for="address2">Venue Address2</label></div>
 	                        <div class="col-sm-3">
-	                            <input type="text" ng-model="ctrl.event.address2" id="address2" name="address2" class="username  form-control input-sm" placeholder="Enter venue address2" required ng-minlength="5"/>
-	                  			<div class="has-error" ng-show="myForm.$dirty">
-                                      <span ng-show="myForm.address2.$error.required">This is a required field</span>
-                                      <span ng-show="myForm.address2.$error.minlength">Minimum length required is 5</span>
-                                      <span ng-show="myForm.address2.$invalid">This field is invalid </span>
-                                  </div>      
+	                            <input type="text" ng-model="ctrl.event.address2" id="address2" name="address2" class="username  form-control input-sm" placeholder="Enter venue address2"  ng-minlength="5"/>
 	                        </div>
 	                    </div>
 	                </div>
@@ -125,8 +127,8 @@
 	                </div>
 	             
 	             <div class="row">
-	                   <div class="form-group col-sm-4">
-	                        <label class="col-sm-5  control-label" for="uname">Venue State</label>
+	                   <div class="form-group col-sm-12">
+	                   <div  require>  <label class="col-sm-2  control-label" for="city">Venue State</label></div>
 	                        <div class="col-sm-7">
 	                        <select ng-model="ctrl.event.state" ng-options="state.description for state in ctrl.states track by state.description" required></select>
 	                        </div>
@@ -134,8 +136,8 @@
 	                </div>
 	                
 	                <div class="row">
-	                   <div class="form-group col-sm-4">
-	                        <label class="col-sm-5  control-label" for="uname">Zipcode</label>
+	                   <div class="form-group col-sm-12">
+	                    <div  require>  <label class="col-sm-2  control-label" for="city">Zipcode</label></div>
 	                        <div class="col-sm-7">
 	                        <select ng-model="ctrl.event.zipCode" ng-options="zipCode.code for zipCode in ctrl.event.state.zipCodes track by zipCode.code" required></select>
 	                        </div>
@@ -170,7 +172,15 @@
 	                    </div>
 	                </div>
 	                
-	                {{myForm.$invalid  }} {{ myForm.$pristine}}
+	                 <div class="row">
+	                		<div class="form-group col-sm-12">
+                    		 <div  require> 	<label class="col-sm-2 control-label" for="notes">Notes</label> </div>
+                    			<div class="col-sm-8">
+                      				<textarea name="notes" class="form-control" id="notes" ng-model="ctrl.event.notes"></textarea
+								</div>
+                 			</div>
+                  </div>
+	                
 	                <div class="row">
 	                    <div class="form-actions floatCenter col-sm-offset-8">
 	                        <input type="submit"  value="{{!ctrl.event.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid || myForm.$pristine">
