@@ -50,12 +50,13 @@ body, .form-control{
 }
 
 .generic-container {
-  width:97%;
+  width:95%;
   margin-left: 20px;
   margin-top: 20px;
   margin-bottom: 20px;
   padding: 20px;
-  background-color: #EAE7E7;
+ /* background-color: #EAE7E7; */
+ background-color: #FFF;
   border: 1px solid #ddd;
   border-radius: 4px;
   box-shadow: 0 0 30px black;
@@ -122,4 +123,9 @@ body, .form-control{
 	 clear: both;
     white-space: nowrap;
     word-break: break-all;
+}
+
+.input-group[class*=col-]{
+	float:left !important;	
+}	
 }

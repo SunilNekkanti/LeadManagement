@@ -43,6 +43,7 @@ app
 							self.getAllFacilityTypes = getAllFacilityTypes;
 							self.getAllActivityTypes = getAllActivityTypes;
 							self.getAllEventTemplates = getAllEventTemplates;
+							self.eventRepEmails = getEventRepEmails;
 							self.dtInstance = {};
 							self.eventId = null;
 							self.reset = reset;
@@ -323,6 +324,21 @@ app
 								$scope.myForm.$setPristine(); // reset Form
 							}
 
+							function getEventRepEmails(){
+								alert('getEventRepEmails');
+								 var obj = myForm.eventRepresentatives,
+							        options = obj.options, 
+							        selected = [], i, str;
+
+							    for (i = 0; i < options.length; i++) {
+							        options[i].selected && selected.push(obj[i].value);
+							    }
+
+							    str = selected.join();
+							    alert('str'+str);
+							    console.log('str'+str);
+
+							}
 							
 							function addAgentEventAppointment() {
 								self.event.agentEventAppointments.push(self.selectedAgentEventAppointment);

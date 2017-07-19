@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.pfchoice.springboot.security.CustomAuthenticationSuccessHandler;
-import com.pfchoice.springboot.security.RestAuthenticationEntryPoint;
 
 
 @Configuration

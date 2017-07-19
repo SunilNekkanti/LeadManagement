@@ -20,6 +20,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
@@ -42,10 +43,12 @@ public class Event extends RecordDetails implements Serializable {
 	@Column(name = "event_name")
 	private String eventName;
 
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@Column(name = "event_date_starttime", nullable= true)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar  eventDateStartTime;
 	
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@Column(name = "event_date_endtime", nullable= true)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar  eventDateEndTime;

@@ -42,7 +42,7 @@
           <div class="row">
             <div class="form-group col-sm-12">
               <label class="col-sm-2  control-label" for="eventTemplate">Event Template</label>
-              <div class="col-sm-3">
+              <div class="col-sm-7">
                 <select ng-model="ctrl.event.eventTemplate" name="eventTemplate" ng-options="eventTemplate.name for eventTemplate in ctrl.eventTemplates track by eventTemplate.name" required></select>
                 <div class="has-error" ng-show="myForm.$dirty">
                   <span ng-show="myForm.eventTemplate.$error.required">This is a required field</span>
@@ -82,7 +82,7 @@
           <div class="row">
             <div class="form-group col-sm-12">
               <label class="col-sm-2  control-label" for="brokerage">Brokerage</label>
-              <div class="col-sm-3">
+              <div class="col-sm-7">
               		<select class="col-sm-3" ng-model="ctrl.event.brokerage" name="brokerage" ng-options="brokerage.description for brokerage in ctrl.brokerages track by brokerage.description" required></select>
               		<div class="has-error" ng-show="myForm.$dirty">
                 		<span ng-show="myForm.brokerage.$error.required">This is a required field</span>
@@ -94,7 +94,7 @@
           <div class="row">
             <div class="form-group col-sm-12">
               <label class="col-sm-2  control-label" for="facilityType">Facility Type</label>
-              <div class="col-sm-3">
+              <div class="col-sm-7">
               		<select class="col-sm-3" ng-model="ctrl.event.facilityType" name="facilityType" ng-options="facilityType.description for facilityType in ctrl.facilityTypes track by facilityType.description" required></select>
               		<div class="has-error" ng-show="myForm.$dirty">
                 		<span ng-show="myForm.facilityType.$error.required">This is a required field</span>
@@ -106,7 +106,7 @@
           <div class="row">
             <div class="form-group col-sm-12">
               <label class="col-sm-2  control-label" for="activityType">Activity Type</label>
-              <div class="col-sm-3">
+              <div class="col-sm-7">
                 <select ng-model="ctrl.event.activityType" name="activityType" ng-options="activityType.description for activityType in ctrl.activityTypes track by activityType.description" required></select>
                 <div class="has-error" ng-show="myForm.$dirty">
                   <span ng-show="myForm.activityType.$error.required">This is a required field</span>
@@ -117,16 +117,15 @@
 
           <div class="row">
             <div class="form-group col-sm-12">
-              <label class="col-sm-2  control-label" for="agent">Representative</label>
-              <div class="col-sm-3">
-                <select ng-model="ctrl.event.representatives" ng-options=" agent.username for agent in ctrl.users   track by agent.username"  multiple required>
+              <label class="col-sm-2  control-label" for="agent">Representatives</label>
+              <div class="col-sm-7">
+                <select ng-model="ctrl.event.representatives" name="eventRepresentatives" ng-options=" agent.username for agent in ctrl.users   track by agent.username"  multiple required>
                 </select>
               </div>
+              {{ctrl.getEventRepEmails()}}
             </div>
           </div>
-          {{ctrl.event.representatives[0].email   }}
-          {{ctrl.event.representatives[1].email   }}
-          
+           
 
           <div class="row">
             <div class="form-group col-sm-12">
