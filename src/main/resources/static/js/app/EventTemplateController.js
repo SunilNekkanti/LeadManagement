@@ -2,46 +2,34 @@
 
 app
 		.controller(
-				'EventController',
+				'EventTemplateController',
 				[
-						'EventService',
-						'BrokerageService',
-						'FacilityTypeService',
-						'UserService',
-						'StateService',
 						'EventTemplateService',
+						'StateService',
 						'$scope',
 						'$compile',
 						'$filter',
 						'DTOptionsBuilder',
 						'DTColumnBuilder',
-						function(EventService, BrokerageService,  FacilityTypeService, UserService, StateService, EventTemplateService, $scope, $compile, $filter,
+						function(EventTemplateService, StateService, $scope, $compile, $filter,
 								DTOptionsBuilder, DTColumnBuilder) {
 
 							var self = this;
-							self.event = {};
-							self.events = [];
-							self.brokerages = [];
-							self.facilityTypes = [];
+							self.eventTemplate = {};
 							self.eventTemplates = [];
-							self.users = [];
 							self.display = false;
 							self.states = [];
 							self.displayEditButton = false;
 							self.submit = submit;
-							self.addEvent = addEvent;
-							self.getAllEvents = getAllEvents;
-							self.createEvent = createEvent;
-							self.updateEvent = updateEvent;
-							self.removeEvent = removeEvent;
-							self.editEvent = editEvent;
-							self.getAllAgents = getAllAgents;
-							self.getAllStates = getAllStates;
-							self.getAllBrokerages = getAllBrokerages;
-							self.getAllFacilityTypes = getAllFacilityTypes;
+							self.addEventTemplate = addEventTemplate;
 							self.getAllEventTemplates = getAllEventTemplates;
+							self.createEventTemplate = createEventTemplate;
+							self.updateEventTemplate = updateEventTemplate;
+							self.removeEventTemplate = removeEventTemplate;
+							self.editEventTemplate = editEventTemplate;
+							self.getAllStates = getAllStates;
 							self.dtInstance = {};
-							self.eventId = null;
+							self.eventTemplateId = null;
 							self.reset = reset;
 							self.today = today;
 							self.toggleMin = toggleMin;
@@ -59,30 +47,19 @@ app
 											.renderWith(
 													function(data, type, full,
 															meta) {
-														return '<input type="checkbox" ng-model="ctrl.event['
+														return '<input type="checkbox" ng-model="ctrl.eventTemplate['
 																+ data
-																+ '].checkbox_status" ng-checked="ctrl.event['
+																+ '].checkbox_status" ng-checked="ctrl.eventTemplate['
 																+ data
-																+ '].selected" ng-true-value="true" ng-false-value="false" ng-change="ctrl.checkBoxChange(ctrl.event['
+																+ '].selected" ng-true-value="true" ng-false-value="false" ng-change="ctrl.checkBoxChange(ctrl.eventTemplate['
 																+ data
 																+ '].checkbox_status,'
 																+ data
 																+ ')" />';
 													}).withClass("text-center"),
-									DTColumnBuilder.newColumn('eventName')
+									DTColumnBuilder.newColumn('name')
 											.withTitle('EVENT NAME')
 											.withOption('defaultContent', ''),
-									DTColumnBuilder.newColumn('eventDateTime')
-											.withTitle('EVENT DATETIME').withOption(
-													'defaultContent', ''),
-									DTColumnBuilder.newColumn(
-											'brokerage.description').withTitle(
-											'BROKERAGE').withOption('defaultContent', ''),
-									DTColumnBuilder.newColumn('facilityType.description').withTitle(
-											'FACILITY TYPE').withOption('defaultContent', ''),
-									DTColumnBuilder.newColumn(
-											'agent.username').withTitle(
-											'REPRESENTATIVE').withOption('defaultContent', ''),
 									DTColumnBuilder.newColumn('address1')
 											.withTitle('ADDRESS1').withOption(
 												'defaultContent', ''),
@@ -110,7 +87,7 @@ app
 									.withOption(
 											'ajax',
 											{
-												url : 'http://localhost:8080/EventManagement/api/event/',
+												url : 'http://localhost:8080/EventTemplateManagement/api/eventTemplate/',
 												type : 'GET'
 											}).withDataProp('data').withOption(
 											'serverSide', true).withOption(
@@ -142,9 +119,9 @@ app
 								console.log("test");
 							}
 
-							function checkBoxChange(checkStatus, eventId) {
+							function checkBoxChange(checkStatus, eventTemplateId) {
 								self.displayEditButton = checkStatus;
-								self.eventId = eventId
+								self.eventTemplateId = eventTemplateId
 
 							}
 
@@ -161,8 +138,8 @@ app
 								console.log(JSON.stringify(aoData));
 								// Then just call your service to get the
 								// records from server side
-								EventService
-										.loadEvents(page, length, search, order)
+								EventTemplateService
+										.loadEventTemplates(page, length, search, order)
 										.then(
 												function(result) {
 													var records = {
@@ -187,53 +164,53 @@ app
 
 							function submit() {
 								console.log('Submitting');
-								if (self.event.id === undefined
-										|| self.event.id === null) {
-									console.log('Saving New Event', self.event);
-									createEvent(self.event);
+								if (self.eventTemplate.id === undefined
+										|| self.eventTemplate.id === null) {
+									console.log('Saving New EventTemplate', self.eventTemplate);
+									createEventTemplate(self.eventTemplate);
 								} else {
-									updateEvent(self.event, self.event.id);
-									console.log('Event updated with id ',
-											self.event.id);
+									updateEventTemplate(self.eventTemplate, self.eventTemplate.id);
+									console.log('EventTemplate updated with id ',
+											self.eventTemplate.id);
 								}
 								self.displayEditButton = false;
 							}
 
-							function createEvent(event) {
-								console.log('About to create event');
-								console.log('event'  + JSON.stringify(event));
-								EventService
-										.createEvent(event)
+							function createEventTemplate(eventTemplate) {
+								console.log('About to create eventTemplate');
+								console.log('eventTemplate'  + JSON.stringify(eventTemplate));
+								EventTemplateService
+										.createEventTemplate(eventTemplate)
 										.then(
 												function(response) {
 													console
-															.log('Event created successfully');
-													self.successMessage = 'Event created successfully';
+															.log('EventTemplate created successfully');
+													self.successMessage = 'EventTemplate created successfully';
 													self.errorMessage = '';
 													self.done = true;
 													self.display = false;
-													self.event = {};
+													self.eventTemplate = {};
 													$scope.myForm
 															.$setPristine();
 												},
 												function(errResponse) {
 													console
-															.error('Error while creating Event');
-													self.errorMessage = 'Error while creating Event: '
+															.error('Error while creating EventTemplate');
+													self.errorMessage = 'Error while creating EventTemplate: '
 															+ errResponse.data.errorMessage;
 													self.successMessage = '';
 												});
 							}
 
-							function updateEvent(event, id) {
-								console.log('About to update event');
-								EventService
-										.updateEvent(event, id)
+							function updateEventTemplate(eventTemplate, id) {
+								console.log('About to update eventTemplate');
+								EventTemplateService
+										.updateEventTemplate(eventTemplate, id)
 										.then(
 												function(response) {
 													console
-															.log('Event updated successfully');
-													self.successMessage = 'Event updated successfully';
+															.log('EventTemplate updated successfully');
+													self.successMessage = 'EventTemplate updated successfully';
 													self.errorMessage = '';
 													self.done = true;
 													self.display = false;
@@ -242,116 +219,86 @@ app
 												},
 												function(errResponse) {
 													console
-															.error('Error while updating Event');
-													self.errorMessage = 'Error while updating Event '
+															.error('Error while updating EventTemplate');
+													self.errorMessage = 'Error while updating EventTemplate '
 															+ errResponse.data;
 													self.successMessage = '';
 												});
 							}
 
-							function removeEvent(id) {
-								console.log('About to remove Event with id '
+							function removeEventTemplate(id) {
+								console.log('About to remove EventTemplate with id '
 										+ id);
-								EventService
-										.removeEvent(id)
+								EventTemplateService
+										.removeEventTemplate(id)
 										.then(
 												function() {
 													console
-															.log('Event '
+															.log('EventTemplate '
 																	+ id
 																	+ ' removed successfully');
 												},
 												function(errResponse) {
 													console
-															.error('Error while removing event '
+															.error('Error while removing eventTemplate '
 																	+ id
 																	+ ', Error :'
 																	+ errResponse.data);
 												});
 							}
-							function editEvent(id) {
+							function editEventTemplate(id) {
 								self.successMessage = '';
 								self.errorMessage = '';
-								self.users = getAllAgents();
 								self.states = getAllStates();
-								self.brokerages = getAllBrokerages();
-								self.facilityTypes = getAllFacilityTypes();
-								self.eventTemplates = getAllEventTemplates();
-									EventService
-										.getEvent(id)
+									EventTemplateService
+										.getEventTemplate(id)
 										.then(
-												function(event) {
-													self.event = event;
+												function(eventTemplate) {
+													self.eventTemplate = eventTemplate;
 													self.display = true;
 												},
 												function(errResponse) {
 													console
-															.error('Error while removing event '
+															.error('Error while removing eventTemplate '
 																	+ id
 																	+ ', Error :'
 																	+ errResponse.data);
 												});
 							}
 
-							function addEvent() {
+							function addEventTemplate() {
 								self.successMessage = '';
 								self.errorMessage = '';
 								self.display = true;
-								self.users = getAllAgents();
 								self.states = getAllStates();
-								self.brokerages = getAllBrokerages();
-								self.facilityTypes = getAllFacilityTypes();
-								self.eventTemplates = getAllEventTemplates();
-								
-								console.log('self.eventTemplates'+self.eventTemplates);
 							}
 
 							function reset() {
 								self.successMessage = '';
 								self.errorMessage = '';
-								self.event = {};
+								self.eventTemplate = {};
 								$scope.myForm.$setPristine(); // reset Form
 							}
 
 							
-							function addAgentEventAppointment() {
-								self.event.agentEventAppointments.push(self.selectedAgentEventAppointment);
+							function addAgentEventTemplateAppointment() {
+								self.eventTemplate.agentEventTemplateAppointments.push(self.selectedAgentEventTemplateAppointment);
 							}
-							function getAllEvents() {
-								return EventService.getAllEvents();
+							function getAllEventTemplates() {
+								return EventTemplateService.getAllEventTemplates();
 							}
 
-							function getAllAgents() {
-								return UserService
-										.getAllUsers();
-							}
-							
 							function getAllStates() {
 								return StateService.getAllStates();
 							}
 							
-							function getAllBrokerages() {
-								return BrokerageService
-										.getAllBrokerages();
-							}
-
-							function getAllFacilityTypes() {
-								return FacilityTypeService
-										.getAllFacilityTypes();
-							}
-
-							function getAllEventTemplates() {
-								return EventTemplateService
-										.getAllEventTemplates();
-							}
-
 							function today() {
-								    self.event.eventDateTime = new Date();
+								    self.eventTemplate.eventTemplateDateTime = new Date();
 							}
 								  
 
 							function clear() {
-								self.event.eventDateTime  = null;
+								self.eventTemplate.eventTemplateDateTime  = null;
 							}
 
 
@@ -391,7 +338,7 @@ app
 								  };
 
 						  function setDate(year, month, day) {
-							  self.event.eventDateTime = new Date(year, month, day);
+							  self.eventTemplate.eventTemplateDateTime = new Date(year, month, day);
 								  };
 
 							self.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
@@ -410,7 +357,7 @@ app
 								  tomorrow.setDate(tomorrow.getDate() + 1);
 								  var afterTomorrow = new Date();
 								  afterTomorrow.setDate(tomorrow.getDate() + 1);
-								  self.eventss = [
+								  self.eventTemplatess = [
 								    {
 								      date: tomorrow,
 								      status: 'full'
@@ -427,11 +374,11 @@ app
 								    if (mode === 'day') {
 								      var dayToCheck = new Date(date).setHours(0,0,0,0);
 
-								      for (var i = 0; i < self.eventss.length; i++) {
-								        var currentDay = new Date(self.eventss[i].date).setHours(0,0,0,0);
+								      for (var i = 0; i < self.eventTemplatess.length; i++) {
+								        var currentDay = new Date(self.eventTemplatess[i].date).setHours(0,0,0,0);
 
 								        if (dayToCheck === currentDay) {
-								          return self.eventss[i].status;
+								          return self.eventTemplatess[i].status;
 								        }
 								      }
 								    }

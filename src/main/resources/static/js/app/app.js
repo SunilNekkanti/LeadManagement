@@ -16,8 +16,10 @@ app.constant('urls', {
     INSURANCE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/insurance/',
     PROVIDER_SERVICE_API : 'http://localhost:8080/LeadManagement/api/provider/',
     FACILITYTYPE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/facilityType/',
+    ACTIVITYTYPE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/activityType/',
     BROKERAGE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/brokerage/',
     EVENT_SERVICE_API : 'http://localhost:8080/LeadManagement/api/event/',
+    EVENT_TEMPLATE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/eventTemplate/',
     LOGIN_USER : 'http://localhost:8080/LeadManagement/getloginInfo',
     FILE_UPLOADER : 'http://localhost:8080/LeadManagement/api/fileUpload/fileProcessing.do' ,
     COUNTY_SERVICE_API : 'http://localhost:8080/LeadManagement/api/county/' 
@@ -203,6 +205,22 @@ app.config(['$stateProvider', '$urlRouterProvider',
               }
           }
       })
+      .state('activityType', {
+          url: '/activityType',
+          templateUrl: 'partials/activityType_list',
+          controller:'ActivityTypeController',
+          controllerAs:'ctrl',
+          resolve: {
+              users: function ($q,ActivityTypeService) {
+                  console.log('Load all facilityTypes');
+                  var deferred = $q.defer();
+                  ActivityTypeService.loadAllActivityTypes().then(deferred.resolve, deferred.resolve);
+                  
+                  console.log('deferred.promise'+deferred.promise);
+                  return deferred.promise;
+              }
+          }
+      })
       .state('leadStatus', {
           url: '/leadStatus',
           templateUrl: 'partials/leadStatus_list',
@@ -273,7 +291,37 @@ app.config(['$stateProvider', '$urlRouterProvider',
 		          return deferred.promise;
 		      },
       		  states: function ($q,  StateService) {
-		          console.log('Load all leads');
+		          console.log('Load all states');
+		          var deferred = $q.defer();
+		          StateService.loadAllStates().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise;
+		      },
+      		  eventTemplates: function ($q,  EventTemplateService) {
+		          console.log('Load all eventTemplates');
+		          var deferred = $q.defer();
+		          EventTemplateService.loadAllEventTemplates().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise;
+		      }
+          }
+      })
+      .state('eventTemplate', {
+          url: '/eventTemplate',
+          templateUrl: 'partials/eventTemplate_list',
+          controller:'EventTemplateController',
+          controllerAs:'ctrl',
+          resolve: {
+              events: function ($q,EventTemplateService) {
+                  console.log('Load all eventTemplates');
+                  var deferred = $q.defer();
+                  EventTemplateService.loadAllEventTemplates().then(deferred.resolve, deferred.resolve);
+                  
+                  console.log('deferred.promise'+deferred.promise);
+                  return deferred.promise;
+              },
+      		  states: function ($q,  StateService) {
+		          console.log('Load all states');
 		          var deferred = $q.defer();
 		          StateService.loadAllStates().then(deferred.resolve, deferred.resolve);
 		          console.log('deferred.promise'+deferred.promise);

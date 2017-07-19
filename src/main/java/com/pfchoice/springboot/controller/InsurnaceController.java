@@ -1,7 +1,5 @@
 package com.pfchoice.springboot.controller;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.pfchoice.springboot.model.Insurance;
-import com.pfchoice.springboot.model.Provider;
 import com.pfchoice.springboot.repositories.specifications.InsuranceSpecifications;
-import com.pfchoice.springboot.repositories.specifications.ProviderSpecifications;
 import com.pfchoice.springboot.service.InsuranceService;
 import com.pfchoice.springboot.util.CustomErrorType;
 

@@ -41,6 +41,19 @@
 	                
 	                 <div class="row">
 	                    <div class="form-group col-sm-12">
+	                        <label class="col-sm-2  control-label" for="eventTemplate">Event Template</label>
+	                        <div class="col-sm-3">
+	                        <select ng-model="ctrl.event.eventTemplate" name="eventTemplate" ng-options="eventTemplate.name for eventTemplate in ctrl.eventTemplates track by eventTemplate.name" required></select>
+	                        <div class="has-error" ng-show="myForm.$dirty">
+                                      <span ng-show="myForm.eventTemplate.$error.required">This is a required field</span>
+                                  </div>
+	                        </div>
+	                        </div>
+	                    </div>
+	                </div>
+	                
+	                 <div class="row">
+	                    <div class="form-group col-sm-12">
 	                        <label class="col-sm-2  control-label" for="eventDateTime">Event DateTime</label>
 	                        <div class="col-sm-3">
 	                           <div class="input-group date" id="eventDateTime"  ng-model="ctrl.event.eventDateTime" date-picker>

@@ -60,6 +60,10 @@
   <script src="js/app/ProviderController.js"></script>
   <script src="js/app/LeadStatusController.js"></script>
   <script src="js/app/InsuranceController.js"></script>
+  <script src="js/app/EventTemplateController.js"></script>
+  <script src="js/app/EventTemplateService.js"></script>
+    <script src="js/app/ActivityTypeController.js"></script>
+  <script src="js/app/ActivityTypeService.js"></script>
 </head>
 
 <body class="ng-cloak">
@@ -68,18 +72,23 @@
     
       <div class="navbar-collapse collapse in" collapse="isCollapsed" aria-expanded="true" >
         <ul class="nav navbar-nav">
-        <li><a href="#" ng-click="callMe('lead')">Leads</a></li>
+        <li><a  ng-click="callMe('lead')">Leads</a></li>
          
           <li class="dropdown" dropdown>
             <a href="#" class="dropdown-toggle" dropdown-toggle role="button" aria-expanded="false">Admin <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
              <li><a  ng-click="callMe('event')">Events</a> </li>
-              <li class="divider"></li>
-              <li><a   ng-click="callMe('role')">Roles</a> </li>
-              <li><a ng-click="callMe('user')">User Accounts</a> </li>
-              <li class="divider"></li>
+              <li><a  ng-click="callMe('eventTemplate')">Event Templates</a> </li>
+              <li><a  ng-click="callMe('activityType')">Activity Types</a> </li>
               <li><a  ng-click="callMe('facilityType')">Facility Types</a></li>
               <li><a   ng-click="callMe('brokerage')">Brokerages</a></li>
+             
+              <li class="divider"></li>
+             
+              <li><a   ng-click="callMe('role')">Roles</a> </li>
+              <li><a ng-click="callMe('user')">User Accounts</a> </li>
+             
+              <li class="divider"></li>
               <li><a   ng-click="callMe('provider')">Providers</a></li>
                <li><a   ng-click="callMe('insurance')">Insurances</a></li>
               <li><a   ng-click="callMe('language')">Languages</a></li>

@@ -75,10 +75,6 @@ public class EventController {
 					event.getEventName()  + " already exist."),HttpStatus.CONFLICT);
 		}
 		
-		logger.error("event.getAgent().", event.getAgent());
-		event.setCreatedBy("sarath");
-		event.setUpdatedBy("sarath");
-		
 		eventService.saveEvent(event);
 
 		HttpHeaders headers = new HttpHeaders();
@@ -100,20 +96,11 @@ public class EventController {
 					HttpStatus.NOT_FOUND);
 		}
       
-		logger.error("event.getAgent().", event.getAgent());
 		currentEvent.setEventName(event.getEventName());
-		currentEvent.setAgent(event.getAgent());
 		currentEvent.setBrokerage(event.getBrokerage());
 		currentEvent.setEventDateTime(event.getEventDateTime());
 		currentEvent.setFacilityType(event.getFacilityType());
 		currentEvent.setNotes(event.getNotes());
-		currentEvent.setAddress1(event.getAddress1());
-		currentEvent.setAddress2(event.getAddress2());
-		currentEvent.setCity(event.getCity());
-		currentEvent.setState(event.getState());
-		currentEvent.setZipCode(event.getZipCode());
-		currentEvent.setContactPerson(event.getContactPerson());
-		currentEvent.setContactPhone(event.getContactPhone());
 		eventService.updateEvent(currentEvent);
 		
 		return new ResponseEntity<Event>(currentEvent, HttpStatus.OK);
