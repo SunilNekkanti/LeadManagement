@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(name = "event_representatives")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class EventRepresentative extends RecordDetails implements Serializable {
+public class EventRepresentative implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

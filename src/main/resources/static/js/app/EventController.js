@@ -10,12 +10,13 @@ app
 						'UserService',
 						'StateService',
 						'EventTemplateService',
+						'ActivityTypeService',
 						'$scope',
 						'$compile',
 						'$filter',
 						'DTOptionsBuilder',
 						'DTColumnBuilder',
-						function(EventService, BrokerageService,  FacilityTypeService, UserService, StateService, EventTemplateService, $scope, $compile, $filter,
+						function(EventService, BrokerageService,  FacilityTypeService, UserService, StateService, EventTemplateService, ActivityTypeService, $scope, $compile, $filter,
 								DTOptionsBuilder, DTColumnBuilder) {
 
 							var self = this;
@@ -23,6 +24,7 @@ app
 							self.events = [];
 							self.brokerages = [];
 							self.facilityTypes = [];
+							self.activityTypes = [];
 							self.eventTemplates = [];
 							self.users = [];
 							self.display = false;
@@ -39,6 +41,7 @@ app
 							self.getAllStates = getAllStates;
 							self.getAllBrokerages = getAllBrokerages;
 							self.getAllFacilityTypes = getAllFacilityTypes;
+							self.getAllActivityTypes = getAllActivityTypes;
 							self.getAllEventTemplates = getAllEventTemplates;
 							self.dtInstance = {};
 							self.eventId = null;
@@ -72,36 +75,41 @@ app
 									DTColumnBuilder.newColumn('eventName')
 											.withTitle('EVENT NAME')
 											.withOption('defaultContent', ''),
-									DTColumnBuilder.newColumn('eventDateTime')
-											.withTitle('EVENT DATETIME').withOption(
+									DTColumnBuilder.newColumn('eventDateStartTime')
+											.withTitle('EVENT STARTTIME').withOption(
 													'defaultContent', ''),
+									DTColumnBuilder.newColumn('eventDateEndTime')
+													.withTitle('EVENT ENDTIME').withOption(
+															'defaultContent', ''),
 									DTColumnBuilder.newColumn(
 											'brokerage.description').withTitle(
 											'BROKERAGE').withOption('defaultContent', ''),
 									DTColumnBuilder.newColumn('facilityType.description').withTitle(
 											'FACILITY TYPE').withOption('defaultContent', ''),
+									DTColumnBuilder.newColumn('activityType.description').withTitle(
+											'ACTIVITY TYPE').withOption('defaultContent', ''),
 									DTColumnBuilder.newColumn(
-											'agent.username').withTitle(
-											'REPRESENTATIVE').withOption('defaultContent', ''),
-									DTColumnBuilder.newColumn('address1')
+											'representatives[].username').withTitle(
+											'REPRESENTATIVES').withOption('defaultContent', ''),
+									DTColumnBuilder.newColumn('eventTemplate.address1')
 											.withTitle('ADDRESS1').withOption(
 												'defaultContent', ''),
-									DTColumnBuilder.newColumn('address2')
+									DTColumnBuilder.newColumn('eventTemplate.address2')
 													.withTitle('ADDRESS2').withOption(
 													'defaultContent', ''),
-									DTColumnBuilder.newColumn('city')
+									DTColumnBuilder.newColumn('eventTemplate.city')
 												.withTitle('CITY').withOption(
 													'defaultContent', ''),
-									DTColumnBuilder.newColumn('state.shortName')
+									DTColumnBuilder.newColumn('eventTemplate.state.shortName')
 														.withTitle('STATE').withOption(
 														'defaultContent', ''),
-									DTColumnBuilder.newColumn('zipCode.code')
+									DTColumnBuilder.newColumn('eventTemplate.zipCode.code')
 														.withTitle('ZIPCODE').withOption(
 														'defaultContent', ''),
-									DTColumnBuilder.newColumn('contactPerson')
+									DTColumnBuilder.newColumn('eventTemplate.contactPerson')
 															.withTitle('CONTACT PERSON').withOption(
 															'defaultContent', ''),
-									DTColumnBuilder.newColumn('contactPhone')
+									DTColumnBuilder.newColumn('eventTemplate.contactPhone')
 																.withTitle('CONTACT PHONE').withOption(
 																'defaultContent', '')];
 
@@ -276,6 +284,7 @@ app
 								self.states = getAllStates();
 								self.brokerages = getAllBrokerages();
 								self.facilityTypes = getAllFacilityTypes();
+								self.activityTypes = getAllActivityTypes();
 								self.eventTemplates = getAllEventTemplates();
 									EventService
 										.getEvent(id)
@@ -301,6 +310,7 @@ app
 								self.states = getAllStates();
 								self.brokerages = getAllBrokerages();
 								self.facilityTypes = getAllFacilityTypes();
+								self.activityTypes = getAllActivityTypes();
 								self.eventTemplates = getAllEventTemplates();
 								
 								console.log('self.eventTemplates'+self.eventTemplates);
@@ -340,6 +350,12 @@ app
 										.getAllFacilityTypes();
 							}
 
+							function getAllActivityTypes() {
+								return ActivityTypeService
+										.getAllActivityTypes();
+							}
+
+							
 							function getAllEventTemplates() {
 								return EventTemplateService
 										.getAllEventTemplates();

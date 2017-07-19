@@ -74,7 +74,6 @@ public class EventController {
 			return new ResponseEntity(new CustomErrorType("Unable to create. A Event with name " + 
 					event.getEventName()  + " already exist."),HttpStatus.CONFLICT);
 		}
-		
 		eventService.saveEvent(event);
 
 		HttpHeaders headers = new HttpHeaders();
@@ -98,7 +97,8 @@ public class EventController {
       
 		currentEvent.setEventName(event.getEventName());
 		currentEvent.setBrokerage(event.getBrokerage());
-		currentEvent.setEventDateTime(event.getEventDateTime());
+		currentEvent.setEventDateStartTime(event.getEventDateStartTime());
+		currentEvent.setEventDateEndTime(event.getEventDateEndTime());
 		currentEvent.setFacilityType(event.getFacilityType());
 		currentEvent.setNotes(event.getNotes());
 		eventService.updateEvent(currentEvent);

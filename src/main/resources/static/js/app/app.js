@@ -283,6 +283,14 @@ app.config(['$stateProvider', '$urlRouterProvider',
                   console.log('deferred.promise'+deferred.promise);
                   return deferred.promise;
               },
+              activityTypes: function ($q,ActivityTypeService) {
+                  console.log('Load all facilityTypes');
+                  var deferred = $q.defer();
+                  ActivityTypeService.loadAllActivityTypes().then(deferred.resolve, deferred.resolve);
+                  
+                  console.log('deferred.promise'+deferred.promise);
+                  return deferred.promise;
+              },
               users: function ($q,  UserService) {
 		          console.log('Load all users');
 		          var deferred = $q.defer();

@@ -42,9 +42,13 @@ public class Event extends RecordDetails implements Serializable {
 	@Column(name = "event_name")
 	private String eventName;
 
-	@Column(name = "event_date_time", nullable= true)
+	@Column(name = "event_date_starttime", nullable= true)
 	@Temporal(TemporalType.TIMESTAMP)
-	private Calendar  eventDateTime;
+	private Calendar  eventDateStartTime;
+	
+	@Column(name = "event_date_endtime", nullable= true)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Calendar  eventDateEndTime;
 	
 	@ManyToOne
 	@JoinColumn(name = "brokerage_id", referencedColumnName = "code")
@@ -161,17 +165,31 @@ public class Event extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @return the eventDateTime
+	 * @return the eventDateStartTime
 	 */
-	public Calendar getEventDateTime() {
-		return eventDateTime;
+	public Calendar getEventDateStartTime() {
+		return eventDateStartTime;
 	}
 
 	/**
-	 * @param eventDateTime the eventDateTime to set
+	 * @param eventDateStartTime the eventDateStartTime to set
 	 */
-	public void setEventDateTime(Calendar eventDateTime) {
-		this.eventDateTime = eventDateTime;
+	public void setEventDateStartTime(Calendar eventDateStartTime) {
+		this.eventDateStartTime = eventDateStartTime;
+	}
+
+	/**
+	 * @return the eventDateEndTime
+	 */
+	public Calendar getEventDateEndTime() {
+		return eventDateEndTime;
+	}
+
+	/**
+	 * @param eventDateEndTime the eventDateEndTime to set
+	 */
+	public void setEventDateEndTime(Calendar eventDateEndTime) {
+		this.eventDateEndTime = eventDateEndTime;
 	}
 
 	/**
