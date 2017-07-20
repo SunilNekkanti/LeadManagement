@@ -7,6 +7,7 @@ import com.pfchoice.springboot.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,8 +40,8 @@ public class EventServiceImpl implements EventService{
 		eventRepository.deleteAll();
 	}
 
-	public Page<Event> findAllEventsByPage(Pageable pageable){
-		return eventRepository.findAll(pageable);
+	public Page<Event> findAllEventsByPage(Specification<Event> spec,Pageable pageable)  {
+		return eventRepository.findAll(spec,pageable);
 	}
 	
 	public boolean isEventExists(String eventName) {

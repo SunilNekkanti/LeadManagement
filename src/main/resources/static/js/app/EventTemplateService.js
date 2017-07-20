@@ -31,8 +31,8 @@ app.service('EventTemplateService',
                     .then(
                         function (response) {
                             console.log('Fetched successfully all events');
-                            $localStorage.events = response.data.content;
-                            deferred.resolve(response.data.content);
+                            $localStorage.eventTemplates = response.data.content;
+                            deferred.resolve(response);
                         },
                         function (errResponse) {
                             console.error('Error while loading events');
@@ -44,6 +44,7 @@ app.service('EventTemplateService',
             
             function loadEventTemplates(draw, length, search, order) {
                 console.log('Fetching  events');
+                var deferred = $q.defer();
                 var pageable = {
                   		 page:draw, size:length
                   		};
@@ -56,10 +57,13 @@ app.service('EventTemplateService',
                     .then(
                         function (response) {
                             console.log('Fetched successfully  events');
+                            $localStorage.eventTemplates = response.data.content;
+                            deferred.resolve(response);
                          return     response ;
                         },
                         function (errResponse) {
                             console.error('Error while loading events');
+                            deferred.reject(errResponse);
                             return   errResponse ;
                         }
                     );
@@ -67,7 +71,7 @@ app.service('EventTemplateService',
 
             function getAllEventTemplates(){
             	console.log('$localStorage.events'+$localStorage.events);
-                return $localStorage.events;
+                return $localStorage.eventTemplates;
             }
 
             function getEventTemplate(id) {

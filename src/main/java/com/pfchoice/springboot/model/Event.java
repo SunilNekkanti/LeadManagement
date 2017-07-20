@@ -43,12 +43,12 @@ public class Event extends RecordDetails implements Serializable {
 	@Column(name = "event_name")
 	private String eventName;
 
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS")
 	@Column(name = "event_date_starttime", nullable= true)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar  eventDateStartTime;
 	
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS")
 	@Column(name = "event_date_endtime", nullable= true)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar  eventDateEndTime;

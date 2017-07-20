@@ -124,6 +124,20 @@
 	                    </div>
 	                </div>
 	                
+	                <div class="row">
+	                    <div class="form-group col-sm-12">
+	                        <div  require>  <label class="col-sm-2  control-label" for="contactEmail">Contact Email</label></div>
+	                        <div class="col-sm-3">
+	                            <input type="email" ng-model="ctrl.eventTemplate.contactEmail" id="contactEmail" name="contactEmail" class="username  form-control input-sm"  placeholder="Enter email" required ng-minlength="5"/>
+	                  			<div class="has-error" ng-show="myForm.$dirty">
+                                      <span ng-show="myForm.contactEmail.$error.required">This is a required field</span>
+                                      <span ng-show="myForm.contactEmail.$error.minlength">Minimum length required is 5</span>
+                                      <span ng-show="myForm.contactEmail.$invalid">This field is invalid </span>
+                                  </div>      
+	                        </div>
+	                    </div>
+	                </div>
+	                
 	                
 	                <div class="row">
 	                    <div class="form-actions floatCenter col-sm-offset-8">

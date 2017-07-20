@@ -93,7 +93,7 @@ app.service('EventService',
                 $http.post(urls.EVENT_SERVICE_API, event)
                     .then(
                         function (response) {
-                            loadAllEvents();
+                        	loadEvents(0,10,'',null);
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
@@ -110,7 +110,7 @@ app.service('EventService',
                 $http.put(urls.EVENT_SERVICE_API + id, event)
                     .then(
                         function (response) {
-                            loadAllEvents();
+                        	loadEvents(0,10,'',null);
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
@@ -127,7 +127,7 @@ app.service('EventService',
                 $http.delete(urls.EVENT_SERVICE_API + id)
                     .then(
                         function (response) {
-                            loadAllEvents();
+                        	loadEvents(0,10,'',null);
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {

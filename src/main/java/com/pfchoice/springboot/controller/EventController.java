@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.pfchoice.springboot.model.Event;
+import com.pfchoice.springboot.repositories.specifications.EventSpecifications;
 import com.pfchoice.springboot.service.EventService;
 import com.pfchoice.springboot.util.CustomErrorType;
 
@@ -36,10 +38,17 @@ public class EventController {
 	
 	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
 	@RequestMapping(value = "/event/", method = RequestMethod.GET)
-	public ResponseEntity<Page<Event>> listAllEvents(@RequestParam("page") int pageNo,  @RequestParam("size") int pageSize) {
+	public ResponseEntity<Page<Event>> listAllEvents(@RequestParam("page") Integer pageNo,  @RequestParam("size") Integer pageSize, @RequestParam(value = "search", required = false) String search) {
+		
+		pageNo = (pageNo == null)?0:pageNo;
+		pageSize = (pageSize == null)?1000:pageSize;
 		
 		PageRequest pageRequest = new PageRequest(pageNo,pageSize );
-		Page<Event> events = eventService.findAllEventsByPage(pageRequest);
+		Specification<Event> spec =null ;
+		if(!"".equals(search))
+		 spec = new EventSpecifications(search);
+		Page<Event> events = eventService.findAllEventsByPage(spec, pageRequest);
+		
 		if (events.getTotalElements() == 0) {
 			System.out.println("no events");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);

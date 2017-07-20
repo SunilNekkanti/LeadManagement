@@ -80,6 +80,9 @@ app
 															'defaultContent', ''),
 									DTColumnBuilder.newColumn('contactPhone')
 																.withTitle('CONTACT PHONE').withOption(
+																'defaultContent', ''),
+									DTColumnBuilder.newColumn('contactEmail')
+																.withTitle('CONTACT EMAIL').withOption(
 																'defaultContent', '')];
 
 							self.dtOptions = DTOptionsBuilder
@@ -135,7 +138,6 @@ app
 								var length = aoData[4].value;
 								var search = aoData[5].value;
 
-								console.log(JSON.stringify(aoData));
 								// Then just call your service to get the
 								// records from server side
 								EventTemplateService
@@ -285,9 +287,10 @@ app
 								self.eventTemplate.agentEventTemplateAppointments.push(self.selectedAgentEventTemplateAppointment);
 							}
 							function getAllEventTemplates() {
-								return EventTemplateService.getAllEventTemplates();
+								return EventTemplateService.getEventTemplates();
 							}
 
+							
 							function getAllStates() {
 								return StateService.getAllStates();
 							}

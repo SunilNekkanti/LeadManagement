@@ -58,6 +58,8 @@ public class EventTemplate extends RecordDetails implements Serializable {
 	@Column(name = "contact_phone")
 	private String contactPhone;
 
+	@Column(name = "contact_email")
+	private String contactEmail;
 	
 	/**
 	 * 
@@ -200,6 +202,21 @@ public class EventTemplate extends RecordDetails implements Serializable {
 	 */
 	public void setContactPhone(String contactPhone) {
 		this.contactPhone = contactPhone;
+	}
+
+	
+	/**
+	 * @return the contactEmail
+	 */
+	public String getContactEmail() {
+		return contactEmail;
+	}
+
+	/**
+	 * @param contactEmail the contactEmail to set
+	 */
+	public void setContactEmail(String contactEmail) {
+		this.contactEmail = contactEmail;
 	}
 
 	@Override

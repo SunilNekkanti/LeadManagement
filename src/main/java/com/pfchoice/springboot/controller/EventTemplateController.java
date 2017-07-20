@@ -113,6 +113,7 @@ public class EventTemplateController {
 		currentEventTemplate.setZipCode(eventTemplate.getZipCode());
 		currentEventTemplate.setContactPerson(eventTemplate.getContactPerson());
 		currentEventTemplate.setContactPhone(eventTemplate.getContactPhone());
+		currentEventTemplate.setContactEmail(eventTemplate.getContactEmail());
 		eventTemplateService.updateEventTemplate(currentEventTemplate);
 		
 		return new ResponseEntity<EventTemplate>(currentEventTemplate, HttpStatus.OK);
