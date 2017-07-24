@@ -119,6 +119,7 @@ app
 								// to the DT
 								$compile(angular.element(row).contents())(
 										$scope);
+								
 								console.log("test");
 							}
 
@@ -151,18 +152,16 @@ app
 														'data' : result.data.content
 													};
 													fnCallback(records);
-												});
+													
+												},function (errResponse) {
+						                            console.error('Error while loading events');
+						                         });
 							}
 
 							function reloadData() {
-								var resetPaging = false;
-								self.dtInstance.reloadData(callback,
-										resetPaging);
+								self.dtInstance.rerender();
 							}
 
-							function callback(json) {
-								console.log(json);
-							}
 
 							function submit() {
 								console.log('Submitting');
@@ -194,6 +193,7 @@ app
 													self.eventTemplate = {};
 													$scope.myForm
 															.$setPristine();
+													reloadData();
 												},
 												function(errResponse) {
 													console
@@ -218,6 +218,7 @@ app
 													self.display = false;
 													$scope.myForm
 															.$setPristine();
+													reloadData();
 												},
 												function(errResponse) {
 													console
@@ -239,6 +240,7 @@ app
 															.log('EventTemplate '
 																	+ id
 																	+ ' removed successfully');
+													reloadData();
 												},
 												function(errResponse) {
 													console

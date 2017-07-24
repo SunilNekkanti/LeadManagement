@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 
 /**
@@ -16,6 +18,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "lu_gender")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Gender extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;

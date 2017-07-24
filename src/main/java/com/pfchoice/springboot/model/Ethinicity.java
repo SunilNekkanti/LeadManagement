@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 
 /**
@@ -13,6 +15,7 @@ import javax.persistence.Id;
  * @author Mohanasundharam
  */
 @Entity(name = "lu_ethinicity")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Ethinicity extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;

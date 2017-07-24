@@ -30,12 +30,12 @@ app.service('EventTemplateService',
                 $http.get(urls.EVENT_TEMPLATE_SERVICE_API,  config)
                     .then(
                         function (response) {
-                            console.log('Fetched successfully all events');
+                            console.log('Fetched successfully all eventTemplates');
                             $localStorage.eventTemplates = response.data.content;
                             deferred.resolve(response);
                         },
                         function (errResponse) {
-                            console.error('Error while loading events');
+                            console.error('Error while loading eventTemplates');
                             deferred.reject(errResponse);
                         }
                     );
@@ -53,20 +53,20 @@ app.service('EventTemplateService',
                   		 params: pageable,
                   		 headers : {'Accept' : 'application/json'}
                   		};
-            return     $http.get(urls.EVENT_TEMPLATE_SERVICE_API,  config)
+                 $http.get(urls.EVENT_TEMPLATE_SERVICE_API,  config)
                     .then(
                         function (response) {
-                            console.log('Fetched successfully  events');
                             $localStorage.eventTemplates = response.data.content;
-                            deferred.resolve(response);
-                         return     response ;
+                               deferred.resolve(response);
+                      //   return     response ;
                         },
                         function (errResponse) {
-                            console.error('Error while loading events');
-                            deferred.reject(errResponse);
-                            return   errResponse ;
+                            console.error('Error while loading eventTemplates');
+                           deferred.reject(errResponse);
+                    //       return   errResponse ;
                         }
                     );
+            return deferred.promise;
             }
 
             function getAllEventTemplates(){
@@ -84,7 +84,7 @@ app.service('EventTemplateService',
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
-                            console.error('Error while loading event with id :'+id);
+                            console.error('Error while loading eventTemplate with id :'+id);
                             deferred.reject(errResponse);
                         }
                     );
@@ -97,7 +97,7 @@ app.service('EventTemplateService',
                 $http.post(urls.EVENT_TEMPLATE_SERVICE_API, event)
                     .then(
                         function (response) {
-                            loadAllEventTemplates();
+                        	loadEventTemplates(0,10,'',null);
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
@@ -114,7 +114,7 @@ app.service('EventTemplateService',
                 $http.put(urls.EVENT_TEMPLATE_SERVICE_API + id, event)
                     .then(
                         function (response) {
-                            loadAllEventTemplates();
+                            loadEventTemplates(0,10,'',null);
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
@@ -131,7 +131,7 @@ app.service('EventTemplateService',
                 $http.delete(urls.EVENT_TEMPLATE_SERVICE_API + id)
                     .then(
                         function (response) {
-                            loadAllEventTemplates();
+                        	loadEventTemplates(0,10,'',null);
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {

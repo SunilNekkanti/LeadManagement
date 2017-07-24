@@ -45,11 +45,11 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@OneToMany(cascade={ CascadeType.ALL },fetch = FetchType.LAZY, mappedBy = "lead")
 	private List<AgentLeadAppointment> agentLeadAppointmentList;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "insurance_type_id", referencedColumnName = "plan_type_id")
 	private PlanType planType;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ins_id", referencedColumnName = "insurance_id")
 	private Insurance insurance;
 	
@@ -75,7 +75,7 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@Column(name = "lead_Mbr_FirstName")
 	private String firstName;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lead_Mbr_GenderID", referencedColumnName = "gender_id")
 	private Gender genderId;
 

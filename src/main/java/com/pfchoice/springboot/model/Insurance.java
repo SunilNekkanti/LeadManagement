@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 
 /**
@@ -21,6 +23,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "insurance")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Insurance extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -38,7 +41,7 @@ public class Insurance extends RecordDetails implements Serializable {
 
 	
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "plan_type_id", referencedColumnName = "plan_type_id")
+	@JoinColumn(name = "plan_Type_id", referencedColumnName = "plan_type_id")
 	private PlanType planType;
 
 	/**

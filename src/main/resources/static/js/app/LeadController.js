@@ -385,7 +385,7 @@ app
 								self.languages = getAllLanguages();
 								self.statuses = getAllLeadStatuses();
 								self.insurances = getAllInsurances();
-								console.log("self.insurances"+self.insurances);
+								console.log("self.insurances==========================================="+self.insurances);
 								self.planTypes = getAllPlanTypes();
 								self.providers = getAllProviders();
 								self.users = getAllAgents();
@@ -404,13 +404,10 @@ app
 						           var  promise = FileUploadService.uploadFileToUrl(file, self.lead);
 
 						            promise.then(function (response) {
-						            	
-						            	console.log('serverResponse ============='+JSON.stringify(response));
 						            	if(!self.lead.fileUpload){
 						            		self.lead.fileUpload = {};
 						            	}
 						                self.lead.fileUpload.id = response;
-						                console.log('self.serverResponse ============='+self.lead.fileUpload.id);
 						                createLead(self.lead);
 						            }, function () {
 						                self.serverResponse = 'An error has occurred';

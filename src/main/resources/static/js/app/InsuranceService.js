@@ -23,7 +23,7 @@ app.service('InsuranceService',
                     .then(
                         function (response) {
                             console.log('Fetched successfully all insurances');
-                            $localStorage.insurances = response.data;
+                            $localStorage.insurances = response.data.content;
                             deferred.resolve(response);
                         },
                         function (errResponse) {
