@@ -22,7 +22,10 @@ app.constant('urls', {
     EVENT_TEMPLATE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/eventTemplate/',
     LOGIN_USER : 'http://localhost:8080/LeadManagement/getloginInfo',
     FILE_UPLOADER : 'http://localhost:8080/LeadManagement/api/fileUpload/fileProcessing.do' ,
-    COUNTY_SERVICE_API : 'http://localhost:8080/LeadManagement/api/county/' 
+    COUNTY_SERVICE_API : 'http://localhost:8080/LeadManagement/api/county/',
+    EVENT_FREQUENCY_SERVICE_API : 'http://localhost:8080/LeadManagement/api/eventFrequency/',
+    EVENT_MONTH_SERVICE_API : 'http://localhost:8080/LeadManagement/api/eventMonth/',
+    EVENT_WEEKDAY_SERVICE_API : 'http://localhost:8080/LeadManagement/api/eventWeekDay/'
 });
 
 app.controller('NavbarController',  ['$scope', '$state', function($scope, $state){
@@ -311,6 +314,20 @@ app.config(['$stateProvider', '$urlRouterProvider',
 		          EventTemplateService.loadAllEventTemplates().then(deferred.resolve, deferred.resolve);
 		          console.log('deferred.promise'+deferred.promise);
 		          return deferred.promise;
+		      },
+      		  eventMonths: function ($q,  EventMonthService) {
+		          console.log('Load all eventFrequencies');
+		          var deferred = $q.defer();
+		          EventMonthService.loadAllEventMonths().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise;
+		      },
+      		  eventWeekDays: function ($q,  EventWeekDayService) {
+		          console.log('Load all eventFrequencies');
+		          var deferred = $q.defer();
+		          EventWeekDayService.loadAllEventWeekDays().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise;
 		      }
           }
       })
@@ -491,19 +508,53 @@ app.directive('datePickerInput', function() {
 });
 
 
+app.directive('fileModel', ['$parse', function ($parse) {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs, ngModel) {
+            var model = $parse(attrs.fileModel);
+            var isMultiple = attrs.multiple;
+            var modelSetter = model.assign;
+            element.bind('change', function () {
+                var values = [];
+                angular.forEach(element[0].files, function (item) {
+                    var value = {
+                       // File Name 
+                        name: item.name,
+                        //File Size 
+                        size: item.size,
+                        //File URL to view 
+                        url: URL.createObjectURL(item),
+                        // File Input Value 
+                        _file: item
+                    };
+                    values.push(value);
+                });
+                scope.$apply(function () {
+                    if (isMultiple) {
+                        modelSetter(scope, element[0].files);
+                    } else {
+                        modelSetter(scope, element[0].files[0]);
+                    }
+                });
+            });
+        }
+    };
+}]);
+
 /*
 A directive to enable two way binding of file field
 */
-app.directive('fileModel', function ($parse) {
+/*app.directive('fileModel', function ($parse) {
    return {
        restrict: 'A', //the directive can be used as an attribute only
 
-       /*
+       
         link is a function that defines functionality of directive
         scope: scope associated with the element
         element: element on which this directive used
         attrs: key value pair of element attributes
-        */
+        
        link: function (scope, element, attrs, ngModel) {
            var model = $parse(attrs.fileModel),
                modelSetter = model.assign; //define a setter for demoFileModel
@@ -521,6 +572,9 @@ app.directive('fileModel', function ($parse) {
        }
    };
 });
+*/
+
+
 
 
 app.directive('phoneInput', function($filter, $browser) {

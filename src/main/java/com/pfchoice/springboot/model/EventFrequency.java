@@ -11,8 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 
 
 /**
@@ -20,9 +18,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * @author sarath
  */
 @Entity
-@Table(name = "lu_activity_type")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class ActivityType extends RecordDetails implements Serializable {
+@Table(name = "event_frequency")
+public class EventFrequency extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -34,22 +31,26 @@ public class ActivityType extends RecordDetails implements Serializable {
 	private Integer id;
 
 	
-	@Size(min = 3, max = 150, message = "The description must be between {min} and {max} characters long")
+	@Size(min = 3, max = 100, message = "The description must be between {min} and {max} characters long")
 	@Column(name = "description")
 	private String description;
+	
+	@Size(min = 3, max = 10, message = "The shortName must be between {min} and {max} characters long")
+	@Column(name = "shortName")
+	private String shortName;
 
 	
 	/**
 	 * 
 	 */
-	public ActivityType() {
+	public EventFrequency() {
 		super();
 	}
 
 	/**
 	 * @param id
 	 */
-	public ActivityType(final Integer id) {
+	public EventFrequency(final Integer id) {
 		super();
 		this.id = id;
 	}
@@ -84,6 +85,20 @@ public class ActivityType extends RecordDetails implements Serializable {
 		this.description = description;
 	}
 
+	/**
+	 * @return the shortName
+	 */
+	public String getShortName() {
+		return shortName;
+	}
+
+	/**
+	 * @param shortName the shortName to set
+	 */
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
+	}
+
 	@Override
 	public int hashCode() {
 		int hash = 0;
@@ -93,10 +108,10 @@ public class ActivityType extends RecordDetails implements Serializable {
 
 	@Override
 	public boolean equals(Object object) {
-		if (!(object instanceof ActivityType)) {
+		if (!(object instanceof EventFrequency)) {
 			return false;
 		}
-		ActivityType other = (ActivityType) object;
+		EventFrequency other = (EventFrequency) object;
 		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
 			return false;
 		}
@@ -105,7 +120,7 @@ public class ActivityType extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.Activity[ id=" + id + " ]";
+		return "com.pfchoice.core.entity.FacilityCode[ id=" + id + " ]";
 	}
 
 }

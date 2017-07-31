@@ -1,8 +1,16 @@
 package com.pfchoice.springboot.configuration;
 
+import java.util.Properties;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.mail.MailProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,7 +36,33 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 //	@Autowired
 //	private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-	 
+	
+	@Bean
+	@Primary
+	@ConfigurationProperties(prefix = "email")
+	public MailProperties mailProperties(){
+		return new MailProperties();
+	}
+
+	@Bean
+    public JavaMailSender getMailSender() {
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+ 
+        // Using gmail.
+        mailSender.setHost(mailProperties().getHost());
+        mailSender.setPort(mailProperties().getPort());
+        mailSender.setUsername(mailProperties().getUsername());
+        mailSender.setPassword(mailProperties().getPassword());
+        
+        Properties javaMailProperties = new Properties();
+        javaMailProperties.put("mail.smtp.starttls.enable", mailProperties().getProperties().get("mail.smtp.starttls.enable"));
+        javaMailProperties.put("mail.smtp.auth", mailProperties().getProperties().get("mail.smtp.auth"));
+        javaMailProperties.put("mail.transport.protocol", mailProperties().getProperties().get("mail.transport.protocol"));
+        javaMailProperties.put("mail.debug", mailProperties().getProperties().get("mail.debug"));
+ 
+        mailSender.setJavaMailProperties(javaMailProperties);
+        return mailSender;
+    }
 	    
 	@Override
 	public void configure(WebSecurity web) {

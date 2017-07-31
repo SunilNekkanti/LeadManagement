@@ -79,6 +79,12 @@ public class Event extends RecordDetails implements Serializable {
 					@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, updatable = false) })
 	public Set<User> representatives;
 	
+	@ManyToMany( cascade={ CascadeType.MERGE  ,   CascadeType.REMOVE },fetch = FetchType.LAZY)
+	@JoinTable(name = "event_files_upload", joinColumns = {
+			@JoinColumn(name = "event_id", referencedColumnName = "event_id",nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "files_upload_id", referencedColumnName = "file_upload_id",nullable = false, updatable = false) })
+	private Set<FileUpload> attachments;
+	
 
 	/**
 	 * 
@@ -235,6 +241,20 @@ public class Event extends RecordDetails implements Serializable {
 	 */
 	public void setRepresentatives(Set<User> representatives) {
 		this.representatives = representatives;
+	}
+
+	/**
+	 * @return the attachments
+	 */
+	public Set<FileUpload> getAttachments() {
+		return attachments;
+	}
+
+	/**
+	 * @param attachments the attachments to set
+	 */
+	public void setAttachments(Set<FileUpload> attachments) {
+		this.attachments = attachments;
 	}
 
 	@Override

@@ -62,8 +62,14 @@
   <script src="js/app/InsuranceController.js"></script>
   <script src="js/app/EventTemplateController.js"></script>
   <script src="js/app/EventTemplateService.js"></script>
-    <script src="js/app/ActivityTypeController.js"></script>
+  <script src="js/app/ActivityTypeController.js"></script>
   <script src="js/app/ActivityTypeService.js"></script>
+  <script src="js/app/EventFrequencyController.js"></script>
+  <script src="js/app/EventFrequencyService.js"></script>
+  <script src="js/app/EventMonthController.js"></script>
+  <script src="js/app/EventMonthService.js"></script>
+  <script src="js/app/EventWeekDayController.js"></script>
+  <script src="js/app/EventWeekDayService.js"></script>
 </head>
 
 <body class="ng-cloak">

@@ -138,6 +138,23 @@
 	                    </div>
 	                </div>
 	                
+	                 <div class="row fileUploadSection">
+	                    <div class="form-group col-sm-12">
+	                        <div  require>  <label class="col-sm-2  control-label" for="contactEmail">FileUpload</label></div>
+	                        <div class="col-sm-3">
+	                            <input type="file" name="fileUpload[]" class="form-control input-sm" />
+	                  		</div>
+	                    </div>
+	                </div>
+	                 <div class="row fileUploadSection">
+	                    <div class="form-group col-sm-12">
+	                       
+	                        <div class="col-sm-offset-2 col-sm-3">
+	                             <button class="add_field_button">Add More Files</button>
+	                  		</div>
+	                    </div>
+	                </div>
+	                
 	                
 	                <div class="row">
 	                    <div class="form-actions floatCenter col-sm-offset-8">
@@ -151,3 +168,25 @@
     </div>
 
 </div>
+<script>
+	$(document).ready(function() {
+    var max_fields      = 6; //maximum input boxes allowed
+    var wrapper         = $(".fileUploadSection"); //Fields wrapper
+    var add_button      = $(".add_field_button"); //Add button ID
+    
+    var x = 1; //initlal text box count
+    $(add_button).click(function(e){ //on add input button click
+        e.preventDefault();
+        if(x < max_fields){ //max input box allowed
+            x++; //text box increment
+            $(wrapper).append(' <div class="form-group col-sm-12"><div  require>  <label class="col-sm-2  control-label" for="contactEmail">FileUpload</label></div><div class="col-sm-3"><input type="file" name="fileUpload[]" class="form-control input-sm" /></div><a href="#" class="remove_field">Remove</a></div>'); 
+        }
+    });
+    
+    $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+        e.preventDefault(); $(this).parent('div').remove(); x--;
+    })
+});
+
+
+</script>

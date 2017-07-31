@@ -1,9 +1,9 @@
 package com.pfchoice.springboot.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.pfchoice.springboot.model.FileUpload;
-import com.pfchoice.springboot.model.LeadMembership;
 import com.pfchoice.springboot.service.FileUploadService;
 import com.pfchoice.springboot.util.CustomErrorType;
 
@@ -137,39 +136,38 @@ public class FileUploadController {
 
 	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT"  })
 	@RequestMapping(value = { "/fileUpload/fileProcessing.do"}, method = RequestMethod.POST)
-	public Integer  uploadFileProcessing(Model model,
-			@RequestParam(required = true, value = "file") MultipartFile fileUpload,
-			@RequestParam(required = false, value = "lead") LeadMembership lead,
-			HttpServletRequest request) throws  IOException {
-		logger.info("started file processsing");
+	public List<FileUpload>  uploadFileProcessing(Model model,
+			@RequestParam  MultipartFile[] files) throws  IOException {
+		logger.info("started file processsing"+files.toString());
+		logger.info("fileUpload.length:"+files.length);
+		List<FileUpload> fileUploaders = new ArrayList<>();
 		
-		logger.info("started file processsing lead"+lead);
-
-		logger.info("fileUpload :"+fileUpload);
-		logger.info("fileUpload.getOriginalFilename() :"+fileUpload.getOriginalFilename());
-		if (fileUpload != null && !"".equals(fileUpload.getOriginalFilename())) {
-
-			String fileName = fileUpload.getOriginalFilename();
-
-			try {
-			//	String ext = FilenameUtils.getExtension(fileName);
-				logger.info("fileName is : "+fileName);
-
-				FileUpload fileUploads = new FileUpload();
-				fileUploads.setFileName(fileName);
-				fileUploads.setContentType(fileUpload.getContentType());
-				fileUploads.setData(fileUpload.getBytes());
-				fileUploadService.saveFileUpload(fileUploads);
+		for(MultipartFile fileUpload :files) {
+			logger.info("fileUpload :"+fileUpload);
+			logger.info("fileUpload.getOriginalFilename() :"+fileUpload.getOriginalFilename());
+			if (fileUpload != null && !"".equals(fileUpload.getOriginalFilename())) {
+	
+				String fileName = fileUpload.getOriginalFilename();
+	
+				try {
+				//	String ext = FilenameUtils.getExtension(fileName);
+					logger.info("fileName is : "+fileName);
+	
+					FileUpload fileUploader = new FileUpload();
+					fileUploader.setFileName(fileName);
+					fileUploader.setContentType(fileUpload.getContentType());
+					fileUploader.setData(fileUpload.getBytes());
+					fileUploadService.saveFileUpload(fileUploader);
+					
+					fileUploaders.add(fileUploader);
+					
+				} catch (IOException e) {
+					logger.warn(e.getCause().getMessage());
+				} 
 				
-				return fileUploads.getId();
-			} catch (IOException e) {
-				logger.warn(e.getCause().getMessage());
-			} 
-			
-			logger.info("forwarding to Aging");
-			
+			}	
 		}
+			return fileUploaders;
 
-		return null;
 	}
 }

@@ -401,7 +401,7 @@ app
 
 							function uploadFile() {
 						           var file = self.myFile;
-						           var  promise = FileUploadService.uploadFileToUrl(file, self.lead);
+						           var  promise = FileUploadService.uploadFileToUrl(file);
 
 						            promise.then(function (response) {
 						            	if(!self.lead.fileUpload){

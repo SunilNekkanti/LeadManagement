@@ -3,6 +3,18 @@ server:
   contextPath: /LeadManagement
 ---
 
+email: 
+     host: smtp.office365.com
+     port: 587
+     username: skumar@pfchoice.com
+     cc: skumar@pfchoice.com
+     password: Khammam12g
+     properties: 
+        mail.smtp.auth: true 
+        mail.smtp.starttls.enable: true
+        mail.transport.protocol: smtp
+        mail.debug: false
+  
 spring:
   profiles: local,default
 datasource:
@@ -15,6 +27,9 @@ datasource:
     maxPoolSize: 20
     hibernate:
       hbm2ddl.method: validate
-      show_sql: true
-      format_sql: true
+      show_sql: false
+      format_sql: false
       dialect: org.hibernate.dialect.MySQLDialect
+
+
+ 

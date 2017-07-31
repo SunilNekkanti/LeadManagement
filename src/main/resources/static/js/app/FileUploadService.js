@@ -2,11 +2,15 @@
    
     app.service('FileUploadService', ['$http', '$q', 'urls',function ($http, $q, urls) {
 
-        this.uploadFileToUrl = function (file, lead) {
+        this.uploadFileToUrl = function (files) {
             //FormData, object of key/value pair for form fields and values
+        	
             var fileFormData = new FormData();
-            fileFormData.append('file', file);
-          //  fileFormData.append('lead',  JSON.stringify(lead));
+         //  fileFormData.append('files', files);
+        	 $.each(files, function(i, file) {
+        		fileFormData.append('files', file);
+        	}); 
+            
              
             var deffered = $q.defer();
              		

@@ -133,7 +133,7 @@
 				    <div class="form-group">
 				    	<label class="control-label col-sm-4" for="gender">File</label>
 				      	<div class="col-sm-8">
-				        	<input class="col-sm-12  control-label form-control" name="fileUpload" type="file" file-model="ctrl.myFile"  id="myFileField" ng-model="ctrl.myFile" required/>
+				        	<input class="col-sm-12  control-label form-control" name="fileUpload" type="file" file-model="ctrl.myFiles"  ng-model="ctrl.myfiles" id="myFileField"  required/>
                 			<div ng-if="!ctrl.lead.id ">
                   				<div class="has-error" ng-show="myForm.$dirty">
                     				<span ng-show="myForm.fileUpload.$error.required">This is a required field</span>
@@ -165,7 +165,7 @@
 				<fieldset class="col-sm-12" ng-show="ctrl.lead.status.id == 2">
 					<legend>PCP Details</legend>
 						<!-- Select Basic -->
-					
+					<div class="col-sm-12">
 						<div class="col-md-6">
 							<div class="form-group">
 								<label class="col-md-4 control-label" for="uname">PCP </label>
@@ -186,7 +186,8 @@
 	                   			</div>
 							</div>
 						</div>
-						
+					</div>
+					<div class="col-sm-12">	
 						<div class="col-md-6">		
 							<div class="form-group" >
 								<label class="col-md-4 control-label" for="planType">Plan Type</label>
@@ -204,7 +205,8 @@
 						  		</div>
 						  	</div>
 						</div>
-						
+					</div>
+					<div class="col-sm-12">	
 						<div class="col-md-6">
 							<div class="form-group" >
 								<label class="col-md-4 control-label" for="drappointment">Dr Appointment </label>
@@ -225,6 +227,7 @@
 						  		</div>
 							</div>
 						</div>
+					</div>	
 				</fieldset>
 				
 				<fieldset class="col-sm-12">

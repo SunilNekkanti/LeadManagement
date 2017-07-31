@@ -11,21 +11,37 @@ app
 						'StateService',
 						'EventTemplateService',
 						'ActivityTypeService',
+						'FileUploadService',
+						'EventFrequencyService',
+						'EventMonthService',
+						'EventWeekDayService',
 						'$scope',
 						'$compile',
 						'$filter',
 						'DTOptionsBuilder',
 						'DTColumnBuilder',
-						function(EventService, BrokerageService,  FacilityTypeService, UserService, StateService, EventTemplateService, ActivityTypeService, $scope, $compile, $filter,
+						function(EventService, BrokerageService,  FacilityTypeService, UserService, StateService, EventTemplateService, ActivityTypeService, FileUploadService, EventFrequencyService,EventMonthService, EventWeekDayService, $scope, $compile, $filter,
 								DTOptionsBuilder, DTColumnBuilder) {
 
 							var self = this;
 							self.event = {};
 							self.events = [];
+							self.myFiles = [];
+							self.bool = false;
 							self.brokerages = [];
 							self.facilityTypes = [];
 							self.activityTypes = [];
 							self.eventTemplates = [];
+							self.eventFrequencies = ['DAILY','WEEKLY','MONTHLY','YEARLY'];
+							self.eventIntervals = [1,2,3,4,5];
+							self.eventOnDays = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
+							self.eventOnWeeks = ['First','Second','Third','Fourth','Last'];
+							self.eventEndOptions = ['Never','After','On date'];
+							self.eventEndOption = 'Never';
+							self.event.frequency='DAILY';
+							self.eventOnWeekDays = [];
+							self.selectedWeekDays = [];
+							self.eventMonths = [];
 							self.users = [];
 							self.display = false;
 							self.states = [];
@@ -43,11 +59,20 @@ app
 							self.getAllFacilityTypes = getAllFacilityTypes;
 							self.getAllActivityTypes = getAllActivityTypes;
 							self.getAllEventTemplates = getAllEventTemplates;
+							//self.getAllEventFrequencies = getAllEventFrequencies;
+							self.getAllEventMonths = getAllEventMonths;
+							self.getAllEventWeekDays = getAllEventWeekDays;
 							self.eventRepEmails = getEventRepEmails;
+							self.uploadFile = uploadFile;
+							self.eventrrule = eventrrule;
+							self.sync =sync;
+							self.isChecked = isChecked;
 							self.dtInstance = {};
 							self.eventId = null;
 							self.reset = reset;
 							self.today = today;
+							self.repeatDisplay = false;
+							self.repeat = repeat;
 							self.toggleMin = toggleMin;
 							self.successMessage = '';
 							self.errorMessage = '';
@@ -167,7 +192,6 @@ app
 								var length = aoData[4].value;
 								var search = aoData[5].value;
 
-								console.log(JSON.stringify(aoData));
 								// Then just call your service to get the
 								// records from server side
 								EventService
@@ -198,8 +222,8 @@ app
 								console.log('Submitting');
 								if (self.event.id === undefined
 										|| self.event.id === null) {
-									console.log('Saving New Event', self.event);
-									createEvent(self.event);
+									uploadFile();
+									//createEvent(self.event);
 								} else {
 									updateEvent(self.event, self.event.id);
 									console.log('Event updated with id ',
@@ -210,7 +234,6 @@ app
 
 							function createEvent(event) {
 								console.log('About to create event');
-								console.log('event'  + JSON.stringify(event));
 								EventService
 										.createEvent(event)
 										.then(
@@ -287,6 +310,9 @@ app
 								self.facilityTypes = getAllFacilityTypes();
 								self.activityTypes = getAllActivityTypes();
 								self.eventTemplates = getAllEventTemplates();
+								//self.eventFrequencies = getAllEventFrequencies();
+								self.eventMonths =getAllEventMonths();
+								self.eventOnWeekDays =getAllEventWeekDays();
 									EventService
 										.getEvent(id)
 										.then(
@@ -313,8 +339,10 @@ app
 								self.facilityTypes = getAllFacilityTypes();
 								self.activityTypes = getAllActivityTypes();
 								self.eventTemplates = getAllEventTemplates();
+								//self.eventFrequencies = getAllEventFrequencies();
+								self.eventMonths =getAllEventMonths();
+								self.eventOnWeekDays =getAllEventWeekDays();
 								
-								console.log('self.eventTemplates'+self.eventTemplates);
 							}
 
 							function reset() {
@@ -324,6 +352,63 @@ app
 								$scope.myForm.$setPristine(); // reset Form
 							}
 
+							function uploadFile() {
+						           console.log(JSON.stringify(self.myFiles));
+						           var  promise = FileUploadService.uploadFileToUrl(self.myFiles);
+
+						            promise.then(function (response) {
+						            	if(!self.event.attachments){
+						            		self.event.attachments = [];
+						            	}
+						                self.event.attachments = response;
+						                createEvent(self.event);
+						            }, function () {
+						                self.serverResponse = 'An error has occurred';
+						            })
+						        };
+						        
+						    function eventrrule(){
+						    	var rrule = [];
+						    	
+						    	var freq = 'FREQ='+self.event.frequency;
+						    	 rrule.push(freq);
+						    	var byDay ;
+
+						    	if (self.event.frequency== 'WEEKLY' && self.selectedWeekDays.length >0) {
+						    		self.selectedWeekDays = $filter('orderBy')(self.selectedWeekDays, 'id')
+						    			byDay = ';BYDAY='+ self.selectedWeekDays.map(o => o.shortName).join();
+						    		if(byDay)rrule.push(byDay);
+						    	}
+						    	
+						    	if(self.event.frequency== 'MONTHLY' ){
+						    		if(self.onDayorThe && self.onDayorThe==true){
+						    			var byMonthDay =';BYMONTHDAY='+self.event.onDay;
+							    		rrule.push(byMonthDay)
+						    		}else{
+						    			var byMonthWeekAndDay = ';BYSETPOS='+self.eventOnWeek+';BYDAY='+self.eventOnWeekDay.shortName;
+						    			rrule.push(byMonthWeekAndDay)
+						    		}
+						    		
+						    	}
+						    	
+						    	
+						    	var interval = ';INTERVAL='+self.event.interval
+						    	  
+						    	if(self.event.interval) rrule.push(interval);
+						    	
+						    	if(self.eventEndOption  =='After'){
+						    		var count = ';COUNT='+self.eventEndCount;
+						    		 rrule.push(count);
+						    	} else if(ctrl.eventEndCount =='On date'){
+						    		var count = ';UNTIL=='+self.eventUntil;
+						    		 rrule.push(count);
+						    	}
+						    		
+						    	
+						    	return rrule.join('');
+						    	
+						    }
+						    
 							function getEventRepEmails(){
 								alert('getEventRepEmails');
 								 var obj = myForm.eventRepresentatives,
@@ -340,9 +425,44 @@ app
 
 							}
 							
+							function repeat() {
+								self.repeatDisplay = !self.repeatDisplay;
+								if(self.repeatDisplay == true){
+									self.event.interval = 1;
+									self.event.onWeekDay ={"id":1} ;
+									self.event.onWeek='First';
+									self.event.onDay=1;
+									//self.event.frequency ={};
+									//self.event.frequency.id =1;
+									self.event.month = {"id":1};
+									self.onDayorThe =true;
+								}else{
+									self.event.interval = 0;
+									self.event.onWeekDay ={} ;
+									self.event.onWeek='';
+									self.event.onDay=0;
+									//self.event.frequency = {};
+									self.event.month = {};
+								}
+							}
+							
 							function addAgentEventAppointment() {
 								self.event.agentEventAppointments.push(self.selectedAgentEventAppointment);
 							}
+							
+							function getAllEventWeekDays(){
+								return EventWeekDayService.getAllEventWeekDays();
+							}
+							
+							function getAllEventMonths(){
+								return EventMonthService.getAllEventMonths();
+							}
+
+							
+							/*function getAllEventFrequencies(){
+								return EventFrequencyService.getAllEventFrequencies();
+							}*/
+
 							function getAllEvents() {
 								return EventService.getAllEvents();
 							}
@@ -386,7 +506,35 @@ app
 								self.event.eventDateTime  = null;
 							}
 
-
+							function isChecked(id){
+								
+							      var match = false;
+							      for(var i=0 ; i < self.selectedWeekDays.length; i++) {
+							        if(self.selectedWeekDays[i].id == id){
+							        	
+							          match = true;
+							        }
+							      }
+							      
+							      return match;
+							  };
+							  
+							  
+							 function sync(bool, item){
+								    if(bool){
+								      // add item
+								    	self.selectedWeekDays.push(item);
+								    } else {
+								      // remove item
+								      for(var i=0 ; i < self.selectedWeekDays.length; i++) {
+								        if(self.selectedWeekDays[i].id == item.id){
+								        	self.selectedWeekDays.splice(i,1);
+								        }
+								      }      
+								    }
+								  };
+								  
+							  
 							self.inlineOptions = {
 								    customClass: getDayClass,
 								    minDate: new Date(),

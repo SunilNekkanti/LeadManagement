@@ -1,6 +1,9 @@
 package com.pfchoice.springboot.controller;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.mail.MessagingException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.pfchoice.springboot.model.AgentLeadAppointment;
+import com.pfchoice.springboot.model.Email;
 import com.pfchoice.springboot.model.LeadMembership;
 import com.pfchoice.springboot.repositories.specifications.LeadSpecifications;
+import com.pfchoice.springboot.service.EmailService;
 import com.pfchoice.springboot.service.LeadMembershipService;
 import com.pfchoice.springboot.util.CustomErrorType;
 
@@ -35,11 +40,23 @@ public class LeadController {
 
 	@Autowired
 	LeadMembershipService leadService; //Service which will do all data retrieval/manipulation work
+	
 
+	@Autowired
+	EmailService emailService;
+	
 	// -------------------Retrieve All LeadMemberships---------------------------------------------
 	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT"  })
 	@RequestMapping(value = "/lead/", method = RequestMethod.GET)
-	public ResponseEntity<Page<LeadMembership>> listAllLeadMemberships(@RequestParam(value = "page", required = false) int pageNo,  @RequestParam(value = "size", required = false) int pageSize,@RequestParam(value = "search", required = false) String search) {
+	public ResponseEntity<Page<LeadMembership>> listAllLeadMemberships(@RequestParam(value = "page", required = false) int pageNo,  @RequestParam(value = "size", required = false) int pageSize,@RequestParam(value = "search", required = false) String search) throws MessagingException, IOException {
+		
+		Email eParams = new Email();
+		eParams.setEmailTo("skumar@pfchoice.com");
+		eParams.setBody("testing email functionaliity");
+		eParams.setEmailFrom("skumar@pfchoice.com");
+		eParams.setEmailCc("mohangbvn@gmail.com");
+		
+		emailService.sendMailWithAttachment(eParams);
 		
 		PageRequest pageRequest = new PageRequest(pageNo,pageSize );
 		Specification<LeadMembership> spec = new LeadSpecifications(search);

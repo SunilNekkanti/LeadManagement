@@ -38,6 +38,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-freemarker</artifactId>
 		</dependency>
+		
+		<!-- Add Email support -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+		
 		<!-- Add JPA support -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
