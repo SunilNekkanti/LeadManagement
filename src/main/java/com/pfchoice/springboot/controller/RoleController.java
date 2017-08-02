@@ -31,7 +31,7 @@ public class RoleController {
 	RoleService roleService; //Service which will do all data retrieval/manipulation work
 
 	// -------------------Retrieve All Roles---------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT" })
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR" })
 	@RequestMapping(value = "/role/", method = RequestMethod.GET)
 	public ResponseEntity<List<Role>> listAllRoles() {
 		List<Role> roles = roleService.findDistinctRoles();

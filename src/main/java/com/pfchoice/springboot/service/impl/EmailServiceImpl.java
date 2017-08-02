@@ -73,7 +73,7 @@ public class EmailServiceImpl implements EmailService {
                 "ORGANIZER:MAILTO:xx@xx.com\n" +
                 "DTSTART:20161208T053000Z\n" +
                 "DTEND:20161208T060000Z\n" +
-                "LOCATION:Conference room\n" +
+                "LOCATION:Conferenceroom\n" +
                 "TRANSP:OPAQUE\n" +
                 "SEQUENCE:0\n" +
                 "UID:040000008200E00074C5B7101A82E00800000000002FF466CE3AC5010000000000000000100\n" +

@@ -35,7 +35,7 @@ public class ProviderController {
 	ProviderService providerService; //Service which will do all data retrieval/manipulation work
 
 	// -------------------Retrieve All Providers---------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT"  })
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"  })
 	@RequestMapping(value = "/provider/", method = RequestMethod.GET)
 	public ResponseEntity<Page<Provider>> listAllProviders(@RequestParam(value = "page", required = false) Integer pageNo,  @RequestParam(value = "size", required = false) Integer pageSize,@RequestParam(value = "search", required = false) String search) {
 		

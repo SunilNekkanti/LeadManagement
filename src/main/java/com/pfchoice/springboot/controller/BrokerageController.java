@@ -33,7 +33,7 @@ public class BrokerageController {
 	// -------------------Retrieve All Brokerages---------------------------------------------
 
 	
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT" })
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR" })
 	@RequestMapping(value = "/brokerage/", method = RequestMethod.GET)
 	public ResponseEntity<List<Brokerage>> listAllBrokerages() {
 		List<Brokerage> brokerages = brokerageService.findAllBrokerages();

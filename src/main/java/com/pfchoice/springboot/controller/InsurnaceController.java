@@ -35,7 +35,7 @@ public class InsurnaceController {
 
 	// -------------------Retrieve All Insurances---------------------------------------------
 	
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT"  })
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"  })
 	@RequestMapping(value = "/insurance/", method = RequestMethod.GET)
 	public ResponseEntity<?> listAllInsurances(@RequestParam(value = "page", required = false) Integer pageNo,  @RequestParam(value = "size", required = false) Integer pageSize,@RequestParam(value = "search", required = false) String search) {
 		

@@ -9,7 +9,6 @@ app
 						'FacilityTypeService',
 						'UserService',
 						'StateService',
-						'EventTemplateService',
 						'ActivityTypeService',
 						'FileUploadService',
 						'EventFrequencyService',
@@ -20,7 +19,7 @@ app
 						'$filter',
 						'DTOptionsBuilder',
 						'DTColumnBuilder',
-						function(EventService, BrokerageService,  FacilityTypeService, UserService, StateService, EventTemplateService, ActivityTypeService, FileUploadService, EventFrequencyService,EventMonthService, EventWeekDayService, $scope, $compile, $filter,
+						function(EventService, BrokerageService,  FacilityTypeService, UserService, StateService,  ActivityTypeService, FileUploadService, EventFrequencyService,EventMonthService, EventWeekDayService, $scope, $compile, $filter,
 								DTOptionsBuilder, DTColumnBuilder) {
 
 							var self = this;
@@ -31,17 +30,22 @@ app
 							self.brokerages = [];
 							self.facilityTypes = [];
 							self.activityTypes = [];
-							self.eventTemplates = [];
 							self.eventFrequencies = ['DAILY','WEEKLY','MONTHLY','YEARLY'];
 							self.eventIntervals = [1,2,3,4,5];
 							self.eventOnDays = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
-							self.eventOnWeeks = ['First','Second','Third','Fourth','Last'];
+							self.eventOnWeeks = [{"description":"First","id":1} ,{"description":"Second","id":2},{"description":"Third","id":3},{"description":"Fourth","id":4},{"description":"Last","id":-1}];
 							self.eventEndOptions = ['Never','After','On date'];
 							self.eventEndOption = 'Never';
 							self.event.frequency='DAILY';
 							self.eventOnWeekDays = [];
+							self.eventOnWeekDay = {};
+							self.eventOnWeek ='First';
+							self.onDayorThe = true;
 							self.selectedWeekDays = [];
+							self.eventEndCount = 1;
+							self.eventUntil = new Date();
 							self.eventMonths = [];
+							self.eventMonth = {};
 							self.users = [];
 							self.display = false;
 							self.states = [];
@@ -58,13 +62,18 @@ app
 							self.getAllBrokerages = getAllBrokerages;
 							self.getAllFacilityTypes = getAllFacilityTypes;
 							self.getAllActivityTypes = getAllActivityTypes;
-							self.getAllEventTemplates = getAllEventTemplates;
 							//self.getAllEventFrequencies = getAllEventFrequencies;
 							self.getAllEventMonths = getAllEventMonths;
 							self.getAllEventWeekDays = getAllEventWeekDays;
-							self.eventRepEmails = getEventRepEmails;
+							self.getEventRepEmails = getEventRepEmails;
+							self.parseEventRule = parseEventRule;
+							self.findWeekDaysByShortNames = findWeekDaysByShortNames;
 							self.uploadFile = uploadFile;
 							self.eventrrule = eventrrule;
+							
+							//Lead from event
+							self.addLead = self.addLead;
+							self.isOnDayorThe = isOnDayorThe;
 							self.sync =sync;
 							self.isChecked = isChecked;
 							self.dtInstance = {};
@@ -117,26 +126,29 @@ app
 									DTColumnBuilder.newColumn(
 											'representatives[].username').withTitle(
 											'REPRESENTATIVES').withOption('defaultContent', ''),
-									DTColumnBuilder.newColumn('eventTemplate.address1')
+									DTColumnBuilder.newColumn('address1')
 											.withTitle('ADDRESS1').withOption(
 												'defaultContent', ''),
-									DTColumnBuilder.newColumn('eventTemplate.address2')
+									DTColumnBuilder.newColumn('address2')
 													.withTitle('ADDRESS2').withOption(
 													'defaultContent', ''),
-									DTColumnBuilder.newColumn('eventTemplate.city')
+									DTColumnBuilder.newColumn('city')
 												.withTitle('CITY').withOption(
 													'defaultContent', ''),
-									DTColumnBuilder.newColumn('eventTemplate.state.shortName')
+									DTColumnBuilder.newColumn('state.shortName')
 														.withTitle('STATE').withOption(
 														'defaultContent', ''),
-									DTColumnBuilder.newColumn('eventTemplate.zipCode.code')
+									DTColumnBuilder.newColumn('zipCode.code')
 														.withTitle('ZIPCODE').withOption(
 														'defaultContent', ''),
-									DTColumnBuilder.newColumn('eventTemplate.contactPerson')
+									DTColumnBuilder.newColumn('contactPerson')
 															.withTitle('CONTACT PERSON').withOption(
 															'defaultContent', ''),
-									DTColumnBuilder.newColumn('eventTemplate.contactPhone')
+									DTColumnBuilder.newColumn('contactPhone')
 																.withTitle('CONTACT PHONE').withOption(
+																'defaultContent', ''),
+									DTColumnBuilder.newColumn('contactEmail')
+																.withTitle('CONTACT EMAIL').withOption(
 																'defaultContent', '')];
 
 							self.dtOptions = DTOptionsBuilder
@@ -222,6 +234,7 @@ app
 								console.log('Submitting');
 								if (self.event.id === undefined
 										|| self.event.id === null) {
+									self.event.repeatRule = eventrrule();
 									uploadFile();
 									//createEvent(self.event);
 								} else {
@@ -302,6 +315,7 @@ app
 												});
 							}
 							function editEvent(id) {
+								
 								self.successMessage = '';
 								self.errorMessage = '';
 								self.users = getAllAgents();
@@ -309,7 +323,6 @@ app
 								self.brokerages = getAllBrokerages();
 								self.facilityTypes = getAllFacilityTypes();
 								self.activityTypes = getAllActivityTypes();
-								self.eventTemplates = getAllEventTemplates();
 								//self.eventFrequencies = getAllEventFrequencies();
 								self.eventMonths =getAllEventMonths();
 								self.eventOnWeekDays =getAllEventWeekDays();
@@ -318,6 +331,7 @@ app
 										.then(
 												function(event) {
 													self.event = event;
+													parseEventRule();
 													self.display = true;
 												},
 												function(errResponse) {
@@ -338,10 +352,12 @@ app
 								self.brokerages = getAllBrokerages();
 								self.facilityTypes = getAllFacilityTypes();
 								self.activityTypes = getAllActivityTypes();
-								self.eventTemplates = getAllEventTemplates();
 								//self.eventFrequencies = getAllEventFrequencies();
 								self.eventMonths =getAllEventMonths();
+								self.eventMonth = self.eventMonths[0];
 								self.eventOnWeekDays =getAllEventWeekDays();
+								self.eventOnWeekDay = self.eventOnWeekDays[0];
+								self.eventOnWeek = self.eventOnWeeks[0];
 								
 							}
 
@@ -353,7 +369,6 @@ app
 							}
 
 							function uploadFile() {
-						           console.log(JSON.stringify(self.myFiles));
 						           var  promise = FileUploadService.uploadFileToUrl(self.myFiles);
 
 						            promise.then(function (response) {
@@ -385,22 +400,33 @@ app
 						    			var byMonthDay =';BYMONTHDAY='+self.event.onDay;
 							    		rrule.push(byMonthDay)
 						    		}else{
-						    			var byMonthWeekAndDay = ';BYSETPOS='+self.eventOnWeek+';BYDAY='+self.eventOnWeekDay.shortName;
+						    			var byMonthWeekAndDay = ';BYSETPOS='+self.eventOnWeek.id+';BYMONTHDAY='+self.eventOnWeekDay.shortName
 						    			rrule.push(byMonthWeekAndDay)
 						    		}
 						    		
 						    	}
 						    	
+						    	if(self.event.frequency== 'YEARLY' ){
+						    		if(self.onDayorThe && self.onDayorThe==true){
+						    			var byMonthAndDay = ';BYMONTH='+self.event.month.id+';BYMONTHDAY='+self.event.onDay;
+						    			rrule.push(byMonthAndDay)
+						    			
+						    		}else{
+						    			var byDayWeekNoAndMonth =';BYDAY='+self.eventOnWeekDay.shortName+';BYSETPOS='+self.eventOnWeek.id+';BYMONTH='+self.event.month.id;
+							    		rrule.push(byDayWeekNoAndMonth)
+							    	
+						    		}
+						    		
+						    	}
 						    	
 						    	var interval = ';INTERVAL='+self.event.interval
-						    	  
 						    	if(self.event.interval) rrule.push(interval);
 						    	
 						    	if(self.eventEndOption  =='After'){
 						    		var count = ';COUNT='+self.eventEndCount;
 						    		 rrule.push(count);
-						    	} else if(ctrl.eventEndCount =='On date'){
-						    		var count = ';UNTIL=='+self.eventUntil;
+						    	} else if(self.eventEndOption =='On date'){
+						    		var count = ';UNTIL='+self.eventUntil;
 						    		 rrule.push(count);
 						    	}
 						    		
@@ -409,19 +435,43 @@ app
 						    	
 						    }
 						    
+						    function parseEventRule(){
+						    	var res = self.event.repeatRule.split(";");
+						    	if(res.length>0){
+						    		self.repeatDisplay =true;
+						    		for(var i=0;i<res.length;i++){
+						    			var ruleType = res[i].split("=");
+						    			  if(ruleType.length > 1){
+						    				  switch(ruleType[0])
+							    				{
+							    				   case "COUNT": self.eventEndCount = ruleType[1]; self.eventEndOption  ='After' ;break;
+							    				   case "UNTIL": self.eventUntil = ruleType[1];  self.eventEndOption  =='On date'; break;
+							    				   case 'INTERVAL': self.eventInterval = ruleType[1];  break;
+							    				   case 'BYDAY':  findWeekDaysByShortNames( ruleType[1]);  break;
+							    				   case 'BYSETPOS': self.eventOnWeek.id = ruleType[1]; ctrl.onDayorThe =false; break;
+							    				   case 'BYMONTH': self.event.month.id = ruleType[1];  break;
+							    				   case 'BYMONTHDAY': self.event.onDay = ruleType[1];   break;
+							    				   case 'FREQ': self.event.frequency = ruleType[1];  break;
+
+							    				   default: 
+							    					   self.eventEndOption  =='Never';
+							    				}
+						    			  }
+						    				
+
+						    		}
+						    	}
+							  }
+						    
 							function getEventRepEmails(){
-								alert('getEventRepEmails');
-								 var obj = myForm.eventRepresentatives,
-							        options = obj.options, 
-							        selected = [], i, str;
-
-							    for (i = 0; i < options.length; i++) {
-							        options[i].selected && selected.push(obj[i].value);
-							    }
-
-							    str = selected.join();
-							    alert('str'+str);
-							    console.log('str'+str);
+								
+								if(self.event.representatives){
+									var repEmails = self.event.representatives.map(function(agent) {return agent.email;});
+									var str = repEmails.join();
+									return str;
+								}
+								
+								return "";
 
 							}
 							
@@ -492,9 +542,10 @@ app
 							}
 
 							
-							function getAllEventTemplates() {
-								return EventTemplateService
-										.getAllEventTemplates();
+							 
+							
+							function addLead( ){
+								alert("inside lead");
 							}
 
 							function today() {
@@ -506,21 +557,30 @@ app
 								self.event.eventDateTime  = null;
 							}
 
+							function isOnDayorThe(){
+								if(self.onDayorThe){
+									self.event.month = ctrl.event.month||{};
+									self.event.month.id = self.event.month.id || 1
+								}else{
+									self.event.month = ctrl.event.month||{};
+									self.event.month.id = self.event.month.id || 1
+									
+									ctrl.eventOnWeek
+								}
+							}
 							function isChecked(id){
-								
 							      var match = false;
-							      for(var i=0 ; i < self.selectedWeekDays.length; i++) {
+							      for(var i=0 ; i < self.selectedWeekDays.length; i++) 
 							        if(self.selectedWeekDays[i].id == id){
-							        	
-							          match = true;
+							           match = true;
+							          break;
 							        }
-							      }
-							      
 							      return match;
 							  };
 							  
 							  
 							 function sync(bool, item){
+								 
 								    if(bool){
 								      // add item
 								    	self.selectedWeekDays.push(item);
@@ -534,6 +594,11 @@ app
 								    }
 								  };
 								  
+							  function findWeekDaysByShortNames(shortNames){
+								    self.selectedWeekDays = self.eventOnWeekDays.filter(function(weekday){
+									    return shortNames.indexOf(weekday.shortName)> -1 ;
+									});
+							  }
 							  
 							self.inlineOptions = {
 								    customClass: getDayClass,
@@ -618,5 +683,7 @@ app
 
 								    return '';
 								  }
+								  
+								  
 	} 
 ]);

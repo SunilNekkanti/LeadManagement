@@ -29,6 +29,7 @@
    <script data-require="angular-datatables@*" data-semver="0.6.0" src="//cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.0/angular-datatables.min.js"></script>
    <script data-require="ngStorage@0.3.0" data-semver="0.3.0" src="http://rawgit.com/gsklee/ngStorage/0.3.0/ngStorage.min.js"></script>
    <script data-require="ui-router@1.0.0-beta.2" data-semver="1.0.0-beta.2" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.0-beta.2/angular-ui-router.js"></script>
+    <script data-require="ui-bootstrap@*" data-semver="0.12.0" src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.0.min.js"></script>
    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.0.js"></script>
  
   <script src="js/app/app.js"></script>
@@ -60,8 +61,6 @@
   <script src="js/app/ProviderController.js"></script>
   <script src="js/app/LeadStatusController.js"></script>
   <script src="js/app/InsuranceController.js"></script>
-  <script src="js/app/EventTemplateController.js"></script>
-  <script src="js/app/EventTemplateService.js"></script>
   <script src="js/app/ActivityTypeController.js"></script>
   <script src="js/app/ActivityTypeService.js"></script>
   <script src="js/app/EventFrequencyController.js"></script>

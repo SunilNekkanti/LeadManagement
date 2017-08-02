@@ -19,7 +19,6 @@ app.constant('urls', {
     ACTIVITYTYPE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/activityType/',
     BROKERAGE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/brokerage/',
     EVENT_SERVICE_API : 'http://localhost:8080/LeadManagement/api/event/',
-    EVENT_TEMPLATE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/eventTemplate/',
     LOGIN_USER : 'http://localhost:8080/LeadManagement/getloginInfo',
     FILE_UPLOADER : 'http://localhost:8080/LeadManagement/api/fileUpload/fileProcessing.do' ,
     COUNTY_SERVICE_API : 'http://localhost:8080/LeadManagement/api/county/',
@@ -96,7 +95,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
           }
       })
       .state('lead', {
-          url: '/lead',
+          url: '/lead/?eventId',
           templateUrl: 'partials/lead_list',
           controller:'LeadController',
           controllerAs:'ctrl',
@@ -176,6 +175,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
 		      
           }
       })
+      
       .state('role', {
           url: '/role',
           templateUrl: 'partials/role_list',

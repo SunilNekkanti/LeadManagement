@@ -31,7 +31,7 @@ public class CountyController {
 	CountyService countyService; //Service which will do all data retrieval/manipulation work
 
 	// -------------------Retrieve All Countys---------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR" })
 	@RequestMapping(value = "/county/", method = RequestMethod.GET)
 	public ResponseEntity<List<County>> listAllCountys() {
 		List<County> countys = countyService.findAllCountys();

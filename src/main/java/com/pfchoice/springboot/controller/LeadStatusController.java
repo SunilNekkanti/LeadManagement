@@ -31,7 +31,7 @@ public class LeadStatusController {
 	LeadStatusService leadStatusService; //Service which will do all data retrieval/manipulation work
 
 	// -------------------Retrieve All LeadStatuses---------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT"  })
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"  })
 	@RequestMapping(value = "/leadStatus/", method = RequestMethod.GET)
 	public ResponseEntity<List<LeadStatus>> listAllLeadStatuses() {
 		List<LeadStatus> leadStatuss = leadStatusService.findAllLeadStatuses();

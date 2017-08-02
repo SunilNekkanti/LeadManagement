@@ -46,17 +46,17 @@ public class LeadController {
 	EmailService emailService;
 	
 	// -------------------Retrieve All LeadMemberships---------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT"  })
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"  })
 	@RequestMapping(value = "/lead/", method = RequestMethod.GET)
 	public ResponseEntity<Page<LeadMembership>> listAllLeadMemberships(@RequestParam(value = "page", required = false) int pageNo,  @RequestParam(value = "size", required = false) int pageSize,@RequestParam(value = "search", required = false) String search) throws MessagingException, IOException {
 		
-		Email eParams = new Email();
+/*		Email eParams = new Email();
 		eParams.setEmailTo("skumar@pfchoice.com");
 		eParams.setBody("testing email functionaliity");
 		eParams.setEmailFrom("skumar@pfchoice.com");
 		eParams.setEmailCc("mohangbvn@gmail.com");
 		
-		emailService.sendMailWithAttachment(eParams);
+		emailService.sendMailWithAttachment(eParams);*/
 		
 		PageRequest pageRequest = new PageRequest(pageNo,pageSize );
 		Specification<LeadMembership> spec = new LeadSpecifications(search);
@@ -71,7 +71,7 @@ public class LeadController {
 	}
 
 	// -------------------Retrieve Single LeadMembership------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT"  })
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"   })
 	@RequestMapping(value = "/lead/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getLeadMembership(@PathVariable("id") int id) {
 		logger.info("Fetching LeadMembership with id {}", id);
@@ -85,7 +85,7 @@ public class LeadController {
 	}
 
 	// -------------------Create a LeadMembership-------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"  })
 	@RequestMapping(value = "/lead/", method = RequestMethod.POST)
 	public ResponseEntity<?> createLeadMembership(@RequestBody LeadMembership lead, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating LeadMembership : {}", lead);
@@ -105,7 +105,7 @@ public class LeadController {
 	}
 
 	// ------------------- Update a LeadMembership ------------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT" })
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"  })
 	@RequestMapping(value = "/lead/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateLeadMembership(@PathVariable("id") int id, @RequestBody LeadMembership lead) {
 		logger.info("Updating LeadMembership with id {}", id);

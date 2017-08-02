@@ -34,7 +34,7 @@ public class LanguageController {
 	LanguageService languageService; //Service which will do all data retrieval/manipulation work
 
 	// -------------------Retrieve All Languages---------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT"  })
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"  })
 	@RequestMapping(value = "/language/", method = RequestMethod.GET)
 	public ResponseEntity<Page<Language>> listAllLanguages(@RequestParam(value = "page", required = false) Integer pageNo,  @RequestParam(value = "size", required = false) Integer pageSize,@RequestParam(value = "search", required = false) String search) {
 		pageNo = (pageNo == null)?0:pageNo;

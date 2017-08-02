@@ -32,7 +32,7 @@ public class GenderController {
 
 	// -------------------Retrieve All Genders---------------------------------------------
 	
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT"  })
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"  })
 	@RequestMapping(value = "/gender/", method = RequestMethod.GET)
 	public ResponseEntity<List<Gender>> listAllGenders() {
 		List<Gender> genders = genderService.findAllGenders();

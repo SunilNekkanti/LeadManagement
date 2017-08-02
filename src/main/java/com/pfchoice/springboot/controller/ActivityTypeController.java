@@ -31,7 +31,7 @@ public class ActivityTypeController {
 	ActivityTypeService activityTypeService; //Service which will do all data retrieval/manipulation work
 
 	// -------------------Retrieve All ActivityTypes---------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR" })
 	@RequestMapping(value = "/activityType/", method = RequestMethod.GET)
 	public ResponseEntity<List<ActivityType>> listAllActivityTypes() {
 		List<ActivityType> activityTypes = activityTypeService.findAllActivityTypes();

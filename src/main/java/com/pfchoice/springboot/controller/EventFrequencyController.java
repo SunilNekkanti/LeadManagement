@@ -31,7 +31,7 @@ public class EventFrequencyController {
 	EventFrequencyService eventFrequencyService; //Service which will do all data retrieval/manipulation work
 
 	// -------------------Retrieve All EventFrequencys---------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR" })
 	@RequestMapping(value = "/eventFrequency/", method = RequestMethod.GET)
 	public ResponseEntity<List<EventFrequency>> listAllEventFrequencys() {
 		List<EventFrequency> eventFrequencys = eventFrequencyService.findAllEventFrequencies();

@@ -31,7 +31,7 @@ public class EventWeekDayController {
 	EventWeekDayService eventWeekDayService; //Service which will do all data retrieval/manipulation work
 
 	// -------------------Retrieve All EventWeekDays---------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR" })
 	@RequestMapping(value = "/eventWeekDay/", method = RequestMethod.GET)
 	public ResponseEntity<List<EventWeekDay>> listAllEventWeekDays() {
 		List<EventWeekDay> eventWeekDays = eventWeekDayService.findAllEventFrequencies();

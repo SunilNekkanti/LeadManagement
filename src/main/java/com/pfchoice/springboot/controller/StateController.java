@@ -31,7 +31,7 @@ public class StateController {
 	StateService stateService; //Service which will do all data retrieval/manipulation work
 
 	// -------------------Retrieve All States---------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT"  })
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"  })
 	@RequestMapping(value = "/state/", method = RequestMethod.GET)
 	public ResponseEntity<List<State>> listAllStates() {
 		List<State> states = stateService.findAllStates();

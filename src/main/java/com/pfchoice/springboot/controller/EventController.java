@@ -36,7 +36,7 @@ public class EventController {
 	// -------------------Retrieve All Events---------------------------------------------
 
 	
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"  })
 	@RequestMapping(value = "/event/", method = RequestMethod.GET)
 	public ResponseEntity<Page<Event>> listAllEvents(@RequestParam("page") Integer pageNo,  @RequestParam("size") Integer pageSize, @RequestParam(value = "search", required = false) String search) {
 		
@@ -59,7 +59,7 @@ public class EventController {
 	}
 
 	// -------------------Retrieve Single Event------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"   })
 	@RequestMapping(value = "/event/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getEvent(@PathVariable("id") int id) {
 		logger.info("Fetching Event with id {}", id);

@@ -33,7 +33,7 @@ public class UserController {
 
 	@Autowired
 	UserService userService; //Service which will do all data retrieval/manipulation work
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT" })
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR" })
 	// -------------------Retrieve Users as per page request ---------------------------------------------
 	
 	@RequestMapping(value = "/user/", method = RequestMethod.GET)
@@ -57,7 +57,7 @@ public class UserController {
 	}
 
 	// -------------------Retrieve Single User------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"  })
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getUser(@PathVariable("id") int id) {
 		logger.info("Fetching User with id {}", id);

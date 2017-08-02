@@ -33,7 +33,7 @@ public class LeadNotesController {
 	// -------------------Retrieve All LeadNotess---------------------------------------------
 
 	
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT" })
+	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR" })
 	@RequestMapping(value = "/leadNotes/", method = RequestMethod.GET)
 	public ResponseEntity<List<LeadNotes>> listAllLeadNotess() {
 		List<LeadNotes> leadNotess = leadNotesService.findAllLeadNotes();

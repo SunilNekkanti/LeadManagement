@@ -65,14 +65,39 @@ public class Event extends RecordDetails implements Serializable {
 	private String notes;
 	
 	@ManyToOne
-	@JoinColumn(name = "event_template_id", referencedColumnName = "event_template_id")
-	private EventTemplate eventTemplate;
-	
-	@ManyToOne
 	@JoinColumn(name = "event_activity_type_id", referencedColumnName = "code")
 	private ActivityType activityType;
 	
+	@Column(name = "address1")
+	private String address1;
+	
+	@Column(name = "address2")
+	private String address2;
 
+	@Column(name = "city")
+	private String city;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "state", referencedColumnName = "code")
+	private State state;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "zipcode", referencedColumnName = "zipcode")
+	private ZipCode zipCode;
+	
+	@Column(name = "contact_person")
+	private String contactPerson;
+	
+	@Column(name = "contact_phone")
+	private String contactPhone;
+
+	@Column(name = "contact_email")
+	private String contactEmail;
+	
+	@Column(name = "repeat_rule")
+	private String repeatRule;
+	
+	
 	@ManyToMany( cascade={ CascadeType.MERGE  ,   CascadeType.REMOVE },fetch = FetchType.LAZY)
 	@JoinTable(name = "event_representatives", joinColumns = {
 			@JoinColumn(name = "event_id", referencedColumnName = "event_id",nullable = false, updatable = false) }, inverseJoinColumns = {
@@ -146,6 +171,118 @@ public class Event extends RecordDetails implements Serializable {
 	}
 
 	/**
+	 * @return the address1
+	 */
+	public String getAddress1() {
+		return address1;
+	}
+
+	/**
+	 * @param address1 the address1 to set
+	 */
+	public void setAddress1(String address1) {
+		this.address1 = address1;
+	}
+
+	/**
+	 * @return the address2
+	 */
+	public String getAddress2() {
+		return address2;
+	}
+
+	/**
+	 * @param address2 the address2 to set
+	 */
+	public void setAddress2(String address2) {
+		this.address2 = address2;
+	}
+
+	/**
+	 * @return the city
+	 */
+	public String getCity() {
+		return city;
+	}
+
+	/**
+	 * @param city the city to set
+	 */
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	/**
+	 * @return the state
+	 */
+	public State getState() {
+		return state;
+	}
+
+	/**
+	 * @param state the state to set
+	 */
+	public void setState(State state) {
+		this.state = state;
+	}
+
+	/**
+	 * @return the zipCode
+	 */
+	public ZipCode getZipCode() {
+		return zipCode;
+	}
+
+	/**
+	 * @param zipCode the zipCode to set
+	 */
+	public void setZipCode(ZipCode zipCode) {
+		this.zipCode = zipCode;
+	}
+
+	/**
+	 * @return the contactPerson
+	 */
+	public String getContactPerson() {
+		return contactPerson;
+	}
+
+	/**
+	 * @param contactPerson the contactPerson to set
+	 */
+	public void setContactPerson(String contactPerson) {
+		this.contactPerson = contactPerson;
+	}
+
+	/**
+	 * @return the contactPhone
+	 */
+	public String getContactPhone() {
+		return contactPhone;
+	}
+
+	/**
+	 * @param contactPhone the contactPhone to set
+	 */
+	public void setContactPhone(String contactPhone) {
+		this.contactPhone = contactPhone;
+	}
+
+	/**
+	 * @return the contactEmail
+	 */
+	public String getContactEmail() {
+		return contactEmail;
+	}
+
+	/**
+	 * @param contactEmail the contactEmail to set
+	 */
+	public void setContactEmail(String contactEmail) {
+		this.contactEmail = contactEmail;
+	}
+
+	/**
 	 * @return the facilityType
 	 */
 	public FacilityType getFacilityType() {
@@ -201,19 +338,6 @@ public class Event extends RecordDetails implements Serializable {
 		this.eventDateEndTime = eventDateEndTime;
 	}
 
-	/**
-	 * @return the eventTemplate
-	 */
-	public EventTemplate getEventTemplate() {
-		return eventTemplate;
-	}
-
-	/**
-	 * @param eventTemplate the eventTemplate to set
-	 */
-	public void setEventTemplate(EventTemplate eventTemplate) {
-		this.eventTemplate = eventTemplate;
-	}
 
 	/**
 	 * @return the activityType
@@ -227,6 +351,20 @@ public class Event extends RecordDetails implements Serializable {
 	 */
 	public void setActivityType(ActivityType activityType) {
 		this.activityType = activityType;
+	}
+
+	/**
+	 * @return the repeatRule
+	 */
+	public String getRepeatRule() {
+		return repeatRule;
+	}
+
+	/**
+	 * @param repeatRule the repeatRule to set
+	 */
+	public void setRepeatRule(String repeatRule) {
+		this.repeatRule = repeatRule;
 	}
 
 	/**
