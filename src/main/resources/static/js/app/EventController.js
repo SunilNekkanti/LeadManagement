@@ -15,11 +15,12 @@ app
 						'EventMonthService',
 						'EventWeekDayService',
 						'$scope',
+						'$state',
 						'$compile',
 						'$filter',
 						'DTOptionsBuilder',
 						'DTColumnBuilder',
-						function(EventService, BrokerageService,  FacilityTypeService, UserService, StateService,  ActivityTypeService, FileUploadService, EventFrequencyService,EventMonthService, EventWeekDayService, $scope, $compile, $filter,
+						function(EventService, BrokerageService,  FacilityTypeService, UserService, StateService,  ActivityTypeService, FileUploadService, EventFrequencyService,EventMonthService, EventWeekDayService, $scope,$state, $compile, $filter,
 								DTOptionsBuilder, DTColumnBuilder) {
 
 							var self = this;
@@ -72,7 +73,7 @@ app
 							self.eventrrule = eventrrule;
 							
 							//Lead from event
-							self.addLead = self.addLead;
+							self.addLead = addLead;
 							self.isOnDayorThe = isOnDayorThe;
 							self.sync =sync;
 							self.isChecked = isChecked;
@@ -545,7 +546,9 @@ app
 							 
 							
 							function addLead( ){
-								alert("inside lead");
+								$scope.$emit('selected-event', self.event);
+								$state.go('lead', {eventId: self.event.id, leadDisplay:true});
+								
 							}
 
 							function today() {

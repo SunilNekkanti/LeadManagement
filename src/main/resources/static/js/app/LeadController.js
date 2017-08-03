@@ -16,13 +16,15 @@ app
 						'EventService',
 						'FileUploadService',
 						'$scope',
+						'$location',
+						'$stateParams',
 						'$compile',
 						'$filter',
 						'DTOptionsBuilder',
 						'DTColumnBuilder',
 						function(LeadService, GenderService, StateService,
 								LeadStatusService, LanguageService,
-								InsuranceService, PlanTypeService, ProviderService, UserService, EventService, FileUploadService, $scope, $compile, $filter,
+								InsuranceService, PlanTypeService, ProviderService, UserService, EventService, FileUploadService, $scope, $location, $stateParams, $compile, $filter,
 								DTOptionsBuilder, DTColumnBuilder) {
 
 							var self = this;
@@ -32,8 +34,10 @@ app
 							self.lead = {};
 							//self.lead.bestTimeToCall = "1988-04-21T18:25:43-05:00";
 							self.leads = [];
+							self.leadEventId = $stateParams.eventId;
 							self.genders = [];
 							self.states = [];
+						//	$location.url('/');
 							self.languages = [];
 							self.statuses = [];
 							self.insurances = [];
@@ -42,7 +46,7 @@ app
 							self.selectedAgentLeadAppointment = {};
 							self.users = [];
 							self.events = [];
-							self.display = false;
+							self.display = $stateParams.leadDisplay||false;
 							self.displayEditButton = false;
 							self.submit = submit;
 							self.addLead = addLead;
@@ -65,6 +69,13 @@ app
 							self.getAllEvents = getAllEvents;
 							self.uploadFile = uploadFile;
 							self.addAgentLeadAppointment = addAgentLeadAppointment;
+							self.showAgentAssignment = showAgentAssignment;
+							self.showEventSource = showEventSource;
+							self.showStatusChangeDetails =showStatusChangeDetails;
+							self.showEventStatus =showEventStatus;
+							self.showLeadAdditionalDetails = showLeadAdditionalDetails;
+							self.configLeadEvent = configLeadEvent;
+							 configLeadEvent();
 							self.reset = reset;
 							loginUser : loginUser;
 							self.today = today;
@@ -377,6 +388,11 @@ app
 							}
 
 							function addLead() {
+								
+								$scope.$on('selected-event',  function(event, eventId) {
+									self.lead.event.id =eventId;
+							    });
+								
 								self.successMessage = '';
 								self.errorMessage = '';
 								self.display = true;
@@ -385,7 +401,6 @@ app
 								self.languages = getAllLanguages();
 								self.statuses = getAllLeadStatuses();
 								self.insurances = getAllInsurances();
-								console.log("self.insurances==========================================="+self.insurances);
 								self.planTypes = getAllPlanTypes();
 								self.providers = getAllProviders();
 								self.users = getAllAgents();
@@ -414,6 +429,79 @@ app
 						            })
 						        };
 							
+						        function configLeadEvent(){
+						        	self.successMessage = '';
+									self.errorMessage = '';
+									
+									if(self.leadEventId){
+										EventService
+										.getEvent(self.leadEventId).then(
+												function(event) {
+													self.lead.event = event;
+													self.events = getAllEvents();
+												},
+												function(errResponse) {
+													console
+															.error('Error while fetching event '
+																	+ self.leadEventId
+																	+ ', Error :'
+																	+ errResponse.data);
+												});;
+									}
+						        }
+						    function showAgentAssignment(){
+						    	
+						    	if(self.loginUser.roleName != 'ROLE_AGENT' && self.loginUser.roleName != 'ROLE_EVENT_COORDINATOR'){
+						    		return true;
+						    	}else{
+						    		return false;
+						    	}
+						    }
+						    
+						    function showEventStatus(){
+						    	alert('self.loginUser.roleName'+JSON.stringify(self.loginUser.roleName));
+						    	if(self.loginUser.roleName != 'ROLE_EVENT_COORDINATOR'){
+						    		return true;
+						    	}else{
+						    		return false;
+						    	}
+						    }
+						    
+						    function showEventSource(){
+						    	if(self.loginUser.roleName != 'ROLE_AGENT'){
+						    		return true;
+						    	}else{
+						    		return false;
+						    	}
+						    }
+						    
+						    function showEventStatus(){
+						    	if(self.loginUser.roleName != 'ROLE_EVENT_COORDINATOR'){
+						    		return true;
+						    	}else{
+						    		return false;
+						    	}
+						    }
+ 
+						    function showStatusChangeDetails(){
+						    	if(self.loginUser.roleName != 'ROLE_EVENT_COORDINATOR' && self.lead.status && self.lead.status.id == 2){
+						    		return true;
+						    	}else{
+						    		return false;
+						    	}
+						    }
+						    
+						    function showLeadAdditionalDetails(){
+						    	if(self.loginUser.roleName == 'ROLE_EVENT_COORDINATOR' || self.loginUser.roleName == 'ROLE_ADMIN'){
+						    		return true;
+						    	}else{
+						    		return false;
+						    	}
+						    }
+						    
+						    
+						    
+						    
 							function addAgentLeadAppointment() {
 								self.lead.agentLeadAppointments.push(self.selectedAgentLeadAppointment);
 							}
@@ -465,6 +553,8 @@ app
 								return EventService
 										.getAllEvents();
 							}
+							
+							
 							
 							function today() {
 								    self.bestTimeToCall = new Date();

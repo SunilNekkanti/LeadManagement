@@ -19,25 +19,19 @@
       <form ng-submit="ctrl.submit()" name="myForm" class="form-horizontal">
         <input type="hidden" ng-model="ctrl.lead.id" />
 
-
-        <div class="col-sm-12 sourceInfo">
+        <div class="col-sm-12 sourceInfo" ng-show="ctrl.showEventSource()">
           <div class="panel panel-default">
             <div class="panel-heading">Source</div>
             <div class="panel-body">
               <div class="row">
                 <div class="col-sm-6">
                   <div class="form-group col-sm-12">
-                    <label for="agentEvent"> Agent Event </label>
-                    <input type="text" class="form-control" placeholder="Agent Event" />
+                    <label for="agentEvent">Event </label>
+                     <select ng-model="ctrl.lead.event" class="form-control" ng-options="event.eventName for event in ctrl.events  | orderBy:'eventName'  track by event.eventName" required></select>
                   </div>
                 </div>
 
-                <div class="col-sm-6">
-                  <div class="form-group col-sm-12">
-                    <label for="agentName">Agent Name</label>
-                    <input type="text" class="form-control" placeholder="Agent Name" />
-                  </div>
-                </div>
+             
               </div>
             </div>
           </div>
@@ -207,7 +201,7 @@
           </div>
         </div>
 
-        <div class="col-sm-12 additionalInfo">
+        <div class="col-sm-12 additionalInfo" ng-show="ctrl.showLeadAdditionalDetails()">
           <div class="panel panel-default">
             <div class="panel-heading">Additional Details</div>
             <div class="panel-body">
@@ -250,10 +244,9 @@
           </div>
         </div>
 
-
-        <div class="col-sm-12 agentInfo">
+        <div class="col-sm-12 agentInfo" ng-show="ctrl.showAgentAssignment()">
           <div class="panel panel-default">
-            <div class="panel-heading">Agent</div>
+            <div class="panel-heading">Agent Assignment</div>
             <div class="panel-body">
               <div class="row col-md-6">
                 <div class="col-sm-12">
@@ -289,8 +282,7 @@
           </div>
         </div>
 
-
-        <div class="col-sm-12 statusInfo">
+        <div class="col-sm-12 statusInfo" ng-show="ctrl.showEventStatus()">
           <div class="panel panel-default">
             <div class="panel-heading">Status</div>
             <div class="panel-body">
@@ -302,7 +294,7 @@
 
 
 
-        <div class="col-sm-12 pcpInfo" ng-show="ctrl.lead.status.id == 2">
+        <div class="col-sm-12 pcpInfo" ng-show="ctrl.showStatusChangeDetails()">
           <div class="panel panel-default">
             <div class="panel-heading">PCP Details</div>
             <div class="panel-body">

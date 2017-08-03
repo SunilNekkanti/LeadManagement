@@ -285,7 +285,7 @@
                     <select class="form-control col-md-7" ng-disabled="ctrl.onDayorThe==false" ng-model="ctrl.event.month" name="onMonth" ng-options="ctrl.event.month as eventMonth.description for eventMonth in ctrl.eventMonths track by eventMonth.id"></select>
                   </div>
                   <div class="col-md-3">
-                    <select class="form-control col-md-4" ng-disabled="ctrl.onDayorThe==false" ng-model="ctrl.event.onDay"  name="ondays" ng-options=+(i) for i in ctrl.eventOnDays "></select>
+                    <select class="form-control col-md-4" ng-disabled="ctrl.onDayorThe==false" ng-model="ctrl.event.onDay"  name="ondays" ng-options="i for i in ctrl.eventOnDays "></select>
                   </div>
                   <div class="col-md-3"> </div>
                 </div>

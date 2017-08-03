@@ -27,7 +27,7 @@ app.constant('urls', {
     EVENT_WEEKDAY_SERVICE_API : 'http://localhost:8080/LeadManagement/api/eventWeekDay/'
 });
 
-app.controller('NavbarController',  ['$scope', '$state', function($scope, $state){
+app.controller('NavbarController',  ['$scope', '$state', '$stateParams', function($scope, $state, $stateParams){
   $scope.isCollapsed = true;
   $scope.displayNavbar = true;
   $scope.callMe = function(url){
@@ -95,7 +95,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
           }
       })
       .state('lead', {
-          url: '/lead/?eventId',
+          url: '/lead/?eventId&leadDisplay',
           templateUrl: 'partials/lead_list',
           controller:'LeadController',
           controllerAs:'ctrl',
@@ -305,13 +305,6 @@ app.config(['$stateProvider', '$urlRouterProvider',
 		          console.log('Load all states');
 		          var deferred = $q.defer();
 		          StateService.loadAllStates().then(deferred.resolve, deferred.resolve);
-		          console.log('deferred.promise'+deferred.promise);
-		          return deferred.promise;
-		      },
-      		  eventTemplates: function ($q,  EventTemplateService) {
-		          console.log('Load all eventTemplates');
-		          var deferred = $q.defer();
-		          EventTemplateService.loadAllEventTemplates().then(deferred.resolve, deferred.resolve);
 		          console.log('deferred.promise'+deferred.promise);
 		          return deferred.promise;
 		      },
