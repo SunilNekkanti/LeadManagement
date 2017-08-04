@@ -15,12 +15,13 @@ app
 						'EventMonthService',
 						'EventWeekDayService',
 						'$scope',
+						'$rootScope',
 						'$state',
 						'$compile',
 						'$filter',
 						'DTOptionsBuilder',
 						'DTColumnBuilder',
-						function(EventService, BrokerageService,  FacilityTypeService, UserService, StateService,  ActivityTypeService, FileUploadService, EventFrequencyService,EventMonthService, EventWeekDayService, $scope,$state, $compile, $filter,
+						function(EventService, BrokerageService,  FacilityTypeService, UserService, StateService,  ActivityTypeService, FileUploadService, EventFrequencyService,EventMonthService, EventWeekDayService, $scope,$rootScope,$state, $compile, $filter,
 								DTOptionsBuilder, DTColumnBuilder) {
 
 							var self = this;
@@ -543,10 +544,8 @@ app
 							}
 
 							
-							 
 							
 							function addLead( ){
-								$scope.$emit('selected-event', self.event);
 								$state.go('lead', {eventId: self.event.id, leadDisplay:true});
 								
 							}

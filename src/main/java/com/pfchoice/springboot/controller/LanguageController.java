@@ -34,7 +34,7 @@ public class LanguageController {
 	LanguageService languageService; //Service which will do all data retrieval/manipulation work
 
 	// -------------------Retrieve All Languages---------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"  })
+	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER"  })
 	@RequestMapping(value = "/language/", method = RequestMethod.GET)
 	public ResponseEntity<Page<Language>> listAllLanguages(@RequestParam(value = "page", required = false) Integer pageNo,  @RequestParam(value = "size", required = false) Integer pageSize,@RequestParam(value = "search", required = false) String search) {
 		pageNo = (pageNo == null)?0:pageNo;
@@ -55,7 +55,7 @@ public class LanguageController {
 	}
 
 	// -------------------Retrieve Single Language------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/language/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getLanguage(@PathVariable("id") short id) {
 		logger.info("Fetching Language with id {}", id);
@@ -69,7 +69,7 @@ public class LanguageController {
 	}
 
 	// -------------------Create a Language-------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/language/", method = RequestMethod.POST)
 	public ResponseEntity<?> createLanguage(@RequestBody Language language, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating Language : {}", language);
@@ -87,7 +87,7 @@ public class LanguageController {
 	}
 
 	// ------------------- Update a Language ------------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/language/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateLanguage(@PathVariable("id") short id, @RequestBody Language language) {
 		logger.info("Updating Language with id {}", id);
@@ -107,7 +107,7 @@ public class LanguageController {
 	}
 
 	// ------------------- Delete a Language-----------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/language/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteLanguage(@PathVariable("id") short id) {
 		logger.info("Fetching & Deleting Language with id {}", id);
@@ -123,7 +123,7 @@ public class LanguageController {
 	}
 
 	// ------------------- Delete All Languages-----------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/language/", method = RequestMethod.DELETE)
 	public ResponseEntity<Language> deleteAllLanguages() {
 		logger.info("Deleting All Languages");

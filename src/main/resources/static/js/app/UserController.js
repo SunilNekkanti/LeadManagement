@@ -69,7 +69,7 @@ app.controller('UserController',
 				.withOption("bLengthChange", false)
 				.withOption("bPaginate", true)
 				.withOption('bProcessing', true)
-				.withOption('bSaveState', true)
+				.withOption('bStateSave', true)
 		        .withDisplayLength(10).withOption( 'columnDefs', [ {
 					                                orderable : false,
 													className : 'select-checkbox',

@@ -77,7 +77,7 @@ public class LeadMembership extends RecordDetails implements Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lead_Mbr_GenderID", referencedColumnName = "gender_id")
-	private Gender genderId;
+	private Gender gender;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lead_Mbr_languageId", referencedColumnName = "code")
@@ -192,8 +192,8 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	/**
 	 * @return the genderId
 	 */
-	public Gender getGenderId() {
-		return genderId;
+	public Gender getGender() {
+		return gender;
 	}
 
 	/**
@@ -269,8 +269,8 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	 * @param genderId
 	 *            the genderId to set
 	 */
-	public void setGenderId(final Gender genderId) {
-		this.genderId = genderId;
+	public void setGender(final Gender gender) {
+		this.gender = gender;
 	}
 
 

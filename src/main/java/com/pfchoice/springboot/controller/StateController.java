@@ -31,7 +31,7 @@ public class StateController {
 	StateService stateService; //Service which will do all data retrieval/manipulation work
 
 	// -------------------Retrieve All States---------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"  })
+	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER"  })
 	@RequestMapping(value = "/state/", method = RequestMethod.GET)
 	public ResponseEntity<List<State>> listAllStates() {
 		List<State> states = stateService.findAllStates();
@@ -45,7 +45,7 @@ public class StateController {
 	}
 
 	// -------------------Retrieve Single State------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/state/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getState(@PathVariable("id") int id) {
 		logger.info("Fetching State with id {}", id);
@@ -59,7 +59,7 @@ public class StateController {
 	}
 
 	// -------------------Create a State-------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/state/", method = RequestMethod.POST)
 	public ResponseEntity<?> createState(@RequestBody State state, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating State : {}", state);
@@ -79,7 +79,7 @@ public class StateController {
 	}
 
 	// ------------------- Update a State ------------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/state/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateState(@PathVariable("id") int id, @RequestBody State state) {
 		logger.info("Updating State with id {}", id);
@@ -100,7 +100,7 @@ public class StateController {
 	}
 
 	// ------------------- Delete a State-----------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/state/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteState(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting State with id {}", id);
@@ -116,7 +116,7 @@ public class StateController {
 	}
 
 	// ------------------- Delete All States-----------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/state/", method = RequestMethod.DELETE)
 	public ResponseEntity<State> deleteAllStates() {
 		logger.info("Deleting All States");

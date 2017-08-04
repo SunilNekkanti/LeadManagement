@@ -8,7 +8,7 @@
   
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="//cdn.datatables.net/1.10.1/css/jquery.dataTables.css" />
-  <link rel="stylesheet" href="https://rawgithub.com/l-lin/angular-datatables/master/dist/plugins/bootstrap/datatables.bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" />
    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css" />
    
    
@@ -71,33 +71,31 @@
   <script src="js/app/EventWeekDayService.js"></script>
 </head>
 
-<body class="ng-cloak">
-  <nav class="navbar navbar-default myNavbar" ng-controller="NavbarController" ng-show="displayNavbar" role="navigation">
+<body class="ng-cloak" ng-controller="NavbarController">
+  <nav class="navbar navbar-default myNavbar"  ng-show="displayNavbar" role="navigation">
     <div class="container-fluid" >
     
       <div class="navbar-collapse collapse in" collapse="isCollapsed" aria-expanded="true" >
         <ul class="nav navbar-nav">
-        <li><a  ng-click="callMe('lead')">Leads</a></li>
-         
+        <li><a  ng-click="callMe('lead','')">Leads</a></li>
+        <li><a  ng-click="callMe('event','')">Events</a> </li>
           <li class="dropdown" dropdown>
             <a href="#" class="dropdown-toggle" dropdown-toggle role="button" aria-expanded="false">Admin <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-             <li><a  ng-click="callMe('event')">Events</a> </li>
-              <li><a  ng-click="callMe('eventTemplate')">Event Templates</a> </li>
-              <li><a  ng-click="callMe('activityType')">Activity Types</a> </li>
-              <li><a  ng-click="callMe('facilityType')">Facility Types</a></li>
-              <li><a   ng-click="callMe('brokerage')">Brokerages</a></li>
+              <li><a  ng-click="callMe('activityType','')">Activity Types</a> </li>
+              <li><a  ng-click="callMe('facilityType','')">Facility Types</a></li>
+              <li><a   ng-click="callMe('brokerage','')">Brokerages</a></li>
              
               <li class="divider"></li>
              
-              <li><a   ng-click="callMe('role')">Roles</a> </li>
-              <li><a ng-click="callMe('user')">User Accounts</a> </li>
+              <li><a   ng-click="callMe('role','')">Roles</a> </li>
+              <li><a ng-click="callMe('user','')">User Accounts</a> </li>
              
               <li class="divider"></li>
-              <li><a   ng-click="callMe('provider')">Providers</a></li>
-               <li><a   ng-click="callMe('insurance')">Insurances</a></li>
-              <li><a   ng-click="callMe('language')">Languages</a></li>
-               <li><a   ng-click="callMe('leadStatus')">Lead Statuses</a></li>
+              <li><a   ng-click="callMe('provider','')">Providers</a></li>
+               <li><a   ng-click="callMe('insurance','')">Insurances</a></li>
+              <li><a   ng-click="callMe('language','')">Languages</a></li>
+               <li><a   ng-click="callMe('leadStatus','')">Lead Statuses</a></li>
               <li class="divider"></li>
               <li><a href="#">One more separated link</a>   </li>
             </ul>

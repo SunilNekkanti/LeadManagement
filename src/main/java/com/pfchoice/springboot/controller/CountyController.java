@@ -31,7 +31,7 @@ public class CountyController {
 	CountyService countyService; //Service which will do all data retrieval/manipulation work
 
 	// -------------------Retrieve All Countys---------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR" })
+	@Secured({  "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER" })
 	@RequestMapping(value = "/county/", method = RequestMethod.GET)
 	public ResponseEntity<List<County>> listAllCountys() {
 		List<County> countys = countyService.findAllCountys();
@@ -45,7 +45,7 @@ public class CountyController {
 	}
 
 	// -------------------Retrieve Single County------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/county/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getCounty(@PathVariable("id") int id) {
 		logger.info("Fetching County with id {}", id);
@@ -59,7 +59,7 @@ public class CountyController {
 	}
 
 	// -------------------Create a County-------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/county/", method = RequestMethod.POST)
 	public ResponseEntity<?> createCounty(@RequestBody County county, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating County : {}", county);
@@ -79,7 +79,7 @@ public class CountyController {
 	}
 
 	// ------------------- Update a County ------------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/county/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateCounty(@PathVariable("id") int id, @RequestBody County county) {
 		logger.info("Updating County with id {}", id);
@@ -100,7 +100,7 @@ public class CountyController {
 	}
 
 	// ------------------- Delete a County-----------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/county/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteCounty(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting County with id {}", id);
@@ -116,7 +116,7 @@ public class CountyController {
 	}
 
 	// ------------------- Delete All Countys-----------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/county/", method = RequestMethod.DELETE)
 	public ResponseEntity<County> deleteAllCountys() {
 		logger.info("Deleting All Countys");

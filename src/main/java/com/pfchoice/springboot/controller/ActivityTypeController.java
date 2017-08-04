@@ -31,7 +31,7 @@ public class ActivityTypeController {
 	ActivityTypeService activityTypeService; //Service which will do all data retrieval/manipulation work
 
 	// -------------------Retrieve All ActivityTypes---------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR" })
+	@Secured({  "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER" })
 	@RequestMapping(value = "/activityType/", method = RequestMethod.GET)
 	public ResponseEntity<List<ActivityType>> listAllActivityTypes() {
 		List<ActivityType> activityTypes = activityTypeService.findAllActivityTypes();
@@ -45,7 +45,7 @@ public class ActivityTypeController {
 	}
 
 	// -------------------Retrieve Single ActivityType------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER" })
 	@RequestMapping(value = "/activityType/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getActivityType(@PathVariable("id") int id) {
 		logger.info("Fetching ActivityType with id {}", id);
@@ -59,7 +59,7 @@ public class ActivityTypeController {
 	}
 
 	// -------------------Create a ActivityType-------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER"  })
 	@RequestMapping(value = "/activityType/", method = RequestMethod.POST)
 	public ResponseEntity<?> createActivityType(@RequestBody ActivityType activityType, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating ActivityType : {}", activityType);
@@ -79,7 +79,7 @@ public class ActivityTypeController {
 	}
 
 	// ------------------- Update a ActivityType ------------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER"  })
 	@RequestMapping(value = "/activityType/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateActivityType(@PathVariable("id") int id, @RequestBody ActivityType activityType) {
 		logger.info("Updating ActivityType with id {}", id);
@@ -100,7 +100,7 @@ public class ActivityTypeController {
 	}
 
 	// ------------------- Delete a ActivityType-----------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/activityType/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteActivityType(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting ActivityType with id {}", id);
@@ -116,7 +116,7 @@ public class ActivityTypeController {
 	}
 
 	// ------------------- Delete All ActivityTypes-----------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/activityType/", method = RequestMethod.DELETE)
 	public ResponseEntity<ActivityType> deleteAllActivityTypes() {
 		logger.info("Deleting All ActivityTypes");

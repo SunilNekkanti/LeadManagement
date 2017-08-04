@@ -33,7 +33,7 @@ public class ContactController {
 	// -------------------Retrieve All Contacts---------------------------------------------
 
 	
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR" })
+	@Secured({  "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR" })
 	@RequestMapping(value = "/contact/", method = RequestMethod.GET)
 	public ResponseEntity<List<Contact>> listAllContacts() {
 		List<Contact> contacts = contactService.findAllContacts();
@@ -45,7 +45,7 @@ public class ContactController {
 	}
 
 	// -------------------Retrieve Single Contact------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/contact/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getContact(@PathVariable("id") int id) {
 		logger.info("Fetching Contact with id {}", id);
@@ -59,7 +59,7 @@ public class ContactController {
 	}
 
 	// -------------------Create a Contact-------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/contact/", method = RequestMethod.POST)
 	public ResponseEntity<?> createContact(@RequestBody Contact contact, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating Contact : {}", contact);
@@ -77,7 +77,7 @@ public class ContactController {
 	}
 
 	// ------------------- Update a Contact ------------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/contact/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateContact(@PathVariable("id") int id, @RequestBody Contact contact) {
 		logger.info("Updating Contact with id {}", id);
@@ -104,7 +104,7 @@ public class ContactController {
 	}
 
 	// ------------------- Delete a Contact-----------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/contact/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteContact(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting Contact with id {}", id);
@@ -120,7 +120,7 @@ public class ContactController {
 	}
 
 	// ------------------- Delete All Contacts-----------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/contact/", method = RequestMethod.DELETE)
 	public ResponseEntity<Contact> deleteAllContacts() {
 		logger.info("Deleting All Contacts");

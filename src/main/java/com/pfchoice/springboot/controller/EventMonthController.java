@@ -31,7 +31,7 @@ public class EventMonthController {
 	EventMonthService eventMonthService; //Service which will do all data retrieval/manipulation work
 
 	// -------------------Retrieve All EventMonths---------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR" })
+	@Secured({  "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER" })
 	@RequestMapping(value = "/eventMonth/", method = RequestMethod.GET)
 	public ResponseEntity<List<EventMonth>> listAllEventMonths() {
 		List<EventMonth> eventMonths = eventMonthService.findAllEventFrequencies();
@@ -45,7 +45,7 @@ public class EventMonthController {
 	}
 
 	// -------------------Retrieve Single EventMonth------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/eventMonth/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getEventMonth(@PathVariable("id") int id) {
 		logger.info("Fetching EventMonth with id {}", id);
@@ -59,7 +59,7 @@ public class EventMonthController {
 	}
 
 	// -------------------Create a EventMonth-------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/eventMonth/", method = RequestMethod.POST)
 	public ResponseEntity<?> createEventMonth(@RequestBody EventMonth eventMonth, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating EventMonth : {}", eventMonth);
@@ -79,7 +79,7 @@ public class EventMonthController {
 	}
 
 	// ------------------- Update a EventMonth ------------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/eventMonth/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateEventMonth(@PathVariable("id") int id, @RequestBody EventMonth eventMonth) {
 		logger.info("Updating EventMonth with id {}", id);
@@ -100,7 +100,7 @@ public class EventMonthController {
 	}
 
 	// ------------------- Delete a EventMonth-----------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/eventMonth/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteEventMonth(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting EventMonth with id {}", id);
@@ -116,7 +116,7 @@ public class EventMonthController {
 	}
 
 	// ------------------- Delete All EventMonths-----------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/eventMonth/", method = RequestMethod.DELETE)
 	public ResponseEntity<EventMonth> deleteAllEventMonths() {
 		logger.info("Deleting All EventMonths");

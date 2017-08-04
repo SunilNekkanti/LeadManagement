@@ -24,17 +24,24 @@ app.constant('urls', {
     COUNTY_SERVICE_API : 'http://localhost:8080/LeadManagement/api/county/',
     EVENT_FREQUENCY_SERVICE_API : 'http://localhost:8080/LeadManagement/api/eventFrequency/',
     EVENT_MONTH_SERVICE_API : 'http://localhost:8080/LeadManagement/api/eventMonth/',
-    EVENT_WEEKDAY_SERVICE_API : 'http://localhost:8080/LeadManagement/api/eventWeekDay/'
+    EVENT_WEEKDAY_SERVICE_API : 'http://localhost:8080/LeadManagement/api/eventWeekDay/',
+    FILE_UPLOADED_SERVICE_API : 'http://localhost:8080/LeadManagement/api/fileUploaded/' 
 });
 
 app.controller('NavbarController',  ['$scope', '$state', '$stateParams', function($scope, $state, $stateParams){
   $scope.isCollapsed = true;
   $scope.displayNavbar = true;
-  $scope.callMe = function(url){
+  $scope.callMe = function(url,params){
 	  if(url == 'logout'){
 		  $scope.displayNavbar = false;
 	  }
-	  $state.go(url);
+	  if(params !=''){
+		  $state.go(url,params);
+	  }else{
+		  $state.go(url);
+	  }
+		 
+	  
   }
 }]);
 
@@ -648,3 +655,4 @@ app.filter('tel', function () {
 
     };
 });
+

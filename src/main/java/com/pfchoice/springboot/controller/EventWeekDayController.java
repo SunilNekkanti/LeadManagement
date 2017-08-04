@@ -31,7 +31,7 @@ public class EventWeekDayController {
 	EventWeekDayService eventWeekDayService; //Service which will do all data retrieval/manipulation work
 
 	// -------------------Retrieve All EventWeekDays---------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR" })
+	@Secured({  "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER" })
 	@RequestMapping(value = "/eventWeekDay/", method = RequestMethod.GET)
 	public ResponseEntity<List<EventWeekDay>> listAllEventWeekDays() {
 		List<EventWeekDay> eventWeekDays = eventWeekDayService.findAllEventFrequencies();
@@ -45,7 +45,7 @@ public class EventWeekDayController {
 	}
 
 	// -------------------Retrieve Single EventWeekDay------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/eventWeekDay/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getEventWeekDay(@PathVariable("id") int id) {
 		logger.info("Fetching EventWeekDay with id {}", id);
@@ -59,7 +59,7 @@ public class EventWeekDayController {
 	}
 
 	// -------------------Create a EventWeekDay-------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/eventWeekDay/", method = RequestMethod.POST)
 	public ResponseEntity<?> createEventWeekDay(@RequestBody EventWeekDay eventWeekDay, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating EventWeekDay : {}", eventWeekDay);
@@ -79,7 +79,7 @@ public class EventWeekDayController {
 	}
 
 	// ------------------- Update a EventWeekDay ------------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/eventWeekDay/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateEventWeekDay(@PathVariable("id") int id, @RequestBody EventWeekDay eventWeekDay) {
 		logger.info("Updating EventWeekDay with id {}", id);
@@ -100,7 +100,7 @@ public class EventWeekDayController {
 	}
 
 	// ------------------- Delete a EventWeekDay-----------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/eventWeekDay/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteEventWeekDay(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting EventWeekDay with id {}", id);
@@ -116,7 +116,7 @@ public class EventWeekDayController {
 	}
 
 	// ------------------- Delete All EventWeekDays-----------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/eventWeekDay/", method = RequestMethod.DELETE)
 	public ResponseEntity<EventWeekDay> deleteAllEventWeekDays() {
 		logger.info("Deleting All EventWeekDays");

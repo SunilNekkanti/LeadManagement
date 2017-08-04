@@ -15,7 +15,9 @@ app
 						'UserService',
 						'EventService',
 						'FileUploadService',
+						'$sce',
 						'$scope',
+						'$rootScope',
 						'$location',
 						'$stateParams',
 						'$compile',
@@ -24,7 +26,7 @@ app
 						'DTColumnBuilder',
 						function(LeadService, GenderService, StateService,
 								LeadStatusService, LanguageService,
-								InsuranceService, PlanTypeService, ProviderService, UserService, EventService, FileUploadService, $scope, $location, $stateParams, $compile, $filter,
+								InsuranceService, PlanTypeService, ProviderService, UserService, EventService, FileUploadService, $sce, $scope,$rootScope, $location, $stateParams, $compile, $filter,
 								DTOptionsBuilder, DTColumnBuilder) {
 
 							var self = this;
@@ -37,7 +39,7 @@ app
 							self.leadEventId = $stateParams.eventId;
 							self.genders = [];
 							self.states = [];
-						//	$location.url('/');
+							$location.url('/');
 							self.languages = [];
 							self.statuses = [];
 							self.insurances = [];
@@ -46,6 +48,7 @@ app
 							self.selectedAgentLeadAppointment = {};
 							self.users = [];
 							self.events = [];
+							self.content = '';
 							self.display = $stateParams.leadDisplay||false;
 							self.displayEditButton = false;
 							self.submit = submit;
@@ -68,6 +71,7 @@ app
 							self.getAllProviders = getAllProviders;
 							self.getAllEvents = getAllEvents;
 							self.uploadFile = uploadFile;
+							self.readUploadedFile = readUploadedFile;
 							self.addAgentLeadAppointment = addAgentLeadAppointment;
 							self.showAgentAssignment = showAgentAssignment;
 							self.showEventSource = showEventSource;
@@ -186,13 +190,17 @@ app
 									        
 									        .withFnServerData(serverData);
 
-
+							
+							if(self.display){
+								 addLead();
+						    }
+							
+							
 							function createdRow(row, data, dataIndex) {
 								// Recompiling so we can bind Angular directive
 								// to the DT
 								$compile(angular.element(row).contents())(
 										$scope);
-								console.log("test");
 							}
 
 							function checkBoxChange(checkStatus, leadId) {
@@ -279,7 +287,28 @@ app
 															.error('Error while fetching loginUser');
 												});
 							}
-
+							
+							function readUploadedFile(){
+								console.log('About to read consignment form');
+								angular.element('#myModalShower').trigger('click');
+								FileUploadService.getFileUpload(self.lead.fileUpload.id).then(
+										function(response) {
+											self.errorMessage = '';
+											var file = new Blob([response], {type: self.lead.fileUpload.contentType});
+											 var fileURL = URL.createObjectURL(file);
+										    self.content = $sce.trustAsResourceUrl(fileURL); 
+										    var target = angular.element('#pdfModal');
+										    target.show();
+										    
+										},
+										function(errResponse) {
+											console
+													.error('Error while reading consignment form');
+											self.errorMessage = 'Error while reading consignment form: '
+													+ errResponse.data.errorMessage;
+											self.successMessage = '';
+										}); 
+							}
 							function createLead(lead) {
 								console.log('About to create lead');
 								LeadService
@@ -389,10 +418,6 @@ app
 
 							function addLead() {
 								
-								$scope.$on('selected-event',  function(event, eventId) {
-									self.lead.event.id =eventId;
-							    });
-								
 								self.successMessage = '';
 								self.errorMessage = '';
 								self.display = true;
@@ -459,7 +484,6 @@ app
 						    }
 						    
 						    function showEventStatus(){
-						    	alert('self.loginUser.roleName'+JSON.stringify(self.loginUser.roleName));
 						    	if(self.loginUser.roleName != 'ROLE_EVENT_COORDINATOR'){
 						    		return true;
 						    	}else{

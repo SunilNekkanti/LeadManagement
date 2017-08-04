@@ -31,7 +31,7 @@ public class LeadStatusController {
 	LeadStatusService leadStatusService; //Service which will do all data retrieval/manipulation work
 
 	// -------------------Retrieve All LeadStatuses---------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"  })
+	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER"  })
 	@RequestMapping(value = "/leadStatus/", method = RequestMethod.GET)
 	public ResponseEntity<List<LeadStatus>> listAllLeadStatuses() {
 		List<LeadStatus> leadStatuss = leadStatusService.findAllLeadStatuses();
@@ -45,7 +45,7 @@ public class LeadStatusController {
 	}
 
 	// -------------------Retrieve Single LeadStatus------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/leadStatus/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getLeadStatus(@PathVariable("id") byte id) {
 		logger.info("Fetching LeadStatus with id {}", id);
@@ -59,7 +59,7 @@ public class LeadStatusController {
 	}
 
 	// -------------------Create a LeadStatus-------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/leadStatus/", method = RequestMethod.POST)
 	public ResponseEntity<?> createLeadStatus(@RequestBody LeadStatus leadStatus, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating LeadStatus : {}", leadStatus);
@@ -79,7 +79,7 @@ public class LeadStatusController {
 	}
 
 	// ------------------- Update a LeadStatus ------------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/leadStatus/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateLeadStatus(@PathVariable("id") byte id, @RequestBody LeadStatus leadStatus) {
 		logger.info("Updating LeadStatus with id {}", id);
@@ -99,7 +99,7 @@ public class LeadStatusController {
 	}
 
 	// ------------------- Delete a LeadStatus-----------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/leadStatus/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteLeadStatus(@PathVariable("id") byte id) {
 		logger.info("Fetching & Deleting LeadStatus with id {}", id);
@@ -115,7 +115,7 @@ public class LeadStatusController {
 	}
 
 	// ------------------- Delete All LeadStatuses-----------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/leadStatus/", method = RequestMethod.DELETE)
 	public ResponseEntity<LeadStatus> deleteAllLeadStatuses() {
 		logger.info("Deleting All LeadStatuses");

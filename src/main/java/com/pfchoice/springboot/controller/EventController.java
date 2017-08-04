@@ -36,7 +36,7 @@ public class EventController {
 	// -------------------Retrieve All Events---------------------------------------------
 
 	
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"  })
+	@Secured({  "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER"  })
 	@RequestMapping(value = "/event/", method = RequestMethod.GET)
 	public ResponseEntity<Page<Event>> listAllEvents(@RequestParam("page") Integer pageNo,  @RequestParam("size") Integer pageSize, @RequestParam(value = "search", required = false) String search) {
 		
@@ -59,7 +59,7 @@ public class EventController {
 	}
 
 	// -------------------Retrieve Single Event------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"   })
+	@Secured({  "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER"   })
 	@RequestMapping(value = "/event/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getEvent(@PathVariable("id") int id) {
 		logger.info("Fetching Event with id {}", id);
@@ -73,7 +73,7 @@ public class EventController {
 	}
 
 	// -------------------Create a Event-------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/event/", method = RequestMethod.POST)
 	public ResponseEntity<?> createEvent(@RequestBody Event event, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating Event : {}", event);
@@ -91,7 +91,7 @@ public class EventController {
 	}
 
 	// ------------------- Update a Event ------------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/event/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateEvent(@PathVariable("id") int id, @RequestBody Event event) {
 		logger.info("Updating Event with id {}", id);
@@ -116,7 +116,7 @@ public class EventController {
 	}
 
 	// ------------------- Delete a Event-----------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/event/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteEvent(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting Event with id {}", id);
@@ -132,7 +132,7 @@ public class EventController {
 	}
 
 	// ------------------- Delete All Events-----------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/event/", method = RequestMethod.DELETE)
 	public ResponseEntity<Event> deleteAllEvents() {
 		logger.info("Deleting All Events");

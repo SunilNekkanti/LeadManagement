@@ -46,7 +46,7 @@ public class LeadController {
 	EmailService emailService;
 	
 	// -------------------Retrieve All LeadMemberships---------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"  })
+	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER"  })
 	@RequestMapping(value = "/lead/", method = RequestMethod.GET)
 	public ResponseEntity<Page<LeadMembership>> listAllLeadMemberships(@RequestParam(value = "page", required = false) int pageNo,  @RequestParam(value = "size", required = false) int pageSize,@RequestParam(value = "search", required = false) String search) throws MessagingException, IOException {
 		
@@ -71,7 +71,7 @@ public class LeadController {
 	}
 
 	// -------------------Retrieve Single LeadMembership------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"   })
+	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER"   })
 	@RequestMapping(value = "/lead/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getLeadMembership(@PathVariable("id") int id) {
 		logger.info("Fetching LeadMembership with id {}", id);
@@ -85,7 +85,7 @@ public class LeadController {
 	}
 
 	// -------------------Create a LeadMembership-------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"  })
+	@Secured({  "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER"  })
 	@RequestMapping(value = "/lead/", method = RequestMethod.POST)
 	public ResponseEntity<?> createLeadMembership(@RequestBody LeadMembership lead, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating LeadMembership : {}", lead);
@@ -105,7 +105,7 @@ public class LeadController {
 	}
 
 	// ------------------- Update a LeadMembership ------------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"  })
+	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER"  })
 	@RequestMapping(value = "/lead/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateLeadMembership(@PathVariable("id") int id, @RequestBody LeadMembership lead) {
 		logger.info("Updating LeadMembership with id {}", id);
@@ -124,7 +124,7 @@ public class LeadController {
 		currentLeadMembership.setDob(lead.getDob());
 		currentLeadMembership.setEthinicCode(lead.getEthinicCode());
 		currentLeadMembership.setPlanType(lead.getPlanType());
-		currentLeadMembership.setGenderId(lead.getGenderId());
+		currentLeadMembership.setGender(lead.getGender());
 		currentLeadMembership.setStatus(lead.getStatus());
 		currentLeadMembership.setLanguage(lead.getLanguage());
 		currentLeadMembership.setStatus(lead.getStatus());
@@ -153,7 +153,7 @@ public class LeadController {
 	}
 
 	// ------------------- Delete a LeadMembership-----------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/lead/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteLeadMembership(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting LeadMembership with id {}", id);
@@ -169,7 +169,7 @@ public class LeadController {
 	}
 
 	// ------------------- Delete All LeadMemberships-----------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/lead/", method = RequestMethod.DELETE)
 	public ResponseEntity<LeadMembership> deleteAllLeadMemberships() {
 		logger.info("Deleting All LeadMemberships");

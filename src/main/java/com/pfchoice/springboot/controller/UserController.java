@@ -33,7 +33,7 @@ public class UserController {
 
 	@Autowired
 	UserService userService; //Service which will do all data retrieval/manipulation work
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR" })
+	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER" })
 	// -------------------Retrieve Users as per page request ---------------------------------------------
 	
 	@RequestMapping(value = "/user/", method = RequestMethod.GET)
@@ -57,7 +57,7 @@ public class UserController {
 	}
 
 	// -------------------Retrieve Single User------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"  })
+	@Secured({  "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR" ,"ROLE_MANAGER" })
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getUser(@PathVariable("id") int id) {
 		logger.info("Fetching User with id {}", id);
@@ -71,7 +71,7 @@ public class UserController {
 	}
 
 	// -------------------Create a User-------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER","ROLE_CARE_COORDINATOR"  })
 	@RequestMapping(value = "/user/", method = RequestMethod.POST)
 	public ResponseEntity<?> createUser(@RequestBody User user, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating User : {}", user);
@@ -92,7 +92,7 @@ public class UserController {
 	}
 
 	// ------------------- Update a User ------------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_CARE_COORDINATOR" ,"ROLE_MANAGER" })
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateUser(@PathVariable("id") int id, @RequestBody User user) {
 		logger.info("Updating User with id {}", id);
@@ -124,7 +124,7 @@ public class UserController {
 	}
 
 	// ------------------- Delete a User-----------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteUser(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting User with id {}", id);
@@ -140,7 +140,7 @@ public class UserController {
 	}
 
 	// ------------------- Delete All Users-----------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/user/", method = RequestMethod.DELETE)
 	public ResponseEntity<User> deleteAllUsers() {
 		logger.info("Deleting All Users");

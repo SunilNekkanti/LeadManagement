@@ -31,7 +31,7 @@ public class RoleController {
 	RoleService roleService; //Service which will do all data retrieval/manipulation work
 
 	// -------------------Retrieve All Roles---------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR" })
+	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER" })
 	@RequestMapping(value = "/role/", method = RequestMethod.GET)
 	public ResponseEntity<List<Role>> listAllRoles() {
 		List<Role> roles = roleService.findDistinctRoles();
@@ -44,7 +44,7 @@ public class RoleController {
 	}
 
 	// -------------------Retrieve Single Role------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/role/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getRole(@PathVariable("id") int id) {
 		logger.info("Fetching Role with id {}", id);
@@ -58,7 +58,7 @@ public class RoleController {
 	}
 
 	// -------------------Create a Role-------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/role/", method = RequestMethod.POST)
 	public ResponseEntity<?> createRole(@RequestBody Role role, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating Role : {}", role);
@@ -78,7 +78,7 @@ public class RoleController {
 	}
 
 	// ------------------- Update a Role ------------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/role/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateRole(@PathVariable("id") int id, @RequestBody Role role) {
 		logger.info("Updating Role with id {}", id);
@@ -98,7 +98,7 @@ public class RoleController {
 	}
 
 	// ------------------- Delete a Role-----------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/role/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteRole(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting Role with id {}", id);
@@ -114,7 +114,7 @@ public class RoleController {
 	}
 
 	// ------------------- Delete All Roles-----------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/role/", method = RequestMethod.DELETE)
 	public ResponseEntity<Role> deleteAllRoles() {
 		logger.info("Deleting All Roles");

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.ui.Model;
@@ -40,7 +41,7 @@ public class FileUploadController {
 	FileUploadService fileUploadService; //Service which will do all data retrieval/manipulation work
 
 	// -------------------Retrieve All FileUploads---------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"  })
+	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER"  })
 	@RequestMapping(value = "/fileUpload/", method = RequestMethod.GET)
 	public ResponseEntity<List<FileUpload>> listAllFileUploads( ) {
 		
@@ -55,7 +56,7 @@ public class FileUploadController {
 	}
 
 	// -------------------Retrieve Single FileUpload------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT"  })
+	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_MANAGER"  })
 	@RequestMapping(value = "/fileUpload/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getFileUpload(@PathVariable("id") int id) {
 		logger.info("Fetching FileUpload with id {}", id);
@@ -69,7 +70,7 @@ public class FileUploadController {
 	}
 
 	// -------------------Create a FileUpload-------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/fileUpload/", method = RequestMethod.POST)
 	public ResponseEntity<?> createFileUpload(@RequestBody FileUpload fileUpload, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating FileUpload : {}", fileUpload);
@@ -89,7 +90,7 @@ public class FileUploadController {
 	}
 
 	// ------------------- Update a FileUpload ------------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT" })
+	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_MANAGER" })
 	@RequestMapping(value = "/fileUpload/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateFileUpload(@PathVariable("id") int id, @RequestBody FileUpload fileUpload) {
 		logger.info("Updating FileUpload with id {}", id);
@@ -109,7 +110,7 @@ public class FileUploadController {
 	}
 
 	// ------------------- Delete a FileUpload-----------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/fileUpload/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteFileUpload(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting FileUpload with id {}", id);
@@ -125,7 +126,7 @@ public class FileUploadController {
 	}
 
 	// ------------------- Delete All FileUploads-----------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/fileUpload/", method = RequestMethod.DELETE)
 	public ResponseEntity<FileUpload> deleteAllFileUploads() {
 		logger.info("Deleting All FileUploads");
@@ -134,7 +135,7 @@ public class FileUploadController {
 		return new ResponseEntity<FileUpload>(HttpStatus.NO_CONTENT);
 	}
 
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT"  })
+	@Secured({  "ROLE_ADMIN", "ROLE_AGENT"  })
 	@RequestMapping(value = { "/fileUpload/fileProcessing.do"}, method = RequestMethod.POST)
 	public List<FileUpload>  uploadFileProcessing(Model model,
 			@RequestParam  MultipartFile[] files) throws  IOException {
@@ -170,4 +171,26 @@ public class FileUploadController {
 			return fileUploaders;
 
 	}
+	
+	
+
+	// -------------------Retrieve  FileUploaded data ------------------------------------------
+	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_MANAGER"  })
+	@RequestMapping(value = "/fileUploaded/{id}", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> getFileUploadContents(@PathVariable("id") int id) {
+        FileUpload fileUpload = fileUploadService.findById(id);
+		if (fileUpload == null) {
+			logger.error("FileUpload with id {} not found.", id);
+			return new ResponseEntity(new CustomErrorType("FileUpload with id " + id 
+					+ " not found"), HttpStatus.NOT_FOUND);
+		}
+            
+        byte[] contents =  fileUpload.getData();
+        HttpHeaders headers = new HttpHeaders();
+      //  String filename = fileUpload.getFileName();
+      //  headers.setContentDispositionFormData(filename, filename);
+        headers.setContentType(MediaType.parseMediaType(fileUpload.getContentType()));
+        
+        return  new ResponseEntity<byte[]>(contents, headers, HttpStatus.OK);
+    }
 }

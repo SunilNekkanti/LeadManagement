@@ -71,7 +71,7 @@
                 <div class="col-sm-6">
                   <div class="form-group col-sm-12">
                     <label for="gender">Gender</label>
-                    <select ng-model="ctrl.lead.genderId" name="gender" class="form-control" ng-options="gender.description for gender in ctrl.genders | orderBy:'description' track by gender.description" required></select>
+                    <select ng-model="ctrl.lead.gender" name="gender" class="form-control" ng-options="gender.description for gender in ctrl.genders | orderBy:'description' track by gender.description" required></select>
                     <div class="has-error" ng-show="myForm.$dirty">
                       <span ng-show="myForm.gender.$error.required">This is a required field</span>
                     </div>
@@ -118,6 +118,18 @@
                     </div>
                   </div>
                 </div>
+                
+              
+                <div class="col-sm-6">
+                  <div class="form-group col-sm-12">
+                    <label for="language">File</label>
+                    	<a  ng-click="ctrl.readUploadedFile()" style="display:block;">
+          					<span class="glyphicon glyphicon-file"></span>
+        				</a>
+        				<embed ng-src="{{ctrl.content}}" style="width:200px;height:200px;"></embed>
+                  </div>
+                </div>
+                
               </div>
             </div>
           </div>
@@ -146,7 +158,7 @@
               <div class="row">
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
-                    <label for="	Last Name "> City / State / Zip:</label>
+                    <label for="	Last Name "> City / State / Zip</label>
                     <div class="input-group">
 
                       <input type="text" ng-model="ctrl.lead.city" id="city" class="username form-control" placeholder="Enter City" required ng-minlength="4" ng-maxlength="100" />
@@ -208,7 +220,7 @@
               <div class="row col-md-6">
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
-                    <label for="agree consent form">Agree Consent Form :</label>
+                    <label for="agree consent form">Agree Consent Form </label>
                     <input type="checkbox" class="form-control bigCheckBox" ng-model="ctrl.lead.consentFormSigned" name="consentFormSigned" ng-true-value="'Y'" ng-false-value="'N'" required>
                     <div ng-if="!ctrl.lead.id">
                       <div class="has-error" ng-show="myForm.$dirty">
@@ -220,13 +232,11 @@
 
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
-                    <label for="file">File :</label>
+                    <label for="file">File </label>
                     <input class="col-sm-12  control-label form-control" name="fileUpload" type="file" file-model="ctrl.myFiles" ng-model="ctrl.myfiles" id="myFileField" required/>
-                    <div ng-if="!ctrl.lead.id ">
                       <div class="has-error" ng-show="myForm.$dirty">
                         <span ng-show="myForm.fileUpload.$error.required">This is a required field</span>
                       </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -234,7 +244,7 @@
               <div class="row col-md-6">
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
-                    <label for="	Last Name ">Notes :</label>
+                    <label for="appointmentnotes">Notes </label>
                     <textarea name="notes" class="form-control" id="notes" ng-model="ctrl.selectedAgentLeadAppointment.notes"></textarea>
                     <textarea name="notes" disabled class="form-control" id="notes" ng-model="ctrl.selectedAgentLeadAppointment.notes"></textarea>
                   </div>
@@ -251,14 +261,14 @@
               <div class="row col-md-6">
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
-                    <label for="	First Name ">Agent Name:</label>
+                    <label for="	First Name ">Agent Name</label>
                     <select ng-model="ctrl.selectedAgentLeadAppointment.user" class="form-control" ng-options="agent.username for agent in ctrl.users  | orderBy:'username' | filter:{roles:[{role:'ROLE_AGENT'}]} track by agent.username" required></select>
                   </div>
                 </div>
 
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
-                    <label for="	Last Name ">Appointment :</label>
+                    <label for="	Last Name ">Appointment </label>
                     <div class="input-group date" id="appointment" ng-model="ctrl.selectedAgentLeadAppointment.appointmentTime" date-picker>
                       <input type="text" class="form-control netto-input" ng-model="ctrl.selectedAgentLeadAppointment.appointmentTime" date-picker-input>
                       <span class="input-group-addon">
@@ -272,7 +282,7 @@
               <div class="row col-md-6">
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
-                    <label for="	Last Name ">Notes :</label>
+                    <label for="	Last Name ">Notes </label>
                     <textarea name="notes" class="form-control" id="notes" ng-model="ctrl.selectedAgentLeadAppointment.notes"></textarea>
                     <textarea name="notes" disabled class="form-control" id="notes" ng-model="ctrl.selectedAgentLeadAppointment.notes"></textarea>
                   </div>
@@ -286,8 +296,25 @@
           <div class="panel panel-default">
             <div class="panel-heading">Status</div>
             <div class="panel-body">
-              <label class="control-label" for="selectbasic">Status</label>
-              <select ng-model="ctrl.lead.status" class="form-control" ng-options="status.description for status in ctrl.statuses | orderBy:'description' track by status.description" required></select>
+            	<div class="row">
+                	<div class="col-sm-6">
+                  		<div class="form-group col-sm-12">
+                  			<label class="control-label" for="selectbasic">Status</label>
+              				<select ng-model="ctrl.lead.status" class="form-control" ng-options="status.description for status in ctrl.statuses | orderBy:'description' track by status.description" required></select>
+                 	 	</div>
+               		</div>  
+               		
+               		<div class="col-sm-6">
+                  		<div class="form-group col-sm-12">
+                  			 <label class="control-label" for="statusNotes">Notes</label>	
+                  			 <textarea name="notes" class="form-control" ></textarea>
+                    		 <textarea name="notes" disabled class="form-control"></textarea>	
+                  		</div>
+               		</div> 
+               		
+               	</div>	
+            
+              
             </div>
           </div>
         </div>
@@ -375,3 +402,14 @@
 
     </div>
   </div>
+  
+
+</div>
+
+  
+  <style>
+  	.bigCheckBox{
+  		width:30px;
+  		height:12px;
+  	}
+  </style>

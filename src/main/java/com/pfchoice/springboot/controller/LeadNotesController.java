@@ -33,7 +33,7 @@ public class LeadNotesController {
 	// -------------------Retrieve All LeadNotess---------------------------------------------
 
 	
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR" })
+	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER" })
 	@RequestMapping(value = "/leadNotes/", method = RequestMethod.GET)
 	public ResponseEntity<List<LeadNotes>> listAllLeadNotess() {
 		List<LeadNotes> leadNotess = leadNotesService.findAllLeadNotes();
@@ -47,7 +47,7 @@ public class LeadNotesController {
 	}
 
 	// -------------------Retrieve Single LeadNotes------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/leadNotes/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getLeadNotes(@PathVariable("id") int id) {
 		logger.info("Fetching LeadNotes with id {}", id);
@@ -61,7 +61,7 @@ public class LeadNotesController {
 	}
 
 	// -------------------Create a LeadNotes-------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/leadNotes/", method = RequestMethod.POST)
 	public ResponseEntity<?> createLeadNotes(@RequestBody LeadNotes leadNotes, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating LeadNotes : {}", leadNotes);
@@ -81,7 +81,7 @@ public class LeadNotesController {
 	}
 
 	// ------------------- Update a LeadNotes ------------------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/leadNotes/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateLeadNotes(@PathVariable("id") int id, @RequestBody LeadNotes leadNotes) {
 		logger.info("Updating LeadNotes with id {}", id);
@@ -101,7 +101,7 @@ public class LeadNotesController {
 	}
 
 	// ------------------- Delete a LeadNotes-----------------------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/leadNotes/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteLeadNotes(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting LeadNotes with id {}", id);
@@ -117,7 +117,7 @@ public class LeadNotesController {
 	}
 
 	// ------------------- Delete All LeadNotess-----------------------------
-	@Secured({ "ROLE_SELECTOR", "ROLE_ADMIN" })
+	@Secured({  "ROLE_ADMIN" })
 	@RequestMapping(value = "/leadNotes/", method = RequestMethod.DELETE)
 	public ResponseEntity<LeadNotes> deleteAllLeadNotess() {
 		logger.info("Deleting All LeadNotess");

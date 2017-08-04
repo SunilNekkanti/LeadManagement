@@ -1,8 +1,43 @@
 'use strict';
    
-    app.service('FileUploadService', ['$http', '$q', 'urls',function ($http, $q, urls) {
+    app.service('FileUploadService', ['$http', '$q', 'urls', function ($http, $q, urls) {
+    	
+    	 var factory = {
+    			 getFileUpload : getFileUpload,
+    			 uploadFileToUrl: uploadFileToUrl
+             };
 
-        this.uploadFileToUrl = function (files) {
+             return factory;
+             
+    	 function getFileUpload(id) {
+             console.log('Fetching Lead with id :'+id);
+             var deferred = $q.defer();
+             $http.get(urls.FILE_UPLOADED_SERVICE_API + id , {responseType: 'arraybuffer'})
+                 .then(
+                     function (response) {
+                         console.log('Fetched successfully File response'+ JSON.stringify(response));
+                         
+                         var uri = urls.FILE_UPLOADED_SERVICE_API + id;
+                         var link = angular.element('<a href="' + uri + '" target="_blank"></a>');
+
+                         angular.element(document.body).append(link);
+
+                         link[0].click();
+                         link.remove();
+                         
+                         
+                         deferred.resolve(response.data);
+                     },
+                     function (errResponse) {
+                         console.error('Error while loading File with id :'+id);
+                         deferred.reject(errResponse);
+                     }
+                 );
+             return deferred.promise;
+         }
+    	 
+
+    	 function uploadFileToUrl(files) {
             //FormData, object of key/value pair for form fields and values
         	
             var fileFormData = new FormData();
