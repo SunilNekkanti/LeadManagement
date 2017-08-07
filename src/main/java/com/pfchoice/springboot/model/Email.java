@@ -1,6 +1,7 @@
 package com.pfchoice.springboot.model;
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Basic;
@@ -14,8 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 
 
@@ -36,34 +37,33 @@ public class Email extends RecordDetails implements Serializable {
 	@Column(name = "email_id", nullable = false)
 	private Integer id;
 
-	
 	@Column(name = "email_to")
 	private String emailTo;
-
 	
 	@Column(name = "email_from")
 	private String emailFrom;
 
-	
 	@Column(name = "email_cc")
 	private String emailCc;
 
-	
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "subject", nullable = false, referencedColumnName = "email_temp_id")
-	private EmailTemplate emailTemplate;
-
+	@Column(name = "subject")
+	private String subject;
 	
 	@Column(name = "body", length = 65535, columnDefinition = "TEXT")
 	private String body;
 
-	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "emails_files_upload", joinColumns = {
 			@JoinColumn(name = "email_id", referencedColumnName = "email_id") }, inverseJoinColumns = {
 					@JoinColumn(name = "files_upload_id", referencedColumnName = "file_upload_id") })
 	private Set<FileUpload> filesUpload;
 
+	@Transient
+	private String emailTemplateFile;
+	
+	@Transient
+	private Map<String, Object> model;
+	
 	/**
 	 * 
 	 */
@@ -71,12 +71,19 @@ public class Email extends RecordDetails implements Serializable {
 		super();
 	}
 
+	public Email(String emailTemplateFile) {
+		super();
+		this.emailTemplateFile = emailTemplateFile;
+	}
+
+	
 	/**
 	 * @param id
 	 */
-	public Email(final Integer id) {
+	public Email(final Integer id,String emailTemplateFile) {
 		super();
 		this.id = id;
+		this.emailTemplateFile = emailTemplateFile;
 	}
 
 	/**
@@ -139,19 +146,19 @@ public class Email extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @return the emailTemplate
+	 * @return the subject
 	 */
-	public EmailTemplate getEmailTemplate() {
-		return emailTemplate;
+	public String getSubject() {
+		return subject;
 	}
 
 	/**
-	 * @param emailTemplate
-	 *            the emailTemplate to set
+	 * @param subject the subject to set
 	 */
-	public void setEmailTemplate(EmailTemplate emailTemplate) {
-		this.emailTemplate = emailTemplate;
+	public void setSubject(String subject) {
+		this.subject = subject;
 	}
+
 
 	/**
 	 * @return the body
@@ -181,6 +188,34 @@ public class Email extends RecordDetails implements Serializable {
 	 */
 	public void setFilesUpload(Set<FileUpload> filesUpload) {
 		this.filesUpload = filesUpload;
+	}
+
+	/**
+	 * @return the emailTemplateFile
+	 */
+	public String getEmailTemplateFile() {
+		return emailTemplateFile;
+	}
+
+	/**
+	 * @param emailTemplateFile the emailTemplateFile to set
+	 */
+	public void setEmailTemplateFile(String emailTemplateFile) {
+		this.emailTemplateFile = emailTemplateFile;
+	}
+
+	/**
+	 * @return the model
+	 */
+	public Map<String, Object> getModel() {
+		return model;
+	}
+
+	/**
+	 * @param model the model to set
+	 */
+	public void setModel(Map<String, Object> model) {
+		this.model = model;
 	}
 
 	@Override

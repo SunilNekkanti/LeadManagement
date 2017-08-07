@@ -1,8 +1,10 @@
 package com.pfchoice.springboot.model;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -28,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 @Entity
 @Table(name = "lead_membership")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class LeadMembership extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -42,17 +44,17 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@Column(name = "lead_Mbr_LastName")
 	private String lastName;
 
-	@OneToMany(cascade={ CascadeType.ALL },fetch = FetchType.LAZY, mappedBy = "lead")
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "lead")
 	private List<AgentLeadAppointment> agentLeadAppointmentList;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "insurance_type_id", referencedColumnName = "plan_type_id")
 	private PlanType planType;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ins_id", referencedColumnName = "insurance_id")
 	private Insurance insurance;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "lead_Mbr_CountyCode", referencedColumnName = "code")
 	private County countyCode;
@@ -60,10 +62,9 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@Column(name = "lead_Mbr_DOB")
 	@Temporal(TemporalType.DATE)
 	private Date dob;
-	
-	@Column(name = "bestTimeToCall", nullable= true)
-	private String  bestTimeToCall;
-	
+
+	@Column(name = "bestTimeToCall", nullable = true)
+	private String bestTimeToCall;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lead_Mbr_ethinic_code", referencedColumnName = "code")
@@ -82,11 +83,11 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lead_Mbr_languageId", referencedColumnName = "code")
 	private Language language;
-	
+
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "lead_Mbr_Status", referencedColumnName = "code")
+	@JoinColumn(name = "lead_Mbr_Status", referencedColumnName = "code", insertable = false)
 	private LeadStatus status;
-	
+
 	@Column(name = "home_phone")
 	private String homePhone;
 
@@ -95,16 +96,16 @@ public class LeadMembership extends RecordDetails implements Serializable {
 
 	@Column(name = "email")
 	private String email;
-	
+
 	@Column(name = "address1")
 	private String address1;
-	
+
 	@Column(name = "address2")
 	private String address2;
 
 	@Column(name = "city")
 	private String city;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "statecode", referencedColumnName = "code")
 	private State stateCode;
@@ -118,15 +119,21 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	private Event event;
 
 	@Column(name = "consent_form_signed")
-	private Character consentFormSigned  = new Character('N');
-	
+	private Character consentFormSigned = new Character('N');
+
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "file_upload_id", referencedColumnName = "file_upload_id", nullable =false)
-	private FileUpload fileUpload ;
-	
+	@JoinColumn(name = "file_upload_id", referencedColumnName = "file_upload_id", nullable = false)
+	private FileUpload fileUpload;
+
 	@Column(name = "is_homeless")
-	private Character isHomeless  = new Character('N');
-	
+	private Character isHomeless = new Character('N');
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "lead")
+	private List<LeadNotes> leadNotes;
+
+	@javax.persistence.Transient
+	private String notesHistory;
+
 	/**
 	 * 
 	 */
@@ -210,7 +217,6 @@ public class LeadMembership extends RecordDetails implements Serializable {
 		return lastName;
 	}
 
-
 	/**
 	 * @return the status
 	 */
@@ -273,7 +279,6 @@ public class LeadMembership extends RecordDetails implements Serializable {
 		this.gender = gender;
 	}
 
-
 	/**
 	 * @param id
 	 */
@@ -289,7 +294,6 @@ public class LeadMembership extends RecordDetails implements Serializable {
 		this.lastName = lastName;
 	}
 
-	
 	/**
 	 * @param status
 	 *            the status to set
@@ -306,7 +310,8 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param homePhone the homePhone to set
+	 * @param homePhone
+	 *            the homePhone to set
 	 */
 	public void setHomePhone(String homePhone) {
 		this.homePhone = homePhone;
@@ -320,7 +325,8 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param mobilePhone the mobilePhone to set
+	 * @param mobilePhone
+	 *            the mobilePhone to set
 	 */
 	public void setMobilePhone(String mobilePhone) {
 		this.mobilePhone = mobilePhone;
@@ -334,7 +340,8 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param email the email to set
+	 * @param email
+	 *            the email to set
 	 */
 	public void setEmail(String email) {
 		this.email = email;
@@ -348,7 +355,8 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param address1 the address1 to set
+	 * @param address1
+	 *            the address1 to set
 	 */
 	public void setAddress1(String address1) {
 		this.address1 = address1;
@@ -362,7 +370,8 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param address2 the address2 to set
+	 * @param address2
+	 *            the address2 to set
 	 */
 	public void setAddress2(String address2) {
 		this.address2 = address2;
@@ -376,7 +385,8 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param city the city to set
+	 * @param city
+	 *            the city to set
 	 */
 	public void setCity(String city) {
 		this.city = city;
@@ -390,7 +400,8 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param stateCode the stateCode to set
+	 * @param stateCode
+	 *            the stateCode to set
 	 */
 	public void setStateCode(State stateCode) {
 		this.stateCode = stateCode;
@@ -404,7 +415,8 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param zipCode the zipCode to set
+	 * @param zipCode
+	 *            the zipCode to set
 	 */
 	public void setZipCode(ZipCode zipCode) {
 		this.zipCode = zipCode;
@@ -418,13 +430,13 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param language the language to set
+	 * @param language
+	 *            the language to set
 	 */
 	public void setLanguage(Language language) {
 		this.language = language;
 	}
 
-	
 	/**
 	 * @return the bestTimeToCall
 	 */
@@ -433,12 +445,13 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param bestTimeToCall the bestTimeToCall to set
+	 * @param bestTimeToCall
+	 *            the bestTimeToCall to set
 	 */
 	public void setBestTimeToCall(String bestTimeToCall) {
 		this.bestTimeToCall = bestTimeToCall;
 	}
-	
+
 	/**
 	 * @return the agentLeadAppointmentList
 	 */
@@ -447,17 +460,18 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param agentLeadAppointmentList the agentLeadAppointmentList to set
+	 * @param agentLeadAppointmentList
+	 *            the agentLeadAppointmentList to set
 	 */
 	public void setAgentLeadAppointmentList(List<AgentLeadAppointment> agentLeadAppointmentList) {
 		for (AgentLeadAppointment agentLeadAppointment : agentLeadAppointmentList) {
 			agentLeadAppointment.setLead(this);
-			agentLeadAppointment.setCreatedBy("Sarath"); 
+			agentLeadAppointment.setCreatedBy("Sarath");
 			agentLeadAppointment.setUpdatedBy("Sarath");
 		}
 		this.agentLeadAppointmentList = agentLeadAppointmentList;
 	}
-	
+
 	/**
 	 * @return the event
 	 */
@@ -466,7 +480,8 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param event the event to set
+	 * @param event
+	 *            the event to set
 	 */
 	public void setEvent(Event event) {
 		this.event = event;
@@ -480,7 +495,8 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param consentFormSigned the consentFormSigned to set
+	 * @param consentFormSigned
+	 *            the consentFormSigned to set
 	 */
 	public void setConsentFormSigned(Character consentFormSigned) {
 		this.consentFormSigned = consentFormSigned;
@@ -494,7 +510,8 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param fileUpload the fileUpload to set
+	 * @param fileUpload
+	 *            the fileUpload to set
 	 */
 	public void setFileUpload(FileUpload fileUpload) {
 		this.fileUpload = fileUpload;
@@ -508,7 +525,8 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param planType the planType to set
+	 * @param planType
+	 *            the planType to set
 	 */
 	public void setPlanType(PlanType planType) {
 		this.planType = planType;
@@ -522,7 +540,8 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param isHomeless the isHomeless to set
+	 * @param isHomeless
+	 *            the isHomeless to set
 	 */
 	public void setIsHomeless(Character isHomeless) {
 		this.isHomeless = isHomeless;
@@ -536,10 +555,45 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param insurance the insurance to set
+	 * @param insurance
+	 *            the insurance to set
 	 */
 	public void setInsurance(Insurance insurance) {
 		this.insurance = insurance;
+	}
+
+	/**
+	 * @return the leadNotes
+	 */
+	public List<LeadNotes> getLeadNotes() {
+		return leadNotes;
+	}
+
+	/**
+	 * @param leadNotes
+	 *            the leadNotes to set
+	 */
+	public void setLeadNotes(List<LeadNotes> leadNotes) {
+		this.leadNotes = leadNotes;
+	}
+
+	/**
+	 * @return the notesHistory
+	 */
+	public String getNotesHistory() {
+
+		return leadNotes.stream().sorted(Comparator.comparing(LeadNotes::getCreatedDate).reversed())
+				.map(LeadNotes::toString).collect(Collectors.joining(" "));
+
+	}
+
+	/**
+	 * @param notesHistory
+	 *            the notesHistory to set
+	 */
+	public void setNotesHistory(String notesHistory) {
+		this.notesHistory = leadNotes.stream().map(ln -> ln.getNotes()).reduce("", String::concat);
+
 	}
 
 	@Override

@@ -70,7 +70,7 @@ public class FileUploadController {
 	}
 
 	// -------------------Create a FileUpload-------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	@Secured({  "ROLE_ADMIN","ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/fileUpload/", method = RequestMethod.POST)
 	public ResponseEntity<?> createFileUpload(@RequestBody FileUpload fileUpload, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating FileUpload : {}", fileUpload);
@@ -135,7 +135,7 @@ public class FileUploadController {
 		return new ResponseEntity<FileUpload>(HttpStatus.NO_CONTENT);
 	}
 
-	@Secured({  "ROLE_ADMIN", "ROLE_AGENT"  })
+	@Secured({"ROLE_ADMIN", "ROLE_AGENT","ROLE_MANAGER","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"})
 	@RequestMapping(value = { "/fileUpload/fileProcessing.do"}, method = RequestMethod.POST)
 	public List<FileUpload>  uploadFileProcessing(Model model,
 			@RequestParam  MultipartFile[] files) throws  IOException {
@@ -144,7 +144,6 @@ public class FileUploadController {
 		List<FileUpload> fileUploaders = new ArrayList<>();
 		
 		for(MultipartFile fileUpload :files) {
-			logger.info("fileUpload :"+fileUpload);
 			logger.info("fileUpload.getOriginalFilename() :"+fileUpload.getOriginalFilename());
 			if (fileUpload != null && !"".equals(fileUpload.getOriginalFilename())) {
 	
@@ -153,7 +152,6 @@ public class FileUploadController {
 				try {
 				//	String ext = FilenameUtils.getExtension(fileName);
 					logger.info("fileName is : "+fileName);
-	
 					FileUpload fileUploader = new FileUpload();
 					fileUploader.setFileName(fileName);
 					fileUploader.setContentType(fileUpload.getContentType());
@@ -175,7 +173,7 @@ public class FileUploadController {
 	
 
 	// -------------------Retrieve  FileUploaded data ------------------------------------------
-	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_MANAGER"  })
+	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_MANAGER","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR"  })
 	@RequestMapping(value = "/fileUploaded/{id}", method = RequestMethod.GET)
     public ResponseEntity<byte[]> getFileUploadContents(@PathVariable("id") int id) {
         FileUpload fileUpload = fileUploadService.findById(id);
@@ -187,8 +185,8 @@ public class FileUploadController {
             
         byte[] contents =  fileUpload.getData();
         HttpHeaders headers = new HttpHeaders();
-      //  String filename = fileUpload.getFileName();
-      //  headers.setContentDispositionFormData(filename, filename);
+        String filename = fileUpload.getFileName();
+        headers.setContentDispositionFormData(filename, filename);
         headers.setContentType(MediaType.parseMediaType(fileUpload.getContentType()));
         
         return  new ResponseEntity<byte[]>(contents, headers, HttpStatus.OK);

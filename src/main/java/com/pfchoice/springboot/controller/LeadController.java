@@ -1,7 +1,9 @@
 package com.pfchoice.springboot.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
 
@@ -15,25 +17,31 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.pfchoice.springboot.model.AgentLeadAppointment;
 import com.pfchoice.springboot.model.Email;
 import com.pfchoice.springboot.model.LeadMembership;
+import com.pfchoice.springboot.model.LeadNotes;
+import com.pfchoice.springboot.model.User;
 import com.pfchoice.springboot.repositories.specifications.LeadSpecifications;
 import com.pfchoice.springboot.service.EmailService;
 import com.pfchoice.springboot.service.LeadMembershipService;
+import com.pfchoice.springboot.service.UserService;
 import com.pfchoice.springboot.util.CustomErrorType;
+
 
 @RestController
 @RequestMapping("/api")
 @SuppressWarnings({ "unchecked", "rawtypes" })
+@SessionAttributes({ "username", "roleId", "userId" , "roleName" })
 public class LeadController {
 
 	public static final Logger logger = LoggerFactory.getLogger(LeadController.class);
@@ -41,7 +49,9 @@ public class LeadController {
 	@Autowired
 	LeadMembershipService leadService; //Service which will do all data retrieval/manipulation work
 	
-
+	@Autowired
+	UserService userService; //Service which will do all data retrieval/manipulation work
+	
 	@Autowired
 	EmailService emailService;
 	
@@ -49,14 +59,6 @@ public class LeadController {
 	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER"  })
 	@RequestMapping(value = "/lead/", method = RequestMethod.GET)
 	public ResponseEntity<Page<LeadMembership>> listAllLeadMemberships(@RequestParam(value = "page", required = false) int pageNo,  @RequestParam(value = "size", required = false) int pageSize,@RequestParam(value = "search", required = false) String search) throws MessagingException, IOException {
-		
-/*		Email eParams = new Email();
-		eParams.setEmailTo("skumar@pfchoice.com");
-		eParams.setBody("testing email functionaliity");
-		eParams.setEmailFrom("skumar@pfchoice.com");
-		eParams.setEmailCc("mohangbvn@gmail.com");
-		
-		emailService.sendMailWithAttachment(eParams);*/
 		
 		PageRequest pageRequest = new PageRequest(pageNo,pageSize );
 		Specification<LeadMembership> spec = new LeadSpecifications(search);
@@ -87,7 +89,7 @@ public class LeadController {
 	// -------------------Create a LeadMembership-------------------------------------------
 	@Secured({  "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER"  })
 	@RequestMapping(value = "/lead/", method = RequestMethod.POST)
-	public ResponseEntity<?> createLeadMembership(@RequestBody LeadMembership lead, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<?> createLeadMembership(@RequestBody LeadMembership lead, UriComponentsBuilder ucBuilder, @ModelAttribute("userId") Integer userId) throws Exception {
 		logger.info("Creating LeadMembership : {}", lead);
 
 		if (leadService.isLeadMembershipExists(lead.getFirstName(),lead.getLastName(),lead.getDob())) {
@@ -95,10 +97,25 @@ public class LeadController {
 			return new ResponseEntity(new CustomErrorType("Unable to create. A LeadMembership with name " + 
 					lead.getFirstName() +" "+ lead.getLastName() + " already exist."),HttpStatus.CONFLICT);
 		}
-		lead.setCreatedBy("sarath");
-		lead.setUpdatedBy("sarath");
+        StringBuffer emailBody = new StringBuffer();
+		User user  = userService.findById(userId);
+		List<LeadNotes> leadNotes = lead.getLeadNotes();
+		leadNotes.forEach(ln -> {ln.setUser(user); ln.setLead(lead); emailBody.append(ln.getNotes());} );
+		
+		lead.setLeadNotes(leadNotes);
 		leadService.saveLeadMembership(lead);
 
+		String toEmailIds  =  lead.getEvent().getRepresentatives().stream().map(rep -> rep.getEmail()).collect(Collectors.joining(","));
+		
+		Email mail = new Email();
+		mail.setEmailTo(toEmailIds);
+		mail.setEmailFrom("skumar@pfchoice.com");
+		mail.setEmailCc("skumar@pfchoice.com");
+		mail.setSubject("New lead created");
+		mail.setBody(emailService.geContentFromTemplate(lead, "lead_create_email_template.txt"));
+		emailService.sendMail(mail);
+		//emailService.sendMailWithAttachment(eParams);
+		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(ucBuilder.path("/api/lead/{id}").buildAndExpand(lead.getId()).toUri());
 		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
@@ -107,7 +124,7 @@ public class LeadController {
 	// ------------------- Update a LeadMembership ------------------------------------------------
 	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER"  })
 	@RequestMapping(value = "/lead/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<?> updateLeadMembership(@PathVariable("id") int id, @RequestBody LeadMembership lead) {
+	public ResponseEntity<?> updateLeadMembership(@PathVariable("id") int id, @RequestBody LeadMembership lead, @ModelAttribute("userId") Integer userId) {
 		logger.info("Updating LeadMembership with id {}", id);
 
 		LeadMembership currentLeadMembership = leadService.findById(id);
@@ -137,15 +154,28 @@ public class LeadController {
 		currentLeadMembership.setStateCode(lead.getStateCode());
 		currentLeadMembership.setZipCode(lead.getZipCode());
 		
-		List<AgentLeadAppointment> agntLeadAppointList = lead.getAgentLeadAppointmentList();
+		//List<AgentLeadAppointment> agntLeadAppointList = lead.getAgentLeadAppointmentList();
 	
-		agntLeadAppointList.forEach(agntleadAppt -> {System.out.println("testing agntleadAppt"+agntleadAppt);	
+		User user  = userService.findById(userId);
+		
+		List<LeadNotes> leadNotes = new ArrayList<>();
+	      for (LeadNotes ln: lead.getLeadNotes()) {
+	    	  ln.setUser(user); 
+	    	  ln.setLead(currentLeadMembership);
+	    	  leadNotes.add(ln);
+	      }
+	      currentLeadMembership.getLeadNotes().clear();
+	      currentLeadMembership.getLeadNotes().addAll(leadNotes);
+	      
+		
+		
+	/*	agntLeadAppointList.forEach(agntleadAppt -> {System.out.println("testing agntleadAppt"+agntleadAppt);	
 		System.out.println("testing agntleadAppt"+agntleadAppt.toString());}
-		);
+		);*/
 		
 		//currentLeadMembership.getAgentLeadAppointmentList().clear();
 		
-		currentLeadMembership.setAgentLeadAppointmentList(agntLeadAppointList);  
+	//	currentLeadMembership.setAgentLeadAppointmentList(agntLeadAppointList);  
 		System.out.println("currentLeadMembership.getAgentLeadAppointmentList().size() =====3step" +currentLeadMembership.getAgentLeadAppointmentList().size());
 		
 		leadService.updateLeadMembership(currentLeadMembership);

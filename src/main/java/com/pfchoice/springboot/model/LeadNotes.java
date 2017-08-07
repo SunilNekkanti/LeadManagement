@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,7 +13,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+
 
 /**
  *
@@ -32,15 +36,19 @@ public class LeadNotes extends RecordDetails implements Serializable {
 	@Column(name = "lead_notes_id", nullable = false)
 	private Integer id;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "lead_mbr_id", referencedColumnName = "lead_mbr_id", nullable =false)
+	private LeadMembership lead ;
+	
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", referencedColumnName = "id", nullable =false)
 	private User user;
 	
 	@Column(name = "notes", length = 65535, columnDefinition = "TEXT")
 	private String notes;
-	
 
-	
 	/**
 	 * 
 	 */
@@ -49,6 +57,7 @@ public class LeadNotes extends RecordDetails implements Serializable {
 	}
 
 	/**
+	 * 
 	 * @param id
 	 */
 	public LeadNotes(final Integer id) {
@@ -57,6 +66,7 @@ public class LeadNotes extends RecordDetails implements Serializable {
 	}
 
 	/**
+	 * 
 	 * @return
 	 */
 	public Integer getId() {
@@ -64,25 +74,11 @@ public class LeadNotes extends RecordDetails implements Serializable {
 	}
 
 	/**
+	 * 
 	 * @param id
-	 *            the id to set
 	 */
-	public void setId(Integer id) {
+	public void setId(final Integer id) {
 		this.id = id;
-	}
-
-	/**
-	 * @return the user
-	 */
-	public User getUser() {
-		return user;
-	}
-
-	/**
-	 * @param user the user to set
-	 */
-	public void setUser(User user) {
-		this.user = user;
 	}
 
 	/**
@@ -99,6 +95,41 @@ public class LeadNotes extends RecordDetails implements Serializable {
 		this.notes = notes;
 	}
 
+	/**
+	 * @return the lead
+	 */
+	public LeadMembership getLead() {
+		return lead;
+	}
+
+	/**
+	 * @param lead the lead to set
+	 */
+	public void setLead(LeadMembership lead) {
+		this.lead = lead;
+	}
+
+	/**
+	 * @return the user
+	 */
+	public User getUser() {
+		return user;
+	}
+
+	/**
+	 * @param user the user to set
+	 */
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 0;
+		hash += (id != null ? id.hashCode() : 0);
+		return hash;
+	}
+
 	@Override
 	public boolean equals(Object object) {
 		if (!(object instanceof LeadNotes)) {
@@ -113,7 +144,7 @@ public class LeadNotes extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.Brokerage[ id=" + id + " ]";
+		return this.getCreatedDate()+">>>"+this.getCreatedBy()+">>>>"+this.notes+"\n";
 	}
 
 }

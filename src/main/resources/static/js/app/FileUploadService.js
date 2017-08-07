@@ -15,7 +15,7 @@
              $http.get(urls.FILE_UPLOADED_SERVICE_API + id , {responseType: 'arraybuffer'})
                  .then(
                      function (response) {
-                         console.log('Fetched successfully File response'+ JSON.stringify(response));
+                         console.log('Fetched successfully File response');
                          
                          var uri = urls.FILE_UPLOADED_SERVICE_API + id;
                          var link = angular.element('<a href="' + uri + '" target="_blank"></a>');
@@ -40,11 +40,16 @@
     	 function uploadFileToUrl(files) {
             //FormData, object of key/value pair for form fields and values
         	
+    		
             var fileFormData = new FormData();
-         //  fileFormData.append('files', files);
-        	 $.each(files, function(i, file) {
-        		fileFormData.append('files', file);
-        	}); 
+            if(files.length>0 ){
+            	   //  fileFormData.append('files', files);
+           	 $.each(files, function(i, file) {
+           		fileFormData.append('files', file);
+           	  });
+            }else{
+            	fileFormData.append('files', files);
+            }
             
              
             var deffered = $q.defer();

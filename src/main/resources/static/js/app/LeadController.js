@@ -34,6 +34,7 @@ app
 							self.serverResponse = {};
 							self.loginUser = {};
 							self.lead = {};
+							self.notes ='';
 							//self.lead.bestTimeToCall = "1988-04-21T18:25:43-05:00";
 							self.leads = [];
 							self.leadEventId = $stateParams.eventId;
@@ -263,6 +264,10 @@ app
 									
 									
 								} else {
+									 if(self.notes && self.notes != ''){
+					            		 self.lead.leadNotes = [];
+					            		 self.lead.leadNotes.push({notes:self.notes});
+					            	 }
 									updateLead(self.lead, self.lead.id);
 									console.log('Lead updated with id ',
 											self.lead.id);
@@ -290,15 +295,12 @@ app
 							
 							function readUploadedFile(){
 								console.log('About to read consignment form');
-								angular.element('#myModalShower').trigger('click');
 								FileUploadService.getFileUpload(self.lead.fileUpload.id).then(
 										function(response) {
 											self.errorMessage = '';
 											var file = new Blob([response], {type: self.lead.fileUpload.contentType});
 											 var fileURL = URL.createObjectURL(file);
 										    self.content = $sce.trustAsResourceUrl(fileURL); 
-										    var target = angular.element('#pdfModal');
-										    target.show();
 										    
 										},
 										function(errResponse) {
@@ -440,14 +442,21 @@ app
 							}
 
 							function uploadFile() {
-						           var file = self.myFile;
-						           var  promise = FileUploadService.uploadFileToUrl(file);
+						           var  promise = FileUploadService.uploadFileToUrl(self.myFile);
 
 						            promise.then(function (response) {
 						            	if(!self.lead.fileUpload){
 						            		self.lead.fileUpload = {};
 						            	}
-						                self.lead.fileUpload.id = response;
+						            	 var fileuploads = response;
+						            	 if(fileuploads.length >0 )
+						                self.lead.fileUpload= fileuploads[0];
+						            	 
+						            	 if(self.notes && self.notes != ''){
+						            		 
+						            		 self.lead.leadNotes = [];
+						            		 self.lead.leadNotes.push({notes:self.notes});
+						            	 }
 						                createLead(self.lead);
 						            }, function () {
 						                self.serverResponse = 'An error has occurred';
@@ -474,6 +483,7 @@ app
 												});;
 									}
 						        }
+						    
 						    function showAgentAssignment(){
 						    	
 						    	if(self.loginUser.roleName != 'ROLE_AGENT' && self.loginUser.roleName != 'ROLE_EVENT_COORDINATOR'){
@@ -625,6 +635,7 @@ app
 								    self.popup2.opened = true;
 								  };
 
+								  
 						  function setDate(year, month, day) {
 							  self.bestTimeToCall = new Date(year, month, day);
 								  };

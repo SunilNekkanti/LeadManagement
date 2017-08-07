@@ -239,8 +239,6 @@ app.controller('ProviderController',
             self.errorMessage='';
             self.languages = getAllLanguages();
             self.brokerages = getAllBrokerages();
-            console.log('self.brokerages' +self.brokerages);
-            console.log('self.languages ' + JSON.stringify(self.languages) ) ;
             self.display =true;
         }
         

@@ -18,9 +18,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
+
 
 import com.pfchoice.springboot.model.Email;
 import com.pfchoice.springboot.service.EmailService;
+
+import freemarker.template.Configuration;
 
 @Service("emailService")
 public class EmailServiceImpl implements EmailService {
@@ -31,19 +35,22 @@ public class EmailServiceImpl implements EmailService {
 	private JavaMailSender mailSender;
  
 
+	@Autowired
+    Configuration fmConfiguration;
+	
 	/**
 	 * This method will send compose and send the message
 	 * @throws MessagingException 
 	 */
-	public void sendMail(Email eParams) throws MessagingException {
+	public void sendMail(Email mail) throws MessagingException {
 
 		MimeMessage message = mailSender.createMimeMessage();
-		MimeMessageHelper helper = new MimeMessageHelper(message);
-		helper.setTo(eParams.getEmailTo());
-		helper.setFrom(eParams.getEmailFrom());
-		helper.setSubject("email test");
-		helper.setText(eParams.getBody(), true);
-		helper.setCc(eParams.getEmailCc());
+		MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		helper.setTo(mail.getEmailTo());
+		helper.setFrom(mail.getEmailFrom());
+		helper.setSubject(mail.getSubject());
+		helper.setText(mail.getBody(), true);
+		helper.setCc(mail.getEmailCc());
 		mailSender.send(message);
 		LOGGER.info("an email sent from the server");
 	}
@@ -126,5 +133,17 @@ public class EmailServiceImpl implements EmailService {
 			mailSender.send(message);
 	}
 
-
+	public String geContentFromTemplate(Object model, String emailTemplateFile) {
+		System.out.println("emailTemplateFile"+emailTemplateFile);
+        StringBuffer content = new StringBuffer();
+ 
+        try {
+            content.append(FreeMarkerTemplateUtils
+                .processTemplateIntoString(fmConfiguration.getTemplate(emailTemplateFile), model));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return content.toString();
+    }
+	
 }

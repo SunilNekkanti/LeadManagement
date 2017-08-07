@@ -13,13 +13,15 @@
       </div>
     </div>
   </div>
+  
+  
   <div class="panel panel-default" ng-show="ctrl.display">
     <div class="panel-heading">List Details</div>
     <div class="panel-body">
       <form ng-submit="ctrl.submit()" name="myForm" class="form-horizontal">
         <input type="hidden" ng-model="ctrl.lead.id" />
 
-        <div class="col-sm-12 sourceInfo" ng-show="ctrl.showEventSource()">
+        <div class="col-sm-12 sourceInfo" ng-if="ctrl.showEventSource()">
           <div class="panel panel-default">
             <div class="panel-heading">Source</div>
             <div class="panel-body">
@@ -94,16 +96,19 @@
                 <div class="col-sm-6">
                   <div class="form-group col-sm-12">
                     <label for="planType">Plan Type</label>
-                    <select ng-model="ctrl.lead.planType" class="form-control" ng-options="planType.description for planType in ctrl.planTypes | orderBy:'description' track by planType.description" required></select>
+                    <select ng-model="ctrl.lead.planType" class="form-control" name="planType" ng-options="planType.description for planType in ctrl.planTypes | orderBy:'description' track by planType.description" required></select>
                     <div class="has-error" ng-show="myForm.$dirty">
-                      <span ng-show="myForm.language.$error.required">This is a required field</span>
+                      <span ng-show="myForm.planType.$error.required">This is a required field</span>
                     </div>
                   </div>
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group col-sm-12">
                     <label for="currentPlan">Current Plan</label>
-                    <select ng-model="ctrl.lead.insurance" class="form-control" ng-options="insurance.name for insurance in ctrl.insurances  | orderBy:'name' | filter:{planType:{id:ctrl.lead.planType.id}} track by insurance.name" required></select>
+                    <select ng-model="ctrl.lead.insurance" class="form-control" name="insurance" ng-options="insurance.name for insurance in ctrl.insurances  | orderBy:'name' | filter:{planType:{id:ctrl.lead.planType.id}} track by insurance.name" required="ctrl.lead.planType.id !=1"></select>
+                    <div class="has-error" ng-show="myForm.$dirty && ctrl.lead.planType.id !=1">
+                      <span ng-show="myForm.insurance.$error.required">This is a required field</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -112,7 +117,7 @@
                 <div class="col-sm-6">
                   <div class="form-group col-sm-12">
                     <label for="language">Language</label>
-                    <select ng-model="ctrl.lead.language" name="language" class="form-control" ng-options="language.description for language in ctrl.languages | orderBy:'description' track by language.description" required></select>
+                    <select ng-model="ctrl.lead.language" name="language" class="form-control"   ng-options="language.description for language in ctrl.languages | orderBy:'description' track by language.description" required></select>
                     <div class="has-error" ng-show="myForm.$dirty">
                       <span ng-show="myForm.language.$error.required">This is a required field</span>
                     </div>
@@ -120,13 +125,12 @@
                 </div>
                 
               
-                <div class="col-sm-6">
+                <div class="col-sm-6" ng-if="ctrl.lead.id">
                   <div class="form-group col-sm-12">
                     <label for="language">File</label>
                     	<a  ng-click="ctrl.readUploadedFile()" style="display:block;">
           					<span class="glyphicon glyphicon-file"></span>
         				</a>
-        				<embed ng-src="{{ctrl.content}}" style="width:200px;height:200px;"></embed>
                   </div>
                 </div>
                 
@@ -134,6 +138,8 @@
             </div>
           </div>
         </div>
+
+
 
         <div class="col-sm-6 cntInfo">
           <div class="panel panel-default">
@@ -144,7 +150,12 @@
                 <div class="col-sm-6">
                   <div class="form-group col-sm-12">
                     <label for="address1">Address 1</label>
-                    <input type="text" ng-model="ctrl.lead.address1" id="address1" class="username form-control input-sm" placeholder="Enter Address" required ng-minlength="6" ng-maxlength="100" />
+                    <input type="text" ng-model="ctrl.lead.address1" id="address1" name="address1" class="username form-control input-sm" placeholder="Enter Address" ng-required="!ctrl.lead.homePhone" ng-minlength="6" ng-maxlength="100" />
+                    <div class="has-error" ng-show="myForm.$dirty">
+                      <span ng-show="myForm.address1.$error.required">This is a required field</span>
+                      <span ng-show="myForm.address1.$error.minlength">Minimum length required is 5</span>
+                      <span ng-show="myForm.address1.$invalid">This field is invalid </span>
+                    </div>
                   </div>
                 </div>
                 <div class="col-sm-6">
@@ -159,24 +170,42 @@
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
                     <label for="	Last Name "> City / State / Zip</label>
+                     <div class="has-error" ng-show="myForm.$dirty">
+                      	<span ng-show="myForm.city.$error.required">City is a required field</span>
+                      	<span ng-show="myForm.city.$error.minlength">City Minimum length required is 4</span>
+                      	<span ng-show="myForm.city.$invalid">City field is invalid </span>
+                       </div>
+                       
+                        <div class="has-error" ng-show="myForm.$dirty">
+                      	<span ng-show="myForm.state.$error.required">State is a required field</span>
+                       </div>
+                       
+                        <div class="has-error" ng-show="myForm.$dirty">
+                      	<span ng-show="myForm.zipcode.$error.required">Zipcode is a required field</span>
+                       </div>
+                       
                     <div class="input-group">
-
-                      <input type="text" ng-model="ctrl.lead.city" id="city" class="username form-control" placeholder="Enter City" required ng-minlength="4" ng-maxlength="100" />
+                      <input type="text" ng-model="ctrl.lead.city" id="city" name="city" class="username form-control" placeholder="Enter City" ng-required="!ctrl.lead.homePhone" ng-minlength="4" ng-maxlength="100" />
                       <span class="input-group-addon">-</span>
-                      <select ng-model="ctrl.lead.stateCode" class="form-control" ng-options="state.description for state in ctrl.states | orderBy:'description' track by state.description" required></select>
+                      <select ng-model="ctrl.lead.stateCode" class="form-control" name="state" ng-options="state.description for state in ctrl.states | orderBy:'description' track by state.description" ng-required="!ctrl.lead.homePhone"></select>
                       <span class="input-group-addon">-</span>
-                      <select ng-model="ctrl.lead.zipCode" class="form-control" ng-options="zipCode.code for zipCode in ctrl.lead.stateCode.zipCodes | orderBy:'code'  track by zipCode.code" required></select>
+                      <select ng-model="ctrl.lead.zipCode" name="zipcode" class="form-control" ng-options="zipCode.code for zipCode in ctrl.lead.stateCode.zipCodes | orderBy:'code'  track by zipCode.code" ng-required="!ctrl.lead.homePhone"></select>
+                      
                     </div>
                   </div>
                 </div>
 
               </div>
 
+		 
               <div class="row">
                 <div class="col-sm-6">
                   <div class="form-group col-sm-12">
                     <label for="homePhone">Home Phone</label>
-                    <input type="text" ng-model="ctrl.lead.homePhone" id="homePhone" class="username form-control input-sm" placeholder="Enter Home phone" required phone-input ng-minlength="10" />
+                    <input type="text" ng-model="ctrl.lead.homePhone" id="homePhone" name="homePhone" class="username form-control input-sm" placeholder="Enter Home phone" ng-required="!ctrl.lead.address1" phone-input ng-minlength="10" />
+                    <div class="has-error" ng-show="myForm.$dirty">
+                      <span ng-show="myForm.homePhone.$error.required">This is a required field</span>
+                    </div>
                   </div>
                 </div>
 
@@ -213,7 +242,7 @@
           </div>
         </div>
 
-        <div class="col-sm-12 additionalInfo" ng-show="ctrl.showLeadAdditionalDetails()">
+        <div class="col-sm-12 additionalInfo" ng-if="ctrl.showLeadAdditionalDetails()">
           <div class="panel panel-default">
             <div class="panel-heading">Additional Details</div>
             <div class="panel-body">
@@ -221,7 +250,7 @@
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
                     <label for="agree consent form">Agree Consent Form </label>
-                    <input type="checkbox" class="form-control bigCheckBox" ng-model="ctrl.lead.consentFormSigned" name="consentFormSigned" ng-true-value="'Y'" ng-false-value="'N'" required>
+                    <input type="checkbox" class="form-control bigCheckBox" ng-model="ctrl.lead.consentFormSigned" name="consentFormSigned" ng-true-value="'Y'" ng-false-value="'N'" required="!ctrl.lead.id">
                     <div ng-if="!ctrl.lead.id">
                       <div class="has-error" ng-show="myForm.$dirty">
                         <span ng-show="myForm.consentFormSigned.$error.required">This is a required field</span>
@@ -233,8 +262,9 @@
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
                     <label for="file">File </label>
-                    <input class="col-sm-12  control-label form-control" name="fileUpload" type="file" file-model="ctrl.myFiles" ng-model="ctrl.myfiles" id="myFileField" required/>
-                      <div class="has-error" ng-show="myForm.$dirty">
+                    <input class="col-sm-12  control-label form-control" name="fileUpload" type="file" file-model="ctrl.myFile"  ng-model="ctrl.myFile" id="myFileField"  required="!ctrl.lead.id"/>
+                    
+                      <div class="has-error" ng-show="!ctrl.lead.id && myForm.$dirty && !ctrl.myFile">
                         <span ng-show="myForm.fileUpload.$error.required">This is a required field</span>
                       </div>
                   </div>
@@ -245,8 +275,8 @@
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
                     <label for="appointmentnotes">Notes </label>
-                    <textarea name="notes" class="form-control" id="notes" ng-model="ctrl.selectedAgentLeadAppointment.notes"></textarea>
-                    <textarea name="notes" disabled class="form-control" id="notes" ng-model="ctrl.selectedAgentLeadAppointment.notes"></textarea>
+                    <textarea name="notes" class="form-control" id="notes" ng-model="ctrl.notes"></textarea>
+                    <textarea name="notes" disabled class="form-control" id="notes" ng-model="ctrl.lead.notesHistory"></textarea>
                   </div>
                 </div>
               </div>
@@ -254,7 +284,7 @@
           </div>
         </div>
 
-        <div class="col-sm-12 agentInfo" ng-show="ctrl.showAgentAssignment()">
+    <div class="col-sm-12 agentInfo" ng-if="ctrl.showAgentAssignment()">
           <div class="panel panel-default">
             <div class="panel-heading">Agent Assignment</div>
             <div class="panel-body">
@@ -292,7 +322,7 @@
           </div>
         </div>
 
-        <div class="col-sm-12 statusInfo" ng-show="ctrl.showEventStatus()">
+        <div class="col-sm-12 statusInfo" ng-if="ctrl.showEventStatus()">
           <div class="panel panel-default">
             <div class="panel-heading">Status</div>
             <div class="panel-body">
@@ -300,7 +330,7 @@
                 	<div class="col-sm-6">
                   		<div class="form-group col-sm-12">
                   			<label class="control-label" for="selectbasic">Status</label>
-              				<select ng-model="ctrl.lead.status" class="form-control" ng-options="status.description for status in ctrl.statuses | orderBy:'description' track by status.description" required></select>
+              				<select ng-model="ctrl.lead.status" class="form-control" ng-options="status.description for status in ctrl.statuses | orderBy:'description' track by status.description" required="ctrl.lead.id"></select>
                  	 	</div>
                		</div>  
                		
@@ -321,7 +351,7 @@
 
 
 
-        <div class="col-sm-12 pcpInfo" ng-show="ctrl.showStatusChangeDetails()">
+        <div class="col-sm-12 pcpInfo" ng-if="ctrl.showStatusChangeDetails()">
           <div class="panel panel-default">
             <div class="panel-heading">PCP Details</div>
             <div class="panel-body">
@@ -331,7 +361,7 @@
                 <div class="col-sm-4">
                   <div class="form-group col-sm-12">
                     <label for="PCP">PCP </label>
-                    <select class="form-control" ng-model="ctrl.selectedAgentLeadAppointment.prvdr" ng-options="prvdr.name for prvdr in ctrl.providers | orderBy:'name' track by prvdr.name" required="ctrl.lead.status.id == 2"></select>
+                    <select class="form-control" ng-model="ctrl.selectedAgentLeadAppointment.prvdr" ng-options="prvdr.name for prvdr in ctrl.providers | orderBy:'name' track by prvdr.name" required="ctrl.lead.status.id && ctrl.lead.status.id == 2"></select>
                   </div>
                 </div>
 
@@ -340,7 +370,7 @@
 
                     <label for="effectiveDate">Effective From</label>
                     <div class="input-group date" ng-model="ctrl.selectedAgentLeadAppointment.effectiveFrom" date1-picker>
-                      <input type="text" class="form-control netto-input" ng-model="ctrl.selectedAgentLeadAppointment.effectiveFrom" date-picker-input required="ctrl.lead.status.id == 2">
+                      <input type="text" class="form-control netto-input" ng-model="ctrl.selectedAgentLeadAppointment.effectiveFrom" date-picker-input required="ctrl.lead.status.id && ctrl.lead.status.id == 2">
                       <span class="input-group-addon">
 			           							<span class="glyphicon glyphicon-calendar"></span>
                       </span>
@@ -351,7 +381,7 @@
                 <div class="col-sm-4">
                   <div class="form-group col-sm-12">
                     <label for="planType">Plan Type</label>
-                    <select class=" form-control" ng-model="ctrl.selectedAgentLeadAppointment.planType" ng-options="planType.description for planType in ctrl.planTypes | orderBy:'description' track by planType.description" required="ctrl.lead.status.id == 2"></select>
+                    <select class=" form-control" ng-model="ctrl.selectedAgentLeadAppointment.planType" ng-options="planType.description for planType in ctrl.planTypes | orderBy:'description' track by planType.description" required="ctrl.lead.status.id && ctrl.lead.status.id == 2"></select>
                   </div>
                 </div>
               </div>
@@ -368,7 +398,7 @@
                   <div class="form-group col-sm-12">
                     <label class="control-label" for="drappointment">Dr Appointment </label>
                     <div class="input-group" name="drappointment" ng-model="ctrl.selectedAgentLeadAppointment.drappointment" date-picker>
-                      <input type="text" class="form-control netto-input" ng-model="ctrl.selectedAgentLeadAppointment.drappointment" date-picker-input required="ctrl.lead.status.id == 2">
+                      <input type="text" class="form-control netto-input" ng-model="ctrl.selectedAgentLeadAppointment.drappointment" date-picker-input required="ctrl.lead.status.id && ctrl.lead.status.id == 2">
                       <span class="input-group-addon">
 			           							<span class="glyphicon glyphicon-calendar"></span>
                       </span>
@@ -389,6 +419,8 @@
           </div>
         </div>
         
+  
+         
 
           <div class="row col-sm-12" style="padding-bottom:20px;">
             <div class="form-actions floatCenter col-sm-offset-9">
@@ -401,8 +433,7 @@
       </div>
 
     </div>
-  </div>
-  
+
 
 </div>
 

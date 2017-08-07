@@ -13,5 +13,6 @@ public interface EmailService  {
 	
 	 void sendMailWithAttachment(Email eParams) throws MessagingException, IOException ;
 
+	 String geContentFromTemplate( Object model, String emailTemplateFile) ;
 
 }
