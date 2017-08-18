@@ -1,6 +1,7 @@
 package com.pfchoice.springboot.service.impl;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.activation.DataHandler;
@@ -41,9 +42,10 @@ public class EmailServiceImpl implements EmailService {
 	/**
 	 * This method will send compose and send the message
 	 * @throws MessagingException 
+	 * @throws InterruptedException 
 	 */
-	public void sendMail(Email mail) throws MessagingException {
-
+	public void sendMail(Email mail) throws MessagingException, InterruptedException {
+		 Thread.sleep(10000);
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
 		helper.setTo(mail.getEmailTo());
@@ -60,15 +62,22 @@ public class EmailServiceImpl implements EmailService {
 	 * @throws MessagingException 
 	 * @throws IOException 
 	 */
-	public void sendMailWithAttachment(Email eParams) throws MessagingException, IOException {
+	public void sendMailWithAttachment(Email mail) throws MessagingException, IOException, InterruptedException {
 
 		MimeMessage message = mailSender.createMimeMessage();
+		message.addHeaderLine("charset=UTF-8");
+	    message.addHeaderLine("component=VEVENT");
+	    message.addHeaderLine("method=REQUEST");
+	    
 		MimeMessageHelper helper = new MimeMessageHelper(message);
-		helper.setTo(eParams.getEmailTo());
-		helper.setFrom(eParams.getEmailFrom());
-		helper.setSubject("email test");
-		helper.setCc(eParams.getEmailCc());
-
+		helper.setTo(mail.getEmailTo());
+		helper.setFrom(mail.getEmailFrom());
+		helper.setSubject(mail.getSubject());
+		helper.setCc(mail.getEmailCc());
+		helper.setText(mail.getBody(), true);
+		
+		Map<String, Object> emailAttributes =  mail.getModel();
+		String rrule = (emailAttributes.get("rrule") != null) ? "RRULE:"+emailAttributes.get("rrule").toString()+"\n":"";
 		StringBuffer sb = new StringBuffer();
 
         StringBuffer buffer = sb.append("BEGIN:VCALENDAR\n" +
@@ -76,20 +85,20 @@ public class EmailServiceImpl implements EmailService {
                 "VERSION:2.0\n" +
                 "METHOD:REQUEST\n" +
                 "BEGIN:VEVENT\n" +
-                "ATTENDEE;ROLE=REQ-PARTICIPANT;RSVP=TRUE:MAILTO:xx@xx.com\n" +
-                "ORGANIZER:MAILTO:xx@xx.com\n" +
-                "DTSTART:20161208T053000Z\n" +
-                "DTEND:20161208T060000Z\n" +
-                "LOCATION:Conferenceroom\n" +
+                "ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE:MAILTO:"+mail.getEmailTo()+"\n" +
+                "ORGANIZER:MAILTO:"+mail.getEmailCc()+"\n" +
+                "DTSTART:"+emailAttributes.get("appointmentStartTime").toString()+"\n" +
+                "DTEND:"+emailAttributes.get("appointmentEndTime").toString()+"\n" +
+                "LOCATION:"+emailAttributes.get("location").toString()+"\n" +
                 "TRANSP:OPAQUE\n" +
                 "SEQUENCE:0\n" +
-                "UID:040000008200E00074C5B7101A82E00800000000002FF466CE3AC5010000000000000000100\n" +
-                "RRULE:FREQ=WEEKLY;INTERVAL=2;COUNT=8;WKST=SU;BYDAY=TU,TH\n"+
+                "UID:"+mail.getCreatedBy()+"\n" +
+                 rrule+ 
                 " 000004377FE5C37984842BF9440448399EB02\n" +
-                "DTSTAMP:20051206T120102Z\n" +
+                "DTSTAMP:"+emailAttributes.get("currentTime").toString() +"\n" +
                 "CATEGORIES:Meeting\n" +
-                "DESCRIPTION:This the description of the meeting.\n\n" +
-                "SUMMARY:Test meeting request\n" +
+                "DESCRIPTION:"+mail.getSubject()+"\n\n" +
+                "SUMMARY:"+mail.getSubject()+"\n" +
                 "PRIORITY:5\n" +
                 "CLASS:PUBLIC\n" +
                 "BEGIN:VALARM\n" +
@@ -104,7 +113,7 @@ public class EmailServiceImpl implements EmailService {
 			BodyPart messageBodyPart = new MimeBodyPart();
 
 			// Now set the actual message
-			messageBodyPart.setText(eParams.getBody());
+			messageBodyPart.setText(mail.getBody());
 
 			// Create a multipar message
 			Multipart multipart = new MimeMultipart();
@@ -134,7 +143,18 @@ public class EmailServiceImpl implements EmailService {
 	}
 
 	public String geContentFromTemplate(Object model, String emailTemplateFile) {
-		System.out.println("emailTemplateFile"+emailTemplateFile);
+        StringBuffer content = new StringBuffer();
+ 
+        try {
+            content.append(FreeMarkerTemplateUtils
+                .processTemplateIntoString(fmConfiguration.getTemplate(emailTemplateFile), model));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return content.toString();
+    }
+	
+	public String geContentFromTemplate(Map<String, Object> model, String emailTemplateFile) {
         StringBuffer content = new StringBuffer();
  
         try {

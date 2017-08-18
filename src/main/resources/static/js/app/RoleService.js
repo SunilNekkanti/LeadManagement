@@ -22,7 +22,6 @@ app.service('RoleService',
                     .then(
                         function (response) {
                             console.log('Fetched successfully all roles');
-                            console.log('response.data '+JSON.stringify(response.data));
                             $localStorage.roles = response.data;
                             deferred.resolve(response);
                         },

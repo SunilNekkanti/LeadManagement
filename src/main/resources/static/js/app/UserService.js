@@ -107,7 +107,6 @@ app.service('UserService',
 
             function updateUser(user, id) {
                 console.log('Updating User with id '+id);
-                console.log('About to update user'+JSON.stringify(user));
                 var deferred = $q.defer();
                 $http.put(urls.USER_SERVICE_API + id, user)
                     .then(

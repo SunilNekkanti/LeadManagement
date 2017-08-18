@@ -52,12 +52,10 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
  	@JoinColumn(name = "lead_mbr_id", referencedColumnName = "lead_mbr_id")
 	private LeadMembership lead;
  
- 	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
+ 	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone="America/NewYork")
  	@Column(name = "appointment_time", nullable= true)
-	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar  appointmentTime;
  	
- 	@JsonIgnore
  	@ManyToOne(fetch = FetchType.LAZY)
  	@JoinColumn(name = "prvdr_id", referencedColumnName = "prvdr_id")
 	private Provider prvdr;
@@ -66,18 +64,19 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
  	@JoinColumn(name = "plan_type_id", referencedColumnName = "plan_type_id")
 	private PlanType planType;
 	
- 	 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "ins_id", referencedColumnName = "insurance_id")
+	private Insurance insurance;
+
 	@Column(name = "effective_from")
 	@Temporal(TemporalType.DATE)
 	private Date effectiveFrom;
 	
- 	
 	@Column(name = "transportation", insertable = false)
 	private Character transportation = new Character('N');
 	
-	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
+	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone="America/NewYork")
  	@Column(name = "dr_appointment_time", nullable= true)
-	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar  drAppointmentTime;
 	
 	/**
@@ -191,6 +190,20 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 	 */
 	public void setPlanType(PlanType planType) {
 		this.planType = planType;
+	}
+
+	/**
+	 * @return the insurance
+	 */
+	public Insurance getInsurance() {
+		return insurance;
+	}
+
+	/**
+	 * @param insurance the insurance to set
+	 */
+	public void setInsurance(Insurance insurance) {
+		this.insurance = insurance;
 	}
 
 	/**

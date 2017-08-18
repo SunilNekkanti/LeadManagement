@@ -10,6 +10,8 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 
 /**
  * @author sarath
@@ -18,11 +20,13 @@ import javax.persistence.TemporalType;
 @MappedSuperclass
 public class RecordDetails {
 
-	@Temporal(TemporalType.TIMESTAMP)
+	//@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone="America/NewYork")
 	@Column(name = "created_date", updatable=false)
 	private Date createdDate = new Date();
 
-	@Temporal(TemporalType.TIMESTAMP)
+	//@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone="America/NewYork")
 	@Column(name = "updated_date",   updatable=false)
 	private Date updatedDate = new Date();
 

@@ -1,0 +1,21 @@
+<html>
+ 
+<head>
+</head>
+ 
+<body>
+    <p><b>Dear ${agent} </b>,</p>
+    
+    <p>You have been scheduled for an appointment with ${firstName} ${lastName} on   ${appointmentStartTime}</p>
+    <p>at ${location}</b></p>
+    
+     Notes:<p> ${notes}  </p>
+     
+    <p>Thanks</p>
+    <p>${careCoordinator}</p>
+    <p>${currentTime}</p>
+    
+    
+</body>
+ 
+</html>

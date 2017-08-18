@@ -186,7 +186,7 @@ public class FileUploadController {
         byte[] contents =  fileUpload.getData();
         HttpHeaders headers = new HttpHeaders();
         String filename = fileUpload.getFileName();
-        headers.setContentDispositionFormData(filename, filename);
+        headers.setContentDispositionFormData("inline", filename);
         headers.setContentType(MediaType.parseMediaType(fileUpload.getContentType()));
         
         return  new ResponseEntity<byte[]>(contents, headers, HttpStatus.OK);

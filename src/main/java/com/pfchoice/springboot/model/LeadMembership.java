@@ -133,7 +133,8 @@ public class LeadMembership extends RecordDetails implements Serializable {
 
 	@javax.persistence.Transient
 	private String notesHistory;
-
+	
+	
 	/**
 	 * 
 	 */
@@ -595,6 +596,7 @@ public class LeadMembership extends RecordDetails implements Serializable {
 		this.notesHistory = leadNotes.stream().map(ln -> ln.getNotes()).reduce("", String::concat);
 
 	}
+
 
 	@Override
 	public String toString() {

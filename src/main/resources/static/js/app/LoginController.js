@@ -3,9 +3,10 @@
 var loginapp = angular.module('login-app', ['ui.bootstrap','ui.router','ngStorage','datatables','ngAnimate', 'ngSanitize']);
 
 loginapp.controller('LoginController',
-    [ '$scope',  function(  $scope) {
+    [ '$scope', '$window', function(  $scope, $window) {
 
-    	
+    	 $window.localStorage.clear();
+         
         var self = this;
         self.login = {};
         self.headerDisplay = false;
@@ -30,8 +31,7 @@ loginapp.controller('LoginController',
                 console.log('Login updated with id ', self.login.id);
             }
         }
-
-        
+       
         function reset(){
             self.successMessage='';
             self.errorMessage='';

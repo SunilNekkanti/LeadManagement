@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @author sarath
  */
 @Entity
-@Table(name = "Lead_membership_provider")
+@Table(name = "lead_membership_provider")
 public class LeadMembershipProvider extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;

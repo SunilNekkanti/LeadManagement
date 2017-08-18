@@ -81,7 +81,7 @@ app.service('LanguageService',
             }
 
             function createLanguage(language) {
-                console.log('Creating Language:'+JSON.stringify(language));
+                console.log('Creating Language:');
                 var deferred = $q.defer();
                 
                 $http.post(urls.LANGUAGE_SERVICE_API, language)

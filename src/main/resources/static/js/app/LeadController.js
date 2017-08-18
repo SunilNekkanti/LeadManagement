@@ -76,10 +76,12 @@ app
 							self.addAgentLeadAppointment = addAgentLeadAppointment;
 							self.showAgentAssignment = showAgentAssignment;
 							self.showEventSource = showEventSource;
+							self.showStatusNotes = showStatusNotes;
 							self.showStatusChangeDetails =showStatusChangeDetails;
 							self.showEventStatus =showEventStatus;
 							self.showLeadAdditionalDetails = showLeadAdditionalDetails;
 							self.configLeadEvent = configLeadEvent;
+							self.showAddorUpdateButton = showAddorUpdateButton;
 							 configLeadEvent();
 							self.reset = reset;
 							loginUser : loginUser;
@@ -249,11 +251,9 @@ app
 								console.log('Submitting');
 								if(self.lead.agentLeadAppointmentList){
 									self.lead.agentLeadAppointmentList = self.lead.agentLeadAppointmentList.filter(function( obj ) {
-										  return obj.id !== self.selectedAgentLeadAppointment.id;
+										  return obj.id != self.selectedAgentLeadAppointment.id;
 										});
-									
 									self.lead.agentLeadAppointmentList.push(self.selectedAgentLeadAppointment);
-									console.log('self.lead.agentLeadAppointmentList '+JSON.stringify(self.lead.agentLeadAppointmentList));
 								}
 								
 								if (self.lead.id === undefined
@@ -492,9 +492,24 @@ app
 						    		return false;
 						    	}
 						    }
+						    function showAddorUpdateButton(){
+						    	if(self.loginUser.roleName == 'ROLE_EVENT_COORDINATOR'){
+						    		return !self.myFile || self.lead.consentFormSigned == 'N' || $scope.myForm.$invalid || $scope.myForm.$pristine
+						    	}else{
+						    		return  $scope.myForm.$invalid || $scope.myForm.$pristine
+						    	}
+						    }
 						    
 						    function showEventStatus(){
 						    	if(self.loginUser.roleName != 'ROLE_EVENT_COORDINATOR'){
+						    		return true;
+						    	}else{
+						    		return false;
+						    	}
+						    }
+						    
+						    function showStatusNotes(){
+						    	if(self.loginUser.roleName == 'ROLE_AGENT'){
 						    		return true;
 						    	}else{
 						    		return false;

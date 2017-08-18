@@ -58,8 +58,8 @@ public class Email extends RecordDetails implements Serializable {
 					@JoinColumn(name = "files_upload_id", referencedColumnName = "file_upload_id") })
 	private Set<FileUpload> filesUpload;
 
-	@Transient
-	private String emailTemplateFile;
+	@Column(name = "template_filename", nullable=false)
+	private String templateFile;
 	
 	@Transient
 	private Map<String, Object> model;
@@ -71,19 +71,19 @@ public class Email extends RecordDetails implements Serializable {
 		super();
 	}
 
-	public Email(String emailTemplateFile) {
+	public Email(String templateFile) {
 		super();
-		this.emailTemplateFile = emailTemplateFile;
+		this.templateFile =templateFile;
 	}
 
 	
 	/**
 	 * @param id
 	 */
-	public Email(final Integer id,String emailTemplateFile) {
+	public Email(final Integer id,String templateFile) {
 		super();
 		this.id = id;
-		this.emailTemplateFile = emailTemplateFile;
+		this.templateFile = templateFile;
 	}
 
 	/**
@@ -193,15 +193,15 @@ public class Email extends RecordDetails implements Serializable {
 	/**
 	 * @return the emailTemplateFile
 	 */
-	public String getEmailTemplateFile() {
-		return emailTemplateFile;
+	public String getTemplateFilename() {
+		return templateFile;
 	}
 
 	/**
 	 * @param emailTemplateFile the emailTemplateFile to set
 	 */
-	public void setEmailTemplateFile(String emailTemplateFile) {
-		this.emailTemplateFile = emailTemplateFile;
+	public void setTemplateFile(String templateFile) {
+		this.templateFile = templateFile;
 	}
 
 	/**

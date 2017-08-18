@@ -274,9 +274,9 @@
               <div class="row col-md-6">
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
-                    <label for="appointmentnotes">Notes </label>
-                    <textarea name="notes" class="form-control" id="notes" ng-model="ctrl.notes"></textarea>
-                    <textarea name="notes" disabled class="form-control" id="notes" ng-model="ctrl.lead.notesHistory"></textarea>
+                    <label for="leadcreation">Notes </label>
+                    <textarea name="leadcreationnotes" class="form-control" id="notes" ng-model="ctrl.notes"></textarea>
+                    <textarea name="leadcreationnoteshistory" disabled class="form-control" id="notes" ng-model="ctrl.lead.notesHistory"></textarea>
                   </div>
                 </div>
               </div>
@@ -298,7 +298,7 @@
 
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
-                    <label for="	Last Name ">Appointment </label>
+                    <label for="appointmentnotes">Appointment </label>
                     <div class="input-group date" id="appointment" ng-model="ctrl.selectedAgentLeadAppointment.appointmentTime" date-picker>
                       <input type="text" class="form-control netto-input" ng-model="ctrl.selectedAgentLeadAppointment.appointmentTime" date-picker-input>
                       <span class="input-group-addon">
@@ -313,8 +313,8 @@
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
                     <label for="	Last Name ">Notes </label>
-                    <textarea name="notes" class="form-control" id="notes" ng-model="ctrl.selectedAgentLeadAppointment.notes"></textarea>
-                    <textarea name="notes" disabled class="form-control" id="notes" ng-model="ctrl.selectedAgentLeadAppointment.notes"></textarea>
+                    <textarea name="notes" class="form-control" id="notes" ng-model="ctrl.notes"></textarea>
+                    <textarea name="notes" disabled class="form-control" id="notes" ng-model="ctrl.lead.notesHistory"></textarea>
                   </div>
                 </div>
               </div>
@@ -334,7 +334,7 @@
                  	 	</div>
                		</div>  
                		
-               		<div class="col-sm-6">
+               		<div class="col-sm-6" ng-if="ctrl.showStatusNotes()">
                   		<div class="form-group col-sm-12">
                   			 <label class="control-label" for="statusNotes">Notes</label>	
                   			 <textarea name="notes" class="form-control" ></textarea>
@@ -385,20 +385,19 @@
                   </div>
                 </div>
               </div>
-
               <div class="row">
                 <div class="col-sm-4">
                   <div class="form-group col-sm-12">
                     <label for="plan">Plan</label>
-                    <select class=" form-control" ng-model="ctrl.selectedAgentLeadAppointment.leadMbrInsuranceList"  ng-options="insurance.name for insurance in ctrl.insurances | orderBy:'description' | filter :{planType:{id:ctrl.selectedAgentLeadAppointment.planType.id}} track by insurance.name"></select>
+                    <select class=" form-control" ng-model="ctrl.selectedAgentLeadAppointment.insurance"  ng-options="insurance.name for insurance in ctrl.insurances | orderBy:'description' | filter :{planType:{id:ctrl.selectedAgentLeadAppointment.planType.id}} track by insurance.name"></select>
                   </div>
                 </div>
 
                 <div class="col-sm-4">
                   <div class="form-group col-sm-12">
                     <label class="control-label" for="drappointment">Dr Appointment </label>
-                    <div class="input-group" name="drappointment" ng-model="ctrl.selectedAgentLeadAppointment.drappointment" date-picker>
-                      <input type="text" class="form-control netto-input" ng-model="ctrl.selectedAgentLeadAppointment.drappointment" date-picker-input required="ctrl.lead.status.id && ctrl.lead.status.id == 2">
+                    <div class="input-group" name="drappointment" ng-model="ctrl.selectedAgentLeadAppointment.drAppointmentTime" date-picker>
+                      <input type="text" class="form-control netto-input" ng-model="ctrl.selectedAgentLeadAppointment.drAppointmentTime" date-picker-input required="ctrl.lead.status.id && ctrl.lead.status.id == 2">
                       <span class="input-group-addon">
 			           							<span class="glyphicon glyphicon-calendar"></span>
                       </span>
@@ -419,12 +418,10 @@
           </div>
         </div>
         
-  
-         
 
           <div class="row col-sm-12" style="padding-bottom:20px;">
             <div class="form-actions floatCenter col-sm-offset-9">
-              <input type="submit" value="{{!ctrl.lead.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-sm" ng-disabled="!ctrl.myFile || ctrl.lead.consentFormSigned == 'N' || myForm.$invalid || myForm.$pristine">
+              <input type="submit" value="{{!ctrl.lead.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-sm" ng-disabled="ctrl.showAddorUpdateButton()">
               <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-sm" ng-disabled="myForm.$pristine">Reset Form</button>
             </div>
           </div>

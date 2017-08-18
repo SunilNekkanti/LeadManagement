@@ -8,7 +8,7 @@ email:
      port: 587
      username: skumar@pfchoice.com
      cc: skumar@pfchoice.com
-     password: Khammam12g
+     password: Florida6
      properties: 
         mail.smtp.auth: true 
         mail.smtp.starttls.enable: true
@@ -19,12 +19,12 @@ spring:
   profiles: local,default
 datasource:
   leadManagement:
-    url: jdbc:mysql://localhost:3306/lead_management?tinyInt1isBit=false
-    username: root
-    password: test123
+    url: jdbc:mysql://pras-aws-prod.cp2ok1lxfh49.us-east-1.rds.amazonaws.com:3306/lead_management?tinyInt1isBit=false&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=false
+    username: pfcdbadmin
+    password: pfcdb20!7
     driverClassName: com.mysql.jdbc.Driver
     defaultSchema:
-    maxPoolSize: 20
+    maxPoolSize: 10
     hibernate:
       hbm2ddl.method: validate
       show_sql: false

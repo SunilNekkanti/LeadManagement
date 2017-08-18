@@ -63,12 +63,11 @@ public class AppController {
 		if (roleSetItr.hasNext()) {
 			Role role = roleSetItr.next();
 			modal.addAttribute("roleId", role.getId());
-			modal.addAttribute("roleName", role.getId());
+			modal.addAttribute("roleName", role.getRole());
 			loginForm.setRoleName(role.getRole()); 
 			loginForm.setRoleId(role.getId());
 			session.setAttribute("loginUser", loginForm);
 		}
-		System.out.println("logged in user is "+username);
 		return "home";
 	}
 	

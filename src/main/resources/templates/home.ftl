@@ -72,7 +72,7 @@
 </head>
 
 <body class="ng-cloak" ng-controller="NavbarController">
-  <nav class="navbar navbar-default myNavbar"  ng-show="displayNavbar" role="navigation">
+  <nav class="navbar navbar-default myNavbar"  ng-if="displayNavbar" role="navigation">
     <div class="container-fluid" >
     
       <div class="navbar-collapse collapse in" collapse="isCollapsed" aria-expanded="true" >
@@ -109,7 +109,7 @@
         </form>
         <ul class="nav navbar-nav navbar-right">
         	<li> <a href="#"> <span class="glyphicon glyphicon-user"></span> ${username}</a></li>
-        	<li> <a href="#" ng-click="callMe('logout')"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        	<li> <a ng-click="callMe('logout')"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
         </ul>
       </div>
     </div>
