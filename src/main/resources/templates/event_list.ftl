@@ -358,7 +358,6 @@
               </div>
             </div>
 
-            <div class="row"> rrule = {{ctrl.eventrrule()}} </div>
           </div>
 
 

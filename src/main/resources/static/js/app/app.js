@@ -4,29 +4,29 @@ var app = angular.module('my-app', ['ui.bootstrap','ui.router','ngStorage','data
 
 
 app.constant('urls', {
-    BASE: 'http://localhost:8080/LeadManagement',
-    USER_SERVICE_API : 'http://localhost:8080/LeadManagement/api/user/',
-    LEAD_SERVICE_API : 'http://localhost:8080/LeadManagement/api/lead/',
-    GENDER_SERVICE_API : 'http://localhost:8080/LeadManagement/api/gender/',
-    ROLE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/role/',
-    STATE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/state/',
-    STATUS_SERVICE_API : 'http://localhost:8080/LeadManagement/api/leadStatus/',
-    LANGUAGE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/language/',
-    PLANTYPE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/planType/',
-    INSURANCE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/insurance/',
-    PROVIDER_SERVICE_API : 'http://localhost:8080/LeadManagement/api/provider/',
-    FACILITYTYPE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/facilityType/',
-    ACTIVITYTYPE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/activityType/',
-    BROKERAGE_SERVICE_API : 'http://localhost:8080/LeadManagement/api/brokerage/',
-    EVENT_SERVICE_API : 'http://localhost:8080/LeadManagement/api/event/',
-    LOGIN_USER : 'http://localhost:8080/LeadManagement/getloginInfo',
-    FILE_UPLOADER : 'http://localhost:8080/LeadManagement/api/fileUpload/fileProcessing.do' ,
-    COUNTY_SERVICE_API : 'http://localhost:8080/LeadManagement/api/county/',
-    EVENT_FREQUENCY_SERVICE_API : 'http://localhost:8080/LeadManagement/api/eventFrequency/',
-    EVENT_MONTH_SERVICE_API : 'http://localhost:8080/LeadManagement/api/eventMonth/',
-    EVENT_WEEKDAY_SERVICE_API : 'http://localhost:8080/LeadManagement/api/eventWeekDay/',
-    FILE_UPLOADED_SERVICE_API : 'http://localhost:8080/LeadManagement/api/fileUploaded/',
-    EVENT_WEEKNUMBER_SERVICE_API : 'http://localhost:8080/LeadManagement/api/eventWeekNumber/'
+    BASE: '/LeadManagement',
+    USER_SERVICE_API : '/LeadManagement/api/user/',
+    LEAD_SERVICE_API : '/LeadManagement/api/lead/',
+    GENDER_SERVICE_API : '/LeadManagement/api/gender/',
+    ROLE_SERVICE_API : '/LeadManagement/api/role/',
+    STATE_SERVICE_API : '/LeadManagement/api/state/',
+    STATUS_SERVICE_API : '/LeadManagement/api/leadStatus/',
+    LANGUAGE_SERVICE_API : '/LeadManagement/api/language/',
+    PLANTYPE_SERVICE_API : '/LeadManagement/api/planType/',
+    INSURANCE_SERVICE_API : '/LeadManagement/api/insurance/',
+    PROVIDER_SERVICE_API : '/LeadManagement/api/provider/',
+    FACILITYTYPE_SERVICE_API : '/LeadManagement/api/facilityType/',
+    ACTIVITYTYPE_SERVICE_API : '/LeadManagement/api/activityType/',
+    BROKERAGE_SERVICE_API : '/LeadManagement/api/brokerage/',
+    EVENT_SERVICE_API : '/LeadManagement/api/event/',
+    LOGIN_USER : '/LeadManagement/getloginInfo',
+    FILE_UPLOADER : '/LeadManagement/api/fileUpload/fileProcessing.do' ,
+    COUNTY_SERVICE_API : '/LeadManagement/api/county/',
+    EVENT_FREQUENCY_SERVICE_API : '/LeadManagement/api/eventFrequency/',
+    EVENT_MONTH_SERVICE_API : '/LeadManagement/api/eventMonth/',
+    EVENT_WEEKDAY_SERVICE_API : '/LeadManagement/api/eventWeekDay/',
+    FILE_UPLOADED_SERVICE_API : '/LeadManagement/api/fileUploaded/',
+    EVENT_WEEKNUMBER_SERVICE_API : '/LeadManagement/api/eventWeekNumber/'
 });
 
 app.controller('NavbarController',  ['$scope', '$state', '$stateParams', function($scope, $state, $stateParams){
@@ -41,10 +41,8 @@ app.controller('NavbarController',  ['$scope', '$state', '$stateParams', functio
 		  $state.go(url,params);
 		  
 	  }else{
-		  $state.go(url,{leadlink: ''});
+		  $state.go(url);
 	  }
-		 
-	  
   }
 }]);
 
@@ -105,10 +103,14 @@ app.config(['$stateProvider', '$urlRouterProvider',
           }
       })
       .state('lead', {
-          url: '/lead{leadlink}' ,
+          url: '/lead' ,
           templateUrl: 'partials/lead_list',
           controller:'LeadController',
           controllerAs:'ctrl',
+          params: {
+        	    'eventId': '0', 
+        	    'leadDisplay': false, 
+        	  },
           resolve: {
               leads: function ($q, LeadService) {
                   console.log('Load all leads');

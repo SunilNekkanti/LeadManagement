@@ -590,9 +590,8 @@ app
 							
 							
 							function addLead( ){
-								alert('before lead invoke');
-								$state.go('lead', {leadlink:'/?eventId&leadDisplay',eventId:self.event.id,leadDisplay:true});
-								alert('after lead invoke');
+								var params = {"eventId":self.event.id,"leadDisplay":true};
+								$state.go('lead', params );
 								
 							}
 
