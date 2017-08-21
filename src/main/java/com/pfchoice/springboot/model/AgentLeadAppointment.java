@@ -76,7 +76,7 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 	private Character transportation = new Character('N');
 	
 	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone="America/NewYork")
- 	@Column(name = "dr_appointment_time", nullable= true)
+ 	@Column(name = "dr_appointment_time")
 	private Calendar  drAppointmentTime;
 	
 	/**

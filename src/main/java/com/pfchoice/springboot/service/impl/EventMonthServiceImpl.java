@@ -43,11 +43,11 @@ public class EventMonthServiceImpl implements EventMonthService{
 		eventMonthRepository.delete(id);
 	}
 
-	public void deleteAllEventFrequencies(){
+	public void deleteAllEventMonths(){
 		eventMonthRepository.deleteAll();
 	}
 
-	public List<EventMonth> findAllEventFrequencies(){
+	public List<EventMonth> findAllEventMonths(){
 		return eventMonthRepository.findAll();
 	}
 

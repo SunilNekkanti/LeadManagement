@@ -40,7 +40,6 @@ public class CountyController {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
-		System.out.println("there are county");
 		return new ResponseEntity<List<County>>(countys, HttpStatus.OK);
 	}
 

@@ -17,8 +17,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -43,14 +41,12 @@ public class Event extends RecordDetails implements Serializable {
 	@Column(name = "event_name")
 	private String eventName;
 
-	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS")
+	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone="America/NewYork")
 	@Column(name = "event_date_starttime", nullable= true)
-	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar  eventDateStartTime;
 	
-	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS")
+	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone="America/NewYork")
 	@Column(name = "event_date_endtime", nullable= true)
-	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar  eventDateEndTime;
 	
 	@ManyToOne
@@ -98,13 +94,13 @@ public class Event extends RecordDetails implements Serializable {
 	private String repeatRule;
 	
 	
-	@ManyToMany( cascade={ CascadeType.MERGE  ,   CascadeType.REMOVE },fetch = FetchType.LAZY)
+	@ManyToMany(cascade= {CascadeType.MERGE,CascadeType.REMOVE} ,fetch = FetchType.LAZY)
 	@JoinTable(name = "event_representatives", joinColumns = {
 			@JoinColumn(name = "event_id", referencedColumnName = "event_id",nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, updatable = false) })
-	public Set<User> representatives;
+	private Set<User> representatives;
 	
-	@ManyToMany( cascade={ CascadeType.MERGE  ,   CascadeType.REMOVE },fetch = FetchType.LAZY)
+	@ManyToMany( cascade= {CascadeType.MERGE,CascadeType.REMOVE} ,fetch = FetchType.LAZY)
 	@JoinTable(name = "event_files_upload", joinColumns = {
 			@JoinColumn(name = "event_id", referencedColumnName = "event_id",nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "files_upload_id", referencedColumnName = "file_upload_id",nullable = false, updatable = false) })

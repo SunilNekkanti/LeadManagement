@@ -19,9 +19,9 @@ public interface EventWeekDayService {
 
 	void deleteEventWeekDayById(Integer id);
 
-	void deleteAllEventFrequencies();
+	void deleteAllEventWeekDays();
 
-	List<EventWeekDay> findAllEventFrequencies();
+	List<EventWeekDay> findAllEventWeekDays();
 
 	boolean isEventWeekDayExist(EventWeekDay eventWeekDay);
 }

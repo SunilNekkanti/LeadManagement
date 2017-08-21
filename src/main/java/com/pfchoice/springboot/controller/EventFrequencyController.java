@@ -40,7 +40,6 @@ public class EventFrequencyController {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
-		System.out.println("there are eventFrequencys");
 		return new ResponseEntity<List<EventFrequency>>(eventFrequencys, HttpStatus.OK);
 	}
 

@@ -40,7 +40,6 @@ public class PlanTypeController {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
-		System.out.println("there are planTypes");
 		return new ResponseEntity<List<PlanType>>(planTypes, HttpStatus.OK);
 	}
 

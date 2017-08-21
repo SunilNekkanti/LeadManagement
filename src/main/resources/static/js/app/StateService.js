@@ -22,7 +22,8 @@ app.service('StateService',
                     .then(
                         function (response) {
                             console.log('Fetched successfully all States');
-                            $localStorage.States = response.data;
+                            if(!$localStorage.states)
+                            $localStorage.states = response.data;
                             deferred.resolve(response);
                         },
                         function (errResponse) {
@@ -34,8 +35,8 @@ app.service('StateService',
             }
 
             function getAllStates(){
-            	console.log('$localStorage.States'+$localStorage.States);
-                return $localStorage.States;
+            	console.log('$localStorage.states');
+                return $localStorage.states;
             }
 
             function getState(id) {

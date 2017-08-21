@@ -34,7 +34,7 @@ app.service('EventWeekDayService',
             }
 
             function getAllEventWeekDays(){
-            	console.log('$localStorage.eventWeekDays'+$localStorage.eventWeekDays);
+            	console.log('$localStorage.eventWeekDays');
                 return $localStorage.eventWeekDays;
             }
 
@@ -75,7 +75,7 @@ app.service('EventWeekDayService',
             function updateEventWeekDay(user, id) {
                 console.log('Updating EventWeekDay with id '+id);
                 var deferred = $q.defer();
-                $http.put(urls.FACILITYTYPE_SERVICE_API + id, user)
+                $http.put(urls.EVENT_WEEKDAY_SERVICE_API + id, user)
                     .then(
                         function (response) {
                             loadAllEventWeekDays();
@@ -92,7 +92,7 @@ app.service('EventWeekDayService',
             function removeEventWeekDay(id) {
                 console.log('Removing EventWeekDay with id '+id);
                 var deferred = $q.defer();
-                $http.delete(urls.FACILITYTYPE_SERVICE_API + id)
+                $http.delete(urls.EVENT_WEEKDAY_SERVICE_API + id)
                     .then(
                         function (response) {
                             loadAllEventWeekDays();

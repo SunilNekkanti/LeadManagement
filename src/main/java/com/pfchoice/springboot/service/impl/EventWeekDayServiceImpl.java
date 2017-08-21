@@ -43,11 +43,11 @@ public class EventWeekDayServiceImpl implements EventWeekDayService{
 		eventWeekDayRepository.delete(id);
 	}
 
-	public void deleteAllEventFrequencies(){
+	public void deleteAllEventWeekDays(){
 		eventWeekDayRepository.deleteAll();
 	}
 
-	public List<EventWeekDay> findAllEventFrequencies(){
+	public List<EventWeekDay> findAllEventWeekDays(){
 		return eventWeekDayRepository.findAll();
 	}
 

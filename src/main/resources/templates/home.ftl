@@ -69,6 +69,7 @@
   <script src="js/app/EventMonthService.js"></script>
   <script src="js/app/EventWeekDayController.js"></script>
   <script src="js/app/EventWeekDayService.js"></script>
+  <script src="js/app/EventWeekNumberService.js"></script>
 </head>
 
 <body class="ng-cloak" ng-controller="NavbarController">

@@ -34,7 +34,7 @@ app.service('EventMonthService',
             }
 
             function getAllEventMonths(){
-            	console.log('$localStorage.eventMonths'+$localStorage.eventMonths);
+            	console.log('$localStorage.eventMonths');
                 return $localStorage.eventMonths;
             }
 

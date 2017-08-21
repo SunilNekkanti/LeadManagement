@@ -35,7 +35,6 @@ app
 							self.loginUser = {};
 							self.lead = {};
 							self.notes ='';
-							//self.lead.bestTimeToCall = "1988-04-21T18:25:43-05:00";
 							self.leads = [];
 							self.leadEventId = $stateParams.eventId;
 							self.genders = [];
@@ -230,7 +229,7 @@ app
 												function(result) {
 													var records = {
 														'recordsTotal' : result.data.totalElements,
-														'recordsFiltered' : result.data.totalElements,
+														'recordsFiltered' : result.data.numberOfElements,
 														'data' : result.data.content
 													};
 													fnCallback(records);

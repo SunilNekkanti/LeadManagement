@@ -34,7 +34,7 @@ app.service('ActivityTypeService',
             }
 
             function getAllActivityTypes(){
-            	console.log('$localStorage.activityTypes'+$localStorage.activityTypes);
+            	console.log('$localStorage.activityTypes');
                 return $localStorage.activityTypes;
             }
 

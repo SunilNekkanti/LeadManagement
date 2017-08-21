@@ -99,7 +99,7 @@ public class LeadStatus extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.MembershipStatus[ id=" + id + " ]";
+		return "com.pfchoice.core.entity.LeadStatus[ id=" + id + " ]";
 	}
 
 }

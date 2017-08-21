@@ -40,7 +40,6 @@ public class FacilityTypeController {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
-		System.out.println("there are facilityTypes");
 		return new ResponseEntity<List<FacilityType>>(facilityTypes, HttpStatus.OK);
 	}
 

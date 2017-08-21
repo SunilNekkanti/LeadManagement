@@ -34,7 +34,7 @@ app.service('FacilityTypeService',
             }
 
             function getAllFacilityTypes(){
-            	console.log('$localStorage.facilityTypes'+$localStorage.facilityTypes);
+            	console.log('$localStorage.facilityTypes');
                 return $localStorage.facilityTypes;
             }
 

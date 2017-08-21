@@ -18,8 +18,8 @@ import javax.validation.constraints.Size;
  * @author sarath
  */
 @Entity
-@Table(name = "event_month")
-public class EventMonth extends RecordDetails implements Serializable {
+@Table(name = "event_week_number")
+public class EventWeekNumber extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -43,14 +43,14 @@ public class EventMonth extends RecordDetails implements Serializable {
 	/**
 	 * 
 	 */
-	public EventMonth() {
+	public EventWeekNumber() {
 		super();
 	}
 
 	/**
 	 * @param id
 	 */
-	public EventMonth(final Integer id) {
+	public EventWeekNumber(final Integer id) {
 		super();
 		this.id = id;
 	}
@@ -108,10 +108,10 @@ public class EventMonth extends RecordDetails implements Serializable {
 
 	@Override
 	public boolean equals(Object object) {
-		if (!(object instanceof EventMonth)) {
+		if (!(object instanceof EventWeekNumber)) {
 			return false;
 		}
-		EventMonth other = (EventMonth) object;
+		EventWeekNumber other = (EventWeekNumber) object;
 		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
 			return false;
 		}
@@ -120,7 +120,7 @@ public class EventMonth extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.EventMonth[ id=" + id + " ]";
+		return "com.pfchoice.core.entity.EventWeekNumber[ id=" + id + " ]";
 	}
 
 }

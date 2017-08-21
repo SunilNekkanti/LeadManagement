@@ -52,7 +52,6 @@ public class InsurnaceController {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
-		System.out.println("there are insurances");
 		return new ResponseEntity<Page<Insurance>>(insurances, HttpStatus.OK);
 	}
 

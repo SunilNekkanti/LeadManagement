@@ -40,7 +40,6 @@ public class StateController {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
-		System.out.println("there are states");
 		return new ResponseEntity<List<State>>(states, HttpStatus.OK);
 	}
 

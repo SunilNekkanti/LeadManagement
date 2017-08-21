@@ -34,13 +34,12 @@ public class EventWeekDayController {
 	@Secured({  "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER" })
 	@RequestMapping(value = "/eventWeekDay/", method = RequestMethod.GET)
 	public ResponseEntity<List<EventWeekDay>> listAllEventWeekDays() {
-		List<EventWeekDay> eventWeekDays = eventWeekDayService.findAllEventFrequencies();
+		List<EventWeekDay> eventWeekDays = eventWeekDayService.findAllEventWeekDays();
 		if (eventWeekDays.isEmpty()) {
 			System.out.println("no eventWeekDays");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
-		System.out.println("there are eventWeekDays");
 		return new ResponseEntity<List<EventWeekDay>>(eventWeekDays, HttpStatus.OK);
 	}
 
@@ -121,7 +120,7 @@ public class EventWeekDayController {
 	public ResponseEntity<EventWeekDay> deleteAllEventWeekDays() {
 		logger.info("Deleting All EventWeekDays");
 
-		eventWeekDayService.deleteAllEventFrequencies();
+		eventWeekDayService.deleteAllEventWeekDays();
 		return new ResponseEntity<EventWeekDay>(HttpStatus.NO_CONTENT);
 	}
 

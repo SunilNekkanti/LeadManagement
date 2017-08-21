@@ -34,7 +34,7 @@ app.service('BrokerageService',
             }
 
             function getAllBrokerages(){
-            	console.log('$localStorage.brokerages'+$localStorage.brokerages);
+            	console.log('$localStorage.brokerages');
                 return $localStorage.brokerages;
             }
 

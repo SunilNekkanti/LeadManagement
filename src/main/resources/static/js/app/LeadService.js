@@ -65,6 +65,7 @@ app.service('LeadService',
             
             function loadLeads(pageNo, length, search, order) {
                 console.log('Fetching  leads');
+                var deferred = $q.defer();
                 var pageable = {
                   		 page:pageNo, size:length,search: search||''
                   		};
@@ -76,18 +77,19 @@ app.service('LeadService',
             return     $http.get(urls.LEAD_SERVICE_API,  config)
                     .then(
                         function (response) {
-                            console.log('Fetched successfully  leads');
-                         return     response ;
+                            $localStorage.leads = response.data.content;
+                            deferred.resolve(response);
+                            return response;
                         },
                         function (errResponse) {
                             console.error('Error while loading leads');
-                            return   errResponse ;
+                            deferred.reject(errResponse);
                         }
                     );
             }
 
             function getAllLeads(){
-            	console.log('$localStorage.leads'+$localStorage.leads);
+            	console.log('$localStorage.leads');
                 return $localStorage.leads;
             }
 

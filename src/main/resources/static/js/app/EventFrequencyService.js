@@ -34,7 +34,7 @@ app.service('EventFrequencyService',
             }
 
             function getAllEventFrequencies(){
-            	console.log('$localStorage.eventFrequencies'+$localStorage.eventFrequencys);
+            	console.log('$localStorage.eventFrequencies');
                 return $localStorage.eventFrequencys;
             }
 

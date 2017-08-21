@@ -41,7 +41,6 @@ public class GenderController {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
-		System.out.println("there are genders");
 		return new ResponseEntity<List<Gender>>(genders, HttpStatus.OK);
 	}
 

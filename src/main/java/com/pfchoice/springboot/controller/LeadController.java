@@ -1,7 +1,6 @@
 package com.pfchoice.springboot.controller;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -83,7 +82,6 @@ public class LeadController {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
-		System.out.println("there are leads");
 		return new ResponseEntity<Page<LeadMembership>>(leads, HttpStatus.OK);
 	}
 
@@ -195,7 +193,6 @@ public class LeadController {
 		currentLeadMembership.getLeadNotes().clear();
 		currentLeadMembership.getLeadNotes().addAll(leadNotes);
 		
-		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ssZ");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
 		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 	

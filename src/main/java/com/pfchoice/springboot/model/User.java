@@ -50,25 +50,25 @@ public class User extends RecordDetails implements Serializable {
 	
 	
 
-	@ManyToMany( cascade={ CascadeType.MERGE  ,   CascadeType.REMOVE },fetch = FetchType.LAZY)
+	@ManyToMany( cascade= CascadeType.ALL,fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles", joinColumns = {
 			@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "role_id", referencedColumnName = "id",nullable = false, updatable = false) })
 	public Set<Role> roles;
 
-	@ManyToMany( cascade={ CascadeType.MERGE  ,   CascadeType.REMOVE },fetch = FetchType.LAZY)
+	@ManyToMany( cascade=  CascadeType.ALL ,fetch = FetchType.LAZY)
 	@JoinTable(name = "user_counties", joinColumns = {
 			@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "county_id", referencedColumnName = "code",nullable = false, updatable = false) })
 	private Set<County> counties;
 	
-	@ManyToMany( cascade={ CascadeType.MERGE  ,   CascadeType.REMOVE },fetch = FetchType.LAZY)
+	@ManyToMany( cascade=  CascadeType.ALL  ,  fetch = FetchType.LAZY)
 	@JoinTable(name = "user_brokerages", joinColumns = {
 			@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "brokerage_id", referencedColumnName = "code",nullable = false, updatable = false) })
 	public Set<Brokerage> brokerages;
 	
-	@ManyToMany( cascade={ CascadeType.MERGE  ,   CascadeType.REMOVE },fetch = FetchType.LAZY)
+	@ManyToMany( cascade=CascadeType.ALL,fetch = FetchType.LAZY)
 	@JoinTable(name = "user_languages", joinColumns = {
 			@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "language_id", referencedColumnName = "code",nullable = false, updatable = false) })

@@ -34,7 +34,7 @@ app.service('RoleService',
             }
 
             function getAllRoles(){
-            	console.log('$localStorage.roles'+$localStorage.roles);
+            	console.log('$localStorage.roles');
                 return $localStorage.roles;
             }
 

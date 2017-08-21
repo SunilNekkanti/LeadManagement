@@ -79,7 +79,6 @@ public class AppController {
 	@RequestMapping("/partials/{page}")
 	String partialHandler(ModelMap modal, @PathVariable("page") final String page, @ModelAttribute("username") String username,  @ModelAttribute("roleName") String roleName) {
 		modal.addAttribute("roleName", roleName);
-		System.out.println("inside /partials/{page} /partials/"+page);
 		return page;
 	}
 	

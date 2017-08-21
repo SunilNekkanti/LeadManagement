@@ -34,13 +34,12 @@ public class EventMonthController {
 	@Secured({  "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER" })
 	@RequestMapping(value = "/eventMonth/", method = RequestMethod.GET)
 	public ResponseEntity<List<EventMonth>> listAllEventMonths() {
-		List<EventMonth> eventMonths = eventMonthService.findAllEventFrequencies();
+		List<EventMonth> eventMonths = eventMonthService.findAllEventMonths();
 		if (eventMonths.isEmpty()) {
 			System.out.println("no eventMonths");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
-		System.out.println("there are eventMonths");
 		return new ResponseEntity<List<EventMonth>>(eventMonths, HttpStatus.OK);
 	}
 
@@ -121,7 +120,7 @@ public class EventMonthController {
 	public ResponseEntity<EventMonth> deleteAllEventMonths() {
 		logger.info("Deleting All EventMonths");
 
-		eventMonthService.deleteAllEventFrequencies();
+		eventMonthService.deleteAllEventMonths();
 		return new ResponseEntity<EventMonth>(HttpStatus.NO_CONTENT);
 	}
 

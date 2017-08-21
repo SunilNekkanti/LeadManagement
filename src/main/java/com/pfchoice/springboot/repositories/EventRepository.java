@@ -11,7 +11,8 @@ import com.pfchoice.springboot.model.Event;
 @Repository
 public interface EventRepository extends PagingAndSortingRepository<Event, Integer> , JpaSpecificationExecutor<Event> {
 
-    public List<Event> findEventByEventName(String eventName);
+    List<Event> findEventByEventName(String eventName);
+    
 	
 }
 

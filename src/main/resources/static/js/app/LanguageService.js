@@ -59,7 +59,7 @@ app.service('LanguageService',
             }
             
             function getAllLanguages(){
-            	console.log('$localStorage.Languages'+$localStorage.Languages);
+            	console.log('$localStorage.Languages');
                 return $localStorage.Languages;
             }
 

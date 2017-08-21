@@ -42,7 +42,6 @@ public class BrokerageController {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
-		System.out.println("there are brokerages");
 		return new ResponseEntity<List<Brokerage>>(brokerages, HttpStatus.OK);
 	}
 

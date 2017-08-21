@@ -50,7 +50,6 @@ public class LanguageController {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
-		System.out.println("there are Languages");
 		return new ResponseEntity<Page<Language>>(languages, HttpStatus.OK);
 	}
 

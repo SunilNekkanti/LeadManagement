@@ -119,6 +119,8 @@ body, .form-control{
     border-radius: 6px 0 6px 6px;
 }
 
+a.form-control.no-border{ border : none !important; }
+
 .dataTable td {
 	 clear: both;
     white-space: nowrap;
@@ -129,3 +131,5 @@ body, .form-control{
 	float:left !important;	
 }	
 }
+
+

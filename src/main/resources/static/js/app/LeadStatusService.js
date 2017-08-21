@@ -34,7 +34,7 @@ app.service('LeadStatusService',
             }
 
             function getAllLeadStatuses(){
-            	console.log('$localStorage.LeadStatuss'+$localStorage.LeadStatuss);
+            	console.log('$localStorage.LeadStatuss');
                 return $localStorage.LeadStatuss;
             }
 

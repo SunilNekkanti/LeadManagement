@@ -34,7 +34,7 @@ app.service('CountyService',
             }
 
             function getAllCounties(){
-            	console.log('$localStorage.countys'+$localStorage.counties);
+            	console.log('$localStorage.countys');
                 return $localStorage.counties;
             }
 

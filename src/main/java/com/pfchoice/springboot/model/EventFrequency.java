@@ -120,7 +120,7 @@ public class EventFrequency extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.FacilityCode[ id=" + id + " ]";
+		return "com.pfchoice.core.entity.EventFrequency[ id=" + id + " ]";
 	}
 
 }

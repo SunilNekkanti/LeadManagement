@@ -40,7 +40,6 @@ public class LeadStatusController {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
-		System.out.println("there are leadStatuss");
 		return new ResponseEntity<List<LeadStatus>>(leadStatuss, HttpStatus.OK);
 	}
 

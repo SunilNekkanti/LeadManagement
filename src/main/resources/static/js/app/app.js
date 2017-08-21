@@ -25,20 +25,23 @@ app.constant('urls', {
     EVENT_FREQUENCY_SERVICE_API : 'http://localhost:8080/LeadManagement/api/eventFrequency/',
     EVENT_MONTH_SERVICE_API : 'http://localhost:8080/LeadManagement/api/eventMonth/',
     EVENT_WEEKDAY_SERVICE_API : 'http://localhost:8080/LeadManagement/api/eventWeekDay/',
-    FILE_UPLOADED_SERVICE_API : 'http://localhost:8080/LeadManagement/api/fileUploaded/' 
+    FILE_UPLOADED_SERVICE_API : 'http://localhost:8080/LeadManagement/api/fileUploaded/',
+    EVENT_WEEKNUMBER_SERVICE_API : 'http://localhost:8080/LeadManagement/api/eventWeekNumber/'
 });
 
 app.controller('NavbarController',  ['$scope', '$state', '$stateParams', function($scope, $state, $stateParams){
+	
   $scope.isCollapsed = true;
   $scope.displayNavbar = true;
   $scope.callMe = function(url,params){
 	  if(url == 'logout'){
 		  $scope.displayNavbar = false;
 	  }
-	  if(params !=''){
+	  if( params !==''){
 		  $state.go(url,params);
+		  
 	  }else{
-		  $state.go(url);
+		  $state.go(url,{leadlink: ''});
 	  }
 		 
 	  
@@ -102,7 +105,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
           }
       })
       .state('lead', {
-          url: '/lead/?eventId&leadDisplay',
+          url: '/lead{leadlink}' ,
           templateUrl: 'partials/lead_list',
           controller:'LeadController',
           controllerAs:'ctrl',
@@ -316,16 +319,23 @@ app.config(['$stateProvider', '$urlRouterProvider',
 		          return deferred.promise;
 		      },
       		  eventMonths: function ($q,  EventMonthService) {
-		          console.log('Load all eventFrequencies');
+		          console.log('Load all eventMonths');
 		          var deferred = $q.defer();
 		          EventMonthService.loadAllEventMonths().then(deferred.resolve, deferred.resolve);
 		          console.log('deferred.promise'+deferred.promise);
 		          return deferred.promise;
 		      },
       		  eventWeekDays: function ($q,  EventWeekDayService) {
-		          console.log('Load all eventFrequencies');
+		          console.log('Load all eventWeekDays');
 		          var deferred = $q.defer();
 		          EventWeekDayService.loadAllEventWeekDays().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise;
+		      },
+      		  eventWeekNumbers: function ($q,  EventWeekNumberService) {
+		          console.log('Load all eventWeekNumbers');
+		          var deferred = $q.defer();
+		          EventWeekNumberService.loadAllEventWeekNumbers().then(deferred.resolve, deferred.resolve);
 		          console.log('deferred.promise'+deferred.promise);
 		          return deferred.promise;
 		      }

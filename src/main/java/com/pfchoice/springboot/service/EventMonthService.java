@@ -19,9 +19,9 @@ public interface EventMonthService {
 
 	void deleteEventMonthById(Integer id);
 
-	void deleteAllEventFrequencies();
+	void deleteAllEventMonths();
 
-	List<EventMonth> findAllEventFrequencies();
+	List<EventMonth> findAllEventMonths();
 
 	boolean isEventMonthExist(EventMonth eventMonth);
 }

@@ -1,50 +1,50 @@
 'use strict';
 
-app.service('PlanTypeService',
+app.service('EventWeekNumberService',
     ['$localStorage', '$http', '$q', 'urls',
         function ($localStorage, $http, $q, urls) {
 
             var factory = {
-                loadAllPlanTypes: loadAllPlanTypes,
-                getAllPlanTypes: getAllPlanTypes,
-                getPlanType: getPlanType,
-                createPlanType: createPlanType,
-                updatePlanType: updatePlanType,
-                removePlanType: removePlanType
+                loadAllEventWeekNumbers: loadAllEventWeekNumbers,
+                getAllEventWeekNumbers: getAllEventWeekNumbers,
+                getEventWeekNumber: getEventWeekNumber,
+                createEventWeekNumber: createEventWeekNumber,
+                updateEventWeekNumber: updateEventWeekNumber,
+                removeEventWeekNumber: removeEventWeekNumber
             };
 
             return factory;
 
-            function loadAllPlanTypes() {
-                console.log('Fetching all planTypes');
+            function loadAllEventWeekNumbers() {
+                console.log('Fetching all eventWeekNumbers');
                 var deferred = $q.defer();
-                $http.get(urls.PLANTYPE_SERVICE_API)
+                $http.get(urls.EVENT_WEEKNUMBER_SERVICE_API)
                     .then(
                         function (response) {
-                            console.log('Fetched successfully all planTypes');
-                            $localStorage.planTypes = response.data;
+                            console.log('Fetched successfully all eventWeekNumbers');
+                            $localStorage.eventWeekNumbers = response.data;
                             deferred.resolve(response);
                         },
                         function (errResponse) {
-                            console.error('Error while loading planTypes');
+                            console.error('Error while loading eventWeekNumbers');
                             deferred.reject(errResponse);
                         }
                     );
                 return deferred.promise;
             }
 
-            function getAllPlanTypes(){
-            	console.log('$localStorage.planTypes');
-                return $localStorage.planTypes;
+            function getAllEventWeekNumbers(){
+            	console.log('$localStorage.eventWeekNumbers');
+                return $localStorage.eventWeekNumbers;
             }
 
-            function getPlanType(id) {
-                console.log('Fetching PlanType with id :'+id);
+            function getEventWeekNumber(id) {
+                console.log('Fetching EventWeekNumber with id :'+id);
                 var deferred = $q.defer();
-                $http.get(urls.PLANTYPE_SERVICE_API + id)
+                $http.get(urls.EVENT_WEEKNUMBER_SERVICE_API + id)
                     .then(
                         function (response) {
-                            console.log('Fetched successfully PlanType with id :'+id);
+                            console.log('Fetched successfully EventWeekNumber with id :'+id);
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
@@ -55,51 +55,51 @@ app.service('PlanTypeService',
                 return deferred.promise;
             }
 
-            function createPlanType(user) {
-                console.log('Creating PlanType');
+            function createEventWeekNumber(user) {
+                console.log('Creating EventWeekNumber');
                 var deferred = $q.defer();
-                $http.post(urls.PLANTYPE_SERVICE_API, user)
+                $http.post(urls.EVENT_WEEKNUMBER_SERVICE_API, user)
                     .then(
                         function (response) {
-                            loadAllPlanTypes();
+                            loadAllEventWeekNumbers();
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
-                           console.error('Error while creating PlanType : '+errResponse.data.errorMessage);
+                           console.error('Error while creating EventWeekNumber : '+errResponse.data.errorMessage);
                            deferred.reject(errResponse);
                         }
                     );
                 return deferred.promise;
             }
 
-            function updatePlanType(user, id) {
-                console.log('Updating PlanType with id '+id);
+            function updateEventWeekNumber(user, id) {
+                console.log('Updating EventWeekNumber with id '+id);
                 var deferred = $q.defer();
-                $http.put(urls.PLANTYPE_SERVICE_API + id, user)
+                $http.put(urls.EVENT_WEEKNUMBER_SERVICE_API + id, user)
                     .then(
                         function (response) {
-                            loadAllPlanTypes();
+                            loadAllEventWeekNumbers();
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
-                            console.error('Error while updating PlanType with id :'+id);
+                            console.error('Error while updating EventWeekNumber with id :'+id);
                             deferred.reject(errResponse);
                         }
                     );
                 return deferred.promise;
             }
 
-            function removePlanType(id) {
-                console.log('Removing PlanType with id '+id);
+            function removeEventWeekNumber(id) {
+                console.log('Removing EventWeekNumber with id '+id);
                 var deferred = $q.defer();
-                $http.delete(urls.PLANTYPE_SERVICE_API + id)
+                $http.delete(urls.EVENT_WEEKNUMBER_SERVICE_API + id)
                     .then(
                         function (response) {
-                            loadAllPlanTypes();
+                            loadAllEventWeekNumbers();
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
-                            console.error('Error while removing PlanType with id :'+id);
+                            console.error('Error while removing EventWeekNumber with id :'+id);
                             deferred.reject(errResponse);
                         }
                     );

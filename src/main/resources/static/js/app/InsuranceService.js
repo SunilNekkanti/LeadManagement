@@ -58,7 +58,7 @@ app.service('InsuranceService',
             }
             
             function getAllInsurances(){
-            	console.log('$localStorage.insurances'+$localStorage.insurances);
+            	console.log('$localStorage.insurances');
                 return $localStorage.insurances;
             }
 

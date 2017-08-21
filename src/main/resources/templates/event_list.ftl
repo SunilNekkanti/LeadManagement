@@ -3,9 +3,9 @@
   <div class="panel panel-default" ng-hide="ctrl.display">
     <!-- Default panel contents -->
     <div class="panel-heading"><span class="user">List of Events </span>
-      <button type="button" ng-click="ctrl.addEvent()" ng-hide="ctrl.displayEditButton" class="btn btn-success custom-width floatRight"> Add </button>
-      <button type="button" ng-click="ctrl.editEvent(ctrl.eventId)" ng-show="ctrl.displayEditButton" class="btn btn-primary custom-width floatRight">Edit</button>
-      <button type="button" ng-click="ctrl.removeEvent(ctrl.eventId)" ng-show="ctrl.displayEditButton" class="btn btn-danger custom-width floatRight">Remove</button>
+      <button type="button" ng-click="ctrl.addEvent()" ng-hide="ctrl.displayEditButton" class="btn btn-success btn-xs custom-width floatRight"> Add </button>
+      <button type="button" ng-click="ctrl.editEvent(ctrl.eventId)" ng-show="ctrl.displayEditButton" class="btn btn-primary btn-xs custom-width floatRight">Edit</button>
+      <button type="button" ng-click="ctrl.removeEvent(ctrl.eventId)" ng-show="ctrl.displayEditButton" class="btn btn-danger btn-xs custom-width floatRight">Remove</button>
     </div>
     <div class="panel-body">
       <div class="table-responsive">
@@ -114,12 +114,18 @@
 
                 <label class="col-md-1  control-label" for="state">State</label>
                 <div class="col-md-2">
-                  <select ng-model="ctrl.event.state" ng-options="state.description for state in ctrl.states track by state.description" required></select>
+                  <select ng-model="ctrl.event.state" name="state" class="form-control"  ng-options="state.description for state in ctrl.states track by state.description" required></select>
+                  <div class="has-error" ng-show="myForm.$dirty">
+                    <span ng-show="myForm.state.$error.required">This is a required field</span>
+                  </div>
                 </div>
 
                 <label class="col-md-1  control-label" for="zipcode">Zipcode</label>
                 <div class="col-md-3">
-                  <select ng-model="ctrl.event.zipCode" ng-options="zipCode.code for zipCode in ctrl.event.state.zipCodes track by zipCode.code" required></select>
+                  <select ng-model="ctrl.event.zipCode" name="zipCode" class="form-control" ng-options="zipCode.code for zipCode in ctrl.event.state.zipCodes track by zipCode.code" required></select>
+                  <div class="has-error" ng-show="myForm.$dirty">
+                    <span ng-show="myForm.zipCode.$error.required">This is a required field</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -231,11 +237,23 @@
 
                 </div>
               </div>
+              
+               <div class="form-group col-md-12 uploadedFiles" ng-if="ctrl.event.id">
+                <div require>
+                  <label class="col-md-2  control-label" for="contactEmail">Uploaded Files</label>
+                </div>
+                <div ng-repeat="attachment in ctrl.event.attachments" class="col-md-3">
+						<a  class="form-control no-border" ng-click="ctrl.readUploadedFile(attachment.id, attachment.contentType)"  style="display:block;">
+          					<span class="glyphicon glyphicon-file"></span>
+        				</a>
+                </div>
+              </div>
+              
+              
             </div>
           </div>
 
           <div class="form-group col-md-6" ng-show="ctrl.repeatDisplay">
-
             <div class="row">
               <div class="form-group col-lg-12">
                 <label class="col-md-2 control-label" for="frequency">Repeat</label>
@@ -245,7 +263,7 @@
                 <span class="repeat-interval-panel">
                                 <label class="control-label col-md-1 repeat-interval-pretext">every</label>
                                 <span class="input-group spinner  col-md-2">
-                                   <select class="col-md-12 form-control"  ng-model="ctrl.event.interval" name="interval" ng-options="i as i for i in ctrl.eventIntervals" >
+                                   <select class="col-md-12 form-control" ng-init=" ctrl.event.interval=ctrl.event.interval|| 1"  ng-model="ctrl.event.interval" name="interval" ng-options=" i as i for i in ctrl.eventIntervals" >
 							       </select>
                                 </span>
                 <span ng-show="ctrl.event.frequency=='DAILY'"><label class="control-label">&nbsp; day(s) </label></span>
@@ -270,7 +288,6 @@
               </div>
             </div>
 
-
             <div ng-init="ctrl.onDayorThe=ctrl.onDayorThe||true" ng-show="ctrl.event.frequency=='MONTHLY' || ctrl.event.frequency=='YEARLY'">
               <div class="row">
 
@@ -282,10 +299,10 @@
                     </label>
                   </div>
                   <div class="col-md-3" ng-show="ctrl.event.frequency=='YEARLY'">
-                    <select class="form-control col-md-7" ng-disabled="ctrl.onDayorThe==false" ng-model="ctrl.event.month" name="onMonth" ng-options="ctrl.event.month as eventMonth.description for eventMonth in ctrl.eventMonths track by eventMonth.id"></select>
+                    <select class="form-control col-md-7" ng-disabled="ctrl.onDayorThe==false" ng-model="ctrl.eventMonthOnDay" name="onMonth" ng-options="eventMonth.description for eventMonth in ctrl.eventMonths track by eventMonth.id"></select>
                   </div>
                   <div class="col-md-3">
-                    <select class="form-control col-md-4" ng-disabled="ctrl.onDayorThe==false" ng-model="ctrl.event.onDay"  name="ondays" ng-options="i for i in ctrl.eventOnDays "></select>
+                    <select class="form-control col-md-4" ng-disabled="ctrl.onDayorThe==false" ng-model="ctrl.event.onDay"  name="ondays" ng-options="i for i in ctrl.eventOnDays"></select>
                   </div>
                   <div class="col-md-3"> </div>
                 </div>
@@ -300,23 +317,20 @@
                     </label>
                   </div>
                   <div class="col-md-3">
-                    <select class="form-control col-md-12" ng-disabled="ctrl.onDayorThe==true" ng-model="ctrl.eventOnWeek.id" name="onWeek" ng-options="weekNo.id as weekNo.description for weekNo in ctrl.eventOnWeeks"></select>
+                   <select class="form-control col-md-12" ng-disabled="ctrl.onDayorThe==true" ng-model="ctrl.eventOnWeek" name="onWeek" ng-options="weekNo.description for weekNo in ctrl.eventOnWeeks track by weekNo.id"></select>
                   </div>
-
                   <div class="col-md-3">
-                    <select class="form-control col-md-9" ng-disabled="ctrl.onDayorThe==true" c ng-model="ctrl.eventOnWeekDay.shortName" name="weekday1" ng-options="weekday.shortName as weekDay.description for weekDay in ctrl.eventOnWeekDays track
-              by weekday.id"></select>
+                   <select class="form-control col-md-12" ng-disabled="ctrl.onDayorThe==true" ng-model="ctrl.eventOnWeekDay" name="weekday" ng-options="weekDay.description for weekDay in ctrl.eventOnWeekDays track by weekDay.id"></select>
                   </div>
                   <div class="col-md-1" ng-show="ctrl.event.frequency=='YEARLY'">
                     <label class="col-md-12 control-label text-center"> of </label>
                   </div>
                   <div class="col-md-3" ng-show="ctrl.event.frequency=='YEARLY'">
-                    <select class="form-control col-md-7" ng-disabled="ctrl.onDayorThe==true" ng-model="ctrl.eventMonth" name="onMonth" ng-options="eventMonth.description for eventMonth in ctrl.eventMonths track by eventMonth.id"></select>
+                    <select class="form-control col-md-7" ng-disabled="ctrl.onDayorThe==true" ng-model="ctrl.eventMonthOnThe" name="onMonth" ng-options="eventMonth.description for eventMonth in ctrl.eventMonths track by eventMonth.id"></select>
                   </div>
                 </div>
               </div>
             </div>
-
             <div class="row">
               <div class="form-group col-md-12">
                 <label class="col-md-2 control-label" for="end">End</label>

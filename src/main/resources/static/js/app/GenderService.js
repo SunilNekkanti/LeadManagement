@@ -34,7 +34,7 @@ app.service('GenderService',
             }
 
             function getAllGenders(){
-            	console.log('$localStorage.genders'+$localStorage.genders);
+            	console.log('$localStorage.genders');
                 return $localStorage.genders;
             }
 

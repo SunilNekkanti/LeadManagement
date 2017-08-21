@@ -19,6 +19,7 @@ app.service('UserService',
 
             function loadUsers(pageNo, length, search, order) {
                 console.log('Fetching  users');
+                var deferred = $q.defer();
                 var pageable = {
                   		 page:pageNo, size:length,search: search||''
                   		};
@@ -31,10 +32,13 @@ app.service('UserService',
                     .then(
                         function (response) {
                             console.log('Fetched successfully  leads');
+                            $localStorage.users = response.data.content;
+                            deferred.resolve(response);
                          return     response ;
                         },
                         function (errResponse) {
                             console.error('Error while loading leads');
+                            deferred.reject(errResponse);
                             return   errResponse ;
                         }
                     );
@@ -67,7 +71,7 @@ app.service('UserService',
             }
 
             function getAllUsers(){
-            	console.log('$localStorage.users'+$localStorage.users);
+            	console.log('$localStorage.users');
                 return $localStorage.users;
             }
 

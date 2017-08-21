@@ -58,7 +58,7 @@ app.service('ProviderService',
             }
             
             function getAllProviders(){
-            	console.log('$localStorage.providers'+$localStorage.providers);
+            	console.log('$localStorage.providers');
                 return $localStorage.providers;
             }
 

@@ -44,6 +44,7 @@ app.service('EventService',
             
             function loadEvents(draw, length, search, order) {
                 console.log('Fetching  events');
+                var deferred = $q.defer();
                 var pageable = {
                   		 page:draw, size:length
                   		};
@@ -56,17 +57,20 @@ app.service('EventService',
                     .then(
                         function (response) {
                             console.log('Fetched successfully  events');
+                            $localStorage.events = response.data.content;
+                            deferred.resolve(response.data.content);
                          return     response ;
                         },
                         function (errResponse) {
                             console.error('Error while loading events');
-                            return   errResponse ;
+                            deferred.reject(errResponse);
+                           // return   errResponse ;
                         }
                     );
             }
 
             function getAllEvents(){
-            	console.log('$localStorage.events'+$localStorage.events);
+            	console.log('$localStorage.events');
                 return $localStorage.events;
             }
 

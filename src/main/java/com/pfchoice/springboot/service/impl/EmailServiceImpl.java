@@ -79,7 +79,8 @@ public class EmailServiceImpl implements EmailService {
 		Map<String, Object> emailAttributes =  mail.getModel();
 		String rrule = (emailAttributes.get("rrule") != null) ? "RRULE:"+emailAttributes.get("rrule").toString()+"\n":"";
 		StringBuffer sb = new StringBuffer();
-
+		 String startDateTime = (emailAttributes.get("appointmentStartTime") ==null)? emailAttributes.get("eventStartTime").toString():emailAttributes.get("appointmentStartTime") .toString();
+		 String endDateTime = (emailAttributes.get("appointmentEndTime") ==null)? emailAttributes.get("eventEndTime").toString():emailAttributes.get("appointmentEndTime") .toString();
         StringBuffer buffer = sb.append("BEGIN:VCALENDAR\n" +
                 "PRODID:-//Microsoft Corporation//Outlook 9.0 MIMEDIR//EN\n" +
                 "VERSION:2.0\n" +
@@ -87,12 +88,12 @@ public class EmailServiceImpl implements EmailService {
                 "BEGIN:VEVENT\n" +
                 "ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE:MAILTO:"+mail.getEmailTo()+"\n" +
                 "ORGANIZER:MAILTO:"+mail.getEmailCc()+"\n" +
-                "DTSTART:"+emailAttributes.get("appointmentStartTime").toString()+"\n" +
-                "DTEND:"+emailAttributes.get("appointmentEndTime").toString()+"\n" +
+                "DTSTART:"+startDateTime+"\n" +
+                "DTEND:"+endDateTime+"\n" +
                 "LOCATION:"+emailAttributes.get("location").toString()+"\n" +
                 "TRANSP:OPAQUE\n" +
                 "SEQUENCE:0\n" +
-                "UID:"+mail.getCreatedBy()+"\n" +
+                "UID:040000008200E00074C5B7101A82E00800000000002FF466CE3AC5010000000000000000100\n" +
                  rrule+ 
                 " 000004377FE5C37984842BF9440448399EB02\n" +
                 "DTSTAMP:"+emailAttributes.get("currentTime").toString() +"\n" +
@@ -111,9 +112,10 @@ public class EmailServiceImpl implements EmailService {
         
 			// Create the message part
 			BodyPart messageBodyPart = new MimeBodyPart();
+			messageBodyPart.setContent(mail.getBody(), "text/html");
 
 			// Now set the actual message
-			messageBodyPart.setText(mail.getBody());
+			//messageBodyPart.setText);
 
 			// Create a multipar message
 			Multipart multipart = new MimeMultipart();

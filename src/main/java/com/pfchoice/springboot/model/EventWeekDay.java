@@ -21,7 +21,7 @@ import javax.validation.constraints.Size;
 @Table(name = "event_day")
 public class EventWeekDay extends RecordDetails implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
 	
 	@Id

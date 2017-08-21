@@ -118,6 +118,7 @@ public class UserController {
 		currentUser.setBrokerages(user.getBrokerages());
 		currentUser.getLanguages().clear();
 		currentUser.setLanguages(user.getLanguages());
+		currentUser.setPosition(user.getPosition());
 	
 		userService.updateUser(currentUser);
 		return new ResponseEntity<User>(currentUser, HttpStatus.OK);

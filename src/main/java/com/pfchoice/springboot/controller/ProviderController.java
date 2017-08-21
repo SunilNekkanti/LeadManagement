@@ -52,7 +52,6 @@ public class ProviderController {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
-		System.out.println("there are providers");
 		return new ResponseEntity<Page<Provider>>(providers, HttpStatus.OK);
 	}
 
