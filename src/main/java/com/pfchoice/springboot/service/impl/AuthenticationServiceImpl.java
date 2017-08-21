@@ -43,7 +43,7 @@ public class AuthenticationServiceImpl implements UserDetailsService {
 		Set<Role> roles = user.getRoles();
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		for (Role r : roles) {
-			GrantedAuthority authority = new SimpleGrantedAuthority(r.getRole());
+			GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_"+r.getRole());
 			authorities.add(authority);
 		}
 
