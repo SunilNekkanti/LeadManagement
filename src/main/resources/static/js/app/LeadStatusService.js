@@ -22,7 +22,7 @@ app.service('LeadStatusService',
                     .then(
                         function (response) {
                             console.log('Fetched successfully all LeadStatuss');
-                            $localStorage.LeadStatuss = response.data;
+                            $localStorage.LeadStatus = response.data;
                             deferred.resolve(response);
                         },
                         function (errResponse) {
@@ -35,7 +35,7 @@ app.service('LeadStatusService',
 
             function getAllLeadStatuses(){
             	console.log('$localStorage.LeadStatuss');
-                return $localStorage.LeadStatuss;
+                return $localStorage.LeadStatus;
             }
 
             function getLeadStatus(id) {
@@ -61,7 +61,7 @@ app.service('LeadStatusService',
                 $http.post(urls.STATUS_SERVICE_API, user)
                     .then(
                         function (response) {
-                            loadAllLeadStatuss();
+                            loadAllLeadStatuses();
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
@@ -78,7 +78,7 @@ app.service('LeadStatusService',
                 $http.put(urls.STATUS_SERVICE_API + id, user)
                     .then(
                         function (response) {
-                            loadAllLeadStatuss();
+                            loadAllLeadStatuses();
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
@@ -95,7 +95,7 @@ app.service('LeadStatusService',
                 $http.delete(urls.STATUS_SERVICE_API + id)
                     .then(
                         function (response) {
-                            loadAllLeadStatuss();
+                            loadAllLeadStatuses();
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
