@@ -49,7 +49,7 @@ app.controller('LanguageController',
 		.withOption(
 				'ajax',
 				{
-					url : 'http://localhost:8080/LeadManagement/api/language/',
+					url : '/LeadManagement/api/language/',
 					type : 'GET'
 				}).withDataProp('data').withOption('bServerSide', true)
 				.withOption("bLengthChange", false)

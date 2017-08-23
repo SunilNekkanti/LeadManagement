@@ -2,7 +2,7 @@
   <div class="panel panel-default" ng-hide="ctrl.display">
     <!-- Default panel contents -->
     <div class="panel-heading"><span class="user">List of Leads </span>
-      <button type="button" ng-click="ctrl.addLead()" ng-hide="ctrl.displayEditButton" ng-show="ctrl.loginUser.roleName != 'ROLE_AGENT'" class="btn btn-success  btn-xs  custom-width floatRight"> Add </button>
+      <button type="button" ng-click="ctrl.addLead()" ng-hide="ctrl.displayEditButton" ng-show="ctrl.loginUser.roleName != 'AGENT'" class="btn btn-success  btn-xs  custom-width floatRight"> Add </button>
       <button type="button" ng-click="ctrl.editLead(ctrl.leadId)" ng-show="ctrl.displayEditButton" class="btn btn-primary btn-xs custom-width floatRight">Edit</button>
       <button type="button" ng-click="ctrl.removeLead(ctrl.leadId)" ng-show="ctrl.displayEditButton" class="btn btn-danger btn-xs  custom-width floatRight">Remove</button>
     </div>
@@ -292,7 +292,7 @@
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
                     <label for="	First Name ">Agent Name</label>
-                    <select ng-model="ctrl.selectedAgentLeadAppointment.user" class="form-control" ng-options="agent.username for agent in ctrl.users  | orderBy:'username' | filter:{roles:[{role:'ROLE_AGENT'}]} track by agent.username" required></select>
+                    <select ng-model="ctrl.selectedAgentLeadAppointment.user" class="form-control" ng-options="agent.username for agent in ctrl.users  | orderBy:'username' | filter:{roles:[{role:'AGENT'}]} track by agent.username" required></select>
                   </div>
                 </div>
 

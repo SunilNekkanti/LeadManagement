@@ -30,8 +30,8 @@ public  class UserSpecifications  implements Specification<User> {
                   cb.like(cb.lower(root.get("phone")), containsLikePattern),
                   cb.like(cb.lower(root.get("email")), containsLikePattern),
                   cb.like(cb.lower(root.get("licenseNo")), containsLikePattern),
-                  cb.like(root.join("languages", JoinType.LEFT).get("description"), containsLikePattern),
-                  cb.like(root.join("brokerages", JoinType.LEFT).get("description"), containsLikePattern),
+                  cb.like(root.join("language", JoinType.LEFT).get("description"), containsLikePattern),
+                  cb.like(root.join("insurances", JoinType.LEFT).get("name"), containsLikePattern),
                   cb.like(root.join("counties", JoinType.LEFT).get("description"), containsLikePattern),
                   cb.like(root.join("roles").get("role"), containsLikePattern)
           );

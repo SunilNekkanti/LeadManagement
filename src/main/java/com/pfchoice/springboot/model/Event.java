@@ -50,19 +50,11 @@ public class Event extends RecordDetails implements Serializable {
 	private Calendar  eventDateEndTime;
 	
 	@ManyToOne
-	@JoinColumn(name = "brokerage_id", referencedColumnName = "code")
-	private Brokerage brokerage;
-
-	@ManyToOne
 	@JoinColumn(name = "facility_type_id", referencedColumnName = "code")
 	private FacilityType facilityType;
 	
 	@Column(name = "notes", length = 65535, columnDefinition = "TEXT")
 	private String notes;
-	
-	@ManyToOne
-	@JoinColumn(name = "event_activity_type_id", referencedColumnName = "code")
-	private ActivityType activityType;
 	
 	@Column(name = "address1")
 	private String address1;
@@ -89,16 +81,6 @@ public class Event extends RecordDetails implements Serializable {
 
 	@Column(name = "contact_email")
 	private String contactEmail;
-	
-	@Column(name = "repeat_rule")
-	private String repeatRule;
-	
-	
-	@ManyToMany(cascade= {CascadeType.MERGE,CascadeType.REMOVE} ,fetch = FetchType.LAZY)
-	@JoinTable(name = "event_representatives", joinColumns = {
-			@JoinColumn(name = "event_id", referencedColumnName = "event_id",nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, updatable = false) })
-	private Set<User> representatives;
 	
 	@ManyToMany( cascade= {CascadeType.MERGE,CascadeType.REMOVE} ,fetch = FetchType.LAZY)
 	@JoinTable(name = "event_files_upload", joinColumns = {
@@ -152,19 +134,6 @@ public class Event extends RecordDetails implements Serializable {
 		this.eventName = eventName;
 	}
 
-	/**
-	 * @return the brokerage
-	 */
-	public Brokerage getBrokerage() {
-		return brokerage;
-	}
-
-	/**
-	 * @param brokerage the brokerage to set
-	 */
-	public void setBrokerage(Brokerage brokerage) {
-		this.brokerage = brokerage;
-	}
 
 	/**
 	 * @return the address1
@@ -334,48 +303,6 @@ public class Event extends RecordDetails implements Serializable {
 		this.eventDateEndTime = eventDateEndTime;
 	}
 
-
-	/**
-	 * @return the activityType
-	 */
-	public ActivityType getActivityType() {
-		return activityType;
-	}
-
-	/**
-	 * @param activityType the activityType to set
-	 */
-	public void setActivityType(ActivityType activityType) {
-		this.activityType = activityType;
-	}
-
-	/**
-	 * @return the repeatRule
-	 */
-	public String getRepeatRule() {
-		return repeatRule;
-	}
-
-	/**
-	 * @param repeatRule the repeatRule to set
-	 */
-	public void setRepeatRule(String repeatRule) {
-		this.repeatRule = repeatRule;
-	}
-
-	/**
-	 * @return the representatives
-	 */
-	public Set<User> getRepresentatives() {
-		return representatives;
-	}
-
-	/**
-	 * @param representatives the representatives to set
-	 */
-	public void setRepresentatives(Set<User> representatives) {
-		this.representatives = representatives;
-	}
 
 	/**
 	 * @return the attachments

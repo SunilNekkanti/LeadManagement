@@ -105,14 +105,8 @@ public class ProviderController {
 		}
 
 		currentProvider.setName(provider.getName());
-		currentProvider.setHoursOfOperation(provider.getHoursOfOperation());
-		currentProvider.setAddress(provider.getAddress());
-		currentProvider.setPhone(provider.getPhone());
-		currentProvider.setAgeSeen(provider.getAgeSeen());
 		currentProvider.getLanguages().clear();
 		currentProvider.setLanguages(provider.getLanguages());
-		currentProvider.getBrokerages().clear();
-		currentProvider.setBrokerages(provider.getBrokerages());
 
 		providerService.updateProvider(currentProvider);
 		return new ResponseEntity<Provider>(currentProvider, HttpStatus.OK);

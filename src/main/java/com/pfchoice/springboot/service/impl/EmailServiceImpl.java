@@ -48,7 +48,8 @@ public class EmailServiceImpl implements EmailService {
 		 Thread.sleep(10000);
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
-		helper.setTo(mail.getEmailTo());
+		String[] toEmailList = mail.getEmailTo().split(";");
+		helper.setTo(toEmailList);
 		helper.setFrom(mail.getEmailFrom());
 		helper.setSubject(mail.getSubject());
 		helper.setText(mail.getBody(), true);
@@ -70,7 +71,8 @@ public class EmailServiceImpl implements EmailService {
 	    message.addHeaderLine("method=REQUEST");
 	    
 		MimeMessageHelper helper = new MimeMessageHelper(message);
-		helper.setTo(mail.getEmailTo());
+		String[] toEmailList = mail.getEmailTo().split(";");
+		helper.setTo(toEmailList);
 		helper.setFrom(mail.getEmailFrom());
 		helper.setSubject(mail.getSubject());
 		helper.setCc(mail.getEmailCc());
@@ -78,6 +80,7 @@ public class EmailServiceImpl implements EmailService {
 		
 		Map<String, Object> emailAttributes =  mail.getModel();
 		String rrule = (emailAttributes.get("rrule") != null) ? "RRULE:"+emailAttributes.get("rrule").toString()+"\n":"";
+		System.out.println("rule"+rrule);
 		StringBuffer sb = new StringBuffer();
 		 String startDateTime = (emailAttributes.get("appointmentStartTime") ==null)? emailAttributes.get("eventStartTime").toString():emailAttributes.get("appointmentStartTime") .toString();
 		 String endDateTime = (emailAttributes.get("appointmentEndTime") ==null)? emailAttributes.get("eventEndTime").toString():emailAttributes.get("appointmentEndTime") .toString();
@@ -86,11 +89,11 @@ public class EmailServiceImpl implements EmailService {
                 "VERSION:2.0\n" +
                 "METHOD:REQUEST\n" +
                 "BEGIN:VEVENT\n" +
-                "ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE:MAILTO:"+mail.getEmailTo()+"\n" +
+                "ATTENDEE;ROLE=REQ-PARTICIPANT;RSVP=TRUE:MAILTO:skumar@pfchoice.com\n" +
                 "ORGANIZER:MAILTO:"+mail.getEmailCc()+"\n" +
-                "DTSTART:"+startDateTime+"\n" +
-                "DTEND:"+endDateTime+"\n" +
-                "LOCATION:"+emailAttributes.get("location").toString()+"\n" +
+                "DTSTART;TZID=US-Eastern:"+startDateTime+"\n" +
+                "DTEND;TZID=US-Eastern:"+endDateTime+"\n" +
+                "LOCATION:testing\n" +
                 "TRANSP:OPAQUE\n" +
                 "SEQUENCE:0\n" +
                 "UID:040000008200E00074C5B7101A82E00800000000002FF466CE3AC5010000000000000000100\n" +
@@ -109,6 +112,7 @@ public class EmailServiceImpl implements EmailService {
                 "END:VALARM\n" +
                 "END:VEVENT\n" +
                 "END:VCALENDAR");
+        
         
 			// Create the message part
 			BodyPart messageBodyPart = new MimeBodyPart();

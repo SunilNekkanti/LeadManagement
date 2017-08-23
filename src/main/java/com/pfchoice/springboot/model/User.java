@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -48,31 +49,28 @@ public class User extends RecordDetails implements Serializable {
 	@Column(name = "password")
 	private String password;
 	
-	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "language_id", referencedColumnName = "code")
+	private Language language;
 
-	@ManyToMany( cascade= CascadeType.ALL,fetch = FetchType.LAZY)
+	@ManyToMany( cascade= {CascadeType.MERGE,CascadeType.REMOVE,CascadeType.DETACH},fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles", joinColumns = {
 			@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "role_id", referencedColumnName = "id",nullable = false, updatable = false) })
 	public Set<Role> roles;
 
-	@ManyToMany( cascade=  CascadeType.ALL ,fetch = FetchType.LAZY)
+	@ManyToMany( cascade=  {CascadeType.MERGE,CascadeType.REMOVE,CascadeType.DETACH} ,fetch = FetchType.LAZY)
 	@JoinTable(name = "user_counties", joinColumns = {
 			@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "county_id", referencedColumnName = "code",nullable = false, updatable = false) })
 	private Set<County> counties;
 	
-	@ManyToMany( cascade=  CascadeType.ALL  ,  fetch = FetchType.LAZY)
-	@JoinTable(name = "user_brokerages", joinColumns = {
+	@ManyToMany( cascade= {CascadeType.MERGE,CascadeType.REMOVE,CascadeType.DETACH}  ,  fetch = FetchType.LAZY)
+	@JoinTable(name = "user_insurances", joinColumns = {
 			@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "brokerage_id", referencedColumnName = "code",nullable = false, updatable = false) })
-	public Set<Brokerage> brokerages;
+					@JoinColumn(name = "insurance_id", referencedColumnName = "insurance_id",nullable = false, updatable = false) })
+	public Set<Insurance> insurances;
 	
-	@ManyToMany( cascade=CascadeType.ALL,fetch = FetchType.LAZY)
-	@JoinTable(name = "user_languages", joinColumns = {
-			@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "language_id", referencedColumnName = "code",nullable = false, updatable = false) })
-	public Set<Language> languages;
 	
 	@Column(name = "email")
 	private String email;
@@ -82,9 +80,6 @@ public class User extends RecordDetails implements Serializable {
 
 	@Column(name = "license_no")
 	private String licenseNo;
-	
-	@Column(name = "position")
-	private String position;
 	
 	/**
 	 * 
@@ -217,45 +212,31 @@ public class User extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @return the languages
+	 * @return the language
 	 */
-	public Set<Language> getLanguages() {
-		return languages;
+	public Language getLanguage() {
+		return language;
 	}
 
 	/**
-	 * @param languages the languages to set
+	 * @param language the language to set
 	 */
-	public void setLanguages(Set<Language> languages) {
-		this.languages = languages;
+	public void setLanguage(Language language) {
+		this.language = language;
 	}
 
 	/**
-	 * @return the brokerages
+	 * @return the insurances
 	 */
-	public Set<Brokerage> getBrokerages() {
-		return brokerages;
+	public Set<Insurance> getInsurances() {
+		return insurances;
 	}
 
 	/**
-	 * @param brokerages the brokerages to set
+	 * @param insurances the insurances to set
 	 */
-	public void setBrokerages(Set<Brokerage> brokerages) {
-		this.brokerages = brokerages;
-	}
-
-	/**
-	 * @return the position
-	 */
-	public String getPosition() {
-		return position;
-	}
-
-	/**
-	 * @param position the position to set
-	 */
-	public void setPosition(String position) {
-		this.position = position;
+	public void setInsurances(Set<Insurance> insurances) {
+		this.insurances = insurances;
 	}
 
 	@Override

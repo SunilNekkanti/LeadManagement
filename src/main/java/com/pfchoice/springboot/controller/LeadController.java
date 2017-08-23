@@ -69,11 +69,14 @@ public class LeadController {
 	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
 	@RequestMapping(value = "/lead/", method = RequestMethod.GET)
 	public ResponseEntity<Page<LeadMembership>> listAllLeadMemberships(
-			@RequestParam(value = "page", required = false) int pageNo,
-			@RequestParam(value = "size", required = false) int pageSize,
+			@RequestParam(value = "page", required = false) Integer pageNo,
+			@RequestParam(value = "size", required = false) Integer pageSize,
 			@RequestParam(value = "search", required = false) String search,
 			@ModelAttribute("roleName") String roleName) throws MessagingException, IOException {
 
+		pageNo = (pageNo == null)?0:pageNo;
+		pageSize = (pageSize == null)?10:pageSize;
+		
 		PageRequest pageRequest = new PageRequest(pageNo, pageSize);
 		Specification<LeadMembership> spec = new LeadSpecifications(search);
 		Page<LeadMembership> leads = leadService.findAllLeadMembershipsByPage(spec, pageRequest);
@@ -126,11 +129,11 @@ public class LeadController {
 		lead.setLeadNotes(leadNotes);
 		leadService.saveLeadMembership(lead);
 
-		String toEmailIds = lead.getEvent().getRepresentatives().stream().map(rep -> rep.getEmail())
+		/*String toEmailIds = lead.getEvent().getRepresentatives().stream().map(rep -> rep.getEmail())
 				.collect(Collectors.joining(","));
-
+*/
 		Email mail = new Email();
-		mail.setEmailTo(toEmailIds);
+		mail.setEmailTo("skumar@pfchoice.com");
 		mail.setEmailFrom("skumar@pfchoice.com");
 		mail.setEmailCc("skumar@pfchoice.com");
 		mail.setSubject("New lead created");

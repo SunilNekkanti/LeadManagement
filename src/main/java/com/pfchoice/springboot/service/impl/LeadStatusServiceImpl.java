@@ -20,7 +20,7 @@ public class LeadStatusServiceImpl implements LeadStatusService{
 	private LeadStatusRepository leadStatusRepository;
 
 
-	public LeadStatus findById(Byte id) {
+	public LeadStatus findById(Short id) {
 		return leadStatusRepository.findById(id);
 	}
 
@@ -36,7 +36,7 @@ public class LeadStatusServiceImpl implements LeadStatusService{
 		saveLeadStatus(leadStatus);
 	}
 
-	public void deleteLeadStatusById(Byte id){
+	public void deleteLeadStatusById(Short id){
 		leadStatusRepository.delete(id);
 	}
 

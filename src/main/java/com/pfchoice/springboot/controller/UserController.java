@@ -37,8 +37,7 @@ public class UserController {
 	// -------------------Retrieve Users as per page request ---------------------------------------------
 	
 	@RequestMapping(value = "/user/", method = RequestMethod.GET)
-	public ResponseEntity<Page<User>> listAllUsers(@RequestParam("page") Integer pageNo,  @RequestParam("size") Integer pageSize,@RequestParam(value = "search", required = false) String search) {
-		
+	public ResponseEntity<Page<User>> listAllUsers(@RequestParam(value = "page", required = false) Integer pageNo,  @RequestParam(value = "size", required = false) Integer pageSize,@RequestParam(value = "search", required = false) String search) {
 		pageNo = (pageNo == null)?0:pageNo;
 		pageSize = (pageSize == null)?1000:pageSize;
 		
@@ -114,11 +113,9 @@ public class UserController {
 		currentUser.setRoles(user.getRoles());
 		currentUser.getCounties().clear();
 		currentUser.setCounties(user.getCounties());
-		currentUser.getBrokerages().clear();
-		currentUser.setBrokerages(user.getBrokerages());
-		currentUser.getLanguages().clear();
-		currentUser.setLanguages(user.getLanguages());
-		currentUser.setPosition(user.getPosition());
+		currentUser.getInsurances().clear();
+		currentUser.setInsurances(user.getInsurances());
+		currentUser.setLanguage(user.getLanguage());
 	
 		userService.updateUser(currentUser);
 		return new ResponseEntity<User>(currentUser, HttpStatus.OK);

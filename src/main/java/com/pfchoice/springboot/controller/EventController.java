@@ -1,11 +1,6 @@
 package com.pfchoice.springboot.controller;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TimeZone;
-import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
 
@@ -29,9 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.pfchoice.springboot.model.Email;
 import com.pfchoice.springboot.model.Event;
-import com.pfchoice.springboot.model.User;
 import com.pfchoice.springboot.repositories.specifications.EventSpecifications;
 import com.pfchoice.springboot.service.EmailService;
 import com.pfchoice.springboot.service.EventService;
@@ -59,10 +52,10 @@ public class EventController {
 	
 	@Secured({  "ROLE_ADMIN", "ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER"  })
 	@RequestMapping(value = "/event/", method = RequestMethod.GET)
-	public ResponseEntity<Page<Event>> listAllEvents(@RequestParam("page") Integer pageNo,  @RequestParam("size") Integer pageSize, @RequestParam(value = "search", required = false) String search) {
+	public ResponseEntity<Page<Event>> listAllEvents(@RequestParam(value = "page", required = false) Integer pageNo,  @RequestParam(value = "size", required = false) Integer pageSize, @RequestParam(value = "search", required = false) String search) {
 		
 		pageNo = (pageNo == null)?0:pageNo;
-		pageSize = (pageSize == null)?1000:pageSize;
+		pageSize = (pageSize == null)?10:pageSize;
 		
 		PageRequest pageRequest = new PageRequest(pageNo,pageSize );
 		Specification<Event> spec =null ;
@@ -106,43 +99,6 @@ public class EventController {
 		}
 		eventService.saveEvent(event);
 
-		User user = userService.findById(userId);
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
-		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-		
-		String eventNotes = event.getNotes();
-		String toEmailIds = event.getRepresentatives().stream().map(rep -> rep.getEmail())
-				.collect(Collectors.joining(","));
-		String toNamesList = event.getRepresentatives().stream().map(rep -> rep.getUsername())
-				.collect(Collectors.joining(","));
-
-		String address = event.getAddress1() + "\n" + event.getAddress2() + "\n" + event.getCity() + " ,"
-				+ event.getState().getShortName() + " ," + event.getZipCode().getCode();
-	
-		
-		Email mail = new Email();
-		mail.setEmailTo(toEmailIds);
-		mail.setEmailFrom("skumar@pfchoice.com");
-		mail.setEmailCc(user.getEmail());
-		mail.setSubject("New Event "+event.getEventName()+" Created");
-		Map<String, Object> emailAttributes = new HashMap<>();
-		emailAttributes.put("toNamesList", toNamesList);
-		emailAttributes.put("eventName", event.getEventName());
-		emailAttributes.put("currentUser", user.getUsername());
-		emailAttributes.put("manager", user.getUsername());
-		emailAttributes.put("notes", eventNotes);
-		emailAttributes.put("eventStartTime", sdf.format(event.getEventDateStartTime().getTime()));
-		emailAttributes.put("eventEndTime", sdf.format(event.getEventDateEndTime().getTime()));
-		emailAttributes.put("currentTime", sdf.format(event.getCreatedDate()));
-		emailAttributes.put("rrule", event.getRepeatRule());
-		emailAttributes.put("location", address);
-		
-		mail.setModel(emailAttributes);
-		String emailTemplateFileName = "event_creation_email_template.txt";
-		
-		mail.setBody(emailService.geContentFromTemplate(emailAttributes,emailTemplateFileName ));
-	     emailService.sendMailWithAttachment(mail);
-			
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(ucBuilder.path("/api/event/{id}").buildAndExpand(event.getId()).toUri());
 		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
@@ -163,12 +119,9 @@ public class EventController {
 		}
       
 		currentEvent.setEventName(event.getEventName());
-		currentEvent.setBrokerage(event.getBrokerage());
 		currentEvent.setEventDateStartTime(event.getEventDateStartTime());
 		currentEvent.setEventDateEndTime(event.getEventDateEndTime());
 		currentEvent.setFacilityType(event.getFacilityType());
-		currentEvent.setActivityType(event.getActivityType());
-		currentEvent.setBrokerage(event.getBrokerage());
 		currentEvent.setAddress1(event.getAddress1());
 		currentEvent.setAddress2(event.getAddress2());
 		currentEvent.setCity(event.getCity());
@@ -177,9 +130,9 @@ public class EventController {
 		currentEvent.setZipCode(event.getZipCode());
 		currentEvent.setContactPerson(event.getContactPerson());
 		currentEvent.setContactPhone(event.getContactPhone());
-		currentEvent.setRepeatRule(event.getRepeatRule());
-		currentEvent.getRepresentatives().clear();
-		currentEvent.getRepresentatives().addAll(event.getRepresentatives());
+	//	currentEvent.setRepeatRule(event.getRepeatRule());
+	//	currentEvent.getRepresentatives().clear();
+	//	currentEvent.getRepresentatives().addAll(event.getRepresentatives());
 		currentEvent.setNotes(event.getNotes());
 		eventService.updateEvent(currentEvent);
 		

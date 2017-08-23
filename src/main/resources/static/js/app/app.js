@@ -16,9 +16,8 @@ app.constant('urls', {
     INSURANCE_SERVICE_API : '/LeadManagement/api/insurance/',
     PROVIDER_SERVICE_API : '/LeadManagement/api/provider/',
     FACILITYTYPE_SERVICE_API : '/LeadManagement/api/facilityType/',
-    ACTIVITYTYPE_SERVICE_API : '/LeadManagement/api/activityType/',
-    BROKERAGE_SERVICE_API : '/LeadManagement/api/brokerage/',
     EVENT_SERVICE_API : '/LeadManagement/api/event/',
+    EVENT_ASSIGNMENT_SERVICE_API : '/LeadManagement/api/eventAssignment/',
     LOGIN_USER : '/LeadManagement/getloginInfo',
     FILE_UPLOADER : '/LeadManagement/api/fileUpload/fileProcessing.do' ,
     COUNTY_SERVICE_API : '/LeadManagement/api/county/',
@@ -86,20 +85,19 @@ app.config(['$stateProvider', '$urlRouterProvider',
 		          return deferred.promise;
 		      },
 		      counties: function ($q,  CountyService) {
-		          console.log('Load all languages');
+		          console.log('Load all counties');
 		          var deferred = $q.defer();
 		          CountyService.loadAllCounties().then(deferred.resolve, deferred.resolve);
 		          console.log('deferred.promise'+deferred.promise);
 		          return deferred.promise;
 		      },
-              brokerages: function ($q,BrokerageService) {
-                  console.log('Load all brokerages');
-                  var deferred = $q.defer();
-                  BrokerageService.loadAllBrokerages().then(deferred.resolve, deferred.resolve);
-                  
-                  console.log('deferred.promise'+deferred.promise);
-                  return deferred.promise;
-              },
+		      insurances: function ($q,  InsuranceService) {
+		          console.log('Load all insurances');
+		          var deferred = $q.defer();
+		          InsuranceService.loadAllInsurances().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise;
+		      }
           }
       })
       .state('lead', {
@@ -220,22 +218,6 @@ app.config(['$stateProvider', '$urlRouterProvider',
               }
           }
       })
-      .state('activityType', {
-          url: '/activityType',
-          templateUrl: 'partials/activityType_list',
-          controller:'ActivityTypeController',
-          controllerAs:'ctrl',
-          resolve: {
-              users: function ($q,ActivityTypeService) {
-                  console.log('Load all facilityTypes');
-                  var deferred = $q.defer();
-                  ActivityTypeService.loadAllActivityTypes().then(deferred.resolve, deferred.resolve);
-                  
-                  console.log('deferred.promise'+deferred.promise);
-                  return deferred.promise;
-              }
-          }
-      })
       .state('leadStatus', {
           url: '/leadStatus',
           templateUrl: 'partials/leadStatus_list',
@@ -252,22 +234,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
               }
           }
       })
-      .state('brokerage', {
-          url: '/brokerage',
-          templateUrl: 'partials/brokerage_list',
-          controller:'BrokerageController',
-          controllerAs:'ctrl',
-          resolve: {
-              brokerages: function ($q,BrokerageService) {
-                  console.log('Load all brokerages');
-                  var deferred = $q.defer();
-                  BrokerageService.loadAllBrokerages().then(deferred.resolve, deferred.resolve);
-                  
-                  console.log('deferred.promise'+deferred.promise);
-                  return deferred.promise;
-              }
-          }
-      })
+      
       .state('event', {
           url: '/event',
           templateUrl: 'partials/event_list',
@@ -282,26 +249,10 @@ app.config(['$stateProvider', '$urlRouterProvider',
                   console.log('deferred.promise'+deferred.promise);
                   return deferred.promise;
               },
-              brokerages: function ($q,BrokerageService) {
-                  console.log('Load all brokerages');
-                  var deferred = $q.defer();
-                  BrokerageService.loadAllBrokerages().then(deferred.resolve, deferred.resolve);
-                  
-                  console.log('deferred.promise'+deferred.promise);
-                  return deferred.promise;
-              },
               facilityTypes: function ($q,FacilityTypeService) {
                   console.log('Load all facilityTypes');
                   var deferred = $q.defer();
                   FacilityTypeService.loadAllFacilityTypes().then(deferred.resolve, deferred.resolve);
-                  
-                  console.log('deferred.promise'+deferred.promise);
-                  return deferred.promise;
-              },
-              activityTypes: function ($q,ActivityTypeService) {
-                  console.log('Load all facilityTypes');
-                  var deferred = $q.defer();
-                  ActivityTypeService.loadAllActivityTypes().then(deferred.resolve, deferred.resolve);
                   
                   console.log('deferred.promise'+deferred.promise);
                   return deferred.promise;
@@ -343,27 +294,31 @@ app.config(['$stateProvider', '$urlRouterProvider',
 		      }
           }
       })
-      .state('eventTemplate', {
-          url: '/eventTemplate',
-          templateUrl: 'partials/eventTemplate_list',
-          controller:'EventTemplateController',
+      .state('eventAssignment', {
+          url: '/eventAssignment' ,
+          templateUrl: 'partials/eventAssignment_list',
+          controller:'EventAssignmentController',
           controllerAs:'ctrl',
+          params: {
+        	    'eventId': '0', 
+        	    'leadDisplay': false, 
+        	  },
           resolve: {
-              events: function ($q,EventTemplateService) {
-                  console.log('Load all eventTemplates');
-                  var deferred = $q.defer();
-                  EventTemplateService.loadAllEventTemplates().then(deferred.resolve, deferred.resolve);
-                  
-                  console.log('deferred.promise'+deferred.promise);
-                  return deferred.promise;
-              },
-      		  states: function ($q,  StateService) {
-		          console.log('Load all states');
+		      users: function ($q,  UserService) {
+		          console.log('Load all users');
 		          var deferred = $q.defer();
-		          StateService.loadAllStates().then(deferred.resolve, deferred.resolve);
+		          UserService.loadAllUsers().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise;
+		      },
+		      events: function ($q,  EventService) {
+		          console.log('Load all events');
+		          var deferred = $q.defer();
+		          EventService.loadAllEvents().then(deferred.resolve, deferred.resolve);
 		          console.log('deferred.promise'+deferred.promise);
 		          return deferred.promise;
 		      }
+		      
           }
       })
       .state('provider', {
@@ -376,14 +331,6 @@ app.config(['$stateProvider', '$urlRouterProvider',
                   console.log('Load all providers');
                   var deferred = $q.defer();
                   ProviderService.loadAllProviders().then(deferred.resolve, deferred.resolve);
-                  
-                  console.log('deferred.promise'+deferred.promise);
-                  return deferred.promise;
-              },
-               brokerages: function ($q,BrokerageService) {
-                  console.log('Load all brokerages');
-                  var deferred = $q.defer();
-                  BrokerageService.loadAllBrokerages().then(deferred.resolve, deferred.resolve);
                   
                   console.log('deferred.promise'+deferred.promise);
                   return deferred.promise;
@@ -466,7 +413,8 @@ app.directive('datePicker', function () {
                         return moment(new Date(data));
                     }
                 },
-                maxDate: new Date()
+                minDate:   new Date(new Date().setDate(new Date().getDate()-7)),
+                maxDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
             });
 
             $(element).on("dp.change", function (e) {
@@ -492,7 +440,8 @@ app.directive('date1Picker', function () {
                         return moment(new Date(data));
                     }
                 },
-                maxDate: new Date()
+                minDate:  new Date(new Date().setDate(new Date().getDate()-7)),
+                maxDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
             });
 
             $(element).on("dp.change", function (e) {
@@ -503,21 +452,6 @@ app.directive('date1Picker', function () {
     };
 });
 
-
-// DatePicker Input NgModel->DatePicker
-app.directive('datePickerInput', function() {
-    return {
-        require: 'ngModel',
-        link: function (scope, element, attr, ngModel) {
-            // Trigger the Input Change Event, so the Datepicker gets refreshed
-            scope.$watch(attr.ngModel, function (value) {
-                if (value) {
-                    element.trigger("change");
-                }
-            });
-        }
-    };
-});
 
 
 app.directive('fileModel', ['$parse', function ($parse) {
@@ -626,9 +560,46 @@ app.directive('phoneInput', function($filter, $browser) {
 
     };
 });
+
+app.filter('nonAdminUsersFilter', function () {
+  return function (input, arrayOfString) {
+	  var out =[];
+      input.forEach(function(user){
+    	  user.roles.filter( function( el ) {
+    		    if( arrayOfString.indexOf( el.role ) >-1){
+    		    	out.push(user);
+    		    }
+    	   });
+    });
+      return out;
+  }
+});
+
+app.filter('filterFromArray', function() {
+	  return function(input, arrayToMatch) {
+		    input = input || [];
+		    arrayToMatch= arrayToMatch|| [];
+		    var l = input.length,
+		        k = arrayToMatch.length,
+		        out = [], i = 0,
+		        map = {};
+
+		    for (; i < k; i++) {
+		      map[arrayToMatch[k]] = true;
+		    }
+
+		    for (i = 0; i < l; i++) {
+		      if(map[input[i].name]){
+		          out.push(input[i]);
+		      }
+		    }
+
+		    return out;
+		  };
+		});
+
 app.filter('tel', function () {
     return function (tel) {
-        console.log(tel);
         if (!tel) { return ''; }
 
         var value = tel.toString().trim().replace(/^\+/, '');

@@ -46,7 +46,7 @@ public class LeadStatusController {
 	// -------------------Retrieve Single LeadStatus------------------------------------------
 	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/leadStatus/{id}", method = RequestMethod.GET)
-	public ResponseEntity<?> getLeadStatus(@PathVariable("id") byte id) {
+	public ResponseEntity<?> getLeadStatus(@PathVariable("id") short id) {
 		logger.info("Fetching LeadStatus with id {}", id);
 		LeadStatus leadStatus = leadStatusService.findById(id);
 		if (leadStatus == null) {
@@ -62,6 +62,7 @@ public class LeadStatusController {
 	@RequestMapping(value = "/leadStatus/", method = RequestMethod.POST)
 	public ResponseEntity<?> createLeadStatus(@RequestBody LeadStatus leadStatus, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating LeadStatus : {}", leadStatus);
+		
 
 		if (leadStatusService.isLeadStatusExist(leadStatus)) {
 			logger.error("Unable to create. A LeadStatus with name {} already exist", leadStatus.getId());
@@ -80,7 +81,7 @@ public class LeadStatusController {
 	// ------------------- Update a LeadStatus ------------------------------------------------
 	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/leadStatus/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<?> updateLeadStatus(@PathVariable("id") byte id, @RequestBody LeadStatus leadStatus) {
+	public ResponseEntity<?> updateLeadStatus(@PathVariable("id") short id, @RequestBody LeadStatus leadStatus) {
 		logger.info("Updating LeadStatus with id {}", id);
 
 		LeadStatus currentLeadStatus = leadStatusService.findById(id);
@@ -100,7 +101,7 @@ public class LeadStatusController {
 	// ------------------- Delete a LeadStatus-----------------------------------------
 	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/leadStatus/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<?> deleteLeadStatus(@PathVariable("id") byte id) {
+	public ResponseEntity<?> deleteLeadStatus(@PathVariable("id") short id) {
 		logger.info("Fetching & Deleting LeadStatus with id {}", id);
 
 		LeadStatus leadStatus = leadStatusService.findById(id);

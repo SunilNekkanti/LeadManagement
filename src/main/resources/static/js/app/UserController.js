@@ -1,7 +1,7 @@
 'use strict';
 
 app.controller('UserController',
-    ['UserService', 'RoleService', 'LanguageService', 'CountyService', 'BrokerageService','$scope', '$compile','DTOptionsBuilder', 'DTColumnBuilder', function( UserService, RoleService, LanguageService, CountyService,BrokerageService, $scope,$compile,  DTOptionsBuilder, DTColumnBuilder) {
+    ['UserService', 'RoleService', 'LanguageService', 'InsuranceService', 'CountyService', '$scope', '$compile','DTOptionsBuilder', 'DTColumnBuilder', function( UserService, RoleService, LanguageService,  InsuranceService,CountyService, $scope,$compile,  DTOptionsBuilder, DTColumnBuilder) {
 
         var self = this;
         self.user = {};
@@ -12,7 +12,7 @@ app.controller('UserController',
         self.roles=[];
         self.languages=[];
         self.counties=[];
-        self.brokerages = [];
+        self.insurances = [];
         self.getAllUsers = getAllUsers;
         self.createUser = createUser;
         self.updateUser = updateUser;
@@ -23,7 +23,7 @@ app.controller('UserController',
         self.reset = reset;
         self.getAllLanguages = getAllLanguages;
         self.getAllCounties = getAllCounties;
-        self.getAllBrokerages = getAllBrokerages;
+        self.getAllInsurances =getAllInsurances;
         self.addUser = addUser;
         self.successMessage = '';
         self.errorMessage = '';
@@ -32,30 +32,18 @@ app.controller('UserController',
         self.onlyNumbers = /^\d+([,.]\d+)?$/;
         self.roles = RoleService.getAllRoles();
         self.dtInstance = {};
+        
         self.checkBoxChange = checkBoxChange;
         self.dtColumns = [
-            
-			DTColumnBuilder.newColumn('id')
-			.withTitle('ACTION').renderWith(
+            DTColumnBuilder.newColumn('username').withTitle('USERNAME').renderWith(
 					function(data, type, full,
 							meta) {
-						return '<input type="checkbox" ng-model="ctrl.user['
-								+ data
-								+ '].checkbox_status" ng-checked="ctrl.user['
-								+ data
-								+ '].selected" ng-true-value="true" ng-false-value="false" ng-change="ctrl.checkBoxChange(ctrl.user['
-								+ data
-								+ '].checkbox_status,'
-								+ data
-								+ ')" />';
-					}).withClass("text-center"),
-            DTColumnBuilder.newColumn('username').withTitle('USERNAME'),
+						 return '<a href="javascript:void(0)" class="'+full.id+'" ng-click="ctrl.editUser('+full.id+')">'+data+'</a>';
+					}).withClass("text-center"),,
             DTColumnBuilder.newColumn('language.description').withTitle('LANGUAGE').withOption('defaultContent', ''),
             DTColumnBuilder.newColumn('counties[].description').withTitle('COUNTY').withOption('defaultContent', ''),
-            DTColumnBuilder.newColumn('brokerage.description').withTitle('BROKERAGE').withOption('defaultContent', ''),
             DTColumnBuilder.newColumn('phone').withTitle('CELL').withOption('defaultContent', ''),
-            DTColumnBuilder.newColumn('email').withTitle('EMAIL').withOption('defaultContent', ''),
-            DTColumnBuilder.newColumn('position').withTitle('POSITION').withOption('defaultContent', '')
+            DTColumnBuilder.newColumn('email').withTitle('EMAIL').withOption('defaultContent', '')
           ];
      
         
@@ -63,7 +51,7 @@ app.controller('UserController',
 		.withOption(
 				'ajax',
 				{
-					url : 'http://localhost:8080/LeadManagement/api/user/',
+					url : '/LeadManagement/api/user/',
 					type : 'GET'
 				}).withDataProp('data').withOption('bServerSide', true)
 				.withOption("bLengthChange", false)
@@ -113,7 +101,14 @@ app.controller('UserController',
 			var resetPaging = false;
 			self.dtInstance.reloadData(callback,
 					resetPaging);
+			self.dtInstance.rerender();
 		} 
+		 
+
+		function callback(json) {
+				console.log(json);
+		}
+			
 		 
        function createdRow(row, data, dataIndex) {
             // Recompiling so we can bind Angular directive to the DT
@@ -153,6 +148,8 @@ app.controller('UserController',
                         console.log(self.languages);
                         self.user={};
                         $scope.myForm.$setPristine();
+                        self.dtInstance.reloadData();
+                        self.dtInstance.rerender();
                     },
                     function (errResponse) {
                         console.error('Error while creating User');
@@ -174,6 +171,8 @@ app.controller('UserController',
                         self.done = true;
                         self.display =false;
                         $scope.myForm.$setPristine();
+                        self.dtInstance.reloadData();
+                        self.dtInstance.rerender();
                     },
                     function(errResponse){
                         console.error('Error while updating User');
@@ -190,6 +189,8 @@ app.controller('UserController',
                 .then(
                     function(){
                         console.log('User '+id + ' removed successfully');
+                        self.dtInstance.reloadData();
+                        self.dtInstance.rerender();
                     },
                     function(errResponse){
                         console.error('Error while removing user '+id +', Error :'+errResponse.data);
@@ -216,10 +217,9 @@ app.controller('UserController',
         	return  LanguageService.getAllLanguages();
         }
         
-        function getAllBrokerages() {
-			return BrokerageService
-					.getAllBrokerages();
-		}
+        function getAllInsurances(){
+        	return  InsuranceService.getAllInsurances();
+        }
         
         function editUser(id) {
             self.successMessage='';
@@ -230,7 +230,7 @@ app.controller('UserController',
                     self.roles = getAllRoles();
                     self.languages = getAllLanguages();
                     self.counties = getAllCounties();
-                    self.brokerages = getAllBrokerages();
+                    self.insurances = getAllInsurances();
                     self.display = true;
                 },
                 function (errResponse) {
@@ -252,8 +252,7 @@ app.controller('UserController',
             self.languages = getAllLanguages();
             self.roles = getAllRoles();
             self.counties = getAllCounties();
-            self.brokerages = getAllBrokerages();
-            console.log('self.brokerages' +self.brokerages);
+            self.insurances = getAllInsurances();
             self.display =true;
         }
         

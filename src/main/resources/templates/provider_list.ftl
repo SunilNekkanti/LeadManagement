@@ -111,13 +111,6 @@
 	                
 	                  <div class="row">
 	                    <div class="form-group col-md-12">
-	                        <label class="col-md-2 control-lable" for="brokerage">Brokerage</label>
-	                        <div class="col-md-7">
-	                        <select ng-model="ctrl.prvdr.brokerages" name="brokerages"  ng-options="brokerage.description for brokerage in ctrl.brokerages track by brokerage.description" required multiple></select>
-	                           <div class="has-error" ng-show="myForm.$dirty">
-	                                      <span ng-show="myForm.brokerages.$error.required">This is a required field</span>
-	                            </div>
-	                        </div>
 	                    </div>
 	                </div>
 	               

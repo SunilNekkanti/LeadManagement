@@ -52,7 +52,7 @@ app.controller('InsuranceController',
 		.withOption(
 				'ajax',
 				{
-					url : 'http://localhost:8080/LeadManagement/api/insurance/',
+					url : '/LeadManagement/api/insurance/',
 					type : 'GET'
 				}).withDataProp('data').withOption('bServerSide', true)
 				.withOption("bLengthChange", false)

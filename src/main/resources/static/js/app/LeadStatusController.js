@@ -49,7 +49,7 @@ app.controller('LeadStatusController',
 		.withOption(
 				'ajax',
 				{
-					url : 'http://localhost:8080/LeadManagement/api/leadStatus/',
+					url : '/LeadManagement/api/leadStatus/',
 					type : 'GET'
 				}).withDataProp('data').withOption('bServerSide', true)
 				.withOption("bLengthChange", false)

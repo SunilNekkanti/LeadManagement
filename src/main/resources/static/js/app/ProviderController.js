@@ -10,7 +10,6 @@ app.controller('ProviderController',
         self.displayEditButton = false;
         self.submit = submit;
         self.languages=[];
-        self.brokerages = [];
         self.getAllProviders = getAllProviders;
         self.createProvider = createProvider;
         self.updateProvider = updateProvider;
@@ -47,7 +46,6 @@ app.controller('ProviderController',
 					}).withClass("text-center"),
             DTColumnBuilder.newColumn('name').withTitle('PROVIDER'),
             DTColumnBuilder.newColumn('languages[].description').withTitle('LANGUAGE').withOption('defaultContent', ''),
-            DTColumnBuilder.newColumn('brokerages[].description').withTitle('BROKERAGE').withOption('defaultContent', ''),
             DTColumnBuilder.newColumn('phone').withTitle('OFFICE NUMBER').withOption('defaultContent', ''),
             DTColumnBuilder.newColumn('address').withTitle('ADDRESS').withOption('defaultContent', ''),
             DTColumnBuilder.newColumn('hoursOfOperation').withTitle('HOURS OF OPERATION').withOption('defaultContent', ''),
@@ -59,7 +57,7 @@ app.controller('ProviderController',
 		.withOption(
 				'ajax',
 				{
-					url : 'http://localhost:8080/LeadManagement/api/provider/',
+					url : '/LeadManagement/api/provider/',
 					type : 'GET'
 				}).withDataProp('data').withOption('bServerSide', true)
 				.withOption("bLengthChange", false)
@@ -218,7 +216,6 @@ app.controller('ProviderController',
                     self.prvdr = prvdr;
                     self.languages = getAllLanguages();
                     console.log('self.languages ' +self.languages ) ;
-                    self.brokerages = getAllBrokerages();
                     self.display = true;
                 },
                 function (errResponse) {
@@ -238,7 +235,6 @@ app.controller('ProviderController',
             self.successMessage='';
             self.errorMessage='';
             self.languages = getAllLanguages();
-            self.brokerages = getAllBrokerages();
             self.display =true;
         }
         

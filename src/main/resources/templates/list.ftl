@@ -44,7 +44,11 @@
 	                    <div class="form-group col-md-12">
 	                        <label class="col-md-2 control-lable" for="age">Password</label>
 	                        <div class="col-md-7">
-	                            <input type="text" ng-model="ctrl.user.password" id="age" class="form-control input-sm" placeholder="Enter your Password." ng-required="true" ng-minlength="6"/>
+	                            <input type="text" ng-model="ctrl.user.password" name="password" class="form-control input-sm" placeholder="Enter your Password." ng-required="true" ng-minlength="6"/>
+	                            <div class="has-error" ng-show="myForm.$dirty">
+                                      <span ng-show="myForm.password.$error.required">This is a required field</span>
+                                      <span ng-show="myForm.password.$error.minlength">Minimum length required is 6</span>
+                                  </div>
 	                        </div>
 	                    </div>
 	                </div>
@@ -53,7 +57,7 @@
 	                    <div class="form-group col-md-12">
 	                        <label class="col-md-2 control-lable" for="uname">Role</label>
 	                        <div class="col-md-7">
-	                        <select ng-model="ctrl.user.roles" name="role" ng-options="role.role for role in ctrl.roles track by role.role" multiple ng-required="true"></select>
+	                        <select ng-model="ctrl.user.roles" name="role" ng-options="role.role for role in ctrl.roles | orderBy:'role' track by role.role" multiple ng-required="true"></select>
 	                        <div class="has-error" ng-show="myForm.$dirty">
                                       <span ng-show="myForm.role.$error.required">This is a required field</span>
                                   </div>
@@ -65,7 +69,7 @@
 	                    <div class="form-group col-md-12">
 	                        <label class="col-md-2 control-lable" for="uname">Language</label>
 	                        <div class="col-md-7">
-	                        <select ng-model="ctrl.user.languages" name="language" ng-options="language.description for language in ctrl.languages | orderBy:'description' track by language.description" ng-required="(ctrl.user.roles|filter:{role:'ROLE_AGENT'}).length > 0" multiple></select>
+	                        <select ng-model="ctrl.user.language" name="language" ng-options="language as language.description for language in ctrl.languages | orderBy:'description' track by language.description" ng-required="(ctrl.user.roles|filter:{role:'AGENT'}).length > 0" ></select>
 	                           <div class="has-error" ng-show="myForm.$dirty">
 	                                      <span ng-show="myForm.language.$error.required">This is a required field</span>
 	                            </div>
@@ -77,9 +81,9 @@
 	                    <div class="form-group col-md-12">
 	                        <label class="col-md-2 control-lable" for="uname">County</label>
 	                        <div class="col-md-7">
-	                        	<select ng-model="ctrl.user.counties" name="county" ng-options="county.description for county in ctrl.counties | orderBy:'description' track by county.description"   ng-required="(ctrl.user.roles|filter:{role:'ROLE_AGENT'}).length > 0" multiple=true ></select>
+	                        	<select ng-model="ctrl.user.counties" name="county" ng-options="county.description for county in ctrl.counties | orderBy:'description' track by county.description"   ng-required="(ctrl.user.roles|filter:{role:'AGENT'}).length > 0" multiple=true ></select>
 	                        		<div class="has-error" ng-show="myForm.$dirty">
-                                      <span ng-show="(ctrl.user.roles|filter:{role:'ROLE_AGENT'}).length > 0 && myForm.county.$error.required">This is a required field</span>
+                                      <span ng-show="(ctrl.user.roles|filter:{role:'AGENT'}).length > 0 && myForm.county.$error.required">This is a required field</span>
                                   </div>
 	                        </div>
 	                    </div>
@@ -113,14 +117,13 @@
 	                    </div>
 	                </div>
 	                
-	                
 	                  <div class="row">
 	                    <div class="form-group col-md-12">
-	                        <label class="col-md-2 control-lable" for="brokerage">Brokerage</label>
-	                        <div class="col-md-7">
-	                        <select ng-model="ctrl.user.brokerages" name="brokerages" ng-options="brokerage.description for brokerage in ctrl.brokerages track by brokerage.description" ng-required="(ctrl.user.roles|filter:{role:'ROLE_AGENT'}).length > 0" multiple > </select>
+	                        <label class="col-md-2 control-lable" for="insurance">Insurance</label>
+	                        <div class="col-md-9">
+	                        <select ng-model="ctrl.user.insurances" name="insurance" ng-options="insurance.name for insurance in ctrl.insurances | orderBy:'name' track by insurance.name" ng-required="(ctrl.user.roles|filter:{role:'AGENT'}).length > 0" multiple=true > </select>
 	                           <div class="has-error" ng-show="myForm.$dirty">
-	                                      <span ng-show="(ctrl.user.roles|filter:{role:'ROLE_AGENT'}).length > 0 && myForm.brokerages.$error.required">This is a required field</span>
+	                                      <span ng-show="(ctrl.user.roles|filter:{role:'AGENT'}).length > 0 && myForm.insurance.$error.required">This is a required field</span>
 	                            </div>
 	                        </div>
 	                    </div>
@@ -130,27 +133,14 @@
 	                    <div class="form-group col-md-12">
 	                        <label class="col-md-2 control-lable" for="licenseNo">License No</label>
 	                        <div class="col-md-7">
-	                            <input type="text" ng-model="ctrl.user.licenseNo" name="licenseNo" class="form-control input-sm" placeholder="Enter agent LicenseNo." ng-required="(ctrl.user.roles|filter:{role:'ROLE_AGENT'}).length > 0" ng-minlength="6"/>
+	                            <input type="text" ng-model="ctrl.user.licenseNo" name="licenseNo" class="form-control input-sm" placeholder="Enter agent LicenseNo." ng-required="(ctrl.user.roles|filter:{role:'AGENT'}).length > 0" ng-minlength="6"/>
 	                            <div class="has-error" ng-show="myForm.$dirty">
-	                                 <span ng-show="(ctrl.user.roles|filter:{role:'ROLE_AGENT'}).length > 0 &&  myForm.licenseNo.$error.required">This is a required field</span>
+	                                 <span ng-show="(ctrl.user.roles|filter:{role:'AGENT'}).length > 0 &&  myForm.licenseNo.$error.required">This is a required field</span>
                                   </div>
 	                        </div>
 	                    </div>
 	                </div>
 	               
-	                <div class="row">
-	                    <div class="form-group col-md-12">
-	                        <label class="col-md-2 control-lable" for="uname">Position</label>
-	                        <div class="col-md-7">
-	                            <input type="text" ng-model="ctrl.user.position" name="position" class="username form-control input-sm" placeholder="Enter Position in Organization" ng-required="true" ng-minlength="5"/>
-	                            <div class="has-error" ng-show="myForm.$dirty">
-	                                 <span ng-show="myForm.position.$error.required">This is a required field</span>
-                                     <span ng-show="myForm.position.$error.minlength">Minimum length required is 5</span>
-                                     <span ng-show="myForm.position.$invalid">This field is invalid </span>
-                                  </div>
-	                        </div>
-	                    </div>
-	                </div>
 	                
 	                <div class="row">
 	                    <div class="form-actions floatRight">

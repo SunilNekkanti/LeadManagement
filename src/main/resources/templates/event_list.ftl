@@ -30,7 +30,6 @@
             <div class="form-actions floatCenter col-md-offset-4">
               <input type="submit" value="{{!ctrl.event.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid || myForm.$pristine">
               <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-sm" ng-disabled="myForm.$pristine">Reset Form</button>
-              <button type="button" ng-click="ctrl.repeat()" class="btn  btn-primary btn-sm">Repeat</button>
               <button type="button"  ng-click="ctrl.addLead()" ng-show="ctrl.event.id"   class="btn btn-success  btn-sm">Add Lead</button>
             </div>
           </div>
@@ -179,13 +178,6 @@
 
             <div class="row">
               <div class="form-group col-md-12">
-                <label class="col-md-2  control-label" for="brokerage">Brokerage</label>
-                <div class="col-md-2">
-                  <select class="col-md-12 form-control" ng-model="ctrl.event.brokerage" name="brokerage" ng-options="brokerage.description for brokerage in ctrl.brokerages track by brokerage.description" required></select>
-                  <div class="has-error" ng-show="myForm.$dirty">
-                    <span ng-show="myForm.brokerage.$error.required">This is a required field</span>
-                  </div>
-                </div>
 
                 <label class="col-md-2  control-label" for="facilityType">Facility</label>
                 <div class="col-md-2">
@@ -195,24 +187,6 @@
                   </div>
                 </div>
 
-                <label class="col-md-2  control-label" for="activityType">Activity</label>
-                <div class="col-md-2">
-                  <select ng-model="ctrl.event.activityType" class="form-control" name="activityType" ng-options="activityType.description for activityType in ctrl.activityTypes track by activityType.description" required></select>
-                  <div class="has-error" ng-show="myForm.$dirty">
-                    <span ng-show="myForm.activityType.$error.required">This is a required field</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-md-12">
-                <label class="col-md-2  control-label" for="agent">Representatives</label>
-                <div class="col-md-10">
-                  <select ng-model="ctrl.event.representatives" class="form-control" name="eventRepresentatives" ng-options="agent.username for agent in ctrl.users   track by agent.username" multiple required>
-                  </select>
-                </div>
-               
               </div>
             </div>
 
@@ -253,112 +227,7 @@
             </div>
           </div>
 
-          <div class="form-group col-md-6" ng-show="ctrl.repeatDisplay">
-            <div class="row">
-              <div class="form-group col-lg-12">
-                <label class="col-md-2 control-label" for="frequency">Repeat</label>
-                <div class="col-md-3">
-                  <select class="col-md-12 form-control" ng-init=" ctrl.event.frequency=ctrl.event.frequency|| 'DAILY'" ng-model="ctrl.event.frequency" name="frequency" ng-options="frequency as frequency for frequency in ctrl.eventFrequencies"></select>
-                </div>
-                <span class="repeat-interval-panel">
-                                <label class="control-label col-md-1 repeat-interval-pretext">every</label>
-                                <span class="input-group spinner  col-md-2">
-                                   <select class="col-md-12 form-control" ng-init=" ctrl.event.interval=ctrl.event.interval|| 1"  ng-model="ctrl.event.interval" name="interval" ng-options=" i as i for i in ctrl.eventIntervals" >
-							       </select>
-                                </span>
-                <span ng-show="ctrl.event.frequency=='DAILY'"><label class="control-label">&nbsp; day(s) </label></span>
-                <span ng-show="ctrl.event.frequency=='WEEKLY'"><label class="control-label">&nbsp; week(s) on </label></span>
-                <span ng-show="ctrl.event.frequency=='MONTHLY'"><label class="control-label">&nbsp; month(s) </label> </span>
-                <span ng-show="ctrl.event.frequency=='YEARLY'"><label class="control-label">&nbsp; year(s)  </label></span>
-                </span>
-
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-md-12" ng-show="ctrl.event.frequency=='WEEKLY'">
-
-                <div class="btn-group col-md-offset-2" role="group">
-                  <label ng-repeat="item in ctrl.eventOnWeekDays" btn-checkbox="item.shortName" class="item btn btn-default " id="{{item.shortName}}" ng-change="ctrl.sync(bool, item)"  ng-model="bool" ng-checked="ctrl.isChecked(item.id)">
-                   <div ng-show="false" > {{bool=ctrl.isChecked(item.id)||false}} </div>
-                    {{item.shortName}}
-                  </label>
-                </div>
-
-              </div>
-            </div>
-
-            <div ng-init="ctrl.onDayorThe=ctrl.onDayorThe||true" ng-show="ctrl.event.frequency=='MONTHLY' || ctrl.event.frequency=='YEARLY'">
-              <div class="row">
-
-                <div class="form-group col-md-12">
-
-                  <div class="col-md-2">
-                    <label class="col-md-12 control-label text-center">
-                      <input type="radio" ng-model="ctrl.onDayorThe" ng-value="true">&nbsp;on<span ng-show="ctrl.event.frequency=='MONTHLY'">&nbsp;day</span> <span ng-show="ctrl.event.frequency=='YEARLY'">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    </label>
-                  </div>
-                  <div class="col-md-3" ng-show="ctrl.event.frequency=='YEARLY'">
-                    <select class="form-control col-md-7" ng-disabled="ctrl.onDayorThe==false" ng-model="ctrl.eventMonthOnDay" name="onMonth" ng-options="eventMonth.description for eventMonth in ctrl.eventMonths track by eventMonth.id"></select>
-                  </div>
-                  <div class="col-md-3">
-                    <select class="form-control col-md-4" ng-disabled="ctrl.onDayorThe==false" ng-model="ctrl.event.onDay"  name="ondays" ng-options="i for i in ctrl.eventOnDays"></select>
-                  </div>
-                  <div class="col-md-3"> </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="form-group col-md-12">
-
-                  <div class="col-md-2">
-                    <label class="col-md-12 control-label text-center">
-                      <input type="radio" ng-model="ctrl.onDayorThe" ng-value="false">&nbsp;on the
-                    </label>
-                  </div>
-                  <div class="col-md-3">
-                   <select class="form-control col-md-12" ng-disabled="ctrl.onDayorThe==true" ng-model="ctrl.eventOnWeek" name="onWeek" ng-options="weekNo.description for weekNo in ctrl.eventOnWeeks track by weekNo.id"></select>
-                  </div>
-                  <div class="col-md-3">
-                   <select class="form-control col-md-12" ng-disabled="ctrl.onDayorThe==true" ng-model="ctrl.eventOnWeekDay" name="weekday" ng-options="weekDay.description for weekDay in ctrl.eventOnWeekDays track by weekDay.id"></select>
-                  </div>
-                  <div class="col-md-1" ng-show="ctrl.event.frequency=='YEARLY'">
-                    <label class="col-md-12 control-label text-center"> of </label>
-                  </div>
-                  <div class="col-md-3" ng-show="ctrl.event.frequency=='YEARLY'">
-                    <select class="form-control col-md-7" ng-disabled="ctrl.onDayorThe==true" ng-model="ctrl.eventMonthOnThe" name="onMonth" ng-options="eventMonth.description for eventMonth in ctrl.eventMonths track by eventMonth.id"></select>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="form-group col-md-12">
-                <label class="col-md-2 control-label" for="end">End</label>
-                <div class="col-md-3">
-                  <select class="col-md-8 form-control" ng-model="ctrl.eventEndOption" name="end" ng-options="i as i for i in ctrl.eventEndOptions"></select>
-                </div>
-                <div ng-show="ctrl.eventEndOption=='After'" class="col-md-1">
-                  <input type="text" ng-model="ctrl.eventEndCount" id="count" name="eventCount" class="username form-control input-md" placeholder="Enter count" required ng-minlength="1" />
-                  <div class="has-error" ng-show="myForm.$dirty">
-                    <span ng-show="myForm.eventEndCount.$error.required">This is a required field</span>
-                    <span ng-show="myForm.eventEndCount.$error.minlength">Minimum length required is 5</span>
-                    <span ng-show="myForm.eventEndCount.$invalid">This field is invalid </span>
-                  </div>
-                </div>
-                <div ng-show="ctrl.eventEndOption=='On date'" class="col-md-4">
-                  <div class="col-md-9 input-group date" id="appointment" ng-model="ctrl.eventUntil" date1-picker>
-                    <input type="text" class="form-control netto-input col-md-12" ng-model="ctrl.eventUntil" date-picker-input>
-                    <span class="input-group-addon">
-           													<span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                  </div>
-                </div>
-
-
-              </div>
-            </div>
-
-          </div>
+      
 
 
         </form>

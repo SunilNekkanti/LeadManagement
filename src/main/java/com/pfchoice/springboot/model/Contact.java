@@ -13,18 +13,18 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  *
  * @author sarath
  */
 @Entity(name = "contact")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Contact extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
@@ -67,7 +67,6 @@ public class Contact extends RecordDetails implements Serializable {
 	@Column(name = "city")
 	private String city;
 
-	
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "ref_cnt_id", referencedColumnName = "ref_cnt_id")
 	private ReferenceContact refContact;
@@ -331,7 +330,7 @@ public class Contact extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.Contact[ id=" + id + " ]";
+		return "com.pfchoice.springboot.model.Contact[ id=" + id + " ]";
 	}
 
 }

@@ -14,15 +14,15 @@ import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
+import com.pfchoice.springboot.model.Insurance;
 
 /**
  *
- * @author sarath
+ * @author Mohanasundharam
  */
-@Entity(name = "reference_contact")
+@Entity(name = "reference_contract")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class ReferenceContact extends RecordDetails implements Serializable {
+public class ReferenceContract extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -30,34 +30,34 @@ public class ReferenceContact extends RecordDetails implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
-	@Column(name = "ref_cnt_Id", nullable = false)
+	@Column(name = "ref_contract_Id", nullable = false)
 	private Integer id;
-	
+
 	@JsonIgnore
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "insurance_id", referencedColumnName = "insurance_id", nullable=true)
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "insurance_id", referencedColumnName = "insurance_id")
 	private Insurance ins;
 
 	@JsonIgnore
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "prvdr_id", referencedColumnName = "prvdr_id", nullable=true)
+	@JoinColumn(name = "prvdr_id", referencedColumnName = "prvdr_id")
 	private Provider prvdr;
 
 	@JsonIgnore
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "refContact")
-	private Contact cnt;
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "referenceContract")
+	private Contract contract;
 
 	/**
 	 * 
 	 */
-	public ReferenceContact() {
+	public ReferenceContract() {
 		super();
 	}
 
 	/**
 	 * @param id
 	 */
-	public ReferenceContact(final Integer id) {
+	public ReferenceContract(final Integer id) {
 		super();
 		this.id = id;
 	}
@@ -102,38 +102,24 @@ public class ReferenceContact extends RecordDetails implements Serializable {
 	 * @param prvdr
 	 *            the prvdr to set
 	 */
-	public void setPrvdr(final Provider prvdr) {
+	public void setPrvdr(Provider prvdr) {
 		this.prvdr = prvdr;
 	}
 
 	/**
-	 * @return the cnt
+	 * @return the contract
 	 */
-	public Contact getCnt() {
-		return cnt;
+	public Contract getContract() {
+		return contract;
 	}
 
 	/**
-	 * @param cnt
-	 *            the cnt to set
+	 * @param contract
+	 *            the contract to set
 	 */
-	public void setCnt(final Contact cnt) {
-		this.cnt = cnt;
+	public void setContract(Contract contract) {
+		this.contract = contract;
 	}
-	
-	/**
-	 * @return
-	 */
-	/*public LeadMembership getLeadMbr() {
-		return leadMbr;
-	}*/
-
-	/**
-	 * @param leadMbr
-	 */
-	/*public void setLeadMbr(LeadMembership leadMbr) {
-		this.leadMbr = leadMbr;
-	}*/
 
 	@Override
 	public int hashCode() {
@@ -144,10 +130,10 @@ public class ReferenceContact extends RecordDetails implements Serializable {
 
 	@Override
 	public boolean equals(Object object) {
-		if (!(object instanceof ReferenceContact)) {
+		if (!(object instanceof ReferenceContract)) {
 			return false;
 		}
-		ReferenceContact other = (ReferenceContact) object;
+		ReferenceContract other = (ReferenceContract) object;
 		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
 			return false;
 		}
@@ -156,7 +142,7 @@ public class ReferenceContact extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.Contact[ id=" + id + " ]";
+		return "com.pfchoice.springboot.model.Contract[ id=" + id + " ]";
 	}
 
 }

@@ -48,8 +48,6 @@
   <script src="js/app/RoleController.js"></script>
   <script src="js/app/FacilityTypeController.js"></script>
   <script src="js/app/FacilityTypeService.js"></script>
-  <script src="js/app/BrokerageController.js"></script>
-  <script src="js/app/BrokerageService.js"></script>
   <script src="js/app/EventController.js"></script>
   <script src="js/app/EventService.js"></script>
   <script src="js/app/FileUploadService.js"></script>
@@ -61,8 +59,6 @@
   <script src="js/app/ProviderController.js"></script>
   <script src="js/app/LeadStatusController.js"></script>
   <script src="js/app/InsuranceController.js"></script>
-  <script src="js/app/ActivityTypeController.js"></script>
-  <script src="js/app/ActivityTypeService.js"></script>
   <script src="js/app/EventFrequencyController.js"></script>
   <script src="js/app/EventFrequencyService.js"></script>
   <script src="js/app/EventMonthController.js"></script>
@@ -70,6 +66,8 @@
   <script src="js/app/EventWeekDayController.js"></script>
   <script src="js/app/EventWeekDayService.js"></script>
   <script src="js/app/EventWeekNumberService.js"></script>
+  <script src="js/app/EventAssignmentService.js"></script>
+  <script src="js/app/EventAssignmentController.js"></script>
 </head>
 
 <body class="ng-cloak" ng-controller="NavbarController">
@@ -78,14 +76,20 @@
     
       <div class="navbar-collapse collapse in" collapse="isCollapsed" aria-expanded="true" >
         <ul class="nav navbar-nav">
-        <li><a  ng-click="callMe('lead','')">Leads</a></li>
-        <li><a  ng-click="callMe('event','')">Events</a> </li>
+        
+        <li class="dropdown" dropdown>
+            <a href="#" class="dropdown-toggle" dropdown-toggle role="button" aria-expanded="false">Events <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a  ng-click="callMe('event','')">Events</a></li>
+              <li><a   ng-click="callMe('eventAssignment','')">Event Assignments</a> </li>
+            </ul>
+          </li>
+          
+        <li><a  href="javascript:void(0)" ng-click="callMe('lead','')">Leads</a></li>
           <li class="dropdown" dropdown>
             <a href="#" class="dropdown-toggle" dropdown-toggle role="button" aria-expanded="false">Admin <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a  ng-click="callMe('activityType','')">Activity Types</a> </li>
               <li><a  ng-click="callMe('facilityType','')">Facility Types</a></li>
-              <li><a   ng-click="callMe('brokerage','')">Brokerages</a></li>
              
               <li class="divider"></li>
              
@@ -93,21 +97,11 @@
               <li><a ng-click="callMe('user','')">User Accounts</a> </li>
              
               <li class="divider"></li>
-              <li><a   ng-click="callMe('provider','')">Providers</a></li>
-               <li><a   ng-click="callMe('insurance','')">Insurances</a></li>
-              <li><a   ng-click="callMe('language','')">Languages</a></li>
                <li><a   ng-click="callMe('leadStatus','')">Lead Statuses</a></li>
               <li class="divider"></li>
-              <li><a href="#">One more separated link</a>   </li>
             </ul>
           </li>
         </ul>
-        <form class="navbar-form navbar-left" role="search">
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search">
-          </div>
-          <button type="submit" class="btn btn-default">Submit</button>
-        </form>
         <ul class="nav navbar-nav navbar-right">
         	<li> <a href="#"> <span class="glyphicon glyphicon-user"></span> ${username}</a></li>
         	<li> <a ng-click="callMe('logout')"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>

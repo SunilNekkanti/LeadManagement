@@ -95,25 +95,12 @@ app
 							self.checkBoxChange = checkBoxChange;
 							self.reloadData = reloadData;
 							self.dtColumns = [
-									DTColumnBuilder
-											.newColumn('id')
-											.withTitle('ACTION')
-											.renderWith(
+									DTColumnBuilder.newColumn('firstName')
+											.withTitle('FIRSTNAME').renderWith(
 													function(data, type, full,
 															meta) {
-														return '<input type="checkbox" ng-model="ctrl.lead['
-																+ data
-																+ '].checkbox_status" ng-checked="ctrl.lead['
-																+ data
-																+ '].selected" ng-true-value="true" ng-false-value="false" ng-change="ctrl.checkBoxChange(ctrl.lead['
-																+ data
-																+ '].checkbox_status,'
-																+ data
-																+ ')" />';
+														 return '<a href="javascript:void(0)" class="'+full.id+'" ng-click="ctrl.editLead('+full.id+')">'+data+'</a>';
 													}).withClass("text-center"),
-									DTColumnBuilder.newColumn('firstName')
-											.withTitle('FIRSTNAME')
-											.withOption('defaultContent', ''),
 									DTColumnBuilder.newColumn('lastName')
 											.withTitle('LASTNAME').withOption(
 													'defaultContent', ''),
@@ -171,7 +158,7 @@ app
 									.withOption(
 											'ajax',
 											{
-												url : 'http://localhost:8080/LeadManagement/api/lead/',
+												url : '/LeadManagement/api/lead/',
 												type : 'GET'
 											}).withDataProp('data').withOption('bServerSide', true)
 											.withOption("bLengthChange", false)
@@ -323,8 +310,12 @@ app
 													self.done = true;
 													self.display = false;
 													self.lead = {};
+													self.notes ='';
+													clearFiles();
 													$scope.myForm
 															.$setPristine();
+													self.dtInstance.reloadData();
+							                        self.dtInstance.rerender();
 												},
 												function(errResponse) {
 													console
@@ -347,8 +338,12 @@ app
 													self.errorMessage = '';
 													self.done = true;
 													self.display = false;
+													self.notes ='';
+													clearFiles();
 													$scope.myForm
 															.$setPristine();
+													self.dtInstance.reloadData();
+							                        self.dtInstance.rerender();
 												},
 												function(errResponse) {
 													console
@@ -370,6 +365,8 @@ app
 															.log('Lead '
 																	+ id
 																	+ ' removed successfully');
+													self.dtInstance.reloadData();
+							                        self.dtInstance.rerender();
 												},
 												function(errResponse) {
 													console
@@ -485,14 +482,14 @@ app
 						    
 						    function showAgentAssignment(){
 						    	
-						    	if(self.loginUser.roleName != 'ROLE_AGENT' && self.loginUser.roleName != 'ROLE_EVENT_COORDINATOR'){
+						    	if(self.loginUser.roleName != 'AGENT' && self.loginUser.roleName != 'EVENT_COORDINATOR'){
 						    		return true;
 						    	}else{
 						    		return false;
 						    	}
 						    }
 						    function showAddorUpdateButton(){
-						    	if(self.loginUser.roleName == 'ROLE_EVENT_COORDINATOR'){
+						    	if(self.loginUser.roleName == 'EVENT_COORDINATOR'){
 						    		return !self.myFile || self.lead.consentFormSigned == 'N' || $scope.myForm.$invalid || $scope.myForm.$pristine
 						    	}else{
 						    		return  $scope.myForm.$invalid || $scope.myForm.$pristine
@@ -500,7 +497,7 @@ app
 						    }
 						    
 						    function showEventStatus(){
-						    	if(self.loginUser.roleName != 'ROLE_EVENT_COORDINATOR'){
+						    	if(self.loginUser.roleName != 'EVENT_COORDINATOR'){
 						    		return true;
 						    	}else{
 						    		return false;
@@ -508,7 +505,7 @@ app
 						    }
 						    
 						    function showStatusNotes(){
-						    	if(self.loginUser.roleName == 'ROLE_AGENT'){
+						    	if(self.loginUser.roleName == 'AGENT'){
 						    		return true;
 						    	}else{
 						    		return false;
@@ -516,7 +513,7 @@ app
 						    }
 						    
 						    function showEventSource(){
-						    	if(self.loginUser.roleName != 'ROLE_AGENT'){
+						    	if(self.loginUser.roleName != 'AGENT'){
 						    		return true;
 						    	}else{
 						    		return false;
@@ -524,7 +521,7 @@ app
 						    }
 						    
 						    function showEventStatus(){
-						    	if(self.loginUser.roleName != 'ROLE_EVENT_COORDINATOR'){
+						    	if(self.loginUser.roleName != 'EVENT_COORDINATOR'){
 						    		return true;
 						    	}else{
 						    		return false;
@@ -532,7 +529,7 @@ app
 						    }
  
 						    function showStatusChangeDetails(){
-						    	if(self.loginUser.roleName != 'ROLE_EVENT_COORDINATOR' && self.lead.status && self.lead.status.id == 2){
+						    	if(self.loginUser.roleName != 'EVENT_COORDINATOR' && self.lead.status && self.lead.status.id == 2){
 						    		return true;
 						    	}else{
 						    		return false;
@@ -540,7 +537,7 @@ app
 						    }
 						    
 						    function showLeadAdditionalDetails(){
-						    	if(self.loginUser.roleName == 'ROLE_EVENT_COORDINATOR' || self.loginUser.roleName == 'ROLE_ADMIN'){
+						    	if(self.loginUser.roleName == 'EVENT_COORDINATOR' || self.loginUser.roleName == 'ADMIN'){
 						    		return true;
 						    	}else{
 						    		return false;
@@ -602,7 +599,13 @@ app
 										.getAllEvents();
 							}
 							
-							
+							function clearFiles(){
+								angular.forEach(
+									    angular.element("input[type='file']"),
+									    function(inputElem) {
+									      angular.element(inputElem).val(null);
+									    });
+							}
 							
 							function today() {
 								    self.bestTimeToCall = new Date();

@@ -6,7 +6,7 @@
 <body>
     <p><b>Dear ${toNamesList} </b>,</p>
     
-    <p>An Event eventName is scheduled  from  ${eventStartTime} to ${eventEndTime} </p>
+    <p>An Event ${eventName} is scheduled  from  ${eventStartTime} to ${eventEndTime} </p>
     <p>at ${location}</b></p>
     
      Notes:<p> ${notes}  </p>

@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -25,10 +27,10 @@ public class LeadStatus extends RecordDetails implements Serializable {
 
 	
 	@Id
-	// @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
-	@Column(name = "code", nullable = false)
-	private Byte id = (byte) 1;
+	@Column(name = "code", columnDefinition = "TINYINT",nullable = false)
+	private Short id ;
 
 	
 	@Column(name = "description")
@@ -44,7 +46,7 @@ public class LeadStatus extends RecordDetails implements Serializable {
 	/**
 	 * @param id
 	 */
-	public LeadStatus(final Byte id) {
+	public LeadStatus(final Short id) {
 		super();
 		this.id = id;
 	}
@@ -52,14 +54,14 @@ public class LeadStatus extends RecordDetails implements Serializable {
 	/**
 	 * @return
 	 */
-	public Byte getId() {
+	public Short getId() {
 		return id;
 	}
 
 	/**
 	 * @param id
 	 */
-	public void setId(final Byte id) {
+	public void setId(final Short id) {
 		this.id = id;
 	}
 

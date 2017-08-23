@@ -7,7 +7,7 @@ import com.pfchoice.springboot.model.LeadStatus;
 
 public interface LeadStatusService {
 	
-	LeadStatus findById(Byte id);
+	LeadStatus findById(Short id);
 	
 	LeadStatus findByDescription(String description);
 
@@ -15,7 +15,7 @@ public interface LeadStatusService {
 
 	void updateLeadStatus(LeadStatus leadStatus);
 
-	void deleteLeadStatusById(Byte id);
+	void deleteLeadStatusById(Short id);
 
 	void deleteAllLeadStatuses();
 
