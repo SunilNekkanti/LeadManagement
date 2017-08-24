@@ -2,7 +2,6 @@ package com.pfchoice.springboot.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -40,12 +39,10 @@ public class AuthenticationServiceImpl implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		com.pfchoice.springboot.model.User user = userRepository.findByUsername(username);
-		Set<Role> roles = user.getRoles();
+		Role role = user.getRole();
 		List<GrantedAuthority> authorities = new ArrayList<>();
-		for (Role r : roles) {
-			GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_"+r.getRole());
-			authorities.add(authority);
-		}
+		GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_"+role.getRole());
+		authorities.add(authority);
 
 		return new User(user.getUsername(), user.getPassword(), authorities);
 

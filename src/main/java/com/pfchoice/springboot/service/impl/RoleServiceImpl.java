@@ -8,6 +8,9 @@ import com.pfchoice.springboot.repositories.RoleRepository;
 import com.pfchoice.springboot.service.RoleService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,10 +52,14 @@ public class RoleServiceImpl implements RoleService{
 		roleRepository.deleteAll();
 	}
 
-	public List<Role> findAllRoles(){
-		return roleRepository.findAll();
+	public Page<Role> findAllRolesByPage(Specification<Role> spec,Pageable pageable){
+		return roleRepository.findAll(spec, pageable);
 	}
-
+	
+	public List<Role> findAllRoles(){
+		return (List<Role>) roleRepository.findAll();
+	}
+	
 	public boolean isRoleExist(Role role) {
 		return findByRole(role.getRole()) != null;
 	}

@@ -1,10 +1,11 @@
 package com.pfchoice.springboot.controller;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +14,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.pfchoice.springboot.model.LeadStatus;
+import com.pfchoice.springboot.repositories.specifications.LeadStatusSpecifications;
 import com.pfchoice.springboot.service.LeadStatusService;
 import com.pfchoice.springboot.util.CustomErrorType;
 
@@ -33,14 +36,22 @@ public class LeadStatusController {
 	// -------------------Retrieve All LeadStatuses---------------------------------------------
 	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER"  })
 	@RequestMapping(value = "/leadStatus/", method = RequestMethod.GET)
-	public ResponseEntity<List<LeadStatus>> listAllLeadStatuses() {
-		List<LeadStatus> leadStatuss = leadStatusService.findAllLeadStatuses();
-		if (leadStatuss.isEmpty()) {
+	public ResponseEntity<Page<LeadStatus>> listAllLeadStatuses(@RequestParam(value = "page", required = false) Integer pageNo,  @RequestParam(value = "size", required = false) Integer pageSize,@RequestParam(value = "search", required = false) String search) {
+		pageNo = (pageNo == null)?0:pageNo;
+		pageSize = (pageSize == null)?1000:pageSize;
+		PageRequest pageRequest = new PageRequest(pageNo,pageSize );
+		
+		Specification<LeadStatus> spec =null ;
+		if(!"".equals(search))
+		 spec = new LeadStatusSpecifications(search);
+		
+		Page<LeadStatus>   leadStatuss = leadStatusService.findAllLeadStatusesByPage(spec, pageRequest);
+		if (leadStatuss.getTotalElements() == 0) {
 			System.out.println("no leadStatuss");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
-		return new ResponseEntity<List<LeadStatus>>(leadStatuss, HttpStatus.OK);
+		return new ResponseEntity<Page<LeadStatus>>(leadStatuss, HttpStatus.OK);
 	}
 
 	// -------------------Retrieve Single LeadStatus------------------------------------------

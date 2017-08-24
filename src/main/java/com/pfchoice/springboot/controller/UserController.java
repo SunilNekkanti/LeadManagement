@@ -40,7 +40,6 @@ public class UserController {
 	public ResponseEntity<Page<User>> listAllUsers(@RequestParam(value = "page", required = false) Integer pageNo,  @RequestParam(value = "size", required = false) Integer pageSize,@RequestParam(value = "search", required = false) String search) {
 		pageNo = (pageNo == null)?0:pageNo;
 		pageSize = (pageSize == null)?1000:pageSize;
-		
 		PageRequest pageRequest = new PageRequest(pageNo,pageSize );
 		
 		Specification<User> spec =null ;
@@ -109,12 +108,10 @@ public class UserController {
 		currentUser.setEmail(user.getEmail());
 		currentUser.setPhone(user.getPhone());
 		currentUser.setLicenseNo(user.getLicenseNo());
-		currentUser.getRoles().clear();
-		currentUser.setRoles(user.getRoles());
-		currentUser.getCounties().clear();
-		currentUser.setCounties(user.getCounties());
+		currentUser.setRole(user.getRole());
 		currentUser.getInsurances().clear();
 		currentUser.setInsurances(user.getInsurances());
+		currentUser.setContact(user.getContact());
 		currentUser.setLanguage(user.getLanguage());
 	
 		userService.updateUser(currentUser);

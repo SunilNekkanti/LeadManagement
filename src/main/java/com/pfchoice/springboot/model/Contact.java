@@ -3,7 +3,6 @@ package com.pfchoice.springboot.model;
 import java.io.Serializable;
 
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -67,11 +66,6 @@ public class Contact extends RecordDetails implements Serializable {
 	@Column(name = "city")
 	private String city;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "ref_cnt_id", referencedColumnName = "ref_cnt_id")
-	private ReferenceContact refContact;
-
-	
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "statecode", referencedColumnName = "code")
 	private State stateCode;
@@ -292,21 +286,6 @@ public class Contact extends RecordDetails implements Serializable {
 	 */
 	public void setFileId(final Integer fileId) {
 		this.fileId = fileId;
-	}
-
-	/**
-	 * @return the refContact
-	 */
-	public ReferenceContact getRefContact() {
-		return refContact;
-	}
-
-	/**
-	 * @param refContact
-	 *            the refContact to set
-	 */
-	public void setRefContact(final ReferenceContact refContact) {
-		this.refContact = refContact;
 	}
 
 	@Override

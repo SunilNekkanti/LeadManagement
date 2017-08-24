@@ -1,7 +1,7 @@
 'use strict';
 
 app.controller('UserController',
-    ['UserService', 'RoleService', 'LanguageService', 'InsuranceService', 'CountyService', '$scope', '$compile','DTOptionsBuilder', 'DTColumnBuilder', function( UserService, RoleService, LanguageService,  InsuranceService,CountyService, $scope,$compile,  DTOptionsBuilder, DTColumnBuilder) {
+    ['UserService', 'RoleService', 'LanguageService', 'StateService', 'InsuranceService', 'CountyService', '$scope', '$compile','DTOptionsBuilder', 'DTColumnBuilder', function( UserService, RoleService, LanguageService, StateService, InsuranceService,CountyService, $scope,$compile,  DTOptionsBuilder, DTColumnBuilder) {
 
         var self = this;
         self.user = {};
@@ -12,18 +12,20 @@ app.controller('UserController',
         self.roles=[];
         self.languages=[];
         self.counties=[];
+        self.states = [];
         self.insurances = [];
         self.getAllUsers = getAllUsers;
         self.createUser = createUser;
         self.updateUser = updateUser;
         self.removeUser = removeUser;
         self.editUser = editUser;
-        self.dtInstance = {};
 		self.userId = null;
         self.reset = reset;
+        self.cancelEdit = cancelEdit;
         self.getAllLanguages = getAllLanguages;
         self.getAllCounties = getAllCounties;
         self.getAllInsurances =getAllInsurances;
+        self.getAllStates = getAllStates;
         self.addUser = addUser;
         self.successMessage = '';
         self.errorMessage = '';
@@ -35,13 +37,12 @@ app.controller('UserController',
         
         self.checkBoxChange = checkBoxChange;
         self.dtColumns = [
-            DTColumnBuilder.newColumn('username').withTitle('USERNAME').renderWith(
+            DTColumnBuilder.newColumn('name').withTitle('USERNAME').renderWith(
 					function(data, type, full,
 							meta) {
 						 return '<a href="javascript:void(0)" class="'+full.id+'" ng-click="ctrl.editUser('+full.id+')">'+data+'</a>';
-					}).withClass("text-center"),,
-            DTColumnBuilder.newColumn('language.description').withTitle('LANGUAGE').withOption('defaultContent', ''),
-            DTColumnBuilder.newColumn('counties[].description').withTitle('COUNTY').withOption('defaultContent', ''),
+					}).withClass("text-center"),
+            DTColumnBuilder.newColumn('role.role').withTitle('ROLE').withOption('defaultContent', ''),
             DTColumnBuilder.newColumn('phone').withTitle('CELL').withOption('defaultContent', ''),
             DTColumnBuilder.newColumn('email').withTitle('EMAIL').withOption('defaultContent', '')
           ];
@@ -217,6 +218,11 @@ app.controller('UserController',
         	return  LanguageService.getAllLanguages();
         }
         
+        function getAllStates() {
+			return StateService.getAllStates();
+		}
+        
+        
         function getAllInsurances(){
         	return  InsuranceService.getAllInsurances();
         }
@@ -231,6 +237,7 @@ app.controller('UserController',
                     self.languages = getAllLanguages();
                     self.counties = getAllCounties();
                     self.insurances = getAllInsurances();
+                    self.states = getAllStates();
                     self.display = true;
                 },
                 function (errResponse) {
@@ -245,6 +252,14 @@ app.controller('UserController',
             self.user={};
             $scope.myForm.$setPristine(); //reset Form
         }
+        
+        function cancelEdit(){
+            self.successMessage='';
+            self.errorMessage='';
+            self.user={};
+            $scope.myForm.$setPristine(); //reset Form
+            self.display = false;
+        }
        
         function addUser() {
             self.successMessage='';
@@ -253,6 +268,7 @@ app.controller('UserController',
             self.roles = getAllRoles();
             self.counties = getAllCounties();
             self.insurances = getAllInsurances();
+            self.states = getAllStates();
             self.display =true;
         }
         

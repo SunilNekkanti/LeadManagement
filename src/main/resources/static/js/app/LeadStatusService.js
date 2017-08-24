@@ -6,6 +6,7 @@ app.service('LeadStatusService',
 
             var factory = {
                 loadAllLeadStatuses: loadAllLeadStatuses,
+                loadLeadStatuses : loadLeadStatuses,
                 getAllLeadStatuses: getAllLeadStatuses,
                 getLeadStatus: getLeadStatus,
                 createLeadStatus: createLeadStatus,
@@ -15,6 +16,32 @@ app.service('LeadStatusService',
 
             return factory;
 
+            function loadLeadStatuses(pageNo, length, search, order) {
+                console.log('Fetching  LeadStatuss');
+                var deferred = $q.defer();
+                var pageable = {
+                 		 page:pageNo, size:length,search: search||''
+                 		};
+
+                 		var config = {
+                 		 params: pageable,
+                 		 headers : {'Accept' : 'application/json'}
+                 		};
+            return     $http.get(urls.STATUS_SERVICE_API, config)
+                    .then(
+                        function (response) {
+                            console.log('Fetched successfully  LeadStatuss');
+                            $localStorage.LeadStatus = response.data.content;
+                            deferred.resolve(response);
+                         return     response ;
+                        },
+                        function (errResponse) {
+                            console.error('Error while loading LeadStatuss');
+                            deferred.reject(errResponse);
+                            return   errResponse ;
+                        }
+                    );
+            }
             function loadAllLeadStatuses() {
                 console.log('Fetching all LeadStatuss');
                 var deferred = $q.defer();
@@ -22,7 +49,7 @@ app.service('LeadStatusService',
                     .then(
                         function (response) {
                             console.log('Fetched successfully all LeadStatuss');
-                            $localStorage.LeadStatus = response.data;
+                            $localStorage.LeadStatus = response.data.content;
                             deferred.resolve(response);
                         },
                         function (errResponse) {

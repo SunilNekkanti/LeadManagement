@@ -1,8 +1,5 @@
 package com.pfchoice.springboot.controller;
 
-import java.util.Iterator;
-import java.util.Set;
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,16 +55,13 @@ public class AppController {
 			modal.addAttribute("userId", user.getId());
 			loginForm.setUserId(user.getId()); 
 		}
-		Set<Role> roleSet = user.getRoles();
-		Iterator<Role> roleSetItr = roleSet.iterator();
-		if (roleSetItr.hasNext()) {
-			Role role = roleSetItr.next();
-			modal.addAttribute("roleId", role.getId());
-			modal.addAttribute("roleName", role.getRole());
-			loginForm.setRoleName(role.getRole()); 
-			loginForm.setRoleId(role.getId());
-			session.setAttribute("loginUser", loginForm);
-		}
+		Role role = user.getRole();
+		modal.addAttribute("roleId", role.getId());
+		modal.addAttribute("roleName", role.getRole());
+		loginForm.setRoleName(role.getRole()); 
+		loginForm.setRoleId(role.getId());
+		session.setAttribute("loginUser", loginForm);
+		
 		return "home";
 	}
 	

@@ -1,12 +1,13 @@
 package com.pfchoice.springboot.service.impl;
 
-import java.util.List;
-
 import com.pfchoice.springboot.model.LeadStatus;
 import com.pfchoice.springboot.repositories.LeadStatusRepository;
 import com.pfchoice.springboot.service.LeadStatusService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,8 +45,8 @@ public class LeadStatusServiceImpl implements LeadStatusService{
 		leadStatusRepository.deleteAll();
 	}
 
-	public List<LeadStatus> findAllLeadStatuses(){
-		return leadStatusRepository.findAll();
+	public Page<LeadStatus> findAllLeadStatusesByPage(Specification<LeadStatus> spec,Pageable pageable){
+		return leadStatusRepository.findAll(spec,  pageable);
 	}
 
 	public boolean isLeadStatusExist(LeadStatus leadStatus) {

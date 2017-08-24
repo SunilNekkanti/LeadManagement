@@ -6,6 +6,7 @@ app.service('FacilityTypeService',
 
             var factory = {
                 loadAllFacilityTypes: loadAllFacilityTypes,
+                loadFacilityTypes : loadFacilityTypes,
                 getAllFacilityTypes: getAllFacilityTypes,
                 getFacilityType: getFacilityType,
                 createFacilityType: createFacilityType,
@@ -15,6 +16,33 @@ app.service('FacilityTypeService',
 
             return factory;
 
+            function loadFacilityTypes(pageNo, length, search, order) {
+                console.log('Fetching  facilityTypes');
+                var deferred = $q.defer();
+                var pageable = {
+                 		 page:pageNo, size:length,search: search||''
+                 		};
+
+                 		var config = {
+                 		 params: pageable,
+                 		 headers : {'Accept' : 'application/json'}
+                 		};
+            return     $http.get(urls.FACILITYTYPE_SERVICE_API, config)
+                    .then(
+                        function (response) {
+                            console.log('Fetched successfully  facilityTypes');
+                            $localStorage.facilityTypes = response.data.content;
+                            deferred.resolve(response);
+                         return     response ;
+                        },
+                        function (errResponse) {
+                            console.error('Error while loading facilityTypes');
+                            deferred.reject(errResponse);
+                            return   errResponse ;
+                        }
+                    );
+            }
+            
             function loadAllFacilityTypes() {
                 console.log('Fetching all facilityTypes');
                 var deferred = $q.defer();
@@ -22,7 +50,7 @@ app.service('FacilityTypeService',
                     .then(
                         function (response) {
                             console.log('Fetched successfully all facilityTypes');
-                            $localStorage.facilityTypes = response.data;
+                            $localStorage.facilityTypes = response.data.content;
                             deferred.resolve(response);
                         },
                         function (errResponse) {
@@ -48,7 +76,7 @@ app.service('FacilityTypeService',
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
-                            console.error('Error while loading user with id :'+id);
+                            console.error('Error while loading facilityType with id :'+id);
                             deferred.reject(errResponse);
                         }
                     );

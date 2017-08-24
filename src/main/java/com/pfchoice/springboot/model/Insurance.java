@@ -3,6 +3,7 @@ package com.pfchoice.springboot.model;
 import java.io.Serializable;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -35,14 +37,18 @@ public class Insurance extends RecordDetails implements Serializable {
 	@Column(name = "Insurance_Id", nullable = false)
 	private Integer id;
 
-	
 	@Column(name = "name")
 	private String name;
 
-	
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "plan_Type_id", referencedColumnName = "plan_type_id")
 	private PlanType planType;
+	
+	@OneToOne(cascade=CascadeType.ALL )
+	@JoinTable(name = "insurance_contacts", joinColumns = {
+			@JoinColumn(name = "ins_id", referencedColumnName = "Insurance_Id",nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id",nullable = false, updatable = false, unique = true) })
+	private Contact contact;
 
 	/**
 	 * 
@@ -103,7 +109,20 @@ public class Insurance extends RecordDetails implements Serializable {
 		this.planType = planType;
 	}
 
-	
+	/**
+	 * @return the contact
+	 */
+	public Contact getContact() {
+		return contact;
+	}
+
+	/**
+	 * @param contact the contact to set
+	 */
+	public void setContact(Contact contact) {
+		this.contact = contact;
+	}
+
 	@Override
 	public int hashCode() {
 		int hash = 0;

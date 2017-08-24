@@ -1,10 +1,11 @@
 package com.pfchoice.springboot.controller;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +14,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.pfchoice.springboot.model.FacilityType;
+import com.pfchoice.springboot.repositories.specifications.FacilityTypeSpecifications;
 import com.pfchoice.springboot.service.FacilityTypeService;
 import com.pfchoice.springboot.util.CustomErrorType;
 
@@ -33,14 +36,22 @@ public class FacilityTypeController {
 	// -------------------Retrieve All FacilityTypes---------------------------------------------
 	@Secured({  "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER" })
 	@RequestMapping(value = "/facilityType/", method = RequestMethod.GET)
-	public ResponseEntity<List<FacilityType>> listAllFacilityTypes() {
-		List<FacilityType> facilityTypes = facilityTypeService.findAllFacilityTypes();
-		if (facilityTypes.isEmpty()) {
-			System.out.println("no facilityTypes");
+	public ResponseEntity<Page<FacilityType>> listAllFacilityTypes(@RequestParam(value = "page", required = false) Integer pageNo,  @RequestParam(value = "size", required = false) Integer pageSize,@RequestParam(value = "search", required = false) String search) {
+		pageNo = (pageNo == null)?0:pageNo;
+		pageSize = (pageSize == null)?1000:pageSize;
+		PageRequest pageRequest = new PageRequest(pageNo,pageSize );
+		
+		Specification<FacilityType> spec =null ;
+		if(!"".equals(search))
+		 spec = new FacilityTypeSpecifications(search);
+		
+		
+		Page<FacilityType> facilityTypes = facilityTypeService.findAllFacilityTypesByPage(spec, pageRequest);
+		if (facilityTypes.getTotalElements() == 0) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
-		return new ResponseEntity<List<FacilityType>>(facilityTypes, HttpStatus.OK);
+		return new ResponseEntity<Page<FacilityType>>(facilityTypes, HttpStatus.OK);
 	}
 
 	// -------------------Retrieve Single FacilityType------------------------------------------

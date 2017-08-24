@@ -20,8 +20,15 @@ app.service('UserService',
             function loadUsers(pageNo, length, search, order) {
                 console.log('Fetching  users');
                 var deferred = $q.defer();
-              
-            return     $http.get(urls.USER_SERVICE_API)
+                var pageable = {
+                 		 page:pageNo, size:length,search: search||''
+                 		};
+
+                 		var config = {
+                 		 params: pageable,
+                 		 headers : {'Accept' : 'application/json'}
+                 		};
+            return     $http.get(urls.USER_SERVICE_API, config)
                     .then(
                         function (response) {
                             console.log('Fetched successfully  leads');
@@ -43,7 +50,7 @@ app.service('UserService',
                 $http.get( urls.USER_SERVICE_API)
                     .then(
                         function (response) {
-                            console.log('loadAllUsers ======Fetched successfully all users');
+                            console.log('Fetched successfully all users');
                             $localStorage.users = response.data.content;
                             deferred.resolve(response.data);
                         },

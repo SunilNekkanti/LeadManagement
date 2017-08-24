@@ -18,6 +18,8 @@ app.controller('LeadStatusController',
         self.dtInstance = {};
 		self.leadStatusId = null;
         self.reset = reset;
+        self.cancelEdit = cancelEdit;
+        self.dtInstance = {};
         self.successMessage = '';
         self.errorMessage = '';
         self.done = false;
@@ -26,22 +28,11 @@ app.controller('LeadStatusController',
         self.dtInstance = {};
         self.checkBoxChange = checkBoxChange;
         self.dtColumns = [
-            
-			DTColumnBuilder.newColumn('id')
-			.withTitle('ACTION').renderWith(
+            DTColumnBuilder.newColumn('description').withTitle('LEADSTATUS').renderWith(
 					function(data, type, full,
 							meta) {
-						return '<input type="checkbox" ng-model="ctrl.leadStatus['
-								+ data
-								+ '].checkbox_status" ng-checked="ctrl.leadStatus['
-								+ data
-								+ '].selected" ng-true-value="true" ng-false-value="false" ng-change="ctrl.checkBoxChange(ctrl.leadStatus['
-								+ data
-								+ '].checkbox_status,'
-								+ data
-								+ ')" />';
-					}).withClass("text-center"),
-            DTColumnBuilder.newColumn('description').withTitle('LEADSTATUS')
+						 return '<a href="javascript:void(0)" class="'+full.id+'" ng-click="ctrl.editLeadStatus('+full.id+')">'+data+'</a>';
+					}).withClass("text-left")
           ];
      
         
@@ -138,6 +129,8 @@ app.controller('LeadStatusController',
                         console.log(self.languages);
                         self.leadStatus={};
                         $scope.myForm.$setPristine();
+                        self.dtInstance.reloadData();
+                        self.dtInstance.rerender();
                     },
                     function (errResponse) {
                         console.error('Error while creating LeadStatus');
@@ -159,6 +152,8 @@ app.controller('LeadStatusController',
                         self.done = true;
                         self.display =false;
                         $scope.myForm.$setPristine();
+                        self.dtInstance.reloadData();
+                        self.dtInstance.rerender();
                     },
                     function(errResponse){
                         console.error('Error while updating LeadStatus');
@@ -210,6 +205,14 @@ app.controller('LeadStatusController',
             $scope.myForm.$setPristine(); //reset Form
         }
        
+        function cancelEdit(){
+            self.successMessage='';
+            self.errorMessage='';
+            self.facilityType={};
+            $scope.myForm.$setPristine(); //reset Form
+            self.display = false;
+        }
+        
         function addLeadStatus() {
             self.successMessage='';
             self.errorMessage='';

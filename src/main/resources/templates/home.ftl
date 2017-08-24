@@ -80,7 +80,7 @@
         <li class="dropdown" dropdown>
             <a href="#" class="dropdown-toggle" dropdown-toggle role="button" aria-expanded="false">Events <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a  ng-click="callMe('event','')">Events</a></li>
+              <li><a  ng-click="callMe('event','')">Event List</a></li>
               <li><a   ng-click="callMe('eventAssignment','')">Event Assignments</a> </li>
             </ul>
           </li>
@@ -89,16 +89,18 @@
           <li class="dropdown" dropdown>
             <a href="#" class="dropdown-toggle" dropdown-toggle role="button" aria-expanded="false">Admin <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a  ng-click="callMe('facilityType','')">Facility Types</a></li>
-             
-              <li class="divider"></li>
-             
-              <li><a   ng-click="callMe('role','')">Roles</a> </li>
               <li><a ng-click="callMe('user','')">User Accounts</a> </li>
+              <li class="divider"></li>
+             		<li class="dropdown-submenu" dropdown>
+            		<a href="#" class="dropdown-toggle" dropdown-toggle role="button" aria-expanded="false">Settings</a>
+            			<ul class="dropdown-menu" role="submenu">
+              				<li><a  ng-click="callMe('facilityType','')">Facility Types</a></li>
+            				<li><a   ng-click="callMe('leadStatus','')">Lead Statuses</a></li>
+              				<li><a   ng-click="callMe('role','')">Roles</a> </li>
+           				 </ul>
+          			</li>
              
-              <li class="divider"></li>
-               <li><a   ng-click="callMe('leadStatus','')">Lead Statuses</a></li>
-              <li class="divider"></li>
+             
             </ul>
           </li>
         </ul>

@@ -42,7 +42,7 @@
 
         <div class="col-sm-6 ptInfo">
           <div class="panel panel-default">
-            <div class="panel-heading">Patient Info</div>
+            <div class="panel-heading">Lead Info</div>
             <div class="panel-body">
               <div class="row">
                 <div class="col-sm-6">

@@ -7,28 +7,25 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import com.pfchoice.springboot.model.User;
+import com.pfchoice.springboot.model.LeadStatus;
 
-public  class UserSpecifications  implements Specification<User> {
+public  class LeadStatusSpecifications  implements Specification<LeadStatus> {
  
     
     private String searchTerm;
 
-    public UserSpecifications( String searchTerm) {
+    public LeadStatusSpecifications( String searchTerm) {
         super();
         this.searchTerm = searchTerm;
     }
     
-    public Predicate toPredicate(Root<User> root, CriteriaQuery<?> cq,
+    public Predicate toPredicate(Root<LeadStatus> root, CriteriaQuery<?> cq,
             CriteriaBuilder cb) {
 
     	  String containsLikePattern = getContainsLikePattern(searchTerm);
     	  cq.distinct(true);
           return cb.or(
-                  cb.like(cb.lower(root.get("name")), containsLikePattern),
-                  cb.like(cb.lower(root.get("phone")), containsLikePattern),
-                  cb.like(cb.lower(root.get("email")), containsLikePattern),
-                  cb.like(root.join("role").get("role"), containsLikePattern)
+                  cb.like(cb.lower(root.get("description")), containsLikePattern)
           );
     }
  

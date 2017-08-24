@@ -97,7 +97,14 @@ app.config(['$stateProvider', '$urlRouterProvider',
 		          InsuranceService.loadAllInsurances().then(deferred.resolve, deferred.resolve);
 		          console.log('deferred.promise'+deferred.promise);
 		          return deferred.promise;
-		      }
+		      },
+		      states: function ($q,  StateService) {
+		          console.log('Load all states');
+		          var deferred = $q.defer();
+		          StateService.loadAllStates().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise;
+		      },
           }
       })
       .state('lead', {
@@ -564,12 +571,11 @@ app.directive('phoneInput', function($filter, $browser) {
 app.filter('nonAdminUsersFilter', function () {
   return function (input, arrayOfString) {
 	  var out =[];
-      input.forEach(function(user){
-    	  user.roles.filter( function( el ) {
-    		    if( arrayOfString.indexOf( el.role ) >-1){
+      input.filter( function( user ) {
+    		    if( arrayOfString.indexOf( user.role.role ) >-1){
+    		    	
     		    	out.push(user);
     		    }
-    	   });
     });
       return out;
   }

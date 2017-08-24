@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -41,6 +42,8 @@ public class User extends RecordDetails implements Serializable {
 	@Column(name = "Id", nullable = false)
 	private Integer id;
 
+	@Column(name = "name")
+	private String name;
 	
 	@Column(name = "username")
 	private String username;
@@ -53,17 +56,6 @@ public class User extends RecordDetails implements Serializable {
 	@JoinColumn(name = "language_id", referencedColumnName = "code")
 	private Language language;
 
-	@ManyToMany( cascade= {CascadeType.MERGE,CascadeType.REMOVE,CascadeType.DETACH},fetch = FetchType.LAZY)
-	@JoinTable(name = "user_roles", joinColumns = {
-			@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "role_id", referencedColumnName = "id",nullable = false, updatable = false) })
-	public Set<Role> roles;
-
-	@ManyToMany( cascade=  {CascadeType.MERGE,CascadeType.REMOVE,CascadeType.DETACH} ,fetch = FetchType.LAZY)
-	@JoinTable(name = "user_counties", joinColumns = {
-			@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "county_id", referencedColumnName = "code",nullable = false, updatable = false) })
-	private Set<County> counties;
 	
 	@ManyToMany( cascade= {CascadeType.MERGE,CascadeType.REMOVE,CascadeType.DETACH}  ,  fetch = FetchType.LAZY)
 	@JoinTable(name = "user_insurances", joinColumns = {
@@ -71,6 +63,17 @@ public class User extends RecordDetails implements Serializable {
 					@JoinColumn(name = "insurance_id", referencedColumnName = "insurance_id",nullable = false, updatable = false) })
 	public Set<Insurance> insurances;
 	
+	
+	@OneToOne(cascade=CascadeType.ALL )
+	@JoinTable(name = "user_contacts", joinColumns = {
+			@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id",nullable = false, updatable = false, unique = true) })
+	private Contact contact;
+	
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "role_id", referencedColumnName = "id")
+	private Role role;
 	
 	@Column(name = "email")
 	private String email;
@@ -111,6 +114,20 @@ public class User extends RecordDetails implements Serializable {
 	}
 
 	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
 	 * @return the username
 	 */
 	public String getUsername() {
@@ -140,34 +157,6 @@ public class User extends RecordDetails implements Serializable {
 		this.password = password;
 	}
 
-	/**
-	 * @return the role
-	 */
-	public Set<Role> getRoles() {
-		return roles;
-	}
-
-	/**
-	 * @param role
-	 *            the role to set
-	 */
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
-
-	/**
-	 * @return the counties
-	 */
-	public Set<County> getCounties() {
-		return counties;
-	}
-
-	/**
-	 * @param counties the counties to set
-	 */
-	public void setCounties(Set<County> counties) {
-		this.counties = counties;
-	}
 
 	/**
 	 * @return the email
@@ -226,6 +215,20 @@ public class User extends RecordDetails implements Serializable {
 	}
 
 	/**
+	 * @return the role
+	 */
+	public Role getRole() {
+		return role;
+	}
+
+	/**
+	 * @param role the role to set
+	 */
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	/**
 	 * @return the insurances
 	 */
 	public Set<Insurance> getInsurances() {
@@ -237,6 +240,20 @@ public class User extends RecordDetails implements Serializable {
 	 */
 	public void setInsurances(Set<Insurance> insurances) {
 		this.insurances = insurances;
+	}
+
+	/**
+	 * @return the contact
+	 */
+	public Contact getContact() {
+		return contact;
+	}
+
+	/**
+	 * @param contact the contact to set
+	 */
+	public void setContact(Contact contact) {
+		this.contact = contact;
 	}
 
 	@Override
@@ -260,7 +277,7 @@ public class User extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.User[ id=" + id + "roles"+ roles.toString()+"  ]";
+		return "com.pfchoice.core.entity.User[ id=" + id + "role="+ role.getRole()+"  ]";
 	}
 
 }

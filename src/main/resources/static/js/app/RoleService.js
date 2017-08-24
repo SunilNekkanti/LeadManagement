@@ -6,6 +6,7 @@ app.service('RoleService',
 
             var factory = {
                 loadAllRoles: loadAllRoles,
+                loadRoles : loadRoles,
                 getAllRoles: getAllRoles,
                 getRole: getRole,
                 createRole: createRole,
@@ -15,6 +16,33 @@ app.service('RoleService',
 
             return factory;
 
+            function loadRoles(pageNo, length, search, order) {
+                console.log('Fetching  Roles');
+                var deferred = $q.defer();
+                var pageable = {
+                 		 page:pageNo, size:length,search: search||''
+                 		};
+
+                 		var config = {
+                 		 params: pageable,
+                 		 headers : {'Accept' : 'application/json'}
+                 		};
+            return     $http.get(urls.ROLE_SERVICE_API, config)
+                    .then(
+                        function (response) {
+                            console.log('Fetched successfully  roles');
+                            $localStorage.roles = response.data.content;
+                            deferred.resolve(response);
+                         return     response ;
+                        },
+                        function (errResponse) {
+                            console.error('Error while loading roles');
+                            deferred.reject(errResponse);
+                            return   errResponse ;
+                        }
+                    );
+            }
+            
             function loadAllRoles() {
                 console.log('Fetching all roles');
                 var deferred = $q.defer();
@@ -22,7 +50,7 @@ app.service('RoleService',
                     .then(
                         function (response) {
                             console.log('Fetched successfully all roles');
-                            $localStorage.roles = response.data;
+                            $localStorage.roles = response.data.content;
                             deferred.resolve(response);
                         },
                         function (errResponse) {

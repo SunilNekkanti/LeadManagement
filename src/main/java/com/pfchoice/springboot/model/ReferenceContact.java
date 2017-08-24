@@ -43,9 +43,9 @@ public class ReferenceContact extends RecordDetails implements Serializable {
 	@JoinColumn(name = "prvdr_id", referencedColumnName = "prvdr_id", nullable=true)
 	private Provider prvdr;
 
-	@JsonIgnore
+/*	@JsonIgnore
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "refContact")
-	private Contact cnt;
+	private Contact cnt;*/
 
 	/**
 	 * 
@@ -109,17 +109,17 @@ public class ReferenceContact extends RecordDetails implements Serializable {
 	/**
 	 * @return the cnt
 	 */
-	public Contact getCnt() {
+/*	public Contact getCnt() {
 		return cnt;
-	}
+	}*/
 
 	/**
 	 * @param cnt
 	 *            the cnt to set
 	 */
-	public void setCnt(final Contact cnt) {
+/*	public void setCnt(final Contact cnt) {
 		this.cnt = cnt;
-	}
+	}*/
 	
 	/**
 	 * @return
