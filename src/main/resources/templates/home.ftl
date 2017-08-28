@@ -68,6 +68,7 @@
   <script src="js/app/EventWeekNumberService.js"></script>
   <script src="js/app/EventAssignmentService.js"></script>
   <script src="js/app/EventAssignmentController.js"></script>
+  <script src="js/app/BestTimeToCallService.js"></script>
 </head>
 
 <body class="ng-cloak" ng-controller="NavbarController">
@@ -77,16 +78,15 @@
       <div class="navbar-collapse collapse in" collapse="isCollapsed" aria-expanded="true" >
         <ul class="nav navbar-nav">
         
-        <li class="dropdown" dropdown>
+        <li class="dropdown" dropdown ng-if="loginUser.roleName !== 'AGENT'">
             <a href="#" class="dropdown-toggle" dropdown-toggle role="button" aria-expanded="false">Events <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <li><a  ng-click="callMe('event','')">Event List</a></li>
               <li><a   ng-click="callMe('eventAssignment','')">Event Assignments</a> </li>
             </ul>
           </li>
-          
         <li><a  href="javascript:void(0)" ng-click="callMe('lead','')">Leads</a></li>
-          <li class="dropdown" dropdown>
+          <li class="dropdown" dropdown ng-if="loginUser.roleName == 'ADMIN'||loginUser.roleName == 'MANAGER'">
             <a href="#" class="dropdown-toggle" dropdown-toggle role="button" aria-expanded="false">Admin <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <li><a ng-click="callMe('user','')">User Accounts</a> </li>

@@ -100,11 +100,6 @@ public class EventAssignmentController {
 			@ModelAttribute("userId") Integer userId) throws MessagingException, IOException, InterruptedException {
 		logger.info("Creating EventAssignment : {}", eventAssignment);
 
-		/*if (eventAssignmentService.isEventAssignmentExists(eventAssignment.getEventAssignmentName())) {
-			logger.error("Unable to create. A EventAssignment with name {} already exist", eventAssignment.getEventAssignmentName());
-			return new ResponseEntity(new CustomErrorType("Unable to create. A EventAssignment with name " + 
-					eventAssignment.getEvent().getEventName()  + " already exist."),HttpStatus.CONFLICT);
-		}*/
 		eventAssignmentService.saveEventAssignment(eventAssignment);
 
 		User user = userService.findById(userId);
@@ -118,19 +113,18 @@ public class EventAssignmentController {
 				.collect(Collectors.joining(";"));
 		String toNamesList = eventAssignment.getRepresentatives().stream().map(rep -> rep.getUsername())
 				.collect(Collectors.joining(","));
-		String address = event.getAddress1() + "\n" + event.getAddress2() + "\n" + event.getCity() + " ,"
-				+ event.getState().getShortName() + " ," + event.getZipCode().getCode();
+		String address = "";
 		
 	 	Email mail = new Email();
 		mail.setEmailTo(toEmailIds);
 		mail.setEmailFrom("skumar@pfchoice.com");
-		mail.setEmailCc(user.getEmail());
+		mail.setEmailCc(user.getContact().getEmail());
 		mail.setSubject("New EventAssignment "+eventAssignment.getEvent().getEventName()+" Created");
 		Map<String, Object> emailAttributes = new HashMap<>();
 		emailAttributes.put("toNamesList", toNamesList);
 		emailAttributes.put("eventName", eventAssignment.getEvent().getEventName());
-		emailAttributes.put("currentUser", user.getUsername());
-		emailAttributes.put("manager", user.getUsername());
+		emailAttributes.put("currentUser", user.getName());
+		emailAttributes.put("manager", user.getName());
 		emailAttributes.put("notes", eventNotes);
 		emailAttributes.put("eventStartTime", sdf.format(eventAssignment.getEvent().getEventDateStartTime().getTime()));
 		emailAttributes.put("eventEndTime", sdf.format(eventAssignment.getEvent().getEventDateEndTime().getTime()));
@@ -141,8 +135,8 @@ public class EventAssignmentController {
 		mail.setModel(emailAttributes);
 		String emailTemplateFileName = "event_assignment_email_template.txt";
 		
-		mail.setBody(emailService.geContentFromTemplate(emailAttributes,emailTemplateFileName ));
-	     emailService.sendMailWithAttachment(mail); 
+	//	mail.setBody(emailService.geContentFromTemplate(emailAttributes,emailTemplateFileName ));
+	  //   emailService.sendMailWithAttachment(mail); 
 			
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(ucBuilder.path("/api/eventAssignment/{id}").buildAndExpand(eventAssignment.getId()).toUri());

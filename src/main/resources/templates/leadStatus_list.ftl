@@ -1,8 +1,8 @@
 <div class="generic-container" >
 
-   <div class="panel panel-default" ng-hide="ctrl.display">
+   <div class="panel panel-default" ng-if="!ctrl.display">
         <!-- Default panel contents -->
-        <div class="panel-heading"><span class="facilityType">List of Facility Types </span> 
+        <div class="panel-heading"><span class="facilityType">List of Lead Statuses </span> 
                <button type="button"  ng-click="ctrl.addLeadStatus()" ng-hide="ctrl.displayEditButton" class="btn btn-success custom-width floatRight"> Add </button>   
                <button type="button" ng-click="ctrl.editLeadStatus(ctrl.leadStatusId)" ng-show="ctrl.displayEditButton" class="btn btn-primary custom-width floatRight">Edit</button>  
               <button type="button" ng-click="ctrl.removeLeadStatuse(ctrl.leadStatusId)"  ng-show="ctrl.displayEditButton" class="btn btn-danger custom-width floatRight">Remove</button>  
@@ -14,7 +14,7 @@
 		</div>
     </div>
     
-    <div class="panel panel-default" ng-show="ctrl.display">
+    <div class="panel panel-default" ng-if="ctrl.display">
         <!-- Default panel contents -->
         <div class="panel-heading"><span class="leadStatus">Lead Status </span></div>
 		<div class="panel-body">

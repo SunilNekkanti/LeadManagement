@@ -1,6 +1,6 @@
 
 <div class="generic-container">
-   <div class="panel panel-default" ng-hide="ctrl.display">
+   <div class="panel panel-default" ng-if="!ctrl.display">
         <!-- Default panel contents -->
         <div class="panel-heading"><span class="role">List of Facility Types </span> 
                <button type="button"  ng-click="ctrl.addRole()" ng-hide="ctrl.displayEditButton" class="btn btn-success custom-width floatRight"> Add </button>   
@@ -14,7 +14,7 @@
 		</div>
     </div>
     
-    <div class="panel panel-default" ng-show="ctrl.display">
+    <div class="panel panel-default" ng-if="ctrl.display">
         <!-- Default panel contents -->
         <div class="panel-heading"><span class="role">Role </span></div>
 		<div class="panel-body">

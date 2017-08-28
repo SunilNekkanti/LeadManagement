@@ -1,7 +1,7 @@
   
     
 <div class="generic-container" >
-   <div class="panel panel-default" ng-hide="ctrl.display">
+   <div class="panel panel-default" ng-if="!ctrl.display">
         <!-- Default panel contents -->
         <div class="panel-heading"><span class="prvdr">List of Insurances </span> 
                <button type="button"   ng-click="ctrl.addInsurance()" ng-hide="ctrl.displayEditButton" class="btn btn-success custom-width floatRight"> Add </button>   
@@ -17,7 +17,7 @@
     </div>
      
     
-    <div class="panel panel-default" ng-show="ctrl.display">
+    <div class="panel panel-default" ng-if="ctrl.display">
         <!-- Default panel contents -->
         <div class="panel-heading"><span class="lead">Insurance </span></div>
 		<div class="panel-body">

@@ -15,14 +15,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.pfchoice.springboot.util.JsonDateDeserializer;
+import com.pfchoice.springboot.util.JsonDateSerializer;
+
 
 /**
  * @author sarath
@@ -50,21 +54,15 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "insurance_type_id", referencedColumnName = "plan_type_id")
 	private PlanType planType;
+	
+	@Column(name = "present_insurance")
+	private String initialInsurance;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ins_id", referencedColumnName = "insurance_id")
-	private Insurance insurance;
 
-	@ManyToOne
-	@JoinColumn(name = "lead_Mbr_CountyCode", referencedColumnName = "code")
-	private County countyCode;
-
+ 	@JsonSerialize(using=JsonDateSerializer.class)
+ 	@JsonDeserialize(using=JsonDateDeserializer.class)
 	@Column(name = "lead_Mbr_DOB")
-	@Temporal(TemporalType.DATE)
 	private Date dob;
-
-	@Column(name = "bestTimeToCall", nullable = true)
-	private String bestTimeToCall;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lead_Mbr_ethinic_code", referencedColumnName = "code")
@@ -83,37 +81,22 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lead_Mbr_languageId", referencedColumnName = "code")
 	private Language language;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "best_time_to_call_id", referencedColumnName = "code")
+	private BestTimeToCall bestTimeToCall;
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lead_Mbr_Status", referencedColumnName = "code", insertable = false)
 	private LeadStatus status;
 
-	@Column(name = "home_phone")
-	private String homePhone;
-
-	@Column(name = "mobile_phone")
-	private String mobilePhone;
-
-	@Column(name = "email")
-	private String email;
-
-	@Column(name = "address1")
-	private String address1;
-
-	@Column(name = "address2")
-	private String address2;
-
-	@Column(name = "city")
-	private String city;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "statecode", referencedColumnName = "code")
-	private State stateCode;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "zipcode", referencedColumnName = "zipcode")
-	private ZipCode zipCode;
-
+	@OneToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(name = "lead_contacts", joinColumns = {
+			@JoinColumn(name = "lead_mbr_id", referencedColumnName = "lead_mbr_id",nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id",nullable = false, updatable = false, unique = true) })
+	private Contact contact;
+	
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "event_id", referencedColumnName = "event_id")
 	private Event event;
@@ -162,12 +145,6 @@ public class LeadMembership extends RecordDetails implements Serializable {
 		return true;
 	}
 
-	/**
-	 * @return the countyCode
-	 */
-	public County getCountyCode() {
-		return countyCode;
-	}
 
 	/**
 	 * @return the dob
@@ -230,14 +207,6 @@ public class LeadMembership extends RecordDetails implements Serializable {
 		int hash = 0;
 		hash += (id != null ? id.hashCode() : 0);
 		return hash;
-	}
-
-	/**
-	 * @param countyCode
-	 *            the countyCode to set
-	 */
-	public void setCountyCode(final County countyCode) {
-		this.countyCode = countyCode;
 	}
 
 	/**
@@ -304,126 +273,6 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @return the homePhone
-	 */
-	public String getHomePhone() {
-		return homePhone;
-	}
-
-	/**
-	 * @param homePhone
-	 *            the homePhone to set
-	 */
-	public void setHomePhone(String homePhone) {
-		this.homePhone = homePhone;
-	}
-
-	/**
-	 * @return the mobilePhone
-	 */
-	public String getMobilePhone() {
-		return mobilePhone;
-	}
-
-	/**
-	 * @param mobilePhone
-	 *            the mobilePhone to set
-	 */
-	public void setMobilePhone(String mobilePhone) {
-		this.mobilePhone = mobilePhone;
-	}
-
-	/**
-	 * @return the email
-	 */
-	public String getEmail() {
-		return email;
-	}
-
-	/**
-	 * @param email
-	 *            the email to set
-	 */
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	/**
-	 * @return the address1
-	 */
-	public String getAddress1() {
-		return address1;
-	}
-
-	/**
-	 * @param address1
-	 *            the address1 to set
-	 */
-	public void setAddress1(String address1) {
-		this.address1 = address1;
-	}
-
-	/**
-	 * @return the address2
-	 */
-	public String getAddress2() {
-		return address2;
-	}
-
-	/**
-	 * @param address2
-	 *            the address2 to set
-	 */
-	public void setAddress2(String address2) {
-		this.address2 = address2;
-	}
-
-	/**
-	 * @return the city
-	 */
-	public String getCity() {
-		return city;
-	}
-
-	/**
-	 * @param city
-	 *            the city to set
-	 */
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	/**
-	 * @return the stateCode
-	 */
-	public State getStateCode() {
-		return stateCode;
-	}
-
-	/**
-	 * @param stateCode
-	 *            the stateCode to set
-	 */
-	public void setStateCode(State stateCode) {
-		this.stateCode = stateCode;
-	}
-
-	/**
-	 * @return the zipCode
-	 */
-	public ZipCode getZipCode() {
-		return zipCode;
-	}
-
-	/**
-	 * @param zipCode
-	 *            the zipCode to set
-	 */
-	public void setZipCode(ZipCode zipCode) {
-		this.zipCode = zipCode;
-	}
-
-	/**
 	 * @return the language
 	 */
 	public Language getLanguage() {
@@ -441,15 +290,14 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	/**
 	 * @return the bestTimeToCall
 	 */
-	public String getBestTimeToCall() {
+	public BestTimeToCall getBestTimeToCall() {
 		return bestTimeToCall;
 	}
 
 	/**
-	 * @param bestTimeToCall
-	 *            the bestTimeToCall to set
+	 * @param bestTimeToCall the bestTimeToCall to set
 	 */
-	public void setBestTimeToCall(String bestTimeToCall) {
+	public void setBestTimeToCall(BestTimeToCall bestTimeToCall) {
 		this.bestTimeToCall = bestTimeToCall;
 	}
 
@@ -471,6 +319,20 @@ public class LeadMembership extends RecordDetails implements Serializable {
 			agentLeadAppointment.setUpdatedBy("Sarath");
 		}
 		this.agentLeadAppointmentList = agentLeadAppointmentList;
+	}
+
+	/**
+	 * @return the contact
+	 */
+	public Contact getContact() {
+		return contact;
+	}
+
+	/**
+	 * @param contact the contact to set
+	 */
+	public void setContact(Contact contact) {
+		this.contact = contact;
 	}
 
 	/**
@@ -549,18 +411,17 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @return the insurance
+	 * @return the presentInsurance
 	 */
-	public Insurance getInsurance() {
-		return insurance;
+	public String getInitialInsurance() {
+		return initialInsurance;
 	}
 
 	/**
-	 * @param insurance
-	 *            the insurance to set
+	 * @param presentInsurance the presentInsurance to set
 	 */
-	public void setInsurance(Insurance insurance) {
-		this.insurance = insurance;
+	public void setInitialInsurance(String initialInsurance) {
+		this.initialInsurance = initialInsurance;
 	}
 
 	/**

@@ -122,17 +122,7 @@ public class EventController {
 		currentEvent.setEventDateStartTime(event.getEventDateStartTime());
 		currentEvent.setEventDateEndTime(event.getEventDateEndTime());
 		currentEvent.setFacilityType(event.getFacilityType());
-		currentEvent.setAddress1(event.getAddress1());
-		currentEvent.setAddress2(event.getAddress2());
-		currentEvent.setCity(event.getCity());
-		currentEvent.setContactEmail(event.getContactEmail());
-		currentEvent.setState(event.getState());
-		currentEvent.setZipCode(event.getZipCode());
-		currentEvent.setContactPerson(event.getContactPerson());
-		currentEvent.setContactPhone(event.getContactPhone());
-	//	currentEvent.setRepeatRule(event.getRepeatRule());
-	//	currentEvent.getRepresentatives().clear();
-	//	currentEvent.getRepresentatives().addAll(event.getRepresentatives());
+		currentEvent.setContact(event.getContact());
 		currentEvent.setNotes(event.getNotes());
 		eventService.updateEvent(currentEvent);
 		

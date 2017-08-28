@@ -93,16 +93,16 @@ app
 												return $filter('date')(data, 'MM/dd/yyyy'); //date filter
 											}).withOption(
 													'defaultContent', ''),
+									DTColumnBuilder.newColumn('event.eventDateStartTime')
+													.withTitle('STARTTIME').renderWith(function(data, type) {
+														return $filter('date')(data, 'HH:mm'); //date filter
+													}).withOption(
+															'defaultContent', ''),				
 									DTColumnBuilder.newColumn('event.eventDateEndTime')
 													.withTitle('ENDDATE').renderWith(function(data, type) {
 														return $filter('date')(data, 'MM/dd/yyyy'); //date filter
 													}).withOption(
 															'defaultContent', ''),
-									DTColumnBuilder.newColumn('event.eventDateStartTime')
-															.withTitle('STARTTIME').renderWith(function(data, type) {
-																return $filter('date')(data, 'HH:mm'); //date filter
-															}).withOption(
-																	'defaultContent', ''),
 									DTColumnBuilder.newColumn('event.eventDateEndTime')
 																	.withTitle('ENDTIME').renderWith(function(data, type) {
 																		return $filter('date')(data, 'HH:mm'); //date filter

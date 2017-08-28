@@ -1,7 +1,7 @@
 package com.pfchoice.springboot.model;
 
 import java.io.Serializable;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.Basic;
@@ -16,10 +16,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.pfchoice.springboot.util.JsonDateAndTimeDeserializer;
+import com.pfchoice.springboot.util.JsonDateAndTimeSerializer;
 
 /**
  * @author sarath
@@ -41,13 +48,15 @@ public class Event extends RecordDetails implements Serializable {
 	@Column(name = "event_name")
 	private String eventName;
 
-	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone="America/NewYork")
+	@JsonSerialize(using=JsonDateAndTimeSerializer.class)
+ 	@JsonDeserialize(using=JsonDateAndTimeDeserializer.class)
 	@Column(name = "event_date_starttime", nullable= true)
-	private Calendar  eventDateStartTime;
+	private Date  eventDateStartTime;
 	
-	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone="America/NewYork")
+	@JsonSerialize(using=JsonDateAndTimeSerializer.class)
+ 	@JsonDeserialize(using=JsonDateAndTimeDeserializer.class)
 	@Column(name = "event_date_endtime", nullable= true)
-	private Calendar  eventDateEndTime;
+	private Date  eventDateEndTime;
 	
 	@ManyToOne
 	@JoinColumn(name = "facility_type_id", referencedColumnName = "code")
@@ -56,31 +65,12 @@ public class Event extends RecordDetails implements Serializable {
 	@Column(name = "notes", length = 65535, columnDefinition = "TEXT")
 	private String notes;
 	
-	@Column(name = "address1")
-	private String address1;
-	
-	@Column(name = "address2")
-	private String address2;
-
-	@Column(name = "city")
-	private String city;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "state", referencedColumnName = "code")
-	private State state;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "zipcode", referencedColumnName = "zipcode")
-	private ZipCode zipCode;
-	
-	@Column(name = "contact_person")
-	private String contactPerson;
-	
-	@Column(name = "contact_phone")
-	private String contactPhone;
-
-	@Column(name = "contact_email")
-	private String contactEmail;
+	@Fetch(FetchMode.SELECT) //remove this on data cleanup
+	@OneToOne(cascade=CascadeType.ALL )
+	@JoinTable(name = "event_contacts", joinColumns = {
+			@JoinColumn(name = "event_id", referencedColumnName = "event_id",nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id",nullable = false, updatable = false, unique = true) })
+	private Contact contact;
 	
 	@ManyToMany( cascade= {CascadeType.MERGE,CascadeType.REMOVE} ,fetch = FetchType.LAZY)
 	@JoinTable(name = "event_files_upload", joinColumns = {
@@ -133,118 +123,19 @@ public class Event extends RecordDetails implements Serializable {
 	public void setEventName(String eventName) {
 		this.eventName = eventName;
 	}
-
-
+	
 	/**
-	 * @return the address1
+	 * @return the contact
 	 */
-	public String getAddress1() {
-		return address1;
+	public Contact getContact() {
+		return contact;
 	}
 
 	/**
-	 * @param address1 the address1 to set
+	 * @param contact the contact to set
 	 */
-	public void setAddress1(String address1) {
-		this.address1 = address1;
-	}
-
-	/**
-	 * @return the address2
-	 */
-	public String getAddress2() {
-		return address2;
-	}
-
-	/**
-	 * @param address2 the address2 to set
-	 */
-	public void setAddress2(String address2) {
-		this.address2 = address2;
-	}
-
-	/**
-	 * @return the city
-	 */
-	public String getCity() {
-		return city;
-	}
-
-	/**
-	 * @param city the city to set
-	 */
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	/**
-	 * @return the state
-	 */
-	public State getState() {
-		return state;
-	}
-
-	/**
-	 * @param state the state to set
-	 */
-	public void setState(State state) {
-		this.state = state;
-	}
-
-	/**
-	 * @return the zipCode
-	 */
-	public ZipCode getZipCode() {
-		return zipCode;
-	}
-
-	/**
-	 * @param zipCode the zipCode to set
-	 */
-	public void setZipCode(ZipCode zipCode) {
-		this.zipCode = zipCode;
-	}
-
-	/**
-	 * @return the contactPerson
-	 */
-	public String getContactPerson() {
-		return contactPerson;
-	}
-
-	/**
-	 * @param contactPerson the contactPerson to set
-	 */
-	public void setContactPerson(String contactPerson) {
-		this.contactPerson = contactPerson;
-	}
-
-	/**
-	 * @return the contactPhone
-	 */
-	public String getContactPhone() {
-		return contactPhone;
-	}
-
-	/**
-	 * @param contactPhone the contactPhone to set
-	 */
-	public void setContactPhone(String contactPhone) {
-		this.contactPhone = contactPhone;
-	}
-
-	/**
-	 * @return the contactEmail
-	 */
-	public String getContactEmail() {
-		return contactEmail;
-	}
-
-	/**
-	 * @param contactEmail the contactEmail to set
-	 */
-	public void setContactEmail(String contactEmail) {
-		this.contactEmail = contactEmail;
+	public void setContact(Contact contact) {
+		this.contact = contact;
 	}
 
 	/**
@@ -278,28 +169,28 @@ public class Event extends RecordDetails implements Serializable {
 	/**
 	 * @return the eventDateStartTime
 	 */
-	public Calendar getEventDateStartTime() {
+	public Date getEventDateStartTime() {
 		return eventDateStartTime;
 	}
 
 	/**
 	 * @param eventDateStartTime the eventDateStartTime to set
 	 */
-	public void setEventDateStartTime(Calendar eventDateStartTime) {
+	public void setEventDateStartTime(Date eventDateStartTime) {
 		this.eventDateStartTime = eventDateStartTime;
 	}
 
 	/**
 	 * @return the eventDateEndTime
 	 */
-	public Calendar getEventDateEndTime() {
+	public Date getEventDateEndTime() {
 		return eventDateEndTime;
 	}
 
 	/**
 	 * @param eventDateEndTime the eventDateEndTime to set
 	 */
-	public void setEventDateEndTime(Calendar eventDateEndTime) {
+	public void setEventDateEndTime(Date eventDateEndTime) {
 		this.eventDateEndTime = eventDateEndTime;
 	}
 

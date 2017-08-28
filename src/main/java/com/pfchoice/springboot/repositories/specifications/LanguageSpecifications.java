@@ -23,9 +23,19 @@ public  class LanguageSpecifications  implements Specification<Language> {
             CriteriaBuilder cb) {
 
     	  String containsLikePattern = getContainsLikePattern(searchTerm);
-          return cb.or(
-                  cb.like(cb.lower(root.get("description")), containsLikePattern)
-          );
+    	  
+    	  Predicate p = cb.disjunction();
+    	  if(!"".equals(searchTerm)){
+    		  System.out.println("inside language search criteria");
+    		  p.getExpressions()
+              .add(
+                cb.or(
+                      cb.like(cb.lower(root.get("description")), containsLikePattern)
+              ));
+    	  }
+    	  p.getExpressions()
+          .add( cb.and(cb.equal(root.get("activeInd"),'Y')));
+          return p;
     }
  
  

@@ -1,5 +1,5 @@
 <div class="generic-container">
-  <div class="panel panel-default" ng-hide="ctrl.display">
+  <div class="panel panel-default" ng-if="!ctrl.display">
     <!-- Default panel contents -->
     <div class="panel-heading"><span class="user">List of Users </span>
       <button type="button" ng-click="ctrl.addUser()" ng-hide="ctrl.displayEditButton" class="btn btn-success custom-width floatRight"> Add </button>
@@ -15,7 +15,7 @@
   </div>
 
 
-  <div class="panel panel-default" ng-show="ctrl.display">
+  <div class="panel panel-default" ng-if="ctrl.display">
     <!-- Default panel contents -->
     <div class="panel-heading"><span class="lead">User </span></div>
     <div class="panel-body">
@@ -218,7 +218,7 @@
                   <div class="col-sm-6">
                     <div class="form-group col-sm-12">
                       <label for="email" require>Email </label>
-                      <input type="email" ng-model="ctrl.user.contact.email" id="email" name="email" class="username form-control input-sm" placeholder="Enter email" ng-minlength="5" />
+                      <input type="email" ng-model="ctrl.user.contact.email" id="email" name="email" class="username form-control input-sm" placeholder="Enter email" ng-required="true" ng-minlength="5" />
                       <div class="has-error" ng-show="myForm.$dirty">
                         <span ng-show="myForm.email.$error.minlength">Minimum length required is 8</span>
                         <span ng-show="myForm.email.$invalid">This field is invalid </span>

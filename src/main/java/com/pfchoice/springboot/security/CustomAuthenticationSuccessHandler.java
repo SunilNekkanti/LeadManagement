@@ -34,7 +34,7 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
 			Authentication authentication) throws IOException, ServletException {
-		List<String> leadHomePageRoles = Arrays.asList("ROLE_ADMIN", "ROLE_AGENT","ROLE_CARE_COORDINATOR");
+		List<String> leadHomePageRoles = Arrays.asList("ADMIN", "AGENT","CARE_COORDINATOR");
 		
 		HttpSession session = httpServletRequest.getSession();
 		String redirectUrl = null;

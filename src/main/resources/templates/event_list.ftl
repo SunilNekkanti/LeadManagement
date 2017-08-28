@@ -1,11 +1,11 @@
 <div class="generic-container">
 
-  <div class="panel panel-default" ng-hide="ctrl.display">
+  <div class="panel panel-default" ng-if="!ctrl.display">
     <!-- Default panel contents -->
     <div class="panel-heading"><span class="user">List of Events </span>
-      <button type="button" ng-click="ctrl.addEvent()" ng-hide="ctrl.displayEditButton" class="btn btn-success btn-xs custom-width floatRight"> Add </button>
-      <button type="button" ng-click="ctrl.editEvent(ctrl.eventId)" ng-show="ctrl.displayEditButton" class="btn btn-primary btn-xs custom-width floatRight">Edit</button>
-      <button type="button" ng-click="ctrl.removeEvent(ctrl.eventId)" ng-show="ctrl.displayEditButton" class="btn btn-danger btn-xs custom-width floatRight">Remove</button>
+      <button type="button" ng-if="ctrl.adminOrManager()" ng-click="ctrl.addEvent()" ng-hide="ctrl.displayEditButton" class="btn btn-success btn-xs custom-width floatRight"> Add </button>
+      <button type="button" ng-if="ctrl.adminOrManager()" ng-click="ctrl.editEvent(ctrl.eventId)" ng-show="ctrl.displayEditButton" class="btn btn-primary btn-xs custom-width floatRight">Edit</button>
+      <button type="button" ng-if="ctrl.adminOrManager()" ng-click="ctrl.removeEvent(ctrl.eventId)" ng-show="ctrl.displayEditButton" class="btn btn-danger btn-xs custom-width floatRight">Remove</button>
     </div>
     <div class="panel-body">
       <div class="table-responsive">
@@ -16,21 +16,19 @@
   </div>
 
 
-  <div class="panel panel-default" ng-show="ctrl.display">
+  <div class="panel panel-default" ng-if="ctrl.display">
     <!-- Default panel contents -->
-    <div class="panel-heading"><span class="event">Event </span></div>
+    <div class="panel-heading"><span class="event">Event </span><button type="button"  ng-click="ctrl.addLead()" ng-show="ctrl.event.id"   class="btn btn-success  btn-sm floatRight">Add Lead</button></div>
     <div class="panel-body">
       <div class="formcontainer">
         <div class="alert alert-success" role="alert" ng-if="ctrl.successMessage">{{ctrl.successMessage}}</div>
         <div class="alert alert-danger" role="alert" ng-if="ctrl.errorMessage">{{ctrl.errorMessage}}</div>
         <form ng-submit="ctrl.submit()" name="myForm" class="form-horizontal">
 
-
           <div class="panel-heading">
             <div class="form-actions floatCenter col-md-offset-4">
-              <input type="submit" value="{{!ctrl.event.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid || myForm.$pristine">
-              <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-sm" ng-disabled="myForm.$pristine">Reset Form</button>
-              <button type="button"  ng-click="ctrl.addLead()" ng-show="ctrl.event.id"   class="btn btn-success  btn-sm">Add Lead</button>
+              <input type="submit" value="{{!ctrl.event.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid || myForm.$pristine" ng-if="ctrl.adminOrManager()">
+              <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-sm" ng-disabled="myForm.$pristine" ng-if="ctrl.adminOrManager()" >Reset Form</button>
             </div>
           </div>
 
@@ -75,105 +73,6 @@
                 </div>
               </div>
             </div>
-
-            <div class="row">
-              <div class="form-group col-md-12">
-                <label class="col-md-2  control-label" for="address1">Address1</label>
-                <div class="col-md-10">
-                  <input type="text" ng-model="ctrl.event.address1" id="address1" name="address1" class="username  form-control input-md" placeholder="Enter event address1" required ng-minlength="5" />
-                  <div class="has-error" ng-show="myForm.$dirty">
-                    <span ng-show="myForm.address1.$error.required">This is a required field</span>
-                    <span ng-show="myForm.address1.$error.minlength">Minimum length required is 5</span>
-                    <span ng-show="myForm.address1.$invalid">This field is invalid </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-md-12">
-                <label class="col-md-2 control-label" for="address2">Address2</label>
-                <div class="col-md-10">
-                  <input type="text" ng-model="ctrl.event.address2" id="address2" name="address2" class="username  form-control input-md" placeholder="Enter event address2" ng-minlength="5" />
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-md-12">
-                <label class="col-md-2  control-label" for="city">City</label>
-                <div class="col-md-3">
-                  <input type="text" ng-model="ctrl.event.city" id="city" name="city" class="username  form-control input-md" placeholder="Enter event city" required ng-minlength="5" />
-                  <div class="has-error" ng-show="myForm.$dirty">
-                    <span ng-show="myForm.city.$error.required">This is a required field</span>
-                    <span ng-show="myForm.city.$error.minlength">Minimum length required is 5</span>
-                    <span ng-show="myForm.city.$invalid">This field is invalid </span>
-                  </div>
-                </div>
-
-                <label class="col-md-1  control-label" for="state">State</label>
-                <div class="col-md-2">
-                  <select ng-model="ctrl.event.state" name="state" class="form-control"  ng-options="state.description for state in ctrl.states track by state.description" required></select>
-                  <div class="has-error" ng-show="myForm.$dirty">
-                    <span ng-show="myForm.state.$error.required">This is a required field</span>
-                  </div>
-                </div>
-
-                <label class="col-md-1  control-label" for="zipcode">Zipcode</label>
-                <div class="col-md-3">
-                  <select ng-model="ctrl.event.zipCode" name="zipCode" class="form-control" ng-options="zipCode.code for zipCode in ctrl.event.state.zipCodes track by zipCode.code" required></select>
-                  <div class="has-error" ng-show="myForm.$dirty">
-                    <span ng-show="myForm.zipCode.$error.required">This is a required field</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-md-12">
-                <div require>
-                  <label class="col-md-2  control-label" for="contactPerson">Contact Person</label>
-                </div>
-                <div class="col-md-3">
-                  <input type="text" ng-model="ctrl.event.contactPerson" id="contactPerson" name="contactPerson" class="username  form-control input-md" placeholder="Enter event contactPerson" required ng-minlength="5" />
-                  <div class="has-error" ng-show="myForm.$dirty">
-                    <span ng-show="myForm.contactPerson.$error.required">This is a required field</span>
-                    <span ng-show="myForm.contactPerson.$error.minlength">Minimum length required is 5</span>
-                    <span ng-show="myForm.contactPerson.$invalid">This field is invalid </span>
-                  </div>
-                </div>
-
-                <div require>
-                  <label class="col-md-2  control-label" for="contactPhone">Contact Phone</label>
-                </div>
-                <div class="col-md-3">
-                  <input type="text" ng-model="ctrl.event.contactPhone" id="contactPhone" name="contactPhone" class="username  form-control input-md" phone-input placeholder="Enter event contactPhone" required ng-minlength="5" />
-                  <div class="has-error" ng-show="myForm.$dirty">
-                    <span ng-show="myForm.contactPhone.$error.required">This is a required field</span>
-                    <span ng-show="myForm.contactPhone.$error.minlength">Minimum length required is 5</span>
-                    <span ng-show="myForm.contactPhone.$invalid">This field is invalid </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-md-12">
-                <div require>
-                  <label class="col-md-2  control-label" for="contactEmail">Contact Email</label>
-                </div>
-                <div class="col-md-3">
-                  <input type="email" ng-model="ctrl.event.contactEmail" id="contactEmail" name="contactEmail" class="username  form-control input-md" placeholder="Enter event contactEmail" required ng-minlength="5" />
-                  <div class="has-error" ng-show="myForm.$dirty">
-                    <span ng-show="myForm.contactEmail.$error.required">This is a required field</span>
-                    <span ng-show="myForm.contactEmail.$error.minlength">Minimum length required is 5</span>
-                    <span ng-show="myForm.contactEmail.$invalid">This field is invalid </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
 
 
             <div class="row">
@@ -224,6 +123,106 @@
               </div>
               
               
+            </div>
+          </div>
+           <div class="form-group col-sm-6 cntInfo">
+            <div class="panel panel-default">
+              <div class="panel-heading">Contact Info</div>
+              <div class="panel-body">
+
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group col-sm-12">
+                      <label for="address1">Address 1</label>
+                      <input type="text" ng-model="ctrl.event.contact.address1" id="address1" name="address1" class="username form-control input-sm" placeholder="Enter Address" ng-required="!ctrl.event.contact.homePhone" ng-minlength="6" ng-maxlength="100" />
+                      <div class="has-error" ng-show="myForm.$dirty">
+                        <span ng-show="myForm.address1.$error.required">This is a required field</span>
+                        <span ng-show="myForm.address1.$error.minlength">Minimum length required is 5</span>
+                        <span ng-show="myForm.address1.$invalid">This field is invalid </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group col-sm-12">
+                      <label for="addres2">Address 2</label>
+                      <input type="text" ng-model="ctrl.event.contact.address2" id="addres2" class="username form-control input-sm" placeholder="Enter Address" ng-maxlength="10" />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group col-sm-12">
+                      <label for="	Last Name "> City / State / Zip</label>
+                      <div class="has-error" ng-show="myForm.$dirty">
+                        <span ng-show="myForm.city.$error.required">City is a required field</span>
+                        <span ng-show="myForm.city.$error.minlength">City Minimum length required is 4</span>
+                        <span ng-show="myForm.city.$invalid">City field is invalid </span>
+                      </div>
+
+                      <div class="has-error" ng-show="myForm.$dirty">
+                        <span ng-show="myForm.state.$error.required">State is a required field</span>
+                      </div>
+
+                      <div class="has-error" ng-show="myForm.$dirty">
+                        <span ng-show="myForm.zipcode.$error.required">Zipcode is a required field</span>
+                      </div>
+
+                      <div class="input-group">
+                        <input type="text" ng-model="ctrl.event.contact.city" id="city" name="city" class="username form-control" placeholder="Enter City" ng-required="!ctrl.event.homePhone" ng-minlength="4" ng-maxlength="100" />
+                        <span class="input-group-addon">-</span>
+                        <select ng-model="ctrl.event.contact.stateCode" class="form-control" name="state" ng-options="state.description for state in ctrl.states | orderBy:'description' track by state.description" ng-required="!ctrl.event.homePhone"></select>
+                        <span class="input-group-addon">-</span>
+                        <select ng-model="ctrl.event.contact.zipCode" name="zipcode" class="form-control" ng-options="zipCode.code for zipCode in ctrl.event.contact.stateCode.zipCodes | orderBy:'code'  track by zipCode.code" ng-required="!ctrl.event.homePhone"></select>
+
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group col-sm-12">
+                      <label for="homePhone">Home Phone</label>
+                      <input type="text" ng-model="ctrl.event.contact.homePhone" id="homePhone" name="homePhone" class="username form-control input-sm" placeholder="Enter Home phone" ng-required="!ctrl.event.address1" phone-input ng-minlength="10" />
+                      <div class="has-error" ng-show="myForm.$dirty">
+                        <span ng-show="myForm.homePhone.$error.required">This is a required field</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-6">
+                    <div class="form-group col-sm-12">
+                      <label for="mobilePhone">Mobile Phone</label>
+                      <input type="text" ng-model="ctrl.event.contact.mobilePhone" id="mobilePhone" class="username form-control input-sm" placeholder="Enter Mobile phone" phone-input ng-minlength="10" />
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group col-sm-12">
+                      <label for="bestTimeToCall">Contact Person</label>
+                      <input type="text" class="form-control netto-input" ng-model="ctrl.event.contact.contactPerson" date-picker-input>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-6">
+                    <div class="form-group col-sm-12">
+                      <label for="email" require>Email </label>
+                      <input type="email" ng-model="ctrl.event.contact.email" id="email" name="email" class="username form-control input-sm" placeholder="Enter email" ng-required="true" ng-minlength="5" />
+                      <div class="has-error" ng-show="myForm.$dirty">
+                        <span ng-show="myForm.email.$error.minlength">Minimum length required is 8</span>
+                        <span ng-show="myForm.email.$invalid">This field is invalid </span>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
             </div>
           </div>
 

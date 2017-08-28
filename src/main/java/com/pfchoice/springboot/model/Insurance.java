@@ -15,6 +15,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
@@ -44,6 +47,7 @@ public class Insurance extends RecordDetails implements Serializable {
 	@JoinColumn(name = "plan_Type_id", referencedColumnName = "plan_type_id")
 	private PlanType planType;
 	
+	@NotFound(action=NotFoundAction.IGNORE) 
 	@OneToOne(cascade=CascadeType.ALL )
 	@JoinTable(name = "insurance_contacts", joinColumns = {
 			@JoinColumn(name = "ins_id", referencedColumnName = "Insurance_Id",nullable = false, updatable = false) }, inverseJoinColumns = {

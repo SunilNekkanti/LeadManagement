@@ -42,7 +42,7 @@ public class LanguageController {
 		
 		PageRequest pageRequest = new PageRequest(pageNo,pageSize );
 		Specification<Language> spec =null ;
-		if(!"".equals(search))
+		//if(!"".equals(search))
 		 spec = new LanguageSpecifications(search);
 		Page<Language> languages = languageService.findAllLanguagesByPage(spec, pageRequest);
 		if (languages.getTotalElements() == 0) {

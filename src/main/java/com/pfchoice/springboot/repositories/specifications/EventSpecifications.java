@@ -30,13 +30,7 @@ public  class EventSpecifications  implements Specification<Event> {
                  // cb.like(cb.lower(root.get("eventDateStartTime")), containsLikePattern),
                  // cb.like(cb.lower(root.get("eventDateEndTime")), containsLikePattern),
                   cb.like(root.join("facilityType").get("description"), containsLikePattern),
-                  cb.like(cb.lower(root.get("notes")), containsLikePattern),
-                  cb.like(cb.lower(root.get("address1")), containsLikePattern),
-                  cb.like(cb.lower(root.get("address2")), containsLikePattern),
-                  cb.like(cb.lower(root.get("city")), containsLikePattern),
-                  cb.like(cb.lower(root.get("contactPerson")), containsLikePattern),
-                //  cb.like(cb.lower(root.get("contactPhone")), containsLikePattern),
-                  cb.like(root.join("state").get("description"), containsLikePattern)
+                  cb.like(cb.lower(root.get("notes")), containsLikePattern)
                  
           );
     }

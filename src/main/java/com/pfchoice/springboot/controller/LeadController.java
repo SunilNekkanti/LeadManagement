@@ -120,11 +120,17 @@ public class LeadController {
 		StringBuffer emailBody = new StringBuffer();
 		User user = userService.findById(userId);
 		List<LeadNotes> leadNotes = lead.getLeadNotes();
-		leadNotes.forEach(ln -> {
-			ln.setUser(user);
-			ln.setLead(lead);
-			emailBody.append(ln.getNotes());
-		});
+		if(leadNotes!= null){
+			leadNotes.forEach(ln -> {
+				ln.setUser(user);
+				ln.setLead(lead);
+				emailBody.append(ln.getNotes());
+			});
+		}else{
+			emailBody.append("");
+		}
+		
+		
 
 		lead.setLeadNotes(leadNotes);
 		leadService.saveLeadMembership(lead);
@@ -138,8 +144,8 @@ public class LeadController {
 		mail.setEmailCc("skumar@pfchoice.com");
 		mail.setSubject("New lead created");
 		
-		mail.setBody(emailService.geContentFromTemplate(lead, "lead_create_email_template.txt"));
-		emailService.sendMail(mail);
+	//	mail.setBody(emailService.geContentFromTemplate(lead, "lead_create_email_template.txt"));
+	//	emailService.sendMail(mail);
 		// emailService.sendMailWithAttachment(eParams);
 
 		HttpHeaders headers = new HttpHeaders();
@@ -166,22 +172,16 @@ public class LeadController {
 
 		currentLeadMembership.setFirstName(lead.getFirstName());
 		currentLeadMembership.setLastName(lead.getLastName());
-		currentLeadMembership.setCountyCode(lead.getCountyCode());
 		currentLeadMembership.setDob(lead.getDob());
 		currentLeadMembership.setEthinicCode(lead.getEthinicCode());
 		currentLeadMembership.setPlanType(lead.getPlanType());
+		currentLeadMembership.setInitialInsurance(lead.getInitialInsurance());
 		currentLeadMembership.setGender(lead.getGender());
 		currentLeadMembership.setStatus(lead.getStatus());
 		currentLeadMembership.setLanguage(lead.getLanguage());
+		currentLeadMembership.setBestTimeToCall(lead.getBestTimeToCall());
 		currentLeadMembership.setStatus(lead.getStatus());
-		currentLeadMembership.setEmail(lead.getEmail());
-		currentLeadMembership.setHomePhone(lead.getHomePhone());
-		currentLeadMembership.setMobilePhone(lead.getMobilePhone());
-		currentLeadMembership.setAddress1(lead.getAddress1());
-		currentLeadMembership.setAddress2(lead.getAddress2());
-		currentLeadMembership.setCity(lead.getCity());
-		currentLeadMembership.setStateCode(lead.getStateCode());
-		currentLeadMembership.setZipCode(lead.getZipCode());
+		//currentLeadMembership.setContact(lead.getContact());
 		
 		
 		User user = userService.findById(userId);
@@ -209,25 +209,23 @@ public class LeadController {
 		String toEmailIds = agntLeadAppointList.stream().map(la -> la.getUser().getEmail())
 				.collect(Collectors.joining(","));
 		String agentName = agntLeadAppointList.size() > 0 ? agntLeadAppointList.stream().filter(ala -> ala.getActiveInd()=='Y').findAny().get().getUser().getUsername() : "";
-		Calendar calApptTime = (agntLeadAppointList.size() > 0)
+/*		Calendar calApptTime = (agntLeadAppointList.size() > 0)
 				?  agntLeadAppointList.stream().filter(ala -> ala.getActiveInd()=='Y').findAny().get().getAppointmentTime() : Calendar.getInstance();
 			
 		String appointmentTime = agntLeadAppointList.size() > 0
 				? sdf.format(agntLeadAppointList.stream().filter(ala -> ala.getActiveInd()=='Y').findAny().get().getAppointmentTime().getTime()) : new String("");
 		calApptTime.add(Calendar.MINUTE, 60);		
 		String appointmentEndTime = agntLeadAppointList.size() > 0
-						? sdf.format(calApptTime.getTime()) : new String("");
+						? sdf.format(calApptTime.getTime()) : new String("");*/
 		 
-		String address = lead.getAddress1() + "\n" + lead.getAddress2() + "\n" + lead.getCity() + " ,"
-				+ lead.getStateCode() + " ," + lead.getZipCode();
+		String address = "";
 		String leadNotesString = lead.getLeadNotes().stream().sorted((a,b) -> -1).findFirst().get().getNotes();
 	    String careCoordinator =  agntLeadAppointList.stream().filter(ala -> ala.getActiveInd()=='Y').findAny().get().getCreatedBy();			
 		String currentTime = sdf.format((new Date()).getTime());
 		
 
-		calApptTime.setTimeZone(TimeZone.getTimeZone("UTC"));
+	//	calApptTime.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-		System.out.println(sdf.format(calApptTime.getTime()));
 		
 		
 		Email mail = new Email();
@@ -242,20 +240,20 @@ public class LeadController {
 		emailAttributes.put("firstName", lead.getFirstName());
 		emailAttributes.put("lastName", lead.getLastName());
 		emailAttributes.put("notes", leadNotesString);
-		emailAttributes.put("appointmentStartTime", appointmentTime);
-		emailAttributes.put("appointmentEndTime", appointmentEndTime);
+	//	emailAttributes.put("appointmentStartTime", appointmentTime);
+	//	emailAttributes.put("appointmentEndTime", appointmentEndTime);
 		emailAttributes.put("currentTime", currentTime);
 		emailAttributes.put("location", address);
 		
 		mail.setModel(emailAttributes);
-		String emailTemplateFileName = "agent_lead_assignment_email_template_"+roleName+".txt";
+	//	String emailTemplateFileName = "agent_lead_assignment_email_template_"+roleName+".txt";
 		
-		mail.setBody(emailService.geContentFromTemplate(emailAttributes,emailTemplateFileName ));
-		if("ROLE_CARE_COORDINATOR".equals(roleName)){
-			emailService.sendMailWithAttachment(mail);
-		} else{
-			emailService.sendMail(mail);
-		}
+	//	mail.setBody(emailService.geContentFromTemplate(emailAttributes,emailTemplateFileName ));
+//		if("ROLE_CARE_COORDINATOR".equals(roleName)){
+	//		emailService.sendMailWithAttachment(mail);
+	//	} else{
+	//		emailService.sendMail(mail);
+	//	}
 		// emailService.sendMailWithAttachment(eParams);
 
 		return new ResponseEntity<LeadMembership>(currentLeadMembership, HttpStatus.OK);

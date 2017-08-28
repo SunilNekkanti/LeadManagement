@@ -68,6 +68,7 @@ app
 							self.findWeekDaysByShortNames = findWeekDaysByShortNames;
 							self.findWeekDayByShortNames = findWeekDayByShortNames;
 							self.readUploadedFile = readUploadedFile;
+							self.adminOrManager = adminOrManager;
 							self.uploadFile = uploadFile;
 							self.eventrrule = eventrrule;
 							self.convertToInt =convertToInt;
@@ -103,16 +104,17 @@ app
 												return $filter('date')(data, 'MM/dd/yyyy'); //date filter
 											}).withOption(
 													'defaultContent', ''),
+									DTColumnBuilder.newColumn('eventDateStartTime')
+													.withTitle('STARTTIME').renderWith(function(data, type) {
+														return $filter('date')(data, 'HH:mm'); //date filter
+													}).withOption(
+															'defaultContent', ''),
 									DTColumnBuilder.newColumn('eventDateEndTime')
 													.withTitle('ENDDATE').renderWith(function(data, type) {
 														return $filter('date')(data, 'MM/dd/yyyy'); //date filter
 													}).withOption(
 															'defaultContent', ''),
-									DTColumnBuilder.newColumn('eventDateStartTime')
-															.withTitle('STARTTIME').renderWith(function(data, type) {
-																return $filter('date')(data, 'HH:mm'); //date filter
-															}).withOption(
-																	'defaultContent', ''),
+								
 									DTColumnBuilder.newColumn('eventDateEndTime')
 																	.withTitle('ENDTIME').renderWith(function(data, type) {
 																		return $filter('date')(data, 'HH:mm'); //date filter
@@ -120,10 +122,10 @@ app
 																			'defaultContent', ''),
 									DTColumnBuilder.newColumn('facilityType.description').withTitle(
 											'FACILITY TYPE').withOption('defaultContent', ''),
-									DTColumnBuilder.newColumn('contactPerson')
+									DTColumnBuilder.newColumn('contact.contactPerson')
 															.withTitle('CONTACT PERSON').withOption(
 															'defaultContent', ''),
-									DTColumnBuilder.newColumn('contactPhone')
+									DTColumnBuilder.newColumn('contact.mobilePhone')
 																.withTitle('CONTACT PHONE').withOption(
 																'defaultContent', '')];
 
@@ -487,6 +489,14 @@ app
 
 							}
 							
+							function  adminOrManager(){
+						    	if($rootScope.loginUser.roleName == 'ADMIN' ||  $rootScope.loginUser.roleName == 'MANAGER'){
+						    		return true;
+						    	}else{
+						    		return false;
+						    	}
+						    }
+
 							function repeat() {
 								self.repeatDisplay = !self.repeatDisplay;
 								if(self.repeatDisplay == true){

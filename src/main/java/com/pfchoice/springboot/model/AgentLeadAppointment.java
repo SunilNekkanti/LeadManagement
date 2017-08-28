@@ -1,7 +1,6 @@
 package com.pfchoice.springboot.model;
 
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -16,9 +15,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.pfchoice.springboot.util.JsonDateAndTimeDeserializer;
+import com.pfchoice.springboot.util.JsonDateAndTimeSerializer;
 
 
 
@@ -52,9 +54,10 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
  	@JoinColumn(name = "lead_mbr_id", referencedColumnName = "lead_mbr_id")
 	private LeadMembership lead;
  
- 	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone="America/NewYork")
+ 	@JsonSerialize(using=JsonDateAndTimeSerializer.class)
+ 	@JsonDeserialize(using=JsonDateAndTimeDeserializer.class)
  	@Column(name = "appointment_time", nullable= true)
-	private Calendar  appointmentTime;
+	private Date  appointmentTime;
  	
  	@ManyToOne(fetch = FetchType.LAZY)
  	@JoinColumn(name = "prvdr_id", referencedColumnName = "prvdr_id")
@@ -75,9 +78,10 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 	@Column(name = "transportation", insertable = false)
 	private Character transportation = new Character('N');
 	
-	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone="America/NewYork")
+	@JsonSerialize(using=JsonDateAndTimeSerializer.class)
+ 	@JsonDeserialize(using=JsonDateAndTimeDeserializer.class)
  	@Column(name = "dr_appointment_time")
-	private Calendar  drAppointmentTime;
+	private Date  drAppointmentTime;
 	
 	/**
 	 * 
@@ -153,14 +157,14 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 	/**
 	 * @return the appointmentTime
 	 */
-	public Calendar getAppointmentTime() {
+	public Date getAppointmentTime() {
 		return appointmentTime;
 	}
 
 	/**
 	 * @param appointmentTime the appointmentTime to set
 	 */
-	public void setAppointmentTime(Calendar appointmentTime) {
+	public void setAppointmentTime(Date appointmentTime) {
 		this.appointmentTime = appointmentTime;
 	}
 
@@ -237,14 +241,14 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 	/**
 	 * @return the drAppointmentTime
 	 */
-	public Calendar getDrAppointmentTime() {
+	public Date getDrAppointmentTime() {
 		return drAppointmentTime;
 	}
 
 	/**
 	 * @param drAppointmentTime the drAppointmentTime to set
 	 */
-	public void setDrAppointmentTime(Calendar drAppointmentTime) {
+	public void setDrAppointmentTime(Date drAppointmentTime) {
 		this.drAppointmentTime = drAppointmentTime;
 	}
 

@@ -13,6 +13,7 @@ app
 						'PlanTypeService',
 						'ProviderService',
 						'UserService',
+						'BestTimeToCallService',
 						'EventService',
 						'FileUploadService',
 						'$sce',
@@ -26,18 +27,20 @@ app
 						'DTColumnBuilder',
 						function(LeadService, GenderService, StateService,
 								LeadStatusService, LanguageService,
-								InsuranceService, PlanTypeService, ProviderService, UserService, EventService, FileUploadService, $sce, $scope,$rootScope, $location, $stateParams, $compile, $filter,
-								DTOptionsBuilder, DTColumnBuilder) {
+								InsuranceService, PlanTypeService, ProviderService, UserService, BestTimeToCallService, EventService, FileUploadService, $sce, $scope,$rootScope, $location, $stateParams, $compile, $filter,
+								 DTOptionsBuilder, DTColumnBuilder) {
 
 							var self = this;
 							self.myFile;
+							self.invalid =true;
+							self.pristine = true;
 							self.serverResponse = {};
-							self.loginUser = {};
 							self.lead = {};
 							self.notes ='';
 							self.leads = [];
 							self.leadEventId = $stateParams.eventId;
 							self.genders = [];
+							self.bestTimeToCalls = [];
 							self.states = [];
 							$location.url('/');
 							self.languages = [];
@@ -65,6 +68,7 @@ app
 							self.getAllLeadStatuses = getAllLeadStatuses;
 							self.getAllLanguages = getAllLanguages;
 							self.getAllInsurances = getAllInsurances;
+							self.getAllBestTimeToCalls = getAllBestTimeToCalls;
 							self.getAllAgents = getAllAgents;
 							self.getAllPlanTypes = getAllPlanTypes;
 							self.getAllInsuranceTypes = getAllInsuranceTypes;
@@ -83,13 +87,11 @@ app
 							self.showAddorUpdateButton = showAddorUpdateButton;
 							 configLeadEvent();
 							self.reset = reset;
-							loginUser : loginUser;
 							self.today = today;
 							self.toggleMin = toggleMin;
 							self.successMessage = '';
 							self.errorMessage = '';
 							self.done = false;
-							loginUser();
 							self.onlyIntegers = /^\d+$/;
 							self.onlyNumbers = /^\d+([,.]\d+)?$/;
 							self.checkBoxChange = checkBoxChange;
@@ -105,14 +107,8 @@ app
 											.withTitle('LASTNAME').withOption(
 													'defaultContent', ''),
 									DTColumnBuilder.newColumn(
-											'genderId.description').withTitle(
+											'gender.description').withTitle(
 											'GENDER').withOption(
-													'defaultContent', ''),
-									DTColumnBuilder.newColumn('dob').withTitle(
-											'BIRTHDAY').withOption(
-													'defaultContent', ''),
-									DTColumnBuilder.newColumn('planType.description')
-											.withTitle('MEDICAID/MEDICARE').withOption(
 													'defaultContent', ''),
 									DTColumnBuilder.newColumn(
 											'language.description').withTitle(
@@ -121,37 +117,7 @@ app
 									DTColumnBuilder.newColumn(
 											'status.description').withTitle(
 											'STATUS').withOption(
-													'defaultContent', ''),
-									DTColumnBuilder.newColumn('homePhone')
-											.withTitle('HOME_PHONE').withOption(
-													'defaultContent', '')
-											.withOption('defaultContent', ''),
-									DTColumnBuilder.newColumn('mobilePhone')
-											.withTitle('MOBILE_PHONE').withOption(
-													'defaultContent', '')
-											.withOption('defaultContent', ''),
-									DTColumnBuilder.newColumn('email')
-											.withTitle('EMAIL').withOption(
-													'defaultContent', ''),
-									DTColumnBuilder.newColumn('address1')
-											.withTitle('ADDRESS1').withOption(
-													'defaultContent', ''),
-									DTColumnBuilder.newColumn('address2')
-											.withTitle('ADDRESS2').withOption(
-													'defaultContent', ''),
-									DTColumnBuilder.newColumn('city')
-											.withTitle('CITY').withOption(
-													'defaultContent', ''),
-									DTColumnBuilder.newColumn(
-											'stateCode.description').withTitle(
-											'STATE').withOption(
-											'defaultContent', ''),
-									DTColumnBuilder.newColumn('zipCode.code')
-											.withTitle('ZIPCODE').withOption(
-													'defaultContent', ''),
-									DTColumnBuilder.newColumn('event.eventName')
-											.withTitle('SOURCE').withOption(
-															'width', '10%')];
+													'defaultContent', '')];
 
 							self.dtOptions = DTOptionsBuilder
 									.newOptions()
@@ -262,23 +228,6 @@ app
 							}
 							
 							
-							function loginUser() {
-								console.log('About to fetch loginUser');
-								LeadService
-										.loginUser()
-										.then(
-												function(loginUser) {
-													console
-															.log('fetched loginUser details successfully');
-													
-													self.loginUser = loginUser;
-												},
-												function(errResponse) {
-													console
-															.error('Error while fetching loginUser');
-												});
-							}
-							
 							function readUploadedFile(){
 								console.log('About to read consignment form');
 								FileUploadService.getFileUpload(self.lead.fileUpload.id).then(
@@ -380,6 +329,7 @@ app
 								self.successMessage = '';
 								self.errorMessage = '';
 								self.genders = getAllGenders();
+								self.bestTimeToCalls = getAllBestTimeToCalls();
 								self.states = getAllStates();
 								self.languages = getAllLanguages();
 								self.statuses = getAllLeadStatuses();
@@ -420,6 +370,7 @@ app
 								self.errorMessage = '';
 								self.display = true;
 								self.genders = getAllGenders();
+								self.bestTimeToCalls = getAllBestTimeToCalls(); 
 								self.states = getAllStates();
 								self.languages = getAllLanguages();
 								self.statuses = getAllLeadStatuses();
@@ -482,22 +433,31 @@ app
 						    
 						    function showAgentAssignment(){
 						    	
-						    	if(self.loginUser.roleName != 'AGENT' && self.loginUser.roleName != 'EVENT_COORDINATOR'){
+						    	if($rootScope.loginUser.roleName != 'AGENT' && $rootScope.loginUser.roleName != 'EVENT_COORDINATOR'){
 						    		return true;
 						    	}else{
 						    		return false;
 						    	}
 						    }
 						    function showAddorUpdateButton(){
-						    	if(self.loginUser.roleName == 'EVENT_COORDINATOR'){
-						    		return !self.myFile || self.lead.consentFormSigned == 'N' || $scope.myForm.$invalid || $scope.myForm.$pristine
+						    	if($rootScope.loginUser.roleName === 'EVENT_COORDINATOR'){
+						    		return !self.myFile || self.lead.consentFormSigned == 'N' || self.invalid  || self.pristine ;
 						    	}else{
-						    		return  $scope.myForm.$invalid || $scope.myForm.$pristine
+						    		return  self.invalid || self.pristine;
+						    	}
+						    }
+						    
+						    
+						    function showCurrentPlan(){
+						    	if($rootScope.loginUser.roleName == 'EVENT_COORDINATOR'){
+						    		return true;
+						    	}else{
+						    		return  false;
 						    	}
 						    }
 						    
 						    function showEventStatus(){
-						    	if(self.loginUser.roleName != 'EVENT_COORDINATOR'){
+						    	if($rootScope.loginUser.roleName != 'EVENT_COORDINATOR'){
 						    		return true;
 						    	}else{
 						    		return false;
@@ -505,7 +465,7 @@ app
 						    }
 						    
 						    function showStatusNotes(){
-						    	if(self.loginUser.roleName == 'AGENT'){
+						    	if($rootScope.loginUser.roleName == 'AGENT'){
 						    		return true;
 						    	}else{
 						    		return false;
@@ -513,7 +473,7 @@ app
 						    }
 						    
 						    function showEventSource(){
-						    	if(self.loginUser.roleName != 'AGENT'){
+						    	if($rootScope.loginUser.roleName != 'AGENT'){
 						    		return true;
 						    	}else{
 						    		return false;
@@ -521,7 +481,7 @@ app
 						    }
 						    
 						    function showEventStatus(){
-						    	if(self.loginUser.roleName != 'EVENT_COORDINATOR'){
+						    	if($rootScope.loginUser.roleName != 'EVENT_COORDINATOR'){
 						    		return true;
 						    	}else{
 						    		return false;
@@ -529,7 +489,7 @@ app
 						    }
  
 						    function showStatusChangeDetails(){
-						    	if(self.loginUser.roleName != 'EVENT_COORDINATOR' && self.lead.status && self.lead.status.id == 2){
+						    	if($rootScope.loginUser.roleName != 'EVENT_COORDINATOR' && self.lead.status && self.lead.status.description == 'Converted'){
 						    		return true;
 						    	}else{
 						    		return false;
@@ -537,7 +497,7 @@ app
 						    }
 						    
 						    function showLeadAdditionalDetails(){
-						    	if(self.loginUser.roleName == 'EVENT_COORDINATOR' || self.loginUser.roleName == 'ADMIN'){
+						    	if($rootScope.loginUser.roleName == 'EVENT_COORDINATOR' || $rootScope.loginUser.roleName == 'ADMIN'){
 						    		return true;
 						    	}else{
 						    		return false;
@@ -558,6 +518,10 @@ app
 								return GenderService.getAllGenders();
 							}
 
+							function getAllBestTimeToCalls() {
+								return BestTimeToCallService.getAllBestTimeToCalls();
+							}
+							
 							function getAllStates() {
 								return StateService.getAllStates();
 							}

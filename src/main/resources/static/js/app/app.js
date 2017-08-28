@@ -25,13 +25,35 @@ app.constant('urls', {
     EVENT_MONTH_SERVICE_API : '/LeadManagement/api/eventMonth/',
     EVENT_WEEKDAY_SERVICE_API : '/LeadManagement/api/eventWeekDay/',
     FILE_UPLOADED_SERVICE_API : '/LeadManagement/api/fileUploaded/',
-    EVENT_WEEKNUMBER_SERVICE_API : '/LeadManagement/api/eventWeekNumber/'
+    EVENT_WEEKNUMBER_SERVICE_API : '/LeadManagement/api/eventWeekNumber/',
+    BESTTIMETOCALL_SERVICE_API : '/LeadManagement/api/bestTimeToCall/'
 });
 
-app.controller('NavbarController',  ['$scope', '$state', '$stateParams', function($scope, $state, $stateParams){
-	
+app.controller('NavbarController',  ['$rootScope', '$scope', '$state', '$stateParams', 'LeadService',function($rootScope, $scope, $state, $stateParams, LeadService){
+
+  $rootScope.loginUser = ''; 
   $scope.isCollapsed = true;
   $scope.displayNavbar = true;
+   loginUser();
+  
+  function loginUser() {
+		console.log('About to fetch loginUser');
+		LeadService
+				.loginUser()
+				.then(
+						function(loginUser) {
+							console
+									.log('fetched loginUser details successfully');
+							
+							$scope.loginUser = loginUser;
+							$rootScope.loginUser  =  loginUser;
+						},
+						function(errResponse) {
+							console
+									.error('Error while fetching loginUser');
+						});
+	}
+  
   $scope.callMe = function(url,params){
 	  if(url == 'logout'){
 		  $scope.displayNavbar = false;
@@ -186,6 +208,13 @@ app.config(['$stateProvider', '$urlRouterProvider',
 		          console.log('Load all events');
 		          var deferred = $q.defer();
 		          EventService.loadAllEvents().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise;
+		      },
+		      bestTimeToCalls: function ($q,  BestTimeToCallService) {
+		          console.log('Load all bestTimeToCalls');
+		          var deferred = $q.defer();
+		          BestTimeToCallService.loadAllBestTimeToCalls().then(deferred.resolve, deferred.resolve);
 		          console.log('deferred.promise'+deferred.promise);
 		          return deferred.promise;
 		      }
@@ -425,7 +454,7 @@ app.directive('datePicker', function () {
             });
 
             $(element).on("dp.change", function (e) {
-                ngModel.$viewValue = e.date;
+                ngModel.$viewValue = moment(e.date).format('MM/DD/YYYY HH:mm')  ;
                 ngModel.$commitViewValue();
             });
         }
@@ -447,12 +476,11 @@ app.directive('date1Picker', function () {
                         return moment(new Date(data));
                     }
                 },
-                minDate:  new Date(new Date().setDate(new Date().getDate()-7)),
-                maxDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
+                maxDate: new Date()
             });
 
             $(element).on("dp.change", function (e) {
-                ngModel.$viewValue = e.date;
+                ngModel.$viewValue = moment(e.date).format('MM/DD/YYYY');
                 ngModel.$commitViewValue();
             });
         }
