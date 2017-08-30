@@ -2,7 +2,6 @@ package com.pfchoice.springboot.model;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Basic;
@@ -16,12 +15,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.pfchoice.springboot.model.ReferenceContract;
 
 
 /**
@@ -54,14 +54,12 @@ public class Provider extends RecordDetails implements Serializable {
 					@JoinColumn(name = "language_id", referencedColumnName = "code",nullable = false, updatable = false) })
 	public Set<Language> languages;
 	
+	@NotFound(action=NotFoundAction.IGNORE) 
 	@OneToOne(cascade=CascadeType.ALL )
 	@JoinTable(name = "provider_contacts", joinColumns = {
 			@JoinColumn(name = "prvdr_id", referencedColumnName = "prvdr_id",nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id",nullable = false, updatable = false, unique = true) })
 	private Contact contact;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "prvdr")
-	private Set<ReferenceContract> refContracts = new HashSet<>();
 	
 	/**
 	 * 
@@ -151,19 +149,6 @@ public class Provider extends RecordDetails implements Serializable {
 		this.contact = contact;
 	}
 
-	/**
-	 * @return the refContracts
-	 */
-	public Set<ReferenceContract> getRefContracts() {
-		return refContracts;
-	}
-
-	/**
-	 * @param refContracts the refContracts to set
-	 */
-	public void setRefContracts(Set<ReferenceContract> refContracts) {
-		this.refContracts = refContracts;
-	}
 
 	@Override
 	public int hashCode() {
