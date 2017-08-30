@@ -10,10 +10,6 @@
 <link rel="stylesheet" href="css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="css/dataTables.bootstrap.min.css">
 <link rel="stylesheet" href="css/bootstrap-datepicker.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="//cdn.datatables.net/1.10.1/css/jquery.dataTables.min.css" />
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" />
-   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css" />
    
 <script src="js/lib/jquery-1.10.1.min.js"></script>
 <script src="js/lib/jquery.dataTables.min.js"></script>

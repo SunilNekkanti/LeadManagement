@@ -26,7 +26,7 @@ datasource:
     defaultSchema:
     maxPoolSize: 10
     hibernate:
-      hbm2ddl.method: validate
+      hbm2ddl.method: none
       show_sql: false
       format_sql: false
       dialect: org.hibernate.dialect.MySQLDialect
