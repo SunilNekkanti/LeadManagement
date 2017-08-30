@@ -40,29 +40,31 @@ public class EventController {
 	public static final Logger logger = LoggerFactory.getLogger(EventController.class);
 
 	@Autowired
-	EventService eventService; //Service which will do all data retrieval/manipulation work
+	EventService eventService; // Service which will do all data
+								// retrieval/manipulation work
 
 	@Autowired
-	UserService userService; // Service which will do all data// retrieval/manipulation work
+	UserService userService; // Service which will do all data//
+								// retrieval/manipulation work
 
 	@Autowired
 	EmailService emailService;
-	// -------------------Retrieve All Events---------------------------------------------
+	// -------------------Retrieve All
+	// Events---------------------------------------------
 
-	
-	@Secured({  "ROLE_ADMIN", "ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER"  })
+	@Secured({ "ROLE_ADMIN", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
 	@RequestMapping(value = "/event/", method = RequestMethod.GET)
-	public ResponseEntity<Page<Event>> listAllEvents(@RequestParam(value = "page", required = false) Integer pageNo,  @RequestParam(value = "size", required = false) Integer pageSize, @RequestParam(value = "search", required = false) String search) {
-		
-		pageNo = (pageNo == null)?0:pageNo;
-		pageSize = (pageSize == null)?10:pageSize;
-		
-		PageRequest pageRequest = new PageRequest(pageNo,pageSize );
-		Specification<Event> spec =null ;
-		if(!"".equals(search))
-		 spec = new EventSpecifications(search);
+	public ResponseEntity<Page<Event>> listAllEvents(@RequestParam(value = "page", required = false) Integer pageNo,
+			@RequestParam(value = "size", required = false) Integer pageSize,
+			@RequestParam(value = "search", required = false) String search) {
+
+		pageNo = (pageNo == null) ? 0 : pageNo;
+		pageSize = (pageSize == null) ? 10 : pageSize;
+
+		PageRequest pageRequest = new PageRequest(pageNo, pageSize);
+		Specification<Event> spec = new EventSpecifications(search);
 		Page<Event> events = eventService.findAllEventsByPage(spec, pageRequest);
-		
+
 		if (events.getTotalElements() == 0) {
 			System.out.println("no events");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -71,22 +73,23 @@ public class EventController {
 		return new ResponseEntity<Page<Event>>(events, HttpStatus.OK);
 	}
 
-	// -------------------Retrieve Single Event------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER"   })
+	// -------------------Retrieve Single
+	// Event------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
 	@RequestMapping(value = "/event/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getEvent(@PathVariable("id") int id) {
 		logger.info("Fetching Event with id {}", id);
 		Event event = eventService.findById(id);
 		if (event == null) {
 			logger.error("Event with id {} not found.", id);
-			return new ResponseEntity(new CustomErrorType("Event with id " + id 
-					+ " not found"), HttpStatus.NOT_FOUND);
+			return new ResponseEntity(new CustomErrorType("Event with id " + id + " not found"), HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Event>(event, HttpStatus.OK);
 	}
 
-	// -------------------Create a Event-------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
+	// -------------------Create a
+	// Event-------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/event/", method = RequestMethod.POST)
 	public ResponseEntity<?> createEvent(@RequestBody Event event, UriComponentsBuilder ucBuilder,
 			@ModelAttribute("userId") Integer userId) throws MessagingException, IOException, InterruptedException {
@@ -94,8 +97,10 @@ public class EventController {
 
 		if (eventService.isEventExists(event.getEventName())) {
 			logger.error("Unable to create. A Event with name {} already exist", event.getEventName());
-			return new ResponseEntity(new CustomErrorType("Unable to create. A Event with name " + 
-					event.getEventName()  + " already exist."),HttpStatus.CONFLICT);
+			return new ResponseEntity(
+					new CustomErrorType(
+							"Unable to create. A Event with name " + event.getEventName() + " already exist."),
+					HttpStatus.CONFLICT);
 		}
 		eventService.saveEvent(event);
 
@@ -104,8 +109,9 @@ public class EventController {
 		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
 	}
 
-	// ------------------- Update a Event ------------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// ------------------- Update a Event
+	// ------------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/event/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateEvent(@PathVariable("id") int id, @RequestBody Event event) {
 		logger.info("Updating Event with id {}", id);
@@ -117,7 +123,7 @@ public class EventController {
 			return new ResponseEntity(new CustomErrorType("Unable to upate. Event with id " + id + " not found."),
 					HttpStatus.NOT_FOUND);
 		}
-      
+
 		currentEvent.setEventName(event.getEventName());
 		currentEvent.setEventDateStartTime(event.getEventDateStartTime());
 		currentEvent.setEventDateEndTime(event.getEventDateEndTime());
@@ -125,12 +131,13 @@ public class EventController {
 		currentEvent.setContact(event.getContact());
 		currentEvent.setNotes(event.getNotes());
 		eventService.updateEvent(currentEvent);
-		
+
 		return new ResponseEntity<Event>(currentEvent, HttpStatus.OK);
 	}
 
-	// ------------------- Delete a Event-----------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// ------------------- Delete a
+	// Event-----------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/event/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteEvent(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting Event with id {}", id);
@@ -146,7 +153,7 @@ public class EventController {
 	}
 
 	// ------------------- Delete All Events-----------------------------
-	@Secured({  "ROLE_ADMIN" })
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/event/", method = RequestMethod.DELETE)
 	public ResponseEntity<Event> deleteAllEvents() {
 		logger.info("Deleting All Events");

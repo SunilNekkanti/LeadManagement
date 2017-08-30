@@ -9,34 +9,35 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.pfchoice.springboot.model.Insurance;
 
-public  class InsuranceSpecifications  implements Specification<Insurance> {
- 
-    
-    private String searchTerm;
+public class InsuranceSpecifications implements Specification<Insurance> {
 
-    public InsuranceSpecifications( String searchTerm) {
-        super();
-        this.searchTerm = searchTerm;
-    }
-    
-    public Predicate toPredicate(Root<Insurance> root, CriteriaQuery<?> cq,
-            CriteriaBuilder cb) {
+	private String searchTerm;
 
-    	  String containsLikePattern = getContainsLikePattern(searchTerm);
-    	 
-    	  cq.distinct(true);
-          return cb.or(
-                  cb.like(cb.lower(root.get("name")), containsLikePattern)
-          );
-    }
- 
- 
-    private static String getContainsLikePattern(String searchTerm) {
-        if (searchTerm == null || searchTerm.isEmpty()) {
-            return "%";
-        }
-        else {
-            return "%" + searchTerm.toLowerCase() + "%";
-        }
-    }
+	public InsuranceSpecifications(String searchTerm) {
+		super();
+		this.searchTerm = searchTerm;
+	}
+
+	public Predicate toPredicate(Root<Insurance> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
+
+		String containsLikePattern = getContainsLikePattern(searchTerm);
+
+		cq.distinct(true);
+
+		Predicate p = cb.conjunction();
+		p.getExpressions().add(cb.or(cb.like(cb.lower(root.get("name")), containsLikePattern)
+
+		));
+		p.getExpressions().add(cb.and(cb.equal(root.get("activeInd"), 'Y')));
+		return p;
+
+	}
+
+	private static String getContainsLikePattern(String searchTerm) {
+		if (searchTerm == null || searchTerm.isEmpty()) {
+			return "%";
+		} else {
+			return "%" + searchTerm.toLowerCase() + "%";
+		}
+	}
 }

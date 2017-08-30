@@ -25,14 +25,22 @@ public  class EventSpecifications  implements Specification<Event> {
     	  String containsLikePattern = getContainsLikePattern(searchTerm);
     	 
     	  cq.distinct(true);
-          return cb.or(
-                  cb.like(cb.lower(root.get("eventName")), containsLikePattern),
-                 // cb.like(cb.lower(root.get("eventDateStartTime")), containsLikePattern),
-                 // cb.like(cb.lower(root.get("eventDateEndTime")), containsLikePattern),
-                  cb.like(root.join("facilityType").get("description"), containsLikePattern),
-                  cb.like(cb.lower(root.get("notes")), containsLikePattern)
-                 
-          );
+    	  
+    	  Predicate p = cb.conjunction();
+    		  p.getExpressions()
+              .add(
+                cb.or(
+                		   cb.like(root.get("eventName"), containsLikePattern),
+                		   cb.like(root.get("eventDateStartTime").as(String.class), containsLikePattern),
+                           cb.like(root.get("eventDateEndTime").as(String.class), containsLikePattern),
+                           cb.like(root.join("facilityType").get("description"), containsLikePattern),
+                           cb.like(root.join("contact").get("contactPerson"), containsLikePattern),
+                           cb.like(root.join("contact").get("mobilePhone"), containsLikePattern)
+                           
+              ));
+    	  p.getExpressions()
+          .add( cb.and(cb.equal(root.get("activeInd"),'Y')));
+          return p;
     }
  
  

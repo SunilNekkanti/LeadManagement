@@ -41,9 +41,7 @@ public class RoleController {
 		pageSize = (pageSize == null)?1000:pageSize;
 		PageRequest pageRequest = new PageRequest(pageNo,pageSize );
 		
-		Specification<Role> spec =null ;
-		if(!"".equals(search))
-		 spec = new RoleSpecifications(search);
+		Specification<Role> spec = new RoleSpecifications(search);
 		
 		Page<Role> roles = roleService.findAllRolesByPage(spec, pageRequest);
 		if (roles.getTotalElements() == 0) {

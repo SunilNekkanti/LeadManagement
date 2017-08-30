@@ -109,14 +109,14 @@ public class EventAssignmentController {
 		Event event = eventAssignment.getEvent();
 		String eventNotes = (event.getNotes() !=null)?event.getNotes():"";
 		
-	 	String toEmailIds = eventAssignment.getRepresentatives().stream().map(rep -> rep.getEmail())
-				.collect(Collectors.joining(";"));
+	 //	String toEmailIds = eventAssignment.getRepresentatives().stream().map(rep -> rep.getEmail())
+	//			.collect(Collectors.joining(";"));
 		String toNamesList = eventAssignment.getRepresentatives().stream().map(rep -> rep.getUsername())
 				.collect(Collectors.joining(","));
 		String address = "";
 		
 	 	Email mail = new Email();
-		mail.setEmailTo(toEmailIds);
+	//	mail.setEmailTo(toEmailIds);
 		mail.setEmailFrom("skumar@pfchoice.com");
 		mail.setEmailCc(user.getContact().getEmail());
 		mail.setSubject("New EventAssignment "+eventAssignment.getEvent().getEventName()+" Created");
@@ -133,7 +133,7 @@ public class EventAssignmentController {
 		emailAttributes.put("location", address);
 		
 		mail.setModel(emailAttributes);
-		String emailTemplateFileName = "event_assignment_email_template.txt";
+	//	String emailTemplateFileName = "event_assignment_email_template.txt";
 		
 	//	mail.setBody(emailService.geContentFromTemplate(emailAttributes,emailTemplateFileName ));
 	  //   emailService.sendMailWithAttachment(mail); 

@@ -9,33 +9,34 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.pfchoice.springboot.model.Role;
 
-public  class RoleSpecifications  implements Specification<Role> {
- 
-    
-    private String searchTerm;
+public class RoleSpecifications implements Specification<Role> {
 
-    public RoleSpecifications( String searchTerm) {
-        super();
-        this.searchTerm = searchTerm;
-    }
-    
-    public Predicate toPredicate(Root<Role> root, CriteriaQuery<?> cq,
-            CriteriaBuilder cb) {
+	private String searchTerm;
 
-    	  String containsLikePattern = getContainsLikePattern(searchTerm);
-    	  cq.distinct(true);
-          return cb.or(
-                  cb.like(cb.lower(root.get("role")), containsLikePattern)
-          );
-    }
- 
- 
-    private static String getContainsLikePattern(String searchTerm) {
-        if (searchTerm == null || searchTerm.isEmpty()) {
-            return "%";
-        }
-        else {
-            return "%" + searchTerm.toLowerCase() + "%";
-        }
-    }
+	public RoleSpecifications(String searchTerm) {
+		super();
+		this.searchTerm = searchTerm;
+	}
+
+	public Predicate toPredicate(Root<Role> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
+
+		String containsLikePattern = getContainsLikePattern(searchTerm);
+		cq.distinct(true);
+
+		Predicate p = cb.conjunction();
+		p.getExpressions().add(cb.or(cb.like(cb.lower(root.get("role")), containsLikePattern)
+
+		));
+		p.getExpressions().add(cb.and(cb.equal(root.get("activeInd"), 'Y')));
+		return p;
+
+	}
+
+	private static String getContainsLikePattern(String searchTerm) {
+		if (searchTerm == null || searchTerm.isEmpty()) {
+			return "%";
+		} else {
+			return "%" + searchTerm.toLowerCase() + "%";
+		}
+	}
 }

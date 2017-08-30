@@ -23,7 +23,6 @@ public  class EventAssignmentSpecifications  implements Specification<EventAssig
             CriteriaBuilder cb) {
 
     	  String containsLikePattern = getContainsLikePattern(searchTerm);
-    	 
     	  cq.distinct(true);
           return cb.or(
                   cb.like(cb.lower(root.join("event").get("eventName")), containsLikePattern)

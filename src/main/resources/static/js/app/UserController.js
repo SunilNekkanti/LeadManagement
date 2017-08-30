@@ -43,8 +43,8 @@ app.controller('UserController',
 						 return '<a href="javascript:void(0)" class="'+full.id+'" ng-click="ctrl.editUser('+full.id+')">'+data+'</a>';
 					}).withClass("text-center"),
             DTColumnBuilder.newColumn('role.role').withTitle('ROLE').withOption('defaultContent', ''),
-            DTColumnBuilder.newColumn('phone').withTitle('CELL').withOption('defaultContent', ''),
-            DTColumnBuilder.newColumn('email').withTitle('EMAIL').withOption('defaultContent', '')
+            DTColumnBuilder.newColumn('contact.mobilePhone').withTitle('MOBILE').withOption('defaultContent', ''),
+            DTColumnBuilder.newColumn('contact.email').withTitle('EMAIL').withOption('defaultContent', '')
           ];
      
         
@@ -91,8 +91,8 @@ app.controller('UserController',
 							function(result) {
 								var records = {
 									'recordsTotal' : result.data.totalElements,
-									'recordsFiltered' : result.data.totalElements,
-									'data' : result.data.content
+									'recordsFiltered' : result.data.numberOfElements,
+									'data' : result.data.content||{}
 								};
 								fnCallback(records);
 							});

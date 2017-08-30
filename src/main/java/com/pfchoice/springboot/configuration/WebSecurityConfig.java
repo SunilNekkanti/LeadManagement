@@ -76,10 +76,6 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.hasAnyAuthority("ROLE_AGENT", "ROLE_ADMIN", "ROLE_CARE_COORDINATOR", "ROLE_EVENT_COORDINATOR", "ROLE_MANAGER").anyRequest().authenticated().and().formLogin().loginPage("/").usernameParameter("username").passwordParameter("password")
 		.loginProcessingUrl("/loginform.do").successHandler(new CustomAuthenticationSuccessHandler())
 		.failureUrl("/login?error").and()
-
-		.logout().logoutUrl("/logout").logoutSuccessUrl("/login?logout").invalidateHttpSession(true)
-		.deleteCookies("JSESSIONID").permitAll().and()
-
 		.exceptionHandling().accessDeniedPage("/403").and()
 
 		.csrf().disable()

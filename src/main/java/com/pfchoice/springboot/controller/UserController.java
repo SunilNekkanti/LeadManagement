@@ -42,9 +42,7 @@ public class UserController {
 		pageSize = (pageSize == null)?1000:pageSize;
 		PageRequest pageRequest = new PageRequest(pageNo,pageSize );
 		
-		Specification<User> spec =null ;
-		if(!"".equals(search))
-		 spec = new UserSpecifications(search);
+		Specification<User> spec = new UserSpecifications(search);
 		
 		Page<User> users = userService.findAllUsersByPage(spec, pageRequest);
 		if (users.getTotalElements() == 0) {
@@ -105,8 +103,6 @@ public class UserController {
 		
 		currentUser.setUsername(user.getUsername());
 		currentUser.setPassword(user.getPassword());
-		currentUser.setEmail(user.getEmail());
-		currentUser.setPhone(user.getPhone());
 		currentUser.setLicenseNo(user.getLicenseNo());
 		currentUser.setRole(user.getRole());
 		currentUser.getInsurances().clear();

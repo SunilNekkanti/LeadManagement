@@ -68,6 +68,7 @@ app
 							self.findWeekDaysByShortNames = findWeekDaysByShortNames;
 							self.findWeekDayByShortNames = findWeekDayByShortNames;
 							self.readUploadedFile = readUploadedFile;
+							self.cancelEdit = cancelEdit;
 							self.adminOrManager = adminOrManager;
 							self.uploadFile = uploadFile;
 							self.eventrrule = eventrrule;
@@ -129,32 +130,33 @@ app
 																.withTitle('CONTACT PHONE').withOption(
 																'defaultContent', '')];
 
+							
 							self.dtOptions = DTOptionsBuilder
-									.newOptions()
-									.withOption(
-											'ajax',
-											{
-												url : '/LeadManagement/api/event/',
-												type : 'GET'
-											}).withDataProp('data').withOption(
-											'serverSide', true).withOption(
-											"bLengthChange", false).withOption(
-											"bPaginate", true).withOption(
-											'processing', true).withOption(
-											'saveState', true)
-									.withDisplayLength(10).withOption(
-											'columnDefs', [ {
-												orderable : false,
-												className : 'select-checkbox',
-												targets : 0,
-												sortable : false,
-												aTargets : [ 0, 1 ]
-											} ]).withOption('select', {
-										style : 'os',
-										selector : 'td:first-child'
-									}).withOption('createdRow', createdRow)
-									.withPaginationType('full_numbers')
-									.withFnServerData(serverData);
+							.newOptions()
+							.withOption(
+									'ajax',
+									{
+										url : '/LeadManagement/api/event/',
+										type : 'GET'
+									}).withDataProp('data').withOption('bServerSide', true)
+									.withOption("bLengthChange", false)
+									.withOption("bPaginate", true)
+									.withOption('bProcessing', true)
+									.withOption('bSaveState', true)
+							        .withDisplayLength(10).withOption( 'columnDefs', [ {
+										                                orderable : false,
+																		className : 'select-checkbox',
+																		targets : 0,
+																		sortable : false,
+																		aTargets : [ 0, 1 ] } ])
+									.withOption('select', {
+															style : 'os',
+															selector : 'td:first-child' })
+								    .withOption('createdRow', createdRow)
+							        .withPaginationType('full_numbers')
+							        
+							        .withFnServerData(serverData);
+
 
 							self.reloadData = reloadData;
 
@@ -176,7 +178,6 @@ app
 								// All the parameters you need is in the aoData
 								// variable
 
-								var draw = parseInt("1");
 								var order = aoData[2].value;
 								var page = aoData[3].value / aoData[4].value;
 								var length = aoData[4].value;
@@ -185,14 +186,13 @@ app
 								// Then just call your service to get the
 								// records from server side
 								EventService
-										.loadEvents(page, length, search, order)
+										.loadEvents(page, length, search.value, order)
 										.then(
 												function(result) {
 													var records = {
-														'draw' : (parseInt(result.data.number) + 1),
-														'recordsTotal' : result.data.totalElements,
-														'recordsFiltered' : result.data.totalElements,
-														'data' : result.data.content
+															'recordsTotal' : result.data.totalElements,
+															'recordsFiltered' : result.data.numberOfElements,
+															'data' : result.data.content||{}
 													};
 													fnCallback(records);
 												});
@@ -373,6 +373,14 @@ app
 								$scope.myForm.$setPristine(); // reset Form
 							}
 							
+							function cancelEdit(){
+					            self.successMessage='';
+					            self.errorMessage='';
+					            self.event={};
+					            $scope.myForm.$setPristine(); //reset Form
+					            self.display = false;
+					        }
+							
                             function convertToInt(id){
                                 return parseInt(id, 10);
                             }
@@ -490,7 +498,7 @@ app
 							}
 							
 							function  adminOrManager(){
-						    	if($rootScope.loginUser.roleName == 'ADMIN' ||  $rootScope.loginUser.roleName == 'MANAGER'){
+						    	if(($rootScope.loginUser.roleName == 'ADMIN' ||  $rootScope.loginUser.roleName == 'MANAGER') && !self.event.id){
 						    		return true;
 						    	}else{
 						    		return false;

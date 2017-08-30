@@ -183,7 +183,7 @@ app
 													var records = {
 														'recordsTotal' : result.data.totalElements,
 														'recordsFiltered' : result.data.numberOfElements,
-														'data' : result.data.content
+														'data' : result.data.content||{}
 													};
 													fnCallback(records);
 												});

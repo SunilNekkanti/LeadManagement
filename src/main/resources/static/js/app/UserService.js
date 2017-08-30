@@ -52,7 +52,7 @@ app.service('UserService',
                         function (response) {
                             console.log('Fetched successfully all users');
                             $localStorage.users = response.data.content;
-                            deferred.resolve(response.data);
+                            deferred.resolve(response);
                         },
                         function (errResponse) {
                             console.error('Error while loading users');

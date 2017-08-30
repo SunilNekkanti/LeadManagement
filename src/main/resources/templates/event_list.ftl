@@ -1,6 +1,6 @@
 <div class="generic-container">
 
-  <div class="panel panel-default" ng-if="!ctrl.display">
+  <div class="panel panel-default" ng-hide="ctrl.display">
     <!-- Default panel contents -->
     <div class="panel-heading"><span class="user">List of Events </span>
       <button type="button" ng-if="ctrl.adminOrManager()" ng-click="ctrl.addEvent()" ng-hide="ctrl.displayEditButton" class="btn btn-success btn-xs custom-width floatRight"> Add </button>
@@ -16,9 +16,12 @@
   </div>
 
 
-  <div class="panel panel-default" ng-if="ctrl.display">
+  <div class="panel panel-default" ng-show="ctrl.display">
     <!-- Default panel contents -->
-    <div class="panel-heading"><span class="event">Event </span><button type="button"  ng-click="ctrl.addLead()" ng-show="ctrl.event.id"   class="btn btn-success  btn-sm floatRight">Add Lead</button></div>
+    <div class="panel-heading"><span class="event">Event </span>
+    <button type="button"  ng-click="ctrl.addLead()" ng-show="ctrl.event.id"   class="btn btn-success  btn-sm floatRight">Add Lead</button>
+    <button type="button" ng-click="ctrl.cancelEdit()" class="btn btn-warning btn-sm floatRight"   ng-if="ctrl.event.id" >Cancel</button>
+   </div>
     <div class="panel-body">
       <div class="formcontainer">
         <div class="alert alert-success" role="alert" ng-if="ctrl.successMessage">{{ctrl.successMessage}}</div>
@@ -79,7 +82,7 @@
               <div class="form-group col-md-12">
 
                 <label class="col-md-2  control-label" for="facilityType">Facility</label>
-                <div class="col-md-2">
+                <div class="col-md-4">
                   <select class="col-md-12 form-control" ng-model="ctrl.event.facilityType" name="facilityType" ng-options="facilityType.description for facilityType in ctrl.facilityTypes track by facilityType.description" required></select>
                   <div class="has-error" ng-show="myForm.$dirty">
                     <span ng-show="myForm.facilityType.$error.required">This is a required field</span>
@@ -185,7 +188,7 @@
                 <div class="row">
                   <div class="col-sm-6">
                     <div class="form-group col-sm-12">
-                      <label for="homePhone">Home Phone</label>
+                      <label for="homePhone">Phone</label>
                       <input type="text" ng-model="ctrl.event.contact.homePhone" id="homePhone" name="homePhone" class="username form-control input-sm" placeholder="Enter Home phone" ng-required="!ctrl.event.address1" phone-input ng-minlength="10" />
                       <div class="has-error" ng-show="myForm.$dirty">
                         <span ng-show="myForm.homePhone.$error.required">This is a required field</span>

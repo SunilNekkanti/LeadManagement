@@ -9,33 +9,37 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.pfchoice.springboot.model.LeadMembership;
 
-public  class LeadSpecifications  implements Specification<LeadMembership> {
- 
-    
-    private String searchTerm;
+public class LeadSpecifications implements Specification<LeadMembership> {
 
-    public LeadSpecifications( String searchTerm) {
-        super();
-        this.searchTerm = searchTerm;
-    }
-    
-    public Predicate toPredicate(Root<LeadMembership> root, CriteriaQuery<?> cq,
-            CriteriaBuilder cb) {
+	private String searchTerm;
 
-    	  String containsLikePattern = getContainsLikePattern(searchTerm);
-          return cb.or(
-                  cb.like(cb.lower(root.get("firstName")), containsLikePattern),
-                  cb.like(cb.lower(root.get("lastName")), containsLikePattern)
-          );
-    }
- 
- 
-    private static String getContainsLikePattern(String searchTerm) {
-        if (searchTerm == null || searchTerm.isEmpty()) {
-            return "%";
-        }
-        else {
-            return "%" + searchTerm.toLowerCase() + "%";
-        }
-    }
+	public LeadSpecifications(String searchTerm) {
+		super();
+		this.searchTerm = searchTerm;
+	}
+
+	public Predicate toPredicate(Root<LeadMembership> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
+		String containsLikePattern = getContainsLikePattern(searchTerm);
+
+		Predicate p = cb.conjunction();
+		p.getExpressions()
+				.add(cb.or(cb.like(cb.lower(root.get("firstName")), containsLikePattern),
+						cb.like(cb.lower(root.get("lastName")), containsLikePattern),
+						cb.like(root.join("gender").get("description"), containsLikePattern),
+						cb.like(root.join("language").get("description"), containsLikePattern),
+						cb.like(root.join("status").get("description"), containsLikePattern)
+
+		));
+		p.getExpressions().add(cb.and(cb.equal(root.get("activeInd"), 'Y')));
+		return p;
+
+	}
+
+	private static String getContainsLikePattern(String searchTerm) {
+		if (searchTerm == null || searchTerm.isEmpty()) {
+			return "%";
+		} else {
+			return "%" + searchTerm.toLowerCase() + "%";
+		}
+	}
 }

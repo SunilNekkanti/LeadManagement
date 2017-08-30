@@ -168,14 +168,14 @@ app
 								// Then just call your service to get the
 								// records from server side
 								EventAssignmentService
-										.loadEventAssignments(page, length, search, order)
+										.loadEventAssignments(page, length, search.value, order)
 										.then(
 												function(result) {
 													var records = {
 														'draw' : (parseInt(result.data.number) + 1),
 														'recordsTotal' : result.data.totalElements,
-														'recordsFiltered' : result.data.totalElements,
-														'data' : result.data.content
+														'recordsFiltered' : result.data.numberOfElements,
+														'data' : result.data.content ||{}
 													};
 													fnCallback(records);
 												});

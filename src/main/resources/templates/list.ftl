@@ -139,7 +139,7 @@
                   <div class="col-sm-6">
                     <div class="form-group col-sm-12">
                       <label for="address1">Address 1</label>
-                      <input type="text" ng-model="ctrl.user.contact.address1" id="address1" name="address1" class="username form-control input-sm" placeholder="Enter Address" ng-required="!ctrl.user.contact.homePhone" ng-minlength="6" ng-maxlength="100" />
+                      <input type="text" ng-model="ctrl.user.contact.address1" id="address1" name="address1" class="username form-control input-sm" placeholder="Enter Address" ng-required="!ctrl.user.contact.mobilePhone" ng-minlength="6" ng-maxlength="100" />
                       <div class="has-error" ng-show="myForm.$dirty">
                         <span ng-show="myForm.address1.$error.required">This is a required field</span>
                         <span ng-show="myForm.address1.$error.minlength">Minimum length required is 5</span>
@@ -174,11 +174,11 @@
                       </div>
 
                       <div class="input-group">
-                        <input type="text" ng-model="ctrl.user.contact.city" id="city" name="city" class="username form-control" placeholder="Enter City" ng-required="!ctrl.user.homePhone" ng-minlength="4" ng-maxlength="100" />
+                        <input type="text" ng-model="ctrl.user.contact.city" id="city" name="city" class="username form-control" placeholder="Enter City" ng-required="!ctrl.user.mobilePhone" ng-minlength="4" ng-maxlength="100" />
                         <span class="input-group-addon">-</span>
-                        <select ng-model="ctrl.user.contact.stateCode" class="form-control" name="state" ng-options="state.description for state in ctrl.states | orderBy:'description' track by state.description" ng-required="!ctrl.user.homePhone"></select>
+                        <select ng-model="ctrl.user.contact.stateCode" class="form-control" name="state" ng-options="state.description for state in ctrl.states | orderBy:'description' track by state.description" ng-required="!ctrl.user.mobilePhone"></select>
                         <span class="input-group-addon">-</span>
-                        <select ng-model="ctrl.user.contact.zipCode" name="zipcode" class="form-control" ng-options="zipCode.code for zipCode in ctrl.user.contact.stateCode.zipCodes | orderBy:'code'  track by zipCode.code" ng-required="!ctrl.user.homePhone"></select>
+                        <select ng-model="ctrl.user.contact.zipCode" name="zipcode" class="form-control" ng-options="zipCode.code for zipCode in ctrl.user.contact.stateCode.zipCodes | orderBy:'code'  track by zipCode.code" ng-required="!ctrl.user.mobilePhone"></select>
 
                       </div>
                     </div>
@@ -191,9 +191,9 @@
                   <div class="col-sm-6">
                     <div class="form-group col-sm-12">
                       <label for="homePhone">Home Phone</label>
-                      <input type="text" ng-model="ctrl.user.contact.homePhone" id="homePhone" name="homePhone" class="username form-control input-sm" placeholder="Enter Home phone" ng-required="!ctrl.user.address1" phone-input ng-minlength="10" />
+                      <input type="text" ng-model="ctrl.user.contact.homePhone" id="homePhone" name="homePhone" class="username form-control input-sm" placeholder="Enter Home phone" phone-input ng-minlength="10" />
                       <div class="has-error" ng-show="myForm.$dirty">
-                        <span ng-show="myForm.homePhone.$error.required">This is a required field</span>
+                         <span ng-show="myForm.homePhone.$error.minlength">Minimum length required is 10</span>
                       </div>
                     </div>
                   </div>
@@ -201,14 +201,18 @@
                   <div class="col-sm-6">
                     <div class="form-group col-sm-12">
                       <label for="mobilePhone">Mobile Phone</label>
-                      <input type="text" ng-model="ctrl.user.contact.mobilePhone" id="mobilePhone" class="username form-control input-sm" placeholder="Enter Mobile phone" phone-input ng-minlength="10" />
+                      <input type="text" ng-model="ctrl.user.contact.mobilePhone" name="mobilePhone" class="username form-control input-sm" placeholder="Enter Mobile phone"  ng-required="!ctrl.user.address1"  phone-input ng-minlength="10" />
+                       <div class="has-error" ng-show="myForm.$dirty">
+                        <span ng-show="myForm.mobilePhone.$error.required">This is a required field</span>
+                         <span ng-show="myForm.mobilePhone.$error.minlength">Minimum length required is 10</span>
+                      </div>
                     </div>
                   </div>
 
                 </div>
 
                 <div class="row">
-                  <div class="col-sm-6">
+                  <div class="col-sm-6" ng-if="ctrl.lead.id">
                     <div class="form-group col-sm-12">
                       <label for="bestTimeToCall">Best Time to Call</label>
                       <input type="text" class="form-control netto-input" ng-model="ctrl.user.contact.bestTimeToCall" date-picker-input>

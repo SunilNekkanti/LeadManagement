@@ -46,7 +46,7 @@ app.service('EventService',
                 console.log('Fetching  events');
                 var deferred = $q.defer();
                 var pageable = {
-                  		 page:draw, size:length
+                  		 page:draw, size:length,search: search||''
                   		};
 
                   		var config = {
@@ -58,7 +58,7 @@ app.service('EventService',
                         function (response) {
                             console.log('Fetched successfully  events');
                             $localStorage.events = response.data.content;
-                            deferred.resolve(response.data.content);
+                            deferred.resolve(response);
                          return     response ;
                         },
                         function (errResponse) {

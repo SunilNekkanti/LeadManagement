@@ -9,36 +9,38 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.pfchoice.springboot.model.User;
 
-public  class UserSpecifications  implements Specification<User> {
- 
-    
-    private String searchTerm;
+public class UserSpecifications implements Specification<User> {
 
-    public UserSpecifications( String searchTerm) {
-        super();
-        this.searchTerm = searchTerm;
-    }
-    
-    public Predicate toPredicate(Root<User> root, CriteriaQuery<?> cq,
-            CriteriaBuilder cb) {
+	private String searchTerm;
 
-    	  String containsLikePattern = getContainsLikePattern(searchTerm);
-    	  cq.distinct(true);
-          return cb.or(
-                  cb.like(cb.lower(root.get("name")), containsLikePattern),
-                  cb.like(cb.lower(root.get("phone")), containsLikePattern),
-                  cb.like(cb.lower(root.get("email")), containsLikePattern),
-                  cb.like(root.join("role").get("role"), containsLikePattern)
-          );
-    }
- 
- 
-    private static String getContainsLikePattern(String searchTerm) {
-        if (searchTerm == null || searchTerm.isEmpty()) {
-            return "%";
-        }
-        else {
-            return "%" + searchTerm.toLowerCase() + "%";
-        }
-    }
+	public UserSpecifications(String searchTerm) {
+		super();
+		this.searchTerm = searchTerm;
+	}
+
+	public Predicate toPredicate(Root<User> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
+
+		String containsLikePattern = getContainsLikePattern(searchTerm);
+		cq.distinct(true);
+
+		Predicate p = cb.conjunction();
+		p.getExpressions()
+				.add(cb.or(cb.like(cb.lower(root.get("name")), containsLikePattern),
+						cb.like(root.join("contact").get("mobilePhone"), containsLikePattern),
+						cb.like(root.join("contact").get("email"), containsLikePattern),
+						cb.like(root.join("role").get("role"), containsLikePattern)
+
+		));
+		p.getExpressions().add(cb.and(cb.equal(root.get("activeInd"), 'Y')));
+		return p;
+
+	}
+
+	private static String getContainsLikePattern(String searchTerm) {
+		if (searchTerm == null || searchTerm.isEmpty()) {
+			return "%";
+		} else {
+			return "%" + searchTerm.toLowerCase() + "%";
+		}
+	}
 }

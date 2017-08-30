@@ -1,7 +1,7 @@
 package com.pfchoice.springboot.model;
 
 import java.io.Serializable;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.Basic;
@@ -18,8 +18,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.pfchoice.springboot.util.JsonDateAndTimeDeserializer;
+import com.pfchoice.springboot.util.JsonDateAndTimeSerializer;
 
 /**
  * @author sarath
@@ -45,13 +48,15 @@ public class EventAssignment extends RecordDetails implements Serializable {
 	@Column(name = "repeat_rule")
 	private String repeatRule;
 	
-	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone="America/NewYork")
+	@JsonSerialize(using=JsonDateAndTimeSerializer.class)
+ 	@JsonDeserialize(using=JsonDateAndTimeDeserializer.class)
 	@Column(name = "event_date_starttime", nullable= true)
-	private Calendar  eventDateStartTime;
-	
-	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone="America/NewYork")
+	private Date  eventDateStartTime;
+
+	@JsonSerialize(using=JsonDateAndTimeSerializer.class)
+ 	@JsonDeserialize(using=JsonDateAndTimeDeserializer.class)
 	@Column(name = "event_date_endtime", nullable= true)
-	private Calendar  eventDateEndTime;
+	private Date  eventDateEndTime;
 	
 	@ManyToMany(cascade= {CascadeType.MERGE,CascadeType.REMOVE} ,fetch = FetchType.LAZY)
 	@JoinTable(name = "event_assignment_representatives", joinColumns = {
@@ -140,28 +145,28 @@ public class EventAssignment extends RecordDetails implements Serializable {
 	/**
 	 * @return the eventDateStartTime
 	 */
-	public Calendar getEventDateStartTime() {
+	public Date getEventDateStartTime() {
 		return eventDateStartTime;
 	}
 
 	/**
 	 * @param eventDateStartTime the eventDateStartTime to set
 	 */
-	public void setEventDateStartTime(Calendar eventDateStartTime) {
+	public void setEventDateStartTime(Date eventDateStartTime) {
 		this.eventDateStartTime = eventDateStartTime;
 	}
 
 	/**
 	 * @return the eventDateEndTime
 	 */
-	public Calendar getEventDateEndTime() {
+	public Date getEventDateEndTime() {
 		return eventDateEndTime;
 	}
 
 	/**
 	 * @param eventDateEndTime the eventDateEndTime to set
 	 */
-	public void setEventDateEndTime(Calendar eventDateEndTime) {
+	public void setEventDateEndTime(Date eventDateEndTime) {
 		this.eventDateEndTime = eventDateEndTime;
 	}
 

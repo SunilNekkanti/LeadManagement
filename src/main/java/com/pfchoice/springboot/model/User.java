@@ -64,10 +64,10 @@ public class User extends RecordDetails implements Serializable {
 	public Set<Insurance> insurances;
 	
 	
-	@OneToOne( fetch = FetchType.LAZY )
+	@OneToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY )
 	@JoinTable(name = "user_contacts", joinColumns = {
 			@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id",nullable = false, updatable = false, unique = true) })
+					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id",nullable = false, unique = true) })
 	private Contact contact;
 	
 	
@@ -75,12 +75,6 @@ public class User extends RecordDetails implements Serializable {
 	@JoinColumn(name = "role_id", referencedColumnName = "id")
 	private Role role;
 	
-	@Column(name = "email")
-	private String email;
-	
-	@Column(name = "phone")
-	private String phone;
-
 	@Column(name = "license_no")
 	private String licenseNo;
 	
@@ -157,34 +151,6 @@ public class User extends RecordDetails implements Serializable {
 		this.password = password;
 	}
 
-
-	/**
-	 * @return the email
-	 */
-	public String getEmail() {
-		return email;
-	}
-
-	/**
-	 * @param email the email to set
-	 */
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	/**
-	 * @return the phone
-	 */
-	public String getPhone() {
-		return phone;
-	}
-
-	/**
-	 * @param phone the phone to set
-	 */
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
 
 	/**
 	 * @return the licenseNo

@@ -76,8 +76,8 @@ app.controller('RoleController',
 							function(result) {
 								var records = {
 									'recordsTotal' : result.data.totalElements,
-									'recordsFiltered' : result.data.totalElements,
-									'data' : result.data.content
+									'recordsFiltered' : result.data.numberOfElements,
+									'data' : result.data.content||{}
 								};
 								fnCallback(records);
 							});

@@ -3,7 +3,6 @@ package com.pfchoice.springboot.controller;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -206,10 +205,10 @@ public class LeadController {
 
 		leadService.updateLeadMembership(currentLeadMembership);
 
-		String toEmailIds = agntLeadAppointList.stream().map(la -> la.getUser().getEmail())
+		/*	String toEmailIds = agntLeadAppointList.stream().map(la -> la.getUser().getEmail())
 				.collect(Collectors.joining(","));
 		String agentName = agntLeadAppointList.size() > 0 ? agntLeadAppointList.stream().filter(ala -> ala.getActiveInd()=='Y').findAny().get().getUser().getUsername() : "";
-/*		Calendar calApptTime = (agntLeadAppointList.size() > 0)
+		Calendar calApptTime = (agntLeadAppointList.size() > 0)
 				?  agntLeadAppointList.stream().filter(ala -> ala.getActiveInd()=='Y').findAny().get().getAppointmentTime() : Calendar.getInstance();
 			
 		String appointmentTime = agntLeadAppointList.size() > 0
@@ -229,12 +228,12 @@ public class LeadController {
 		
 		
 		Email mail = new Email();
-		mail.setEmailTo(toEmailIds);
+	//	mail.setEmailTo(toEmailIds);
 		mail.setEmailFrom("skumar@pfchoice.com");
-		mail.setEmailCc(user.getEmail());
+	//	mail.setEmailCc(user.getEmail());
 		mail.setSubject("Agent Lead Assignment");
 		Map<String, Object> emailAttributes = new HashMap<>();
-		emailAttributes.put("agent", agentName);
+	//	emailAttributes.put("agent", agentName);
 		emailAttributes.put("currentUser", user.getUsername());
 		emailAttributes.put("careCoordinator", careCoordinator);
 		emailAttributes.put("firstName", lead.getFirstName());

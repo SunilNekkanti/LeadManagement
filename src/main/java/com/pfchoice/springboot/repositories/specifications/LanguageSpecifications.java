@@ -13,6 +13,7 @@ public  class LanguageSpecifications  implements Specification<Language> {
  
     
     private String searchTerm;
+    
 
     public LanguageSpecifications( String searchTerm) {
         super();
@@ -23,10 +24,8 @@ public  class LanguageSpecifications  implements Specification<Language> {
             CriteriaBuilder cb) {
 
     	  String containsLikePattern = getContainsLikePattern(searchTerm);
-    	  
-    	  Predicate p = cb.disjunction();
+    	  Predicate p = cb.conjunction();
     	  if(!"".equals(searchTerm)){
-    		  System.out.println("inside language search criteria");
     		  p.getExpressions()
               .add(
                 cb.or(

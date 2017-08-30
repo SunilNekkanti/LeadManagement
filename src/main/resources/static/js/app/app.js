@@ -33,7 +33,7 @@ app.controller('NavbarController',  ['$rootScope', '$scope', '$state', '$statePa
 
   $rootScope.loginUser = ''; 
   $scope.isCollapsed = true;
-  $scope.displayNavbar = true;
+  $scope.displayNavbar = false;
    loginUser();
   
   function loginUser() {
@@ -47,16 +47,21 @@ app.controller('NavbarController',  ['$rootScope', '$scope', '$state', '$statePa
 							
 							$scope.loginUser = loginUser;
 							$rootScope.loginUser  =  loginUser;
+							$scope.displayNavbar =true;
+							
 						},
 						function(errResponse) {
+							$scope.displayNavbar =false;
 							console
 									.error('Error while fetching loginUser');
+							
 						});
 	}
-  
   $scope.callMe = function(url,params){
 	  if(url == 'logout'){
+		  $rootScope.loginUser =undefined;
 		  $scope.displayNavbar = false;
+		 
 	  }
 	  if( params !==''){
 		  $state.go(url,params);
@@ -423,7 +428,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
       })
       .state('logout', {
           url: '/logout',
-          templateUrl: 'login'
+          templateUrl: 'logout'
       })
         $urlRouterProvider.otherwise('lead');
     
