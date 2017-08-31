@@ -1,7 +1,11 @@
 package com.pfchoice.springboot.repositories.specifications;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -41,7 +45,18 @@ public class LeadSpecifications implements Specification<LeadMembership> {
 			p.getExpressions().add(cb.and(cb.equal(root.get("createdBy").as(String.class), username)));
 		}
 		if("AGENT".equals(roleName) ){
+			
 			p.getExpressions().add(cb.and(cb.equal((root.join("agentLeadAppointmentList").join("user").get("id").as(Integer.class)), userId)));
+			p.getExpressions().add(cb.and(cb.equal(cb.upper(root.join("status").get("description")), "AGENT")));
+
+			Expression<Date> appointmentTime = root.join("agentLeadAppointmentList").get("appointmentTime");
+		    Expression<Date> allocationEndTime = cb.function("AGENT_ALLOCATION_ENDDATE",Date.class, appointmentTime , cb.literal(1440));
+
+		    Calendar currentTime = Calendar.getInstance();
+		    Date currentDate = currentTime.getTime();
+		    
+			p.getExpressions().add(cb.and(cb.between(cb.literal(currentDate), appointmentTime, allocationEndTime)));
+			
 		}
 		p.getExpressions().add(cb.and(cb.equal(root.get("activeInd"), 'Y')));
 		return p;

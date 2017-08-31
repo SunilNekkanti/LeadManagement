@@ -1,7 +1,11 @@
 package com.pfchoice.springboot.repositories.specifications;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -48,6 +52,14 @@ public  class EventSpecifications  implements Specification<Event> {
     	  
     	  if("AGENT".equals(roleName) || "EVENT_COORDINATOR".equals(roleName) ){
   			p.getExpressions().add(cb.and(cb.equal(root.join("eventAssignments").join("representatives").get("id").as(Integer.class), userId)));
+  			
+  			Expression<Date> eventStartTime = root.get("eventDateStartTime");
+  			Expression<Date> eventEndTime = root.get("eventDateEndTime");
+
+		    Calendar currentTime = Calendar.getInstance();
+		    Date currentDate = currentTime.getTime();
+		    
+			p.getExpressions().add(cb.and(cb.between(cb.literal(currentDate), eventStartTime, eventEndTime)));
   		  }	
     	  
     	  p.getExpressions()
