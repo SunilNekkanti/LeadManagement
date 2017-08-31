@@ -109,7 +109,8 @@ public class LeadController {
 	@Secured({ "ROLE_ADMIN", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
 	@RequestMapping(value = "/lead/", method = RequestMethod.POST)
 	public ResponseEntity<?> createLeadMembership(@RequestBody LeadMembership lead, UriComponentsBuilder ucBuilder,
-			@ModelAttribute("userId") Integer userId) throws Exception {
+			@ModelAttribute("userId") Integer userId,
+			@ModelAttribute("username") String username) throws Exception {
 		logger.info("Creating LeadMembership : {}", lead);
 
 		if (leadService.isLeadMembershipExists(lead.getFirstName(), lead.getLastName(), lead.getDob())) {
@@ -134,6 +135,8 @@ public class LeadController {
 		
 
 		lead.setLeadNotes(leadNotes);
+		lead.setCreatedBy(username);
+		lead.setUpdatedBy(username);
 		leadService.saveLeadMembership(lead);
 
 		/*String toEmailIds = lead.getEvent().getRepresentatives().stream().map(rep -> rep.getEmail())
@@ -159,7 +162,8 @@ public class LeadController {
 	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
 	@RequestMapping(value = "/lead/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateLeadMembership(@PathVariable("id") int id, @RequestBody LeadMembership lead,
-			@ModelAttribute("userId") Integer userId,@ModelAttribute("roleName") String roleName) throws MessagingException, InterruptedException, IOException {
+			@ModelAttribute("userId") Integer userId,@ModelAttribute("roleName") String roleName,
+			@ModelAttribute("username") String username) throws MessagingException, InterruptedException, IOException {
 		logger.info("Updating LeadMembership with id {}", id);
 
 		LeadMembership currentLeadMembership = leadService.findById(id);
@@ -204,7 +208,7 @@ public class LeadController {
 		
 		currentLeadMembership.getAgentLeadAppointmentList().clear();
 		currentLeadMembership.getAgentLeadAppointmentList().addAll(agntLeadAppointList);
-
+        currentLeadMembership.setUpdatedBy(username);
 		leadService.updateLeadMembership(currentLeadMembership);
 
 		/*	String toEmailIds = agntLeadAppointList.stream().map(la -> la.getUser().getEmail())

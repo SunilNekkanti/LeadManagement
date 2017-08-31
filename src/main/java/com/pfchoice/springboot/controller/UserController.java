@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,7 +70,8 @@ public class UserController {
 	// -------------------Create a User-------------------------------------------
 	@Secured({  "ROLE_ADMIN","ROLE_MANAGER","ROLE_CARE_COORDINATOR"  })
 	@RequestMapping(value = "/user/", method = RequestMethod.POST)
-	public ResponseEntity<?> createUser(@RequestBody User user, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<?> createUser(@RequestBody User user, UriComponentsBuilder ucBuilder,
+			@ModelAttribute("username") String username) {
 		logger.info("Creating User : {}", user);
 
 		if (userService.isUserExist(user)) {
@@ -78,8 +80,8 @@ public class UserController {
 			user.getUsername() + " already exist."),HttpStatus.CONFLICT);
 		}
 		//logger.info(" user.getRoles().size() :{} ", user.getRoles().size());
-		user.setCreatedBy("sarath");
-		user.setUpdatedBy("sarath");
+		user.setCreatedBy(username);
+		user.setUpdatedBy(username);
 		userService.saveUser(user);
 
 		HttpHeaders headers = new HttpHeaders();
@@ -90,7 +92,8 @@ public class UserController {
 	// ------------------- Update a User ------------------------------------------------
 	@Secured({  "ROLE_ADMIN","ROLE_CARE_COORDINATOR" ,"ROLE_MANAGER" })
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<?> updateUser(@PathVariable("id") int id, @RequestBody User user) {
+	public ResponseEntity<?> updateUser(@PathVariable("id") int id, @RequestBody User user,
+			@ModelAttribute("username") String username) {
 		logger.info("Updating User with id {}", id);
 
 		User currentUser = userService.findById(id);
@@ -109,7 +112,7 @@ public class UserController {
 		currentUser.setInsurances(user.getInsurances());
 		currentUser.setContact(user.getContact());
 		currentUser.setLanguage(user.getLanguage());
-	
+	    currentUser.setUpdatedBy(username);
 		userService.updateUser(currentUser);
 		return new ResponseEntity<User>(currentUser, HttpStatus.OK);
 	}

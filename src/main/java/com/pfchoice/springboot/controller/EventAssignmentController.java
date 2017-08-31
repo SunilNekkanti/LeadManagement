@@ -105,10 +105,13 @@ public class EventAssignmentController {
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/eventAssignment/", method = RequestMethod.POST)
 	public ResponseEntity<?> createEventAssignment(@RequestBody EventAssignment eventAssignment,
-			UriComponentsBuilder ucBuilder, @ModelAttribute("userId") Integer userId)
+			UriComponentsBuilder ucBuilder, @ModelAttribute("userId") Integer userId,
+			@ModelAttribute("username") String username)
 			throws MessagingException, IOException, InterruptedException {
 		logger.info("Creating EventAssignment : {}", eventAssignment);
 
+		eventAssignment.setCreatedBy(username);
+		eventAssignment.setUpdatedBy(username);
 		eventAssignmentService.saveEventAssignment(eventAssignment);
 
 		User user = userService.findById(userId);
@@ -161,7 +164,8 @@ public class EventAssignmentController {
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/eventAssignment/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateEventAssignment(@PathVariable("id") int id,
-			@RequestBody EventAssignment eventAssignment) {
+			@RequestBody EventAssignment eventAssignment,
+			@ModelAttribute("username") String username) {
 		logger.info("Updating EventAssignment with id {}", id);
 
 		EventAssignment currentEventAssignment = eventAssignmentService.findById(id);
@@ -176,6 +180,7 @@ public class EventAssignmentController {
 		currentEventAssignment.setRepeatRule(eventAssignment.getRepeatRule());
 		currentEventAssignment.getRepresentatives().clear();
 		currentEventAssignment.getRepresentatives().addAll(eventAssignment.getRepresentatives());
+		currentEventAssignment.setUpdatedBy(username);
 		eventAssignmentService.updateEventAssignment(currentEventAssignment);
 
 		return new ResponseEntity<EventAssignment>(currentEventAssignment, HttpStatus.OK);

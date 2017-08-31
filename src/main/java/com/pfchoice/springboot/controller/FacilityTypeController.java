@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,7 +72,8 @@ public class FacilityTypeController {
 	// -------------------Create a FacilityType-------------------------------------------
 	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/facilityType/", method = RequestMethod.POST)
-	public ResponseEntity<?> createFacilityType(@RequestBody FacilityType facilityType, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<?> createFacilityType(@RequestBody FacilityType facilityType, UriComponentsBuilder ucBuilder,
+			@ModelAttribute("username") String username) {
 		logger.info("Creating FacilityType : {}", facilityType);
 
 		if (facilityTypeService.isFacilityTypeExist(facilityType)) {
@@ -79,8 +81,8 @@ public class FacilityTypeController {
 			return new ResponseEntity(new CustomErrorType("Unable to create. A FacilityType with name " + 
 			facilityType.getId() + " already exist."),HttpStatus.CONFLICT);
 		}
-		facilityType.setCreatedBy("sarath");
-		facilityType.setUpdatedBy("sarath");
+		facilityType.setCreatedBy(username);
+		facilityType.setUpdatedBy(username);
 		facilityTypeService.saveFacilityType(facilityType);
 
 		HttpHeaders headers = new HttpHeaders();
@@ -91,7 +93,8 @@ public class FacilityTypeController {
 	// ------------------- Update a FacilityType ------------------------------------------------
 	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/facilityType/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<?> updateFacilityType(@PathVariable("id") int id, @RequestBody FacilityType facilityType) {
+	public ResponseEntity<?> updateFacilityType(@PathVariable("id") int id, @RequestBody FacilityType facilityType,
+			@ModelAttribute("username") String username) {
 		logger.info("Updating FacilityType with id {}", id);
 
 		FacilityType currentFacilityType = facilityTypeService.findById(id);
@@ -104,7 +107,7 @@ public class FacilityTypeController {
 
 		currentFacilityType.setId(facilityType.getId());
 		currentFacilityType.setDescription(facilityType.getDescription());
-
+        currentFacilityType.setUpdatedBy(username);
 		facilityTypeService.updateFacilityType(currentFacilityType);
 		return new ResponseEntity<FacilityType>(currentFacilityType, HttpStatus.OK);
 	}

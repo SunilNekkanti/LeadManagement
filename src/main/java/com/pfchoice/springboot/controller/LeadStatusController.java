@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,7 +72,8 @@ public class LeadStatusController {
 	// -------------------Create a LeadStatus-------------------------------------------
 	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/leadStatus/", method = RequestMethod.POST)
-	public ResponseEntity<?> createLeadStatus(@RequestBody LeadStatus leadStatus, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<?> createLeadStatus(@RequestBody LeadStatus leadStatus, UriComponentsBuilder ucBuilder,
+			@ModelAttribute("username") String username) {
 		logger.info("Creating LeadStatus : {}", leadStatus);
 		
 
@@ -80,8 +82,8 @@ public class LeadStatusController {
 			return new ResponseEntity(new CustomErrorType("Unable to create. A LeadStatus with name " + 
 			leadStatus.getId() + " already exist."),HttpStatus.CONFLICT);
 		}
-		leadStatus.setCreatedBy("sarath");
-		leadStatus.setUpdatedBy("sarath");
+		leadStatus.setCreatedBy(username);
+		leadStatus.setUpdatedBy(username);
 		leadStatusService.saveLeadStatus(leadStatus);
 
 		HttpHeaders headers = new HttpHeaders();
@@ -92,7 +94,8 @@ public class LeadStatusController {
 	// ------------------- Update a LeadStatus ------------------------------------------------
 	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
 	@RequestMapping(value = "/leadStatus/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<?> updateLeadStatus(@PathVariable("id") short id, @RequestBody LeadStatus leadStatus) {
+	public ResponseEntity<?> updateLeadStatus(@PathVariable("id") short id, @RequestBody LeadStatus leadStatus,
+			@ModelAttribute("username") String username) {
 		logger.info("Updating LeadStatus with id {}", id);
 
 		LeadStatus currentLeadStatus = leadStatusService.findById(id);
@@ -104,7 +107,7 @@ public class LeadStatusController {
 		}
 
 		currentLeadStatus.setDescription(leadStatus.getDescription());
-
+        currentLeadStatus.setUpdatedBy(username);
 		leadStatusService.updateLeadStatus(currentLeadStatus);
 		return new ResponseEntity<LeadStatus>(currentLeadStatus, HttpStatus.OK);
 	}

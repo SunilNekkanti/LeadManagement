@@ -94,7 +94,8 @@ public class EventController {
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/event/", method = RequestMethod.POST)
 	public ResponseEntity<?> createEvent(@RequestBody Event event, UriComponentsBuilder ucBuilder,
-			@ModelAttribute("userId") Integer userId) throws MessagingException, IOException, InterruptedException {
+			@ModelAttribute("userId") Integer userId,
+			@ModelAttribute("username") String username) throws MessagingException, IOException, InterruptedException {
 		logger.info("Creating Event : {}", event);
 
 		if (eventService.isEventExists(event.getEventName())) {
@@ -104,6 +105,8 @@ public class EventController {
 							"Unable to create. A Event with name " + event.getEventName() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
+		event.setCreatedBy(username);
+		event.setUpdatedBy(username);
 		eventService.saveEvent(event);
 
 		HttpHeaders headers = new HttpHeaders();
@@ -115,7 +118,8 @@ public class EventController {
 	// ------------------------------------------------
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/event/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<?> updateEvent(@PathVariable("id") int id, @RequestBody Event event) {
+	public ResponseEntity<?> updateEvent(@PathVariable("id") int id, @RequestBody Event event,
+			@ModelAttribute("username") String username) {
 		logger.info("Updating Event with id {}", id);
 
 		Event currentEvent = eventService.findById(id);
@@ -132,6 +136,7 @@ public class EventController {
 		currentEvent.setFacilityType(event.getFacilityType());
 		currentEvent.setContact(event.getContact());
 		currentEvent.setNotes(event.getNotes());
+		currentEvent.setUpdatedBy(username);
 		eventService.updateEvent(currentEvent);
 
 		return new ResponseEntity<Event>(currentEvent, HttpStatus.OK);
