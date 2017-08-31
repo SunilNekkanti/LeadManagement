@@ -10,15 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 @Service("zipCodeService")
 @Transactional
-public class ZipCodeServiceImpl implements ZipCodeService{
+public class ZipCodeServiceImpl implements ZipCodeService {
 
 	@Autowired
 	private ZipCodeRepository zipCodeRepository;
-
 
 	public ZipCode findByCode(Integer code) {
 		return zipCodeRepository.findByCode(code);
@@ -28,19 +25,19 @@ public class ZipCodeServiceImpl implements ZipCodeService{
 		zipCodeRepository.save(zipCode);
 	}
 
-	public void updateZipCode(ZipCode zipCode){
+	public void updateZipCode(ZipCode zipCode) {
 		saveZipCode(zipCode);
 	}
 
-	public void deleteZipCodeById(Integer id){
+	public void deleteZipCodeById(Integer id) {
 		zipCodeRepository.delete(id);
 	}
 
-	public void deleteAllZipCodes(){
+	public void deleteAllZipCodes() {
 		zipCodeRepository.deleteAll();
 	}
 
-	public List<ZipCode> findAllZipCodes(){
+	public List<ZipCode> findAllZipCodes() {
 		return zipCodeRepository.findAll();
 	}
 

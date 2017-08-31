@@ -10,4 +10,3 @@ public interface ZipCodeRepository extends JpaRepository<ZipCode, Integer> {
 
 	public ZipCode findByCode(Integer code);
 }
-

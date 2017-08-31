@@ -7,10 +7,10 @@ import org.springframework.stereotype.Repository;
 import com.pfchoice.springboot.model.FacilityType;
 
 @Repository
-public interface FacilityTypeRepository extends  PagingAndSortingRepository<FacilityType, Integer>, JpaSpecificationExecutor<FacilityType>  {
+public interface FacilityTypeRepository
+		extends PagingAndSortingRepository<FacilityType, Integer>, JpaSpecificationExecutor<FacilityType> {
 
 	public FacilityType findById(Integer id);
-	
+
 	public FacilityType findByDescription(String code);
 }
-

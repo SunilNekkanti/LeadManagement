@@ -10,11 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 @Service("eventMonthService")
 @Transactional
-public class EventMonthServiceImpl implements EventMonthService{
+public class EventMonthServiceImpl implements EventMonthService {
 
 	@Autowired
 	private EventMonthRepository eventMonthRepository;
@@ -30,24 +28,24 @@ public class EventMonthServiceImpl implements EventMonthService{
 	public EventMonth findByShortName(String shortName) {
 		return eventMonthRepository.findByDescription(shortName);
 	}
-	
+
 	public void saveEventMonth(EventMonth eventMonth) {
 		eventMonthRepository.save(eventMonth);
 	}
 
-	public void updateEventMonth(EventMonth eventMonth){
+	public void updateEventMonth(EventMonth eventMonth) {
 		saveEventMonth(eventMonth);
 	}
 
-	public void deleteEventMonthById(Integer id){
+	public void deleteEventMonthById(Integer id) {
 		eventMonthRepository.delete(id);
 	}
 
-	public void deleteAllEventMonths(){
+	public void deleteAllEventMonths() {
 		eventMonthRepository.deleteAll();
 	}
 
-	public List<EventMonth> findAllEventMonths(){
+	public List<EventMonth> findAllEventMonths() {
 		return eventMonthRepository.findAll();
 	}
 

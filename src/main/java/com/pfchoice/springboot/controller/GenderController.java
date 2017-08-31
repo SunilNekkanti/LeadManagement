@@ -28,11 +28,13 @@ public class GenderController {
 	public static final Logger logger = LoggerFactory.getLogger(GenderController.class);
 
 	@Autowired
-	GenderService genderService; //Service which will do all data retrieval/manipulation work
+	GenderService genderService; // Service which will do all data
+									// retrieval/manipulation work
 
-	// -------------------Retrieve All Genders---------------------------------------------
-	
-	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR" ,"ROLE_MANAGER" })
+	// -------------------Retrieve All
+	// Genders---------------------------------------------
+
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
 	@RequestMapping(value = "/gender/", method = RequestMethod.GET)
 	public ResponseEntity<List<Gender>> listAllGenders() {
 		List<Gender> genders = genderService.findAllGenders();
@@ -44,30 +46,32 @@ public class GenderController {
 		return new ResponseEntity<List<Gender>>(genders, HttpStatus.OK);
 	}
 
-	// -------------------Retrieve Single Gender------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// -------------------Retrieve Single
+	// Gender------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/gender/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getGender(@PathVariable("id") byte id) {
 		logger.info("Fetching Gender with id {}", id);
 		Gender gender = genderService.findById(id);
 		if (gender == null) {
 			logger.error("Gender with id {} not found.", id);
-			return new ResponseEntity(new CustomErrorType("Gender with id " + id 
-					+ " not found"), HttpStatus.NOT_FOUND);
+			return new ResponseEntity(new CustomErrorType("Gender with id " + id + " not found"), HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Gender>(gender, HttpStatus.OK);
 	}
 
-	// -------------------Create a Gender-------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// -------------------Create a
+	// Gender-------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/gender/", method = RequestMethod.POST)
 	public ResponseEntity<?> createGender(@RequestBody Gender gender, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating Gender : {}", gender);
 
 		if (genderService.isGenderExist(gender)) {
 			logger.error("Unable to create. A Gender with name {} already exist", gender.getCode());
-			return new ResponseEntity(new CustomErrorType("Unable to create. A Gender with name " + 
-			gender.getCode() + " already exist."),HttpStatus.CONFLICT);
+			return new ResponseEntity(
+					new CustomErrorType("Unable to create. A Gender with name " + gender.getCode() + " already exist."),
+					HttpStatus.CONFLICT);
 		}
 		gender.setCreatedBy("sarath");
 		gender.setUpdatedBy("sarath");
@@ -78,8 +82,9 @@ public class GenderController {
 		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
 	}
 
-	// ------------------- Update a Gender ------------------------------------------------
-	@Secured({  "ROLE_ADMIN" })
+	// ------------------- Update a Gender
+	// ------------------------------------------------
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/gender/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateGender(@PathVariable("id") byte id, @RequestBody Gender gender) {
 		logger.info("Updating Gender with id {}", id);
@@ -99,8 +104,9 @@ public class GenderController {
 		return new ResponseEntity<Gender>(currentGender, HttpStatus.OK);
 	}
 
-	// ------------------- Delete a Gender-----------------------------------------
-	@Secured({  "ROLE_ADMIN" })
+	// ------------------- Delete a
+	// Gender-----------------------------------------
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/gender/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteGender(@PathVariable("id") byte id) {
 		logger.info("Fetching & Deleting Gender with id {}", id);
@@ -116,7 +122,7 @@ public class GenderController {
 	}
 
 	// ------------------- Delete All Genders-----------------------------
-	@Secured({  "ROLE_ADMIN" })
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/gender/", method = RequestMethod.DELETE)
 	public ResponseEntity<Gender> deleteAllGenders() {
 		logger.info("Deleting All Genders");

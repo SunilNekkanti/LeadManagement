@@ -27,7 +27,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pfchoice.springboot.util.JsonDateDeserializer;
 import com.pfchoice.springboot.util.JsonDateSerializer;
 
-
 /**
  * @author sarath
  *
@@ -54,13 +53,12 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "insurance_type_id", referencedColumnName = "plan_type_id")
 	private PlanType planType;
-	
+
 	@Column(name = "present_insurance")
 	private String initialInsurance;
 
-
- 	@JsonSerialize(using=JsonDateSerializer.class)
- 	@JsonDeserialize(using=JsonDateDeserializer.class)
+	@JsonSerialize(using = JsonDateSerializer.class)
+	@JsonDeserialize(using = JsonDateDeserializer.class)
 	@Column(name = "lead_Mbr_DOB")
 	private Date dob;
 
@@ -81,7 +79,7 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lead_Mbr_languageId", referencedColumnName = "code")
 	private Language language;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "best_time_to_call_id", referencedColumnName = "code")
 	private BestTimeToCall bestTimeToCall;
@@ -90,13 +88,12 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@JoinColumn(name = "lead_Mbr_Status", referencedColumnName = "code", insertable = false)
 	private LeadStatus status;
 
-	@OneToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "lead_contacts", joinColumns = {
-			@JoinColumn(name = "lead_mbr_id", referencedColumnName = "lead_mbr_id",nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id",nullable = false, updatable = false, unique = true) })
+			@JoinColumn(name = "lead_mbr_id", referencedColumnName = "lead_mbr_id", nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id", nullable = false, updatable = false, unique = true) })
 	private Contact contact;
-	
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "event_id", referencedColumnName = "event_id")
 	private Event event;
@@ -116,8 +113,7 @@ public class LeadMembership extends RecordDetails implements Serializable {
 
 	@javax.persistence.Transient
 	private String notesHistory;
-	
-	
+
 	/**
 	 * 
 	 */
@@ -144,7 +140,6 @@ public class LeadMembership extends RecordDetails implements Serializable {
 		}
 		return true;
 	}
-
 
 	/**
 	 * @return the dob
@@ -295,7 +290,8 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param bestTimeToCall the bestTimeToCall to set
+	 * @param bestTimeToCall
+	 *            the bestTimeToCall to set
 	 */
 	public void setBestTimeToCall(BestTimeToCall bestTimeToCall) {
 		this.bestTimeToCall = bestTimeToCall;
@@ -329,7 +325,8 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param contact the contact to set
+	 * @param contact
+	 *            the contact to set
 	 */
 	public void setContact(Contact contact) {
 		this.contact = contact;
@@ -418,7 +415,8 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param presentInsurance the presentInsurance to set
+	 * @param presentInsurance
+	 *            the presentInsurance to set
 	 */
 	public void setInitialInsurance(String initialInsurance) {
 		this.initialInsurance = initialInsurance;
@@ -457,7 +455,6 @@ public class LeadMembership extends RecordDetails implements Serializable {
 		this.notesHistory = leadNotes.stream().map(ln -> ln.getNotes()).reduce("", String::concat);
 
 	}
-
 
 	@Override
 	public String toString() {

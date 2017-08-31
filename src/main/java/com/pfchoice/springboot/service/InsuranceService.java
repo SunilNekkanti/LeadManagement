@@ -1,6 +1,5 @@
 package com.pfchoice.springboot.service;
 
-
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -10,7 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import com.pfchoice.springboot.model.Insurance;
 
 public interface InsuranceService {
-	
+
 	Insurance findById(Integer id);
 
 	Insurance findByName(String name);
@@ -24,8 +23,8 @@ public interface InsuranceService {
 	void deleteAllInsurances();
 
 	List<Insurance> findAllInsurances();
-	
-	Page<Insurance> findAllInsurancesByPage(Specification<Insurance> spec,Pageable pageable);
+
+	Page<Insurance> findAllInsurancesByPage(Specification<Insurance> spec, Pageable pageable);
 
 	boolean isInsuranceExist(Insurance insurance);
 }

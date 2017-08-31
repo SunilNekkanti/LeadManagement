@@ -32,21 +32,25 @@ public class FacilityTypeController {
 	public static final Logger logger = LoggerFactory.getLogger(FacilityTypeController.class);
 
 	@Autowired
-	FacilityTypeService facilityTypeService; //Service which will do all data retrieval/manipulation work
+	FacilityTypeService facilityTypeService; // Service which will do all data
+												// retrieval/manipulation work
 
-	// -------------------Retrieve All FacilityTypes---------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER" })
+	// -------------------Retrieve All
+	// FacilityTypes---------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
 	@RequestMapping(value = "/facilityType/", method = RequestMethod.GET)
-	public ResponseEntity<Page<FacilityType>> listAllFacilityTypes(@RequestParam(value = "page", required = false) Integer pageNo,  @RequestParam(value = "size", required = false) Integer pageSize,@RequestParam(value = "search", required = false) String search) {
-		pageNo = (pageNo == null)?0:pageNo;
-		pageSize = (pageSize == null)?1000:pageSize;
-		PageRequest pageRequest = new PageRequest(pageNo,pageSize );
-		
-		Specification<FacilityType> spec =null ;
-		if(!"".equals(search))
-		 spec = new FacilityTypeSpecifications(search);
-		
-		
+	public ResponseEntity<Page<FacilityType>> listAllFacilityTypes(
+			@RequestParam(value = "page", required = false) Integer pageNo,
+			@RequestParam(value = "size", required = false) Integer pageSize,
+			@RequestParam(value = "search", required = false) String search) {
+		pageNo = (pageNo == null) ? 0 : pageNo;
+		pageSize = (pageSize == null) ? 1000 : pageSize;
+		PageRequest pageRequest = new PageRequest(pageNo, pageSize);
+
+		Specification<FacilityType> spec = null;
+		if (!"".equals(search))
+			spec = new FacilityTypeSpecifications(search);
+
 		Page<FacilityType> facilityTypes = facilityTypeService.findAllFacilityTypesByPage(spec, pageRequest);
 		if (facilityTypes.getTotalElements() == 0) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -55,22 +59,24 @@ public class FacilityTypeController {
 		return new ResponseEntity<Page<FacilityType>>(facilityTypes, HttpStatus.OK);
 	}
 
-	// -------------------Retrieve Single FacilityType------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// -------------------Retrieve Single
+	// FacilityType------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/facilityType/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getFacilityType(@PathVariable("id") int id) {
 		logger.info("Fetching FacilityType with id {}", id);
 		FacilityType facilityType = facilityTypeService.findById(id);
 		if (facilityType == null) {
 			logger.error("FacilityType with id {} not found.", id);
-			return new ResponseEntity(new CustomErrorType("FacilityType with id " + id 
-					+ " not found"), HttpStatus.NOT_FOUND);
+			return new ResponseEntity(new CustomErrorType("FacilityType with id " + id + " not found"),
+					HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<FacilityType>(facilityType, HttpStatus.OK);
 	}
 
-	// -------------------Create a FacilityType-------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// -------------------Create a
+	// FacilityType-------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/facilityType/", method = RequestMethod.POST)
 	public ResponseEntity<?> createFacilityType(@RequestBody FacilityType facilityType, UriComponentsBuilder ucBuilder,
 			@ModelAttribute("username") String username) {
@@ -78,8 +84,10 @@ public class FacilityTypeController {
 
 		if (facilityTypeService.isFacilityTypeExist(facilityType)) {
 			logger.error("Unable to create. A FacilityType with name {} already exist", facilityType.getId());
-			return new ResponseEntity(new CustomErrorType("Unable to create. A FacilityType with name " + 
-			facilityType.getId() + " already exist."),HttpStatus.CONFLICT);
+			return new ResponseEntity(
+					new CustomErrorType(
+							"Unable to create. A FacilityType with name " + facilityType.getId() + " already exist."),
+					HttpStatus.CONFLICT);
 		}
 		facilityType.setCreatedBy(username);
 		facilityType.setUpdatedBy(username);
@@ -90,8 +98,9 @@ public class FacilityTypeController {
 		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
 	}
 
-	// ------------------- Update a FacilityType ------------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// ------------------- Update a FacilityType
+	// ------------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/facilityType/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateFacilityType(@PathVariable("id") int id, @RequestBody FacilityType facilityType,
 			@ModelAttribute("username") String username) {
@@ -101,19 +110,21 @@ public class FacilityTypeController {
 
 		if (currentFacilityType == null) {
 			logger.error("Unable to update. FacilityType with id {} not found.", id);
-			return new ResponseEntity(new CustomErrorType("Unable to upate. FacilityType with id " + id + " not found."),
+			return new ResponseEntity(
+					new CustomErrorType("Unable to upate. FacilityType with id " + id + " not found."),
 					HttpStatus.NOT_FOUND);
 		}
 
 		currentFacilityType.setId(facilityType.getId());
 		currentFacilityType.setDescription(facilityType.getDescription());
-        currentFacilityType.setUpdatedBy(username);
+		currentFacilityType.setUpdatedBy(username);
 		facilityTypeService.updateFacilityType(currentFacilityType);
 		return new ResponseEntity<FacilityType>(currentFacilityType, HttpStatus.OK);
 	}
 
-	// ------------------- Delete a FacilityType-----------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// ------------------- Delete a
+	// FacilityType-----------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/facilityType/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteFacilityType(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting FacilityType with id {}", id);
@@ -121,7 +132,8 @@ public class FacilityTypeController {
 		FacilityType facilityType = facilityTypeService.findById(id);
 		if (facilityType == null) {
 			logger.error("Unable to delete. FacilityType with id {} not found.", id);
-			return new ResponseEntity(new CustomErrorType("Unable to delete. FacilityType with id " + id + " not found."),
+			return new ResponseEntity(
+					new CustomErrorType("Unable to delete. FacilityType with id " + id + " not found."),
 					HttpStatus.NOT_FOUND);
 		}
 		facilityTypeService.deleteFacilityTypeById(id);
@@ -129,7 +141,7 @@ public class FacilityTypeController {
 	}
 
 	// ------------------- Delete All FacilityTypes-----------------------------
-	@Secured({  "ROLE_ADMIN" })
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/facilityType/", method = RequestMethod.DELETE)
 	public ResponseEntity<FacilityType> deleteAllFacilityTypes() {
 		logger.info("Deleting All FacilityTypes");

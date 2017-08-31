@@ -10,31 +10,26 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
-
 /**
  *
  * @author sarath
  */
 @Entity
 @Table(name = "lu_county")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class County extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	
 	@Id
 	// @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
 	@Column(name = "code", nullable = false)
 	private Integer code;
 
-	
 	@Column(name = "description")
 	private String description;
 
-	
 	@Column(name = "short_name")
 	private String shortName;
 

@@ -12,8 +12,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-
-
 /**
  *
  * @author sarath
@@ -24,20 +22,17 @@ public class FollowupType extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
 	@Column(name = "id", nullable = false)
 	private Integer id;
 
-	
 	@NotNull
 	@Size(min = 2, max = 50, message = "The code must be between {min} and {max} characters long")
 	@Column(name = "code", nullable = false)
 	private String code;
 
-	
 	@NotNull
 	@Size(min = 2, max = 50, message = "The description must be between {min} and {max} characters long")
 	@Column(name = "description")

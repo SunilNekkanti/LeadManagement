@@ -8,8 +8,7 @@ import com.pfchoice.springboot.model.PlanType;
 @Repository
 public interface PlanTypeRepository extends JpaRepository<PlanType, Integer> {
 
-    public PlanType findById(Integer id);
-	
+	public PlanType findById(Integer id);
+
 	public PlanType findByDescription(String code);
 }
-

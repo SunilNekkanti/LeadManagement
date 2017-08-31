@@ -18,8 +18,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-
-
 /**
  *
  * @author Mohanasundharam
@@ -30,7 +28,6 @@ public class Email extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
@@ -39,7 +36,7 @@ public class Email extends RecordDetails implements Serializable {
 
 	@Column(name = "email_to")
 	private String emailTo;
-	
+
 	@Column(name = "email_from")
 	private String emailFrom;
 
@@ -48,7 +45,7 @@ public class Email extends RecordDetails implements Serializable {
 
 	@Column(name = "subject")
 	private String subject;
-	
+
 	@Column(name = "body", length = 65535, columnDefinition = "TEXT")
 	private String body;
 
@@ -58,12 +55,12 @@ public class Email extends RecordDetails implements Serializable {
 					@JoinColumn(name = "files_upload_id", referencedColumnName = "file_upload_id") })
 	private Set<FileUpload> filesUpload;
 
-	@Column(name = "template_filename", nullable=false)
+	@Column(name = "template_filename", nullable = false)
 	private String templateFile;
-	
+
 	@Transient
 	private Map<String, Object> model;
-	
+
 	/**
 	 * 
 	 */
@@ -73,14 +70,13 @@ public class Email extends RecordDetails implements Serializable {
 
 	public Email(String templateFile) {
 		super();
-		this.templateFile =templateFile;
+		this.templateFile = templateFile;
 	}
 
-	
 	/**
 	 * @param id
 	 */
-	public Email(final Integer id,String templateFile) {
+	public Email(final Integer id, String templateFile) {
 		super();
 		this.id = id;
 		this.templateFile = templateFile;
@@ -153,12 +149,12 @@ public class Email extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param subject the subject to set
+	 * @param subject
+	 *            the subject to set
 	 */
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
-
 
 	/**
 	 * @return the body
@@ -198,7 +194,8 @@ public class Email extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param emailTemplateFile the emailTemplateFile to set
+	 * @param emailTemplateFile
+	 *            the emailTemplateFile to set
 	 */
 	public void setTemplateFile(String templateFile) {
 		this.templateFile = templateFile;
@@ -212,7 +209,8 @@ public class Email extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param model the model to set
+	 * @param model
+	 *            the model to set
 	 */
 	public void setModel(Map<String, Object> model) {
 		this.model = model;

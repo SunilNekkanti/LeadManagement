@@ -13,11 +13,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 @Service("providerService")
 @Transactional
-public class ProviderServiceImpl implements ProviderService{
+public class ProviderServiceImpl implements ProviderService {
 
 	@Autowired
 	private ProviderRepository providerRepository;
@@ -34,23 +32,23 @@ public class ProviderServiceImpl implements ProviderService{
 		providerRepository.save(provider);
 	}
 
-	public void updateProvider(Provider provider){
+	public void updateProvider(Provider provider) {
 		saveProvider(provider);
 	}
 
-	public void deleteProviderById(Integer id){
+	public void deleteProviderById(Integer id) {
 		providerRepository.delete(id);
 	}
 
-	public void deleteAllProviders(){
+	public void deleteAllProviders() {
 		providerRepository.deleteAll();
 	}
 
-	public List<Provider> findAllProviders(){
+	public List<Provider> findAllProviders() {
 		return (List<Provider>) providerRepository.findAll();
 	}
-	
-	public Page<Provider> findAllProvidersByPage(Specification<Provider> spec,Pageable pageable){
+
+	public Page<Provider> findAllProvidersByPage(Specification<Provider> spec, Pageable pageable) {
 		return providerRepository.findAll(spec, pageable);
 	}
 

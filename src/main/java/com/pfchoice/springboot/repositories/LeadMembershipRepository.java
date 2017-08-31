@@ -12,10 +12,11 @@ import org.springframework.stereotype.Repository;
 import com.pfchoice.springboot.model.LeadMembership;
 
 @Repository
-public interface LeadMembershipRepository extends PagingAndSortingRepository<LeadMembership, Integer>, JpaSpecificationExecutor<LeadMembership> {
+public interface LeadMembershipRepository
+		extends PagingAndSortingRepository<LeadMembership, Integer>, JpaSpecificationExecutor<LeadMembership> {
 
 	@Query("SELECT l FROM LeadMembership l WHERE LOWER(l.firstName) = LOWER(:firstName) and LOWER(l.lastName) = LOWER(:lastName) and dob = :dob")
-    public List<LeadMembership> findLeadMembershipByLastNameFirstNameDob(@Param("firstName") String firstName, @Param("lastName") String lastName, @Param("dob") Date dob);
-	
-}
+	public List<LeadMembership> findLeadMembershipByLastNameFirstNameDob(@Param("firstName") String firstName,
+			@Param("lastName") String lastName, @Param("dob") Date dob);
 
+}

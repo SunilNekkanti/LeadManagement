@@ -10,11 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 @Service("fileUploadService")
 @Transactional
-public class FileUploadServiceImpl implements FileUploadService{
+public class FileUploadServiceImpl implements FileUploadService {
 
 	@Autowired
 	private FileUploadRepository fileUploadRepository;
@@ -22,7 +20,6 @@ public class FileUploadServiceImpl implements FileUploadService{
 	public FileUpload findById(Integer id) {
 		return fileUploadRepository.findOne(id);
 	}
-
 
 	public FileUpload findByFileName(String fileName) {
 		return fileUploadRepository.findByFileName(fileName);
@@ -32,19 +29,19 @@ public class FileUploadServiceImpl implements FileUploadService{
 		fileUploadRepository.save(fileUpload);
 	}
 
-	public void updateFileUpload(FileUpload fileUpload){
+	public void updateFileUpload(FileUpload fileUpload) {
 		saveFileUpload(fileUpload);
 	}
 
-	public void deleteFileUploadById(Integer id){
+	public void deleteFileUploadById(Integer id) {
 		fileUploadRepository.delete(id);
 	}
 
-	public void deleteAllFileUploads(){
+	public void deleteAllFileUploads() {
 		fileUploadRepository.deleteAll();
 	}
 
-	public List<FileUpload> findAllFileUploads(){
+	public List<FileUpload> findAllFileUploads() {
 		return fileUploadRepository.findAll();
 	}
 

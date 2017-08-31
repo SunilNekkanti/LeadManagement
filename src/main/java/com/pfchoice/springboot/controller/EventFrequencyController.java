@@ -28,10 +28,14 @@ public class EventFrequencyController {
 	public static final Logger logger = LoggerFactory.getLogger(EventFrequencyController.class);
 
 	@Autowired
-	EventFrequencyService eventFrequencyService; //Service which will do all data retrieval/manipulation work
+	EventFrequencyService eventFrequencyService; // Service which will do all
+													// data
+													// retrieval/manipulation
+													// work
 
-	// -------------------Retrieve All EventFrequencys---------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER" })
+	// -------------------Retrieve All
+	// EventFrequencys---------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
 	@RequestMapping(value = "/eventFrequency/", method = RequestMethod.GET)
 	public ResponseEntity<List<EventFrequency>> listAllEventFrequencys() {
 		List<EventFrequency> eventFrequencys = eventFrequencyService.findAllEventFrequencies();
@@ -43,30 +47,34 @@ public class EventFrequencyController {
 		return new ResponseEntity<List<EventFrequency>>(eventFrequencys, HttpStatus.OK);
 	}
 
-	// -------------------Retrieve Single EventFrequency------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// -------------------Retrieve Single
+	// EventFrequency------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/eventFrequency/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getEventFrequency(@PathVariable("id") int id) {
 		logger.info("Fetching EventFrequency with id {}", id);
 		EventFrequency eventFrequency = eventFrequencyService.findById(id);
 		if (eventFrequency == null) {
 			logger.error("EventFrequency with id {} not found.", id);
-			return new ResponseEntity(new CustomErrorType("EventFrequency with id " + id 
-					+ " not found"), HttpStatus.NOT_FOUND);
+			return new ResponseEntity(new CustomErrorType("EventFrequency with id " + id + " not found"),
+					HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<EventFrequency>(eventFrequency, HttpStatus.OK);
 	}
 
-	// -------------------Create a EventFrequency-------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// -------------------Create a
+	// EventFrequency-------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/eventFrequency/", method = RequestMethod.POST)
-	public ResponseEntity<?> createEventFrequency(@RequestBody EventFrequency eventFrequency, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<?> createEventFrequency(@RequestBody EventFrequency eventFrequency,
+			UriComponentsBuilder ucBuilder) {
 		logger.info("Creating EventFrequency : {}", eventFrequency);
 
 		if (eventFrequencyService.isEventFrequencyExist(eventFrequency)) {
 			logger.error("Unable to create. A EventFrequency with name {} already exist", eventFrequency.getId());
-			return new ResponseEntity(new CustomErrorType("Unable to create. A EventFrequency with name " + 
-			eventFrequency.getId() + " already exist."),HttpStatus.CONFLICT);
+			return new ResponseEntity(new CustomErrorType(
+					"Unable to create. A EventFrequency with name " + eventFrequency.getId() + " already exist."),
+					HttpStatus.CONFLICT);
 		}
 		eventFrequency.setCreatedBy("sarath");
 		eventFrequency.setUpdatedBy("sarath");
@@ -77,17 +85,20 @@ public class EventFrequencyController {
 		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
 	}
 
-	// ------------------- Update a EventFrequency ------------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// ------------------- Update a EventFrequency
+	// ------------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/eventFrequency/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<?> updateEventFrequency(@PathVariable("id") int id, @RequestBody EventFrequency eventFrequency) {
+	public ResponseEntity<?> updateEventFrequency(@PathVariable("id") int id,
+			@RequestBody EventFrequency eventFrequency) {
 		logger.info("Updating EventFrequency with id {}", id);
 
 		EventFrequency currentEventFrequency = eventFrequencyService.findById(id);
 
 		if (currentEventFrequency == null) {
 			logger.error("Unable to update. EventFrequency with id {} not found.", id);
-			return new ResponseEntity(new CustomErrorType("Unable to upate. EventFrequency with id " + id + " not found."),
+			return new ResponseEntity(
+					new CustomErrorType("Unable to upate. EventFrequency with id " + id + " not found."),
 					HttpStatus.NOT_FOUND);
 		}
 
@@ -98,8 +109,9 @@ public class EventFrequencyController {
 		return new ResponseEntity<EventFrequency>(currentEventFrequency, HttpStatus.OK);
 	}
 
-	// ------------------- Delete a EventFrequency-----------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// ------------------- Delete a
+	// EventFrequency-----------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/eventFrequency/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteEventFrequency(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting EventFrequency with id {}", id);
@@ -107,15 +119,17 @@ public class EventFrequencyController {
 		EventFrequency eventFrequency = eventFrequencyService.findById(id);
 		if (eventFrequency == null) {
 			logger.error("Unable to delete. EventFrequency with id {} not found.", id);
-			return new ResponseEntity(new CustomErrorType("Unable to delete. EventFrequency with id " + id + " not found."),
+			return new ResponseEntity(
+					new CustomErrorType("Unable to delete. EventFrequency with id " + id + " not found."),
 					HttpStatus.NOT_FOUND);
 		}
 		eventFrequencyService.deleteEventFrequencyById(id);
 		return new ResponseEntity<EventFrequency>(HttpStatus.NO_CONTENT);
 	}
 
-	// ------------------- Delete All EventFrequencys-----------------------------
-	@Secured({  "ROLE_ADMIN" })
+	// ------------------- Delete All
+	// EventFrequencys-----------------------------
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/eventFrequency/", method = RequestMethod.DELETE)
 	public ResponseEntity<EventFrequency> deleteAllEventFrequencys() {
 		logger.info("Deleting All EventFrequencys");

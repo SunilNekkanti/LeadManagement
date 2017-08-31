@@ -8,6 +8,4 @@ import com.pfchoice.springboot.model.FollowupType;
 @Repository
 public interface FollowupTypeRepository extends JpaRepository<FollowupType, Long> {
 
-
 }
-

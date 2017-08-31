@@ -1,6 +1,5 @@
 package com.pfchoice.springboot.controller;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,20 +31,25 @@ public class ProviderController {
 	public static final Logger logger = LoggerFactory.getLogger(ProviderController.class);
 
 	@Autowired
-	ProviderService providerService; //Service which will do all data retrieval/manipulation work
+	ProviderService providerService; // Service which will do all data
+										// retrieval/manipulation work
 
-	// -------------------Retrieve All Providers---------------------------------------------
-	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR" ,"ROLE_MANAGER" })
+	// -------------------Retrieve All
+	// Providers---------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
 	@RequestMapping(value = "/provider/", method = RequestMethod.GET)
-	public ResponseEntity<Page<Provider>> listAllProviders(@RequestParam(value = "page", required = false) Integer pageNo,  @RequestParam(value = "size", required = false) Integer pageSize,@RequestParam(value = "search", required = false) String search) {
-		
-		pageNo = (pageNo == null)?0:pageNo;
-		pageSize = (pageSize == null)?1000:pageSize;
-		
-		PageRequest pageRequest = new PageRequest(pageNo,pageSize );
-		Specification<Provider> spec =null ;
-		if(!"".equals(search))
-		 spec = new ProviderSpecifications(search);
+	public ResponseEntity<Page<Provider>> listAllProviders(
+			@RequestParam(value = "page", required = false) Integer pageNo,
+			@RequestParam(value = "size", required = false) Integer pageSize,
+			@RequestParam(value = "search", required = false) String search) {
+
+		pageNo = (pageNo == null) ? 0 : pageNo;
+		pageSize = (pageSize == null) ? 1000 : pageSize;
+
+		PageRequest pageRequest = new PageRequest(pageNo, pageSize);
+		Specification<Provider> spec = null;
+		if (!"".equals(search))
+			spec = new ProviderSpecifications(search);
 		Page<Provider> providers = providerService.findAllProvidersByPage(spec, pageRequest);
 		if (providers.getTotalElements() == 0) {
 			System.out.println("no providers");
@@ -55,32 +59,36 @@ public class ProviderController {
 		return new ResponseEntity<Page<Provider>>(providers, HttpStatus.OK);
 	}
 
-	// -------------------Retrieve Single Provider------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// -------------------Retrieve Single
+	// Provider------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/provider/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getProvider(@PathVariable("id") int id) {
 		logger.info("Fetching Provider with id {}", id);
 		Provider provider = providerService.findById(id);
 		if (provider == null) {
 			logger.error("Provider with id {} not found.", id);
-			return new ResponseEntity(new CustomErrorType("Provider with id " + id 
-					+ " not found"), HttpStatus.NOT_FOUND);
+			return new ResponseEntity(new CustomErrorType("Provider with id " + id + " not found"),
+					HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Provider>(provider, HttpStatus.OK);
 	}
 
-	// -------------------Create a Provider-------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// -------------------Create a
+	// Provider-------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/provider/", method = RequestMethod.POST)
 	public ResponseEntity<?> createProvider(@RequestBody Provider provider, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating Provider : {}", provider);
 
 		if (providerService.isProviderExist(provider)) {
 			logger.error("Unable to create. A Provider with name {} already exist", provider.getName());
-			return new ResponseEntity(new CustomErrorType("Unable to create. A Provider with name " + 
-			provider.getName() + " already exist."),HttpStatus.CONFLICT);
+			return new ResponseEntity(
+					new CustomErrorType(
+							"Unable to create. A Provider with name " + provider.getName() + " already exist."),
+					HttpStatus.CONFLICT);
 		}
-		
+
 		logger.info("Creating Provider : before save");
 		providerService.saveProvider(provider);
 		logger.info("Creating Provider : after save");
@@ -90,8 +98,9 @@ public class ProviderController {
 		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
 	}
 
-	// ------------------- Update a Provider ------------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// ------------------- Update a Provider
+	// ------------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/provider/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateProvider(@PathVariable("id") int id, @RequestBody Provider provider) {
 		logger.info("Updating Provider with id {}", id);
@@ -112,8 +121,9 @@ public class ProviderController {
 		return new ResponseEntity<Provider>(currentProvider, HttpStatus.OK);
 	}
 
-	// ------------------- Delete a Provider-----------------------------------------
-	@Secured({  "ROLE_ADMIN" })
+	// ------------------- Delete a
+	// Provider-----------------------------------------
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/provider/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteProvider(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting Provider with id {}", id);
@@ -129,7 +139,7 @@ public class ProviderController {
 	}
 
 	// ------------------- Delete All Providers-----------------------------
-	@Secured({  "ROLE_ADMIN" })
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/provider/", method = RequestMethod.DELETE)
 	public ResponseEntity<Provider> deleteAllProviders() {
 		logger.info("Deleting All Providers");

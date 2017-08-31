@@ -41,7 +41,7 @@ public class AuthenticationServiceImpl implements UserDetailsService {
 		com.pfchoice.springboot.model.User user = userRepository.findByUsername(username);
 		Role role = user.getRole();
 		List<GrantedAuthority> authorities = new ArrayList<>();
-		GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_"+role.getRole());
+		GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.getRole());
 		authorities.add(authority);
 
 		return new User(user.getUsername(), user.getPassword(), authorities);

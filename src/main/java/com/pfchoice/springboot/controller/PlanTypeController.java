@@ -28,10 +28,12 @@ public class PlanTypeController {
 	public static final Logger logger = LoggerFactory.getLogger(PlanTypeController.class);
 
 	@Autowired
-	PlanTypeService planTypeService; //Service which will do all data retrieval/manipulation work
+	PlanTypeService planTypeService; // Service which will do all data
+										// retrieval/manipulation work
 
-	// -------------------Retrieve All PlanTypes---------------------------------------------
-	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER"  })
+	// -------------------Retrieve All
+	// PlanTypes---------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
 	@RequestMapping(value = "/planType/", method = RequestMethod.GET)
 	public ResponseEntity<List<PlanType>> listAllPlanTypes() {
 		List<PlanType> planTypes = planTypeService.findAllPlanTypes();
@@ -43,30 +45,34 @@ public class PlanTypeController {
 		return new ResponseEntity<List<PlanType>>(planTypes, HttpStatus.OK);
 	}
 
-	// -------------------Retrieve Single PlanType------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// -------------------Retrieve Single
+	// PlanType------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/planType/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getPlanType(@PathVariable("id") int id) {
 		logger.info("Fetching PlanType with id {}", id);
 		PlanType planType = planTypeService.findById(id);
 		if (planType == null) {
 			logger.error("PlanType with id {} not found.", id);
-			return new ResponseEntity(new CustomErrorType("PlanType with id " + id 
-					+ " not found"), HttpStatus.NOT_FOUND);
+			return new ResponseEntity(new CustomErrorType("PlanType with id " + id + " not found"),
+					HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<PlanType>(planType, HttpStatus.OK);
 	}
 
-	// -------------------Create a PlanType-------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// -------------------Create a
+	// PlanType-------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/planType/", method = RequestMethod.POST)
 	public ResponseEntity<?> createPlanType(@RequestBody PlanType planType, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating PlanType : {}", planType);
 
 		if (planTypeService.isPlanTypeExist(planType)) {
 			logger.error("Unable to create. A PlanType with name {} already exist", planType.getCode());
-			return new ResponseEntity(new CustomErrorType("Unable to create. A PlanType with name " + 
-			planType.getCode() + " already exist."),HttpStatus.CONFLICT);
+			return new ResponseEntity(
+					new CustomErrorType(
+							"Unable to create. A PlanType with name " + planType.getCode() + " already exist."),
+					HttpStatus.CONFLICT);
 		}
 		planType.setCreatedBy("sarath");
 		planType.setUpdatedBy("sarath");
@@ -77,8 +83,9 @@ public class PlanTypeController {
 		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
 	}
 
-	// ------------------- Update a PlanType ------------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// ------------------- Update a PlanType
+	// ------------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/planType/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updatePlanType(@PathVariable("id") int id, @RequestBody PlanType planType) {
 		logger.info("Updating PlanType with id {}", id);
@@ -98,8 +105,9 @@ public class PlanTypeController {
 		return new ResponseEntity<PlanType>(currentPlanType, HttpStatus.OK);
 	}
 
-	// ------------------- Delete a PlanType-----------------------------------------
-	@Secured({  "ROLE_ADMIN" })
+	// ------------------- Delete a
+	// PlanType-----------------------------------------
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/planType/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deletePlanType(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting PlanType with id {}", id);
@@ -115,7 +123,7 @@ public class PlanTypeController {
 	}
 
 	// ------------------- Delete All PlanTypes-----------------------------
-	@Secured({  "ROLE_ADMIN" })
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/planType/", method = RequestMethod.DELETE)
 	public ResponseEntity<PlanType> deleteAllPlanTypes() {
 		logger.info("Deleting All PlanTypes");

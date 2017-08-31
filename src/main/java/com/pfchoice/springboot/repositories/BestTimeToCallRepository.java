@@ -10,4 +10,3 @@ public interface BestTimeToCallRepository extends JpaRepository<BestTimeToCall, 
 
 	BestTimeToCall findByDescription(String description);
 }
-

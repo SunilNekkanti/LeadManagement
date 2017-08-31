@@ -11,11 +11,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 @Service("eventService")
 @Transactional
-public class EventServiceImpl implements EventService{
+public class EventServiceImpl implements EventService {
 
 	@Autowired
 	private EventRepository eventRepository;
@@ -28,24 +26,24 @@ public class EventServiceImpl implements EventService{
 		eventRepository.save(event);
 	}
 
-	public void updateEvent(Event event){
+	public void updateEvent(Event event) {
 		saveEvent(event);
 	}
 
-	public void deleteEventById(Integer id){
+	public void deleteEventById(Integer id) {
 		eventRepository.delete(id);
 	}
 
-	public void deleteAllEvents(){
+	public void deleteAllEvents() {
 		eventRepository.deleteAll();
 	}
 
-	public Page<Event> findAllEventsByPage(Specification<Event> spec,Pageable pageable)  {
-		return eventRepository.findAll(spec,pageable);
+	public Page<Event> findAllEventsByPage(Specification<Event> spec, Pageable pageable) {
+		return eventRepository.findAll(spec, pageable);
 	}
-	
+
 	public boolean isEventExists(String eventName) {
-		return !eventRepository.findEventByEventName( eventName).isEmpty() ;
+		return !eventRepository.findEventByEventName(eventName).isEmpty();
 	}
 
 }

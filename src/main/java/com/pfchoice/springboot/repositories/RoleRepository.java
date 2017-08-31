@@ -7,9 +7,8 @@ import org.springframework.stereotype.Repository;
 import com.pfchoice.springboot.model.Role;
 
 @Repository
-public interface RoleRepository extends PagingAndSortingRepository<Role, Integer>, JpaSpecificationExecutor<Role>  {
+public interface RoleRepository extends PagingAndSortingRepository<Role, Integer>, JpaSpecificationExecutor<Role> {
 
 	Role findByRole(String name);
-	
-}
 
+}

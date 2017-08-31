@@ -9,9 +9,8 @@ import com.pfchoice.springboot.model.EventMonth;
 public interface EventMonthRepository extends JpaRepository<EventMonth, Integer> {
 
 	public EventMonth findById(Integer id);
-	
+
 	public EventMonth findByDescription(String description);
-	
+
 	public EventMonth findByShortName(String shortName);
 }
-

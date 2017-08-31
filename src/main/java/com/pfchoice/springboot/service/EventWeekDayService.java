@@ -1,16 +1,15 @@
 package com.pfchoice.springboot.service;
 
-
 import java.util.List;
 
 import com.pfchoice.springboot.model.EventWeekDay;
 
 public interface EventWeekDayService {
-	
+
 	EventWeekDay findById(Integer id);
 
 	EventWeekDay findByDescription(String description);
-	
+
 	EventWeekDay findByShortName(String shortName);
 
 	void saveEventWeekDay(EventWeekDay eventWeekDay);

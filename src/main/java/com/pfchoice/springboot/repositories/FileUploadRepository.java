@@ -10,4 +10,3 @@ public interface FileUploadRepository extends JpaRepository<FileUpload, Integer>
 
 	public FileUpload findByFileName(String fileName);
 }
-

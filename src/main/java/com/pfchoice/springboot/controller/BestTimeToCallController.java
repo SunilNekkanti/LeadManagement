@@ -25,11 +25,15 @@ public class BestTimeToCallController {
 	public static final Logger logger = LoggerFactory.getLogger(BestTimeToCallController.class);
 
 	@Autowired
-	BestTimeToCallService bestTimeToCallService; //Service which will do all data retrieval/manipulation work
+	BestTimeToCallService bestTimeToCallService; // Service which will do all
+													// data
+													// retrieval/manipulation
+													// work
 
-	// -------------------Retrieve All BestTimeToCalls---------------------------------------------
-	
-	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR" ,"ROLE_MANAGER" })
+	// -------------------Retrieve All
+	// BestTimeToCalls---------------------------------------------
+
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
 	@RequestMapping(value = "/bestTimeToCall/", method = RequestMethod.GET)
 	public ResponseEntity<List<BestTimeToCall>> listAllBestTimeToCalls() {
 		List<BestTimeToCall> bestTimeToCalls = bestTimeToCallService.findAllBestTimeToCalls();
@@ -41,24 +45,24 @@ public class BestTimeToCallController {
 		return new ResponseEntity<List<BestTimeToCall>>(bestTimeToCalls, HttpStatus.OK);
 	}
 
-	// -------------------Retrieve Single BestTimeToCall------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// -------------------Retrieve Single
+	// BestTimeToCall------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/bestTimeToCall/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getBestTimeToCall(@PathVariable("id") short id) {
 		logger.info("Fetching BestTimeToCall with id {}", id);
 		BestTimeToCall bestTimeToCall = bestTimeToCallService.findById(id);
 		if (bestTimeToCall == null) {
 			logger.error("BestTimeToCall with id {} not found.", id);
-			return new ResponseEntity(new CustomErrorType("BestTimeToCall with id " + id 
-					+ " not found"), HttpStatus.NOT_FOUND);
+			return new ResponseEntity(new CustomErrorType("BestTimeToCall with id " + id + " not found"),
+					HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<BestTimeToCall>(bestTimeToCall, HttpStatus.OK);
 	}
 
-
-
-	// ------------------- Delete a BestTimeToCall-----------------------------------------
-	@Secured({  "ROLE_ADMIN" })
+	// ------------------- Delete a
+	// BestTimeToCall-----------------------------------------
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/bestTimeToCall/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteBestTimeToCall(@PathVariable("id") short id) {
 		logger.info("Fetching & Deleting BestTimeToCall with id {}", id);
@@ -66,15 +70,17 @@ public class BestTimeToCallController {
 		BestTimeToCall bestTimeToCall = bestTimeToCallService.findById(id);
 		if (bestTimeToCall == null) {
 			logger.error("Unable to delete. BestTimeToCall with id {} not found.", id);
-			return new ResponseEntity(new CustomErrorType("Unable to delete. BestTimeToCall with id " + id + " not found."),
+			return new ResponseEntity(
+					new CustomErrorType("Unable to delete. BestTimeToCall with id " + id + " not found."),
 					HttpStatus.NOT_FOUND);
 		}
 		bestTimeToCallService.deleteBestTimeToCallById(id);
 		return new ResponseEntity<BestTimeToCall>(HttpStatus.NO_CONTENT);
 	}
 
-	// ------------------- Delete All BestTimeToCalls-----------------------------
-	@Secured({  "ROLE_ADMIN" })
+	// ------------------- Delete All
+	// BestTimeToCalls-----------------------------
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/bestTimeToCall/", method = RequestMethod.DELETE)
 	public ResponseEntity<BestTimeToCall> deleteAllBestTimeToCalls() {
 		logger.info("Deleting All BestTimeToCalls");

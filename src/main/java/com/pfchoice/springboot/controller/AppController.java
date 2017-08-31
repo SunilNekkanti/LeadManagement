@@ -23,64 +23,62 @@ import com.pfchoice.springboot.model.LoginForm;
 import com.pfchoice.springboot.service.UserService;
 
 @Controller
-@SessionAttributes({ "username", "roleId", "userId" , "roleName" })
+@SessionAttributes({ "username", "roleId", "userId", "roleName" })
 public class AppController {
 
-	
 	@Autowired
 	UserService userService;
-	
+
 	/**
 	 * @param modal
 	 * @return
 	 */
-	@RequestMapping(value={"/","/login"})
+	@RequestMapping(value = { "/", "/login" })
 	String login(ModelMap modal) {
-		modal.addAttribute("title","CRUD Example");
+		modal.addAttribute("title", "CRUD Example");
 		LoginForm loginForm = new LoginForm();
 		modal.addAttribute("loginForm", loginForm);
 		return "login";
 	}
-	
+
 	/**
 	 * @param modal
 	 * @return
 	 */
 	@RequestMapping("/home")
 	String home(HttpSession session, ModelMap modal, @ModelAttribute("username") String username) {
-		
+
 		if (!modal.containsAttribute("username")) {
 			modal.addAttribute("username", username);
 		}
 		User user = userService.findByUsername(username);
-		
+
 		LoginForm loginForm = new LoginForm();
 		loginForm.setUsername(username);
-		if (user!=null && !modal.containsAttribute("userId")) {
+		if (user != null && !modal.containsAttribute("userId")) {
 			modal.addAttribute("userId", user.getId());
-			loginForm.setUserId(user.getId()); 
+			loginForm.setUserId(user.getId());
 		}
 		Role role = user.getRole();
 		modal.addAttribute("roleId", role.getId());
 		modal.addAttribute("roleName", role.getRole());
-		loginForm.setRoleName(role.getRole()); 
+		loginForm.setRoleName(role.getRole());
 		loginForm.setRoleId(role.getId());
 		session.setAttribute("loginUser", loginForm);
-		
+
 		return "home";
 	}
-	
 
 	/**
 	 * @param page
 	 * @return
 	 */
 	@RequestMapping("/partials/{page}")
-	String partialHandler(ModelMap modal, @PathVariable("page") final String page, @ModelAttribute("username") String username,  @ModelAttribute("roleName") String roleName) {
+	String partialHandler(ModelMap modal, @PathVariable("page") final String page,
+			@ModelAttribute("username") String username, @ModelAttribute("roleName") String roleName) {
 		modal.addAttribute("roleName", roleName);
 		return page;
 	}
-	
 
 	/**
 	 * for 403 access denied page
@@ -92,24 +90,24 @@ public class AppController {
 		System.out.println("inside /accessDenied section/");
 		return "403";
 	}
-	
 
 	@RequestMapping(value = "/getloginInfo", method = RequestMethod.GET)
 	@ResponseBody
 	public LoginForm getUserInfo(HttpSession session) {
-		LoginForm loginUser =  (LoginForm) session.getAttribute("loginUser");
-	    return loginUser;
+		LoginForm loginUser = (LoginForm) session.getAttribute("loginUser");
+		return loginUser;
 	}
 
-	
-	@RequestMapping(value="/logout", method = RequestMethod.GET)
-	public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
-		
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
+
 		System.out.println("inside /logout");
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (auth != null){    
+		if (auth != null) {
 			new SecurityContextLogoutHandler().logout(request, response, auth);
 		}
-		return "redirect:/login?logout";//You can redirect wherever you want, but generally it's a good practice to show login screen again.
+		return "redirect:/";// You can redirect wherever you want,
+										// but generally it's a good practice to
+										// show login screen again.
 	}
 }

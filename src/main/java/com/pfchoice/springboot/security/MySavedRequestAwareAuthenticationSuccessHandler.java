@@ -14,38 +14,33 @@ import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.util.StringUtils;
 
-public class MySavedRequestAwareAuthenticationSuccessHandler 
-extends SimpleUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+public class MySavedRequestAwareAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler
+		implements AuthenticationSuccessHandler {
 
-  private RequestCache requestCache = new HttpSessionRequestCache();
+	private RequestCache requestCache = new HttpSessionRequestCache();
 
-  @Override
-  public void onAuthenticationSuccess(
-    HttpServletRequest request,
-    HttpServletResponse response, 
-    Authentication authentication) 
-    throws ServletException, IOException {
+	@Override
+	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+			Authentication authentication) throws ServletException, IOException {
 
-      SavedRequest savedRequest
-        = requestCache.getRequest(request, response);
+		SavedRequest savedRequest = requestCache.getRequest(request, response);
 
-      if (savedRequest == null) {
-          clearAuthenticationAttributes(request);
-          return;
-      }
-      String targetUrlParam = getTargetUrlParameter();
-      if (isAlwaysUseDefaultTargetUrl()
-        || (targetUrlParam != null
-        && StringUtils.hasText(request.getParameter(targetUrlParam)))) {
-          requestCache.removeRequest(request, response);
-          clearAuthenticationAttributes(request);
-          return;
-      }
+		if (savedRequest == null) {
+			clearAuthenticationAttributes(request);
+			return;
+		}
+		String targetUrlParam = getTargetUrlParameter();
+		if (isAlwaysUseDefaultTargetUrl()
+				|| (targetUrlParam != null && StringUtils.hasText(request.getParameter(targetUrlParam)))) {
+			requestCache.removeRequest(request, response);
+			clearAuthenticationAttributes(request);
+			return;
+		}
 
-      clearAuthenticationAttributes(request);
-  }
+		clearAuthenticationAttributes(request);
+	}
 
-  public void setRequestCache(RequestCache requestCache) {
-      this.requestCache = requestCache;
-  }
+	public void setRequestCache(RequestCache requestCache) {
+		this.requestCache = requestCache;
+	}
 }

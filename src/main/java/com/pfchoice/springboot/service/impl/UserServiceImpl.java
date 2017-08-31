@@ -11,11 +11,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 @Service("userService")
 @Transactional
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
@@ -32,24 +30,24 @@ public class UserServiceImpl implements UserService{
 		userRepository.save(user);
 	}
 
-	public void updateUser(User user){
+	public void updateUser(User user) {
 		saveUser(user);
 	}
 
-	public void deleteUserById(Integer id){
+	public void deleteUserById(Integer id) {
 		userRepository.delete(id);
 	}
 
-	public void deleteAllUsers(){
+	public void deleteAllUsers() {
 		userRepository.deleteAll();
 	}
 
-	public Page<User> findAllUsersByPage(Specification<User> spec, Pageable pageable){
+	public Page<User> findAllUsersByPage(Specification<User> spec, Pageable pageable) {
 		return userRepository.findAll(spec, pageable);
 	}
 
 	public boolean isUserExist(User user) {
 		return findByUsername(user.getUsername()) != null;
 	}
-	
+
 }

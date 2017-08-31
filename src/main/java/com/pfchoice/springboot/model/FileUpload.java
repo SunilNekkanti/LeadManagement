@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * @author sarath
  */
 @Entity(name = "file_upload")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class FileUpload extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;

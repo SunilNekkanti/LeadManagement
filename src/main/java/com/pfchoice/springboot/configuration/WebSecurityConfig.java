@@ -22,7 +22,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.pfchoice.springboot.security.CustomAuthenticationSuccessHandler;
 
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
@@ -34,36 +33,38 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	UserDetailsService authenticationService;
 
-//	@Autowired
-//	private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-	
+	// @Autowired
+	// private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+
 	@Bean
 	@Primary
 	@ConfigurationProperties(prefix = "email")
-	public MailProperties mailProperties(){
+	public MailProperties mailProperties() {
 		return new MailProperties();
 	}
 
 	@Bean
-    public JavaMailSender getMailSender() {
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
- 
-        // Using gmail.
-        mailSender.setHost(mailProperties().getHost());
-        mailSender.setPort(mailProperties().getPort());
-        mailSender.setUsername(mailProperties().getUsername());
-        mailSender.setPassword(mailProperties().getPassword());
-        
-        Properties javaMailProperties = new Properties();
-        javaMailProperties.put("mail.smtp.starttls.enable", mailProperties().getProperties().get("mail.smtp.starttls.enable"));
-        javaMailProperties.put("mail.smtp.auth", mailProperties().getProperties().get("mail.smtp.auth"));
-        javaMailProperties.put("mail.transport.protocol", mailProperties().getProperties().get("mail.transport.protocol"));
-        javaMailProperties.put("mail.debug", mailProperties().getProperties().get("mail.debug"));
- 
-        mailSender.setJavaMailProperties(javaMailProperties);
-        return mailSender;
-    }
-	    
+	public JavaMailSender getMailSender() {
+		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+
+		// Using gmail.
+		mailSender.setHost(mailProperties().getHost());
+		mailSender.setPort(mailProperties().getPort());
+		mailSender.setUsername(mailProperties().getUsername());
+		mailSender.setPassword(mailProperties().getPassword());
+
+		Properties javaMailProperties = new Properties();
+		javaMailProperties.put("mail.smtp.starttls.enable",
+				mailProperties().getProperties().get("mail.smtp.starttls.enable"));
+		javaMailProperties.put("mail.smtp.auth", mailProperties().getProperties().get("mail.smtp.auth"));
+		javaMailProperties.put("mail.transport.protocol",
+				mailProperties().getProperties().get("mail.transport.protocol"));
+		javaMailProperties.put("mail.debug", mailProperties().getProperties().get("mail.debug"));
+
+		mailSender.setJavaMailProperties(javaMailProperties);
+		return mailSender;
+	}
+
 	@Override
 	public void configure(WebSecurity web) {
 		web.ignoring().antMatchers("/resources/**", "/");
@@ -71,16 +72,18 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		
+
 		http.authorizeRequests().antMatchers()
-		.hasAnyAuthority("ROLE_AGENT", "ROLE_ADMIN", "ROLE_CARE_COORDINATOR", "ROLE_EVENT_COORDINATOR", "ROLE_MANAGER").anyRequest().authenticated().and().formLogin().loginPage("/").usernameParameter("username").passwordParameter("password")
-		.loginProcessingUrl("/loginform.do").successHandler(new CustomAuthenticationSuccessHandler())
-		.failureUrl("/login?error").and()
-		.exceptionHandling().accessDeniedPage("/403").and()
+				.hasAnyAuthority("ROLE_AGENT", "ROLE_ADMIN", "ROLE_CARE_COORDINATOR", "ROLE_EVENT_COORDINATOR",
+						"ROLE_MANAGER")
+				.anyRequest().authenticated().and().formLogin().loginPage("/").usernameParameter("username")
+				.passwordParameter("password").loginProcessingUrl("/loginform.do")
+				.successHandler(new CustomAuthenticationSuccessHandler()).failureUrl("/login?error").and()
+				.exceptionHandling().accessDeniedPage("/403").and()
 
-		.csrf().disable()
+				.csrf().disable()
 
-		.sessionManagement().maximumSessions(1);
+				.sessionManagement().maximumSessions(1);
 	}
 
 	/**

@@ -1,12 +1,11 @@
 package com.pfchoice.springboot.service;
 
-
 import java.util.List;
 
 import com.pfchoice.springboot.model.FileUpload;
 
 public interface FileUploadService {
-	
+
 	FileUpload findById(Integer id);
 
 	FileUpload findByFileName(String fileName);

@@ -1,6 +1,5 @@
 package com.pfchoice.springboot.service;
 
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -8,7 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 import com.pfchoice.springboot.model.User;
 
 public interface UserService {
-	
+
 	User findById(Integer id);
 
 	User findByUsername(String name);
@@ -21,8 +20,8 @@ public interface UserService {
 
 	void deleteAllUsers();
 
-	Page<User> findAllUsersByPage(Specification<User> spec,Pageable pageable);
+	Page<User> findAllUsersByPage(Specification<User> spec, Pageable pageable);
 
 	boolean isUserExist(User user);
-	
+
 }

@@ -11,15 +11,12 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 @Service("leadStatusService")
 @Transactional
-public class LeadStatusServiceImpl implements LeadStatusService{
+public class LeadStatusServiceImpl implements LeadStatusService {
 
 	@Autowired
 	private LeadStatusRepository leadStatusRepository;
-
 
 	public LeadStatus findById(Short id) {
 		return leadStatusRepository.findById(id);
@@ -33,20 +30,20 @@ public class LeadStatusServiceImpl implements LeadStatusService{
 		leadStatusRepository.save(leadStatus);
 	}
 
-	public void updateLeadStatus(LeadStatus leadStatus){
+	public void updateLeadStatus(LeadStatus leadStatus) {
 		saveLeadStatus(leadStatus);
 	}
 
-	public void deleteLeadStatusById(Short id){
+	public void deleteLeadStatusById(Short id) {
 		leadStatusRepository.delete(id);
 	}
 
-	public void deleteAllLeadStatuses(){
+	public void deleteAllLeadStatuses() {
 		leadStatusRepository.deleteAll();
 	}
 
-	public Page<LeadStatus> findAllLeadStatusesByPage(Specification<LeadStatus> spec,Pageable pageable){
-		return leadStatusRepository.findAll(spec,  pageable);
+	public Page<LeadStatus> findAllLeadStatusesByPage(Specification<LeadStatus> spec, Pageable pageable) {
+		return leadStatusRepository.findAll(spec, pageable);
 	}
 
 	public boolean isLeadStatusExist(LeadStatus leadStatus) {

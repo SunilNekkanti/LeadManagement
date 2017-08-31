@@ -1,6 +1,5 @@
 package com.pfchoice.springboot.service;
 
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -8,7 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 import com.pfchoice.springboot.model.FacilityType;
 
 public interface FacilityTypeService {
-	
+
 	FacilityType findById(Integer id);
 
 	FacilityType findByDescription(String code);
@@ -21,7 +20,7 @@ public interface FacilityTypeService {
 
 	void deleteAllFacilityTypes();
 
-	Page<FacilityType> findAllFacilityTypesByPage(Specification<FacilityType> spec,Pageable pageable);
+	Page<FacilityType> findAllFacilityTypesByPage(Specification<FacilityType> spec, Pageable pageable);
 
 	boolean isFacilityTypeExist(FacilityType facilityType);
 }

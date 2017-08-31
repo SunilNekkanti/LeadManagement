@@ -19,23 +19,20 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 @Entity
 @Table(name = "lu_state")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class State extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	
 	@Id
 	// @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
 	@Column(name = "code", nullable = false)
 	private Integer code;
 
-	
 	@Column(name = "description")
 	private String description;
 
-	
 	@Column(name = "shot_name")
 	private String shortName;
 
@@ -115,7 +112,6 @@ public class State extends RecordDetails implements Serializable {
 	public void setZipCodes(final Set<ZipCode> zipCodes) {
 		this.zipCodes = zipCodes;
 	}
-
 
 	@Override
 	public boolean equals(Object object) {

@@ -56,8 +56,7 @@ public class EventController {
 	@RequestMapping(value = "/event/", method = RequestMethod.GET)
 	public ResponseEntity<Page<Event>> listAllEvents(@RequestParam(value = "page", required = false) Integer pageNo,
 			@RequestParam(value = "size", required = false) Integer pageSize,
-			@RequestParam(value = "search", required = false) String search,
-			@ModelAttribute("userId") Integer userId,
+			@RequestParam(value = "search", required = false) String search, @ModelAttribute("userId") Integer userId,
 			@ModelAttribute("roleName") String roleName) {
 
 		pageNo = (pageNo == null) ? 0 : pageNo;
@@ -94,8 +93,8 @@ public class EventController {
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/event/", method = RequestMethod.POST)
 	public ResponseEntity<?> createEvent(@RequestBody Event event, UriComponentsBuilder ucBuilder,
-			@ModelAttribute("userId") Integer userId,
-			@ModelAttribute("username") String username) throws MessagingException, IOException, InterruptedException {
+			@ModelAttribute("userId") Integer userId, @ModelAttribute("username") String username)
+			throws MessagingException, IOException, InterruptedException {
 		logger.info("Creating Event : {}", event);
 
 		if (eventService.isEventExists(event.getEventName())) {

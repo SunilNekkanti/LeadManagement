@@ -22,53 +22,43 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * @author Mohanasundharam
  */
 @Entity(name = "contract")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Contract extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
 	@Column(name = "contract_Id", nullable = false)
 	private Integer id;
 
-	
 	@Column(name = "contract_NBR")
 	private String contractNBR;
 
-	
 	@Column(name = "pcp_provider_nbr")
 	private String pcpPrvdrNBR;
 
-	
 	@Column(name = "PMPM")
 	private Double pmpm;
-	
-	
+
 	@Column(nullable = true, name = "avg_service_fund")
 	private Double avgServiceFund;
 
-	
 	@Column(name = "start_date")
 	private Date startDate;
 
-	
 	@Column(name = "end_date")
 	private Date endDate;
 
-	
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "ref_contract_id", referencedColumnName = "ref_contract_id")
 	private ReferenceContract referenceContract;
 
-	
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "file_upload_id", referencedColumnName = "file_upload_id")
 	private FilesUpload filesUpload;
 
-	
 	@Transient
 	private Integer insId;
 
@@ -145,7 +135,7 @@ public class Contract extends RecordDetails implements Serializable {
 	public void setPmpm(Double pmpm) {
 		this.pmpm = pmpm;
 	}
-	
+
 	/**
 	 * @return the avgServiceFund
 	 */
@@ -154,7 +144,8 @@ public class Contract extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param avgServiceFund the avgServiceFund to set
+	 * @param avgServiceFund
+	 *            the avgServiceFund to set
 	 */
 	public void setAvgServiceFund(Double avgServiceFund) {
 		this.avgServiceFund = avgServiceFund;

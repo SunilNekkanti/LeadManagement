@@ -13,11 +13,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 @Service("insuranceService")
 @Transactional
-public class InsuranceServiceImpl implements InsuranceService{
+public class InsuranceServiceImpl implements InsuranceService {
 
 	@Autowired
 	private InsuranceRepository insuranceRepository;
@@ -34,25 +32,26 @@ public class InsuranceServiceImpl implements InsuranceService{
 		insuranceRepository.save(insurance);
 	}
 
-	public void updateInsurance(Insurance insurance){
+	public void updateInsurance(Insurance insurance) {
 		saveInsurance(insurance);
 	}
 
-	public void deleteInsuranceById(Integer id){
+	public void deleteInsuranceById(Integer id) {
 		insuranceRepository.delete(id);
 	}
 
-	public void deleteAllInsurances(){
+	public void deleteAllInsurances() {
 		insuranceRepository.deleteAll();
 	}
 
-	public List<Insurance> findAllInsurances(){
-		return (List<Insurance>)  insuranceRepository.findAll();
+	public List<Insurance> findAllInsurances() {
+		return (List<Insurance>) insuranceRepository.findAll();
 	}
-	public Page<Insurance> findAllInsurancesByPage(Specification<Insurance> spec,Pageable pageable){
+
+	public Page<Insurance> findAllInsurancesByPage(Specification<Insurance> spec, Pageable pageable) {
 		return insuranceRepository.findAll(spec, pageable);
 	}
-	
+
 	public boolean isInsuranceExist(Insurance insurance) {
 		return findById(insurance.getId()) != null;
 	}

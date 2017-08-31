@@ -22,7 +22,7 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
 
 	@Autowired
 	UserService userService;
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -34,33 +34,33 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
 			Authentication authentication) throws IOException, ServletException {
-		List<String> leadHomePageRoles = Arrays.asList("ROLE_ADMIN", "ROLE_AGENT","ROLE_CARE_COORDINATOR");
-		
+		List<String> leadHomePageRoles = Arrays.asList("ROLE_ADMIN", "ROLE_AGENT", "ROLE_CARE_COORDINATOR");
+
 		HttpSession session = httpServletRequest.getSession();
 		String redirectUrl = null;
 		if (session != null) {
 			redirectUrl = (String) session.getAttribute("LAST_PAGE");
 		}
 		User authUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		
+
 		session.setAttribute("username", authUser.getUsername());
 		session.setMaxInactiveInterval(30 * 60);
 		// set our response to OK status
 		httpServletResponse.setStatus(HttpServletResponse.SC_OK);
 
-		
 		// since we have created our custom success handler, its up to us to
 		// where
 		// we will redirect the user after successfully login
 		if (redirectUrl != null) {
 			httpServletResponse.sendRedirect(redirectUrl);
 		} else {
-			if(authUser.getAuthorities().stream().filter(auth -> leadHomePageRoles.contains(auth.getAuthority())).findAny().isPresent()){
+			if (authUser.getAuthorities().stream().filter(auth -> leadHomePageRoles.contains(auth.getAuthority()))
+					.findAny().isPresent()) {
 				httpServletResponse.sendRedirect("home#/lead/");
-			}else{
+			} else {
 				httpServletResponse.sendRedirect("home#/event");
 			}
-			
+
 		}
 
 	}

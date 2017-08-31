@@ -11,36 +11,38 @@ import javax.persistence.Id;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
-
 /**
  *
  * @author sarath
  */
 @Entity(name = "role")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Role extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
 	@Column(name = "Id", nullable = false)
 	private Integer id;
 
-	
 	@Column(name = "role")
 	private String role;
 
- 	/*@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "user_roles", joinColumns = {
-			@JoinColumn(name = "role_id", referencedColumnName = "id",nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, updatable = false) })
-	private Set<User> users;
- */
+	/*
+	 * @JsonIgnore
+	 * 
+	 * @ManyToMany(fetch = FetchType.LAZY)
+	 * 
+	 * @JoinTable(name = "user_roles", joinColumns = {
+	 * 
+	 * @JoinColumn(name = "role_id", referencedColumnName = "id",nullable =
+	 * false, updatable = false) }, inverseJoinColumns = {
+	 * 
+	 * @JoinColumn(name = "user_id", referencedColumnName = "id",nullable =
+	 * false, updatable = false) }) private Set<User> users;
+	 */
 	/**
 	 * 
 	 */
@@ -88,17 +90,16 @@ public class Role extends RecordDetails implements Serializable {
 	/**
 	 * @return the user
 	 */
- /*	public Set<User> getUsers() {
-		return users;
-	}
- */
+	/*
+	 * public Set<User> getUsers() { return users; }
+	 */
 	/**
 	 * @param user
 	 *            the user to set
 	 */
- /*	public void setUsers(Set<User> users) {
-		this.users = users;
-	} */
+	/*
+	 * public void setUsers(Set<User> users) { this.users = users; }
+	 */
 
 	@Override
 	public int hashCode() {

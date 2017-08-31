@@ -10,11 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 @Service("contactService")
 @Transactional
-public class ContactServiceImpl implements ContactService{
+public class ContactServiceImpl implements ContactService {
 
 	@Autowired
 	private ContactRepository userRepository;
@@ -27,19 +25,19 @@ public class ContactServiceImpl implements ContactService{
 		userRepository.save(contact);
 	}
 
-	public void updateContact(Contact contact){
+	public void updateContact(Contact contact) {
 		saveContact(contact);
 	}
 
-	public void deleteContactById(Integer id){
+	public void deleteContactById(Integer id) {
 		userRepository.delete(id);
 	}
 
-	public void deleteAllContacts(){
+	public void deleteAllContacts() {
 		userRepository.deleteAll();
 	}
 
-	public List<Contact> findAllContacts(){
+	public List<Contact> findAllContacts() {
 		return userRepository.findAll();
 	}
 

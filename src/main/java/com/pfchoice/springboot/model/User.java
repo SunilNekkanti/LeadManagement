@@ -1,6 +1,5 @@
 package com.pfchoice.springboot.model;
 
-
 import java.io.Serializable;
 import java.util.Set;
 
@@ -23,19 +22,17 @@ import org.springframework.context.annotation.ScopedProxyMode;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
 /**
  *
  * @author sarath
  */
 @Entity(name = "user")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class User extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
@@ -44,39 +41,36 @@ public class User extends RecordDetails implements Serializable {
 
 	@Column(name = "name")
 	private String name;
-	
+
 	@Column(name = "username")
 	private String username;
 
-	
 	@Column(name = "password")
 	private String password;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "language_id", referencedColumnName = "code")
 	private Language language;
 
-	
-	@ManyToMany( cascade= {CascadeType.MERGE,CascadeType.REMOVE,CascadeType.DETACH}  ,  fetch = FetchType.LAZY)
+	@ManyToMany(cascade = { CascadeType.MERGE, CascadeType.REMOVE, CascadeType.DETACH }, fetch = FetchType.LAZY)
 	@JoinTable(name = "user_insurances", joinColumns = {
-			@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "insurance_id", referencedColumnName = "insurance_id",nullable = false, updatable = false) })
+			@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "insurance_id", referencedColumnName = "insurance_id", nullable = false, updatable = false) })
 	public Set<Insurance> insurances;
-	
-	@OneToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY )
+
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "user_contacts", joinColumns = {
-			@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id",nullable = false, unique = true) })
+			@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id", nullable = false, unique = true) })
 	private Contact contact;
-	
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "role_id", referencedColumnName = "id")
 	private Role role;
-	
+
 	@Column(name = "license_no")
 	private String licenseNo;
-	
+
 	/**
 	 * 
 	 */
@@ -114,7 +108,8 @@ public class User extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param name the name to set
+	 * @param name
+	 *            the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -150,7 +145,6 @@ public class User extends RecordDetails implements Serializable {
 		this.password = password;
 	}
 
-
 	/**
 	 * @return the licenseNo
 	 */
@@ -159,7 +153,8 @@ public class User extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param licenseNo the licenseNo to set
+	 * @param licenseNo
+	 *            the licenseNo to set
 	 */
 	public void setLicenseNo(String licenseNo) {
 		this.licenseNo = licenseNo;
@@ -173,7 +168,8 @@ public class User extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param language the language to set
+	 * @param language
+	 *            the language to set
 	 */
 	public void setLanguage(Language language) {
 		this.language = language;
@@ -187,7 +183,8 @@ public class User extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param role the role to set
+	 * @param role
+	 *            the role to set
 	 */
 	public void setRole(Role role) {
 		this.role = role;
@@ -201,7 +198,8 @@ public class User extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param insurances the insurances to set
+	 * @param insurances
+	 *            the insurances to set
 	 */
 	public void setInsurances(Set<Insurance> insurances) {
 		this.insurances = insurances;
@@ -215,7 +213,8 @@ public class User extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param contact the contact to set
+	 * @param contact
+	 *            the contact to set
 	 */
 	public void setContact(Contact contact) {
 		this.contact = contact;
@@ -242,7 +241,7 @@ public class User extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.User[ id=" + id + "role="+ role.getRole()+"  ]";
+		return "com.pfchoice.core.entity.User[ id=" + id + "role=" + role.getRole() + "  ]";
 	}
 
 }

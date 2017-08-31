@@ -7,10 +7,10 @@ import org.springframework.stereotype.Repository;
 import com.pfchoice.springboot.model.Insurance;
 
 @Repository
-public interface InsuranceRepository extends PagingAndSortingRepository<Insurance, Integer>, JpaSpecificationExecutor<Insurance>  {
+public interface InsuranceRepository
+		extends PagingAndSortingRepository<Insurance, Integer>, JpaSpecificationExecutor<Insurance> {
 
-    public Insurance findById(Integer id );
-	
+	public Insurance findById(Integer id);
+
 	public Insurance findByName(String name);
 }
-

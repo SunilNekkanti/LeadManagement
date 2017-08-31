@@ -28,12 +28,13 @@ public class ContactController {
 	public static final Logger logger = LoggerFactory.getLogger(ContactController.class);
 
 	@Autowired
-	ContactService contactService; //Service which will do all data retrieval/manipulation work
+	ContactService contactService; // Service which will do all data
+									// retrieval/manipulation work
 
-	// -------------------Retrieve All Contacts---------------------------------------------
+	// -------------------Retrieve All
+	// Contacts---------------------------------------------
 
-	
-	@Secured({  "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR" })
+	@Secured({ "ROLE_ADMIN", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR" })
 	@RequestMapping(value = "/contact/", method = RequestMethod.GET)
 	public ResponseEntity<List<Contact>> listAllContacts() {
 		List<Contact> contacts = contactService.findAllContacts();
@@ -44,30 +45,33 @@ public class ContactController {
 		return new ResponseEntity<List<Contact>>(contacts, HttpStatus.OK);
 	}
 
-	// -------------------Retrieve Single Contact------------------------------------------
-	@Secured({  "ROLE_ADMIN" })
+	// -------------------Retrieve Single
+	// Contact------------------------------------------
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/contact/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getContact(@PathVariable("id") int id) {
 		logger.info("Fetching Contact with id {}", id);
 		Contact contact = contactService.findById(id);
 		if (contact == null) {
 			logger.error("Contact with id {} not found.", id);
-			return new ResponseEntity(new CustomErrorType("Contact with id " + id 
-					+ " not found"), HttpStatus.NOT_FOUND);
+			return new ResponseEntity(new CustomErrorType("Contact with id " + id + " not found"),
+					HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Contact>(contact, HttpStatus.OK);
 	}
 
-	// -------------------Create a Contact-------------------------------------------
-	@Secured({  "ROLE_ADMIN" })
+	// -------------------Create a
+	// Contact-------------------------------------------
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/contact/", method = RequestMethod.POST)
 	public ResponseEntity<?> createContact(@RequestBody Contact contact, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating Contact : {}", contact);
 
 		if (contactService.isContactExist(contact)) {
 			logger.error("Unable to create. A Contact with name {} already exist", contact.getId());
-			return new ResponseEntity(new CustomErrorType("Unable to create. A Contact with name " + 
-			contact.getId() + " already exist."),HttpStatus.CONFLICT);
+			return new ResponseEntity(
+					new CustomErrorType("Unable to create. A Contact with name " + contact.getId() + " already exist."),
+					HttpStatus.CONFLICT);
 		}
 		contactService.saveContact(contact);
 
@@ -76,8 +80,9 @@ public class ContactController {
 		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
 	}
 
-	// ------------------- Update a Contact ------------------------------------------------
-	@Secured({  "ROLE_ADMIN" })
+	// ------------------- Update a Contact
+	// ------------------------------------------------
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/contact/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateContact(@PathVariable("id") int id, @RequestBody Contact contact) {
 		logger.info("Updating Contact with id {}", id);
@@ -103,8 +108,9 @@ public class ContactController {
 		return new ResponseEntity<Contact>(currentContact, HttpStatus.OK);
 	}
 
-	// ------------------- Delete a Contact-----------------------------------------
-	@Secured({  "ROLE_ADMIN" })
+	// ------------------- Delete a
+	// Contact-----------------------------------------
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/contact/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteContact(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting Contact with id {}", id);
@@ -120,7 +126,7 @@ public class ContactController {
 	}
 
 	// ------------------- Delete All Contacts-----------------------------
-	@Secured({  "ROLE_ADMIN" })
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/contact/", method = RequestMethod.DELETE)
 	public ResponseEntity<Contact> deleteAllContacts() {
 		logger.info("Deleting All Contacts");

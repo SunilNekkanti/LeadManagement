@@ -21,12 +21,11 @@ import com.pfchoice.springboot.model.Insurance;
  * @author Mohanasundharam
  */
 @Entity(name = "reference_contract")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class ReferenceContract extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)

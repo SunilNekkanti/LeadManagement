@@ -11,11 +11,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 @Service("eventAssignmentService")
 @Transactional
-public class EventAssignmentServiceImpl implements EventAssignmentService{
+public class EventAssignmentServiceImpl implements EventAssignmentService {
 
 	@Autowired
 	private EventAssignmentRepository eventAssignmentRepository;
@@ -28,21 +26,20 @@ public class EventAssignmentServiceImpl implements EventAssignmentService{
 		eventAssignmentRepository.save(eventAssignment);
 	}
 
-	public void updateEventAssignment(EventAssignment eventAssignment){
+	public void updateEventAssignment(EventAssignment eventAssignment) {
 		saveEventAssignment(eventAssignment);
 	}
 
-	public void deleteEventAssignmentById(Integer id){
+	public void deleteEventAssignmentById(Integer id) {
 		eventAssignmentRepository.delete(id);
 	}
 
-	public void deleteAllEventAssignments(){
+	public void deleteAllEventAssignments() {
 		eventAssignmentRepository.deleteAll();
 	}
 
-	public Page<EventAssignment> findAllEventAssignmentsByPage(Specification<EventAssignment> spec,Pageable pageable)  {
-		return eventAssignmentRepository.findAll(spec,pageable);
+	public Page<EventAssignment> findAllEventAssignmentsByPage(Specification<EventAssignment> spec, Pageable pageable) {
+		return eventAssignmentRepository.findAll(spec, pageable);
 	}
-	
 
 }

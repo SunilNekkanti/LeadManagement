@@ -10,11 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 @Service("planTypeService")
 @Transactional
-public class PlanTypeServiceImpl implements PlanTypeService{
+public class PlanTypeServiceImpl implements PlanTypeService {
 
 	@Autowired
 	private PlanTypeRepository planTypeRepository;
@@ -22,7 +20,6 @@ public class PlanTypeServiceImpl implements PlanTypeService{
 	public PlanType findById(Integer id) {
 		return planTypeRepository.findOne(id);
 	}
-
 
 	public PlanType findByDescription(String name) {
 		return planTypeRepository.findByDescription(name);
@@ -32,19 +29,19 @@ public class PlanTypeServiceImpl implements PlanTypeService{
 		planTypeRepository.save(planType);
 	}
 
-	public void updatePlanType(PlanType planType){
+	public void updatePlanType(PlanType planType) {
 		savePlanType(planType);
 	}
 
-	public void deletePlanTypeById(Integer id){
+	public void deletePlanTypeById(Integer id) {
 		planTypeRepository.delete(id);
 	}
 
-	public void deleteAllPlanTypes(){
+	public void deleteAllPlanTypes() {
 		planTypeRepository.deleteAll();
 	}
 
-	public List<PlanType> findAllPlanTypes(){
+	public List<PlanType> findAllPlanTypes() {
 		return planTypeRepository.findAll();
 	}
 

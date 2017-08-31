@@ -22,51 +22,47 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pfchoice.springboot.util.JsonDateAndTimeDeserializer;
 import com.pfchoice.springboot.util.JsonDateAndTimeSerializer;
 
-
-
 /**
  *
  * @author sarath
  */
 @Entity(name = "agent_lead_appointments")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class AgentLeadAppointment extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
 	@Column(name = "agnt_lead_appt_id", nullable = false)
 	private Integer id;
 
-	
 	@Column(name = "notes", length = 65535, columnDefinition = "TEXT")
 	private String notes;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
- 	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	private User user;
- 	
- 	@JsonIgnore
+
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
- 	@JoinColumn(name = "lead_mbr_id", referencedColumnName = "lead_mbr_id")
+	@JoinColumn(name = "lead_mbr_id", referencedColumnName = "lead_mbr_id")
 	private LeadMembership lead;
- 
- 	@JsonSerialize(using=JsonDateAndTimeSerializer.class)
- 	@JsonDeserialize(using=JsonDateAndTimeDeserializer.class)
- 	@Column(name = "appointment_time", nullable= true)
-	private Date  appointmentTime;
- 	
- 	@ManyToOne(fetch = FetchType.LAZY)
- 	@JoinColumn(name = "prvdr_id", referencedColumnName = "prvdr_id")
-	private Provider prvdr;
- 	
+
+	@JsonSerialize(using = JsonDateAndTimeSerializer.class)
+	@JsonDeserialize(using = JsonDateAndTimeDeserializer.class)
+	@Column(name = "appointment_time", nullable = true)
+	private Date appointmentTime;
+
 	@ManyToOne(fetch = FetchType.LAZY)
- 	@JoinColumn(name = "plan_type_id", referencedColumnName = "plan_type_id")
+	@JoinColumn(name = "prvdr_id", referencedColumnName = "prvdr_id")
+	private Provider prvdr;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "plan_type_id", referencedColumnName = "plan_type_id")
 	private PlanType planType;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ins_id", referencedColumnName = "insurance_id")
 	private Insurance insurance;
@@ -74,15 +70,15 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 	@Column(name = "effective_from")
 	@Temporal(TemporalType.DATE)
 	private Date effectiveFrom;
-	
+
 	@Column(name = "transportation", insertable = false)
 	private Character transportation = new Character('N');
-	
-	@JsonSerialize(using=JsonDateAndTimeSerializer.class)
- 	@JsonDeserialize(using=JsonDateAndTimeDeserializer.class)
- 	@Column(name = "dr_appointment_time")
-	private Date  drAppointmentTime;
-	
+
+	@JsonSerialize(using = JsonDateAndTimeSerializer.class)
+	@JsonDeserialize(using = JsonDateAndTimeDeserializer.class)
+	@Column(name = "dr_appointment_time")
+	private Date drAppointmentTime;
+
 	/**
 	 * 
 	 */
@@ -120,7 +116,8 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 	}
 
 	/**
-	 * @param notes the notes to set
+	 * @param notes
+	 *            the notes to set
 	 */
 	public void setNotes(String notes) {
 		this.notes = notes;
@@ -134,7 +131,8 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 	}
 
 	/**
-	 * @param user the user to set
+	 * @param user
+	 *            the user to set
 	 */
 	public void setUser(User user) {
 		this.user = user;
@@ -148,7 +146,8 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 	}
 
 	/**
-	 * @param lead the lead to set
+	 * @param lead
+	 *            the lead to set
 	 */
 	public void setLead(LeadMembership lead) {
 		this.lead = lead;
@@ -162,7 +161,8 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 	}
 
 	/**
-	 * @param appointmentTime the appointmentTime to set
+	 * @param appointmentTime
+	 *            the appointmentTime to set
 	 */
 	public void setAppointmentTime(Date appointmentTime) {
 		this.appointmentTime = appointmentTime;
@@ -176,7 +176,8 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 	}
 
 	/**
-	 * @param prvdr the prvdr to set
+	 * @param prvdr
+	 *            the prvdr to set
 	 */
 	public void setPrvdr(Provider prvdr) {
 		this.prvdr = prvdr;
@@ -190,7 +191,8 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 	}
 
 	/**
-	 * @param planType the planType to set
+	 * @param planType
+	 *            the planType to set
 	 */
 	public void setPlanType(PlanType planType) {
 		this.planType = planType;
@@ -204,7 +206,8 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 	}
 
 	/**
-	 * @param insurance the insurance to set
+	 * @param insurance
+	 *            the insurance to set
 	 */
 	public void setInsurance(Insurance insurance) {
 		this.insurance = insurance;
@@ -218,7 +221,8 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 	}
 
 	/**
-	 * @param effectiveFrom the effectiveFrom to set
+	 * @param effectiveFrom
+	 *            the effectiveFrom to set
 	 */
 	public void setEffectiveFrom(Date effectiveFrom) {
 		this.effectiveFrom = effectiveFrom;
@@ -232,7 +236,8 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 	}
 
 	/**
-	 * @param transportation the transportation to set
+	 * @param transportation
+	 *            the transportation to set
 	 */
 	public void setTransportation(Character transportation) {
 		this.transportation = transportation;
@@ -246,7 +251,8 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 	}
 
 	/**
-	 * @param drAppointmentTime the drAppointmentTime to set
+	 * @param drAppointmentTime
+	 *            the drAppointmentTime to set
 	 */
 	public void setDrAppointmentTime(Date drAppointmentTime) {
 		this.drAppointmentTime = drAppointmentTime;
@@ -273,7 +279,7 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.AgentLeadAppointment[ id=" + id + " user_id = "+user.getId()+" ]";
+		return "com.pfchoice.core.entity.AgentLeadAppointment[ id=" + id + " user_id = " + user.getId() + " ]";
 	}
 
 }

@@ -23,23 +23,21 @@ import org.hibernate.annotations.NotFoundAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
 /**
  *
  * @author Mohanasundharam
  */
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Table(name = "provider")
 public class Provider extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
-	@Column(name = "prvdr_Id",  nullable = false)
+	@Column(name = "prvdr_Id", nullable = false)
 	private Integer id;
 
 	@Column(name = "code")
@@ -48,19 +46,19 @@ public class Provider extends RecordDetails implements Serializable {
 	@Column(name = "name")
 	private String name;
 
-	@ManyToMany( cascade={ CascadeType.MERGE  ,   CascadeType.REMOVE },fetch = FetchType.LAZY)
+	@ManyToMany(cascade = { CascadeType.MERGE, CascadeType.REMOVE }, fetch = FetchType.LAZY)
 	@JoinTable(name = "provider_languages", joinColumns = {
-			@JoinColumn(name = "prvdr_id", referencedColumnName = "prvdr_id",nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "language_id", referencedColumnName = "code",nullable = false, updatable = false) })
+			@JoinColumn(name = "prvdr_id", referencedColumnName = "prvdr_id", nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "language_id", referencedColumnName = "code", nullable = false, updatable = false) })
 	public Set<Language> languages;
-	
-	@NotFound(action=NotFoundAction.IGNORE) 
-	@OneToOne(cascade=CascadeType.ALL )
+
+	@NotFound(action = NotFoundAction.IGNORE)
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinTable(name = "provider_contacts", joinColumns = {
-			@JoinColumn(name = "prvdr_id", referencedColumnName = "prvdr_id",nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id",nullable = false, updatable = false, unique = true) })
+			@JoinColumn(name = "prvdr_id", referencedColumnName = "prvdr_id", nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id", nullable = false, updatable = false, unique = true) })
 	private Contact contact;
-	
+
 	/**
 	 * 
 	 */
@@ -129,7 +127,8 @@ public class Provider extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param languages the languages to set
+	 * @param languages
+	 *            the languages to set
 	 */
 	public void setLanguages(Set<Language> languages) {
 		this.languages = languages;
@@ -143,12 +142,12 @@ public class Provider extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param contact the contact to set
+	 * @param contact
+	 *            the contact to set
 	 */
 	public void setContact(Contact contact) {
 		this.contact = contact;
 	}
-
 
 	@Override
 	public int hashCode() {
@@ -156,8 +155,7 @@ public class Provider extends RecordDetails implements Serializable {
 		hash += (id != null ? id.hashCode() : 0);
 		return hash;
 	}
-	
-	
+
 	@Override
 	public boolean equals(Object object) {
 		if (!(object instanceof Provider)) {
@@ -174,30 +172,32 @@ public class Provider extends RecordDetails implements Serializable {
 	public String toString() {
 		StringBuilder result = new StringBuilder();
 
-		  result.append( this.getClass().getName() );
-		  result.append( " Object {" );
-		  result.append("\n");
+		result.append(this.getClass().getName());
+		result.append(" Object {");
+		result.append("\n");
 
-		  //determine fields declared in this class only (no fields of superclass)
-		  Field[] fields = this.getClass().getDeclaredFields();
+		// determine fields declared in this class only (no fields of
+		// superclass)
+		Field[] fields = this.getClass().getDeclaredFields();
 
-		  //print field names paired with their values
-		  for ( Field field : fields  ) {
-			  if("serialVersionUID".equals(field.getName()))continue;
-		    result.append("  ");
-		    try {
-		      result.append( field.getName() );
-		      result.append(": ");
-		      //requires access to private field:
-		      result.append( field.get(this) );
-		    } catch ( IllegalAccessException ex ) {
-		      System.out.println(ex);
-		    }
-		    result.append("\n");
-		  }
-		  result.append("}");
+		// print field names paired with their values
+		for (Field field : fields) {
+			if ("serialVersionUID".equals(field.getName()))
+				continue;
+			result.append("  ");
+			try {
+				result.append(field.getName());
+				result.append(": ");
+				// requires access to private field:
+				result.append(field.get(this));
+			} catch (IllegalAccessException ex) {
+				System.out.println(ex);
+			}
+			result.append("\n");
+		}
+		result.append("}");
 
-		  return result.toString();
+		return result.toString();
 	}
 
 }

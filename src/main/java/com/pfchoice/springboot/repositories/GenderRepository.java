@@ -9,7 +9,6 @@ import com.pfchoice.springboot.model.Gender;
 public interface GenderRepository extends JpaRepository<Gender, Byte> {
 
 	public Gender findByCode(char code);
-	
+
 	public Gender findByDescription(String code);
 }
-

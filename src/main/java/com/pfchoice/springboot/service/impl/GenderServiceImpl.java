@@ -10,11 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 @Service("genderService")
 @Transactional
-public class GenderServiceImpl implements GenderService{
+public class GenderServiceImpl implements GenderService {
 
 	@Autowired
 	private GenderRepository genderRepository;
@@ -35,19 +33,19 @@ public class GenderServiceImpl implements GenderService{
 		genderRepository.save(gender);
 	}
 
-	public void updateGender(Gender gender){
+	public void updateGender(Gender gender) {
 		saveGender(gender);
 	}
 
-	public void deleteGenderById(Byte id){
+	public void deleteGenderById(Byte id) {
 		genderRepository.delete(id);
 	}
 
-	public void deleteAllGenders(){
+	public void deleteAllGenders() {
 		genderRepository.deleteAll();
 	}
 
-	public List<Gender> findAllGenders(){
+	public List<Gender> findAllGenders() {
 		return genderRepository.findAll();
 	}
 

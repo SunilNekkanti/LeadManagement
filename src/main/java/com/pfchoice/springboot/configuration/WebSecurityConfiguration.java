@@ -16,30 +16,29 @@ import com.pfchoice.springboot.repositories.UserRepository;
 @Configuration
 class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 
-  @Autowired
-  UserRepository userRepository;
+	@Autowired
+	UserRepository userRepository;
 
-  @Override
-  public void init(AuthenticationManagerBuilder auth) throws Exception {
-    auth.userDetailsService(userDetailsService());
-  }
+	@Override
+	public void init(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDetailsService());
+	}
 
-  @Bean
-  UserDetailsService userDetailsService() {
-    return new UserDetailsService() {
+	@Bean
+	UserDetailsService userDetailsService() {
+		return new UserDetailsService() {
 
-      @Override
-      public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    	com.pfchoice.springboot.model.User user = userRepository.findByUsername(username);
-        if(user != null) {
-        return new User(user.getUsername(), user.getPassword(), true, true, true, true,
-                AuthorityUtils.createAuthorityList("ROLE_AGENT"));
-        } else {
-          throw new UsernameNotFoundException("could not find the user '"
-                  + username + "'");
-        }
-      }
-      
-    };
-  }
+			@Override
+			public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+				com.pfchoice.springboot.model.User user = userRepository.findByUsername(username);
+				if (user != null) {
+					return new User(user.getUsername(), user.getPassword(), true, true, true, true,
+							AuthorityUtils.createAuthorityList("ROLE_AGENT"));
+				} else {
+					throw new UsernameNotFoundException("could not find the user '" + username + "'");
+				}
+			}
+
+		};
+	}
 }

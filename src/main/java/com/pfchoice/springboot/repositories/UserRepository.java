@@ -9,7 +9,6 @@ import com.pfchoice.springboot.model.User;
 @Repository
 public interface UserRepository extends PagingAndSortingRepository<User, Integer>, JpaSpecificationExecutor<User> {
 
-    User findByUsername(String name);
+	User findByUsername(String name);
 
 }
-

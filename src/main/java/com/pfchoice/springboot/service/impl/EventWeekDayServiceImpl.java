@@ -10,11 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 @Service("eventWeekDayService")
 @Transactional
-public class EventWeekDayServiceImpl implements EventWeekDayService{
+public class EventWeekDayServiceImpl implements EventWeekDayService {
 
 	@Autowired
 	private EventWeekDayRepository eventWeekDayRepository;
@@ -30,24 +28,24 @@ public class EventWeekDayServiceImpl implements EventWeekDayService{
 	public EventWeekDay findByShortName(String shortName) {
 		return eventWeekDayRepository.findByDescription(shortName);
 	}
-	
+
 	public void saveEventWeekDay(EventWeekDay eventWeekDay) {
 		eventWeekDayRepository.save(eventWeekDay);
 	}
 
-	public void updateEventWeekDay(EventWeekDay eventWeekDay){
+	public void updateEventWeekDay(EventWeekDay eventWeekDay) {
 		saveEventWeekDay(eventWeekDay);
 	}
 
-	public void deleteEventWeekDayById(Integer id){
+	public void deleteEventWeekDayById(Integer id) {
 		eventWeekDayRepository.delete(id);
 	}
 
-	public void deleteAllEventWeekDays(){
+	public void deleteAllEventWeekDays() {
 		eventWeekDayRepository.deleteAll();
 	}
 
-	public List<EventWeekDay> findAllEventWeekDays(){
+	public List<EventWeekDay> findAllEventWeekDays() {
 		return eventWeekDayRepository.findAll();
 	}
 

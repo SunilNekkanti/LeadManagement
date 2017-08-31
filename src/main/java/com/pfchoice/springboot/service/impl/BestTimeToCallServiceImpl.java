@@ -10,11 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 @Service("bestTimeToCallService")
 @Transactional
-public class BestTimeToCallServiceImpl implements BestTimeToCallService{
+public class BestTimeToCallServiceImpl implements BestTimeToCallService {
 
 	@Autowired
 	private BestTimeToCallRepository bestTimeToCallRepository;
@@ -27,16 +25,15 @@ public class BestTimeToCallServiceImpl implements BestTimeToCallService{
 		return bestTimeToCallRepository.findByDescription(name);
 	}
 
-
-	public void deleteBestTimeToCallById(Short id){
+	public void deleteBestTimeToCallById(Short id) {
 		bestTimeToCallRepository.delete(id);
 	}
 
-	public void deleteAllBestTimeToCalls(){
+	public void deleteAllBestTimeToCalls() {
 		bestTimeToCallRepository.deleteAll();
 	}
 
-	public List<BestTimeToCall> findAllBestTimeToCalls(){
+	public List<BestTimeToCall> findAllBestTimeToCalls() {
 		return bestTimeToCallRepository.findAll();
 	}
 

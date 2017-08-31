@@ -23,6 +23,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -35,11 +36,11 @@ import com.pfchoice.springboot.util.JsonDateAndTimeSerializer;
  */
 @Entity
 @Table(name = "event")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Event extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	   
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
@@ -49,39 +50,39 @@ public class Event extends RecordDetails implements Serializable {
 	@Column(name = "event_name")
 	private String eventName;
 
-	@JsonSerialize(using=JsonDateAndTimeSerializer.class)
- 	@JsonDeserialize(using=JsonDateAndTimeDeserializer.class)
-	@Column(name = "event_date_starttime", nullable= true)
-	private Date  eventDateStartTime;
-	
-	@JsonSerialize(using=JsonDateAndTimeSerializer.class)
- 	@JsonDeserialize(using=JsonDateAndTimeDeserializer.class)
-	@Column(name = "event_date_endtime", nullable= true)
-	private Date  eventDateEndTime;
-	
+	@JsonSerialize(using = JsonDateAndTimeSerializer.class)
+	@JsonDeserialize(using = JsonDateAndTimeDeserializer.class)
+	@Column(name = "event_date_starttime", nullable = true)
+	private Date eventDateStartTime;
+
+	@JsonSerialize(using = JsonDateAndTimeSerializer.class)
+	@JsonDeserialize(using = JsonDateAndTimeDeserializer.class)
+	@Column(name = "event_date_endtime", nullable = true)
+	private Date eventDateEndTime;
+
 	@ManyToOne
 	@JoinColumn(name = "facility_type_id", referencedColumnName = "code")
 	private FacilityType facilityType;
-	
+
 	@Column(name = "notes", length = 65535, columnDefinition = "TEXT")
 	private String notes;
-	
-	@Fetch(FetchMode.SELECT) //remove this on data cleanup
-	@OneToOne(cascade=CascadeType.ALL )
+
+	@Fetch(FetchMode.SELECT) // remove this on data cleanup
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinTable(name = "event_contacts", joinColumns = {
-			@JoinColumn(name = "event_id", referencedColumnName = "event_id",nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id",nullable = false, updatable = false, unique = true) })
+			@JoinColumn(name = "event_id", referencedColumnName = "event_id", nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id", nullable = false, updatable = false, unique = true) })
 	private Contact contact;
-	
-	@ManyToMany( cascade= {CascadeType.MERGE,CascadeType.REMOVE} ,fetch = FetchType.LAZY)
+
+	@ManyToMany(cascade = { CascadeType.MERGE, CascadeType.REMOVE }, fetch = FetchType.LAZY)
 	@JoinTable(name = "event_files_upload", joinColumns = {
-			@JoinColumn(name = "event_id", referencedColumnName = "event_id",nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "files_upload_id", referencedColumnName = "file_upload_id",nullable = false, updatable = false) })
+			@JoinColumn(name = "event_id", referencedColumnName = "event_id", nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "files_upload_id", referencedColumnName = "file_upload_id", nullable = false, updatable = false) })
 	private Set<FileUpload> attachments;
-	
+
+	@JsonIgnore
 	@OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
 	private Set<EventAssignment> eventAssignments;
-	
 
 	/**
 	 * 
@@ -98,8 +99,6 @@ public class Event extends RecordDetails implements Serializable {
 		this.id = id;
 	}
 
-	
-	
 	/**
 	 * @return the id
 	 */
@@ -108,7 +107,8 @@ public class Event extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	public void setId(Integer id) {
 		this.id = id;
@@ -122,12 +122,13 @@ public class Event extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param lastName the lastName to set
+	 * @param lastName
+	 *            the lastName to set
 	 */
 	public void setEventName(String eventName) {
 		this.eventName = eventName;
 	}
-	
+
 	/**
 	 * @return the contact
 	 */
@@ -136,7 +137,8 @@ public class Event extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param contact the contact to set
+	 * @param contact
+	 *            the contact to set
 	 */
 	public void setContact(Contact contact) {
 		this.contact = contact;
@@ -150,7 +152,8 @@ public class Event extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param facilityType the facilityType to set
+	 * @param facilityType
+	 *            the facilityType to set
 	 */
 	public void setFacilityType(FacilityType facilityType) {
 		this.facilityType = facilityType;
@@ -164,7 +167,8 @@ public class Event extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param notes the notes to set
+	 * @param notes
+	 *            the notes to set
 	 */
 	public void setNotes(String notes) {
 		this.notes = notes;
@@ -178,7 +182,8 @@ public class Event extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param eventDateStartTime the eventDateStartTime to set
+	 * @param eventDateStartTime
+	 *            the eventDateStartTime to set
 	 */
 	public void setEventDateStartTime(Date eventDateStartTime) {
 		this.eventDateStartTime = eventDateStartTime;
@@ -192,12 +197,12 @@ public class Event extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param eventDateEndTime the eventDateEndTime to set
+	 * @param eventDateEndTime
+	 *            the eventDateEndTime to set
 	 */
 	public void setEventDateEndTime(Date eventDateEndTime) {
 		this.eventDateEndTime = eventDateEndTime;
 	}
-
 
 	/**
 	 * @return the attachments
@@ -207,7 +212,8 @@ public class Event extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param attachments the attachments to set
+	 * @param attachments
+	 *            the attachments to set
 	 */
 	public void setAttachments(Set<FileUpload> attachments) {
 		this.attachments = attachments;
@@ -221,7 +227,8 @@ public class Event extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param eventAssignments the eventAssignments to set
+	 * @param eventAssignments
+	 *            the eventAssignments to set
 	 */
 	public void setEventAssignments(Set<EventAssignment> eventAssignments) {
 		this.eventAssignments = eventAssignments;
@@ -239,14 +246,12 @@ public class Event extends RecordDetails implements Serializable {
 		return true;
 	}
 
-
 	@Override
 	public int hashCode() {
 		int hash = 0;
 		hash += (id != null ? id.hashCode() : 0);
 		return hash;
 	}
-
 
 	@Override
 	public String toString() {

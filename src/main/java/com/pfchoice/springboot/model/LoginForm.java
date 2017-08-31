@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoginForm {
 
-	
 	private String username;
 	private String password;
 	private String roleName;
@@ -54,7 +53,8 @@ public class LoginForm {
 	}
 
 	/**
-	 * @param roleName the roleName to set
+	 * @param roleName
+	 *            the roleName to set
 	 */
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
@@ -68,7 +68,8 @@ public class LoginForm {
 	}
 
 	/**
-	 * @param roleId the roleId to set
+	 * @param roleId
+	 *            the roleId to set
 	 */
 	public void setRoleId(Integer roleId) {
 		this.roleId = roleId;
@@ -82,7 +83,8 @@ public class LoginForm {
 	}
 
 	/**
-	 * @param userId the userId to set
+	 * @param userId
+	 *            the userId to set
 	 */
 	public void setUserId(Integer userId) {
 		this.userId = userId;

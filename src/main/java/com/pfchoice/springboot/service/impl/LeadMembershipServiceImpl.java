@@ -13,11 +13,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 @Service("leadMembershipService")
 @Transactional
-public class LeadMembershipServiceImpl implements LeadMembershipService{
+public class LeadMembershipServiceImpl implements LeadMembershipService {
 
 	@Autowired
 	private LeadMembershipRepository leadMembershipRepository;
@@ -30,24 +28,25 @@ public class LeadMembershipServiceImpl implements LeadMembershipService{
 		leadMembershipRepository.save(leadMembership);
 	}
 
-	public void updateLeadMembership(LeadMembership leadMembership){
+	public void updateLeadMembership(LeadMembership leadMembership) {
 		saveLeadMembership(leadMembership);
 	}
 
-	public void deleteLeadMembershipById(Integer id){
+	public void deleteLeadMembershipById(Integer id) {
 		leadMembershipRepository.delete(id);
 	}
 
-	public void deleteAllLeadMemberships(){
+	public void deleteAllLeadMemberships() {
 		leadMembershipRepository.deleteAll();
 	}
 
-	public Page<LeadMembership> findAllLeadMembershipsByPage(Specification<LeadMembership>spec, Pageable pageable){
+	public Page<LeadMembership> findAllLeadMembershipsByPage(Specification<LeadMembership> spec, Pageable pageable) {
 		return leadMembershipRepository.findAll(spec, pageable);
 	}
-	
+
 	public boolean isLeadMembershipExists(String leadFirstName, String leadLastName, Date dob) {
-		return !leadMembershipRepository.findLeadMembershipByLastNameFirstNameDob( leadFirstName, leadLastName, dob ).isEmpty() ;
+		return !leadMembershipRepository.findLeadMembershipByLastNameFirstNameDob(leadFirstName, leadLastName, dob)
+				.isEmpty();
 	}
 
 }

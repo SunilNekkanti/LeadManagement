@@ -31,7 +31,7 @@ public class EventAssignmentSpecifications implements Specification<EventAssignm
 		p.getExpressions().add(cb.or(cb.like(root.join("event").get("eventName"), containsLikePattern)
 
 		));
-		if("AGENT".equals(roleName) || "EVENT_COORDINATOR".equals(roleName) ){
+		if ("AGENT".equals(roleName) || "EVENT_COORDINATOR".equals(roleName)) {
 			p.getExpressions().add(cb.and(cb.equal(root.join("representatives").get("id").as(Integer.class), userId)));
 		}
 		p.getExpressions().add(cb.and(cb.equal(root.get("activeInd"), 'Y')));

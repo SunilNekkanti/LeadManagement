@@ -8,6 +8,4 @@ import com.pfchoice.springboot.model.Contact;
 @Repository
 public interface ContactRepository extends JpaRepository<Contact, Integer> {
 
-
 }
-

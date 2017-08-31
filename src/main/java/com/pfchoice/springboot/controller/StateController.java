@@ -28,10 +28,12 @@ public class StateController {
 	public static final Logger logger = LoggerFactory.getLogger(StateController.class);
 
 	@Autowired
-	StateService stateService; //Service which will do all data retrieval/manipulation work
+	StateService stateService; // Service which will do all data
+								// retrieval/manipulation work
 
-	// -------------------Retrieve All States---------------------------------------------
-	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER"  })
+	// -------------------Retrieve All
+	// States---------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
 	@RequestMapping(value = "/state/", method = RequestMethod.GET)
 	public ResponseEntity<List<State>> listAllStates() {
 		List<State> states = stateService.findAllStates();
@@ -43,30 +45,32 @@ public class StateController {
 		return new ResponseEntity<List<State>>(states, HttpStatus.OK);
 	}
 
-	// -------------------Retrieve Single State------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// -------------------Retrieve Single
+	// State------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/state/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getState(@PathVariable("id") int id) {
 		logger.info("Fetching State with id {}", id);
 		State state = stateService.findByCode(id);
 		if (state == null) {
 			logger.error("State with id {} not found.", id);
-			return new ResponseEntity(new CustomErrorType("State with id " + id 
-					+ " not found"), HttpStatus.NOT_FOUND);
+			return new ResponseEntity(new CustomErrorType("State with id " + id + " not found"), HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<State>(state, HttpStatus.OK);
 	}
 
-	// -------------------Create a State-------------------------------------------
-	@Secured({  "ROLE_ADMIN" })
+	// -------------------Create a
+	// State-------------------------------------------
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/state/", method = RequestMethod.POST)
 	public ResponseEntity<?> createState(@RequestBody State state, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating State : {}", state);
 
 		if (stateService.isStateExist(state)) {
 			logger.error("Unable to create. A State with name {} already exist", state.getCode());
-			return new ResponseEntity(new CustomErrorType("Unable to create. A State with name " + 
-			state.getCode() + " already exist."),HttpStatus.CONFLICT);
+			return new ResponseEntity(
+					new CustomErrorType("Unable to create. A State with name " + state.getCode() + " already exist."),
+					HttpStatus.CONFLICT);
 		}
 		state.setCreatedBy("sarath");
 		state.setUpdatedBy("sarath");
@@ -77,8 +81,9 @@ public class StateController {
 		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
 	}
 
-	// ------------------- Update a State ------------------------------------------------
-	@Secured({  "ROLE_ADMIN" })
+	// ------------------- Update a State
+	// ------------------------------------------------
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/state/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateState(@PathVariable("id") int id, @RequestBody State state) {
 		logger.info("Updating State with id {}", id);
@@ -98,8 +103,9 @@ public class StateController {
 		return new ResponseEntity<State>(currentState, HttpStatus.OK);
 	}
 
-	// ------------------- Delete a State-----------------------------------------
-	@Secured({  "ROLE_ADMIN" })
+	// ------------------- Delete a
+	// State-----------------------------------------
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/state/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteState(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting State with id {}", id);
@@ -115,7 +121,7 @@ public class StateController {
 	}
 
 	// ------------------- Delete All States-----------------------------
-	@Secured({  "ROLE_ADMIN" })
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/state/", method = RequestMethod.DELETE)
 	public ResponseEntity<State> deleteAllStates() {
 		logger.info("Deleting All States");

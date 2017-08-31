@@ -16,20 +16,17 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
-
 /**
  *
  * @author sarath
  */
 @Entity
 @Table(name = "lead_notes")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class LeadNotes extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
@@ -38,14 +35,14 @@ public class LeadNotes extends RecordDetails implements Serializable {
 
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "lead_mbr_id", referencedColumnName = "lead_mbr_id", nullable =false)
-	private LeadMembership lead ;
-	
+	@JoinColumn(name = "lead_mbr_id", referencedColumnName = "lead_mbr_id", nullable = false)
+	private LeadMembership lead;
+
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", referencedColumnName = "id", nullable =false)
+	@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
 	private User user;
-	
+
 	@Column(name = "notes", length = 65535, columnDefinition = "TEXT")
 	private String notes;
 
@@ -89,7 +86,8 @@ public class LeadNotes extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param notes the notes to set
+	 * @param notes
+	 *            the notes to set
 	 */
 	public void setNotes(String notes) {
 		this.notes = notes;
@@ -103,7 +101,8 @@ public class LeadNotes extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param lead the lead to set
+	 * @param lead
+	 *            the lead to set
 	 */
 	public void setLead(LeadMembership lead) {
 		this.lead = lead;
@@ -117,7 +116,8 @@ public class LeadNotes extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param user the user to set
+	 * @param user
+	 *            the user to set
 	 */
 	public void setUser(User user) {
 		this.user = user;
@@ -144,7 +144,7 @@ public class LeadNotes extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return this.getCreatedDate()+">>>"+this.getCreatedBy()+">>>>"+this.notes+"\n";
+		return this.getCreatedDate() + ">>>" + this.getCreatedBy() + ">>>>" + this.notes + "\n";
 	}
 
 }

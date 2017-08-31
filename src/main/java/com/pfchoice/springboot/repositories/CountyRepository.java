@@ -10,4 +10,3 @@ public interface CountyRepository extends JpaRepository<County, Integer> {
 
 	public County findByDescription(String code);
 }
-

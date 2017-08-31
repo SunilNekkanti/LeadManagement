@@ -31,18 +31,22 @@ public class RoleController {
 	public static final Logger logger = LoggerFactory.getLogger(RoleController.class);
 
 	@Autowired
-	RoleService roleService; //Service which will do all data retrieval/manipulation work
+	RoleService roleService; // Service which will do all data
+								// retrieval/manipulation work
 
-	// -------------------Retrieve All Roles---------------------------------------------
-	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER" })
+	// -------------------Retrieve All
+	// Roles---------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
 	@RequestMapping(value = "/role/", method = RequestMethod.GET)
-	public ResponseEntity<Page<Role>> listAllRoles(@RequestParam(value = "page", required = false) Integer pageNo,  @RequestParam(value = "size", required = false) Integer pageSize,@RequestParam(value = "search", required = false) String search) {
-		pageNo = (pageNo == null)?0:pageNo;
-		pageSize = (pageSize == null)?1000:pageSize;
-		PageRequest pageRequest = new PageRequest(pageNo,pageSize );
-		
+	public ResponseEntity<Page<Role>> listAllRoles(@RequestParam(value = "page", required = false) Integer pageNo,
+			@RequestParam(value = "size", required = false) Integer pageSize,
+			@RequestParam(value = "search", required = false) String search) {
+		pageNo = (pageNo == null) ? 0 : pageNo;
+		pageSize = (pageSize == null) ? 1000 : pageSize;
+		PageRequest pageRequest = new PageRequest(pageNo, pageSize);
+
 		Specification<Role> spec = new RoleSpecifications(search);
-		
+
 		Page<Role> roles = roleService.findAllRolesByPage(spec, pageRequest);
 		if (roles.getTotalElements() == 0) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -51,30 +55,32 @@ public class RoleController {
 		return new ResponseEntity<Page<Role>>(roles, HttpStatus.OK);
 	}
 
-	// -------------------Retrieve Single Role------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// -------------------Retrieve Single
+	// Role------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/role/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getRole(@PathVariable("id") int id) {
 		logger.info("Fetching Role with id {}", id);
 		Role role = roleService.findById(id);
 		if (role == null) {
 			logger.error("Role with id {} not found.", id);
-			return new ResponseEntity(new CustomErrorType("Role with id " + id 
-					+ " not found"), HttpStatus.NOT_FOUND);
+			return new ResponseEntity(new CustomErrorType("Role with id " + id + " not found"), HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Role>(role, HttpStatus.OK);
 	}
 
-	// -------------------Create a Role-------------------------------------------
-	@Secured({  "ROLE_ADMIN" })
+	// -------------------Create a
+	// Role-------------------------------------------
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/role/", method = RequestMethod.POST)
 	public ResponseEntity<?> createRole(@RequestBody Role role, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating Role : {}", role);
 
 		if (roleService.isRoleExist(role)) {
 			logger.error("Unable to create. A Role with name {} already exist", role.getRole());
-			return new ResponseEntity(new CustomErrorType("Unable to create. A Role with name " + 
-			role.getRole() + " already exist."),HttpStatus.CONFLICT);
+			return new ResponseEntity(
+					new CustomErrorType("Unable to create. A Role with name " + role.getRole() + " already exist."),
+					HttpStatus.CONFLICT);
 		}
 		role.setCreatedBy("sarath");
 		role.setUpdatedBy("sarath");
@@ -85,8 +91,9 @@ public class RoleController {
 		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
 	}
 
-	// ------------------- Update a Role ------------------------------------------------
-	@Secured({  "ROLE_ADMIN" })
+	// ------------------- Update a Role
+	// ------------------------------------------------
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/role/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateRole(@PathVariable("id") int id, @RequestBody Role role) {
 		logger.info("Updating Role with id {}", id);
@@ -105,8 +112,9 @@ public class RoleController {
 		return new ResponseEntity<Role>(currentRole, HttpStatus.OK);
 	}
 
-	// ------------------- Delete a Role-----------------------------------------
-	@Secured({  "ROLE_ADMIN" })
+	// ------------------- Delete a
+	// Role-----------------------------------------
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/role/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteRole(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting Role with id {}", id);
@@ -122,7 +130,7 @@ public class RoleController {
 	}
 
 	// ------------------- Delete All Roles-----------------------------
-	@Secured({  "ROLE_ADMIN" })
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/role/", method = RequestMethod.DELETE)
 	public ResponseEntity<Role> deleteAllRoles() {
 		logger.info("Deleting All Roles");

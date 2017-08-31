@@ -8,6 +8,4 @@ import com.pfchoice.springboot.model.Ethinicity;
 @Repository
 public interface EthinicityRepository extends JpaRepository<Ethinicity, Long> {
 
-
 }
-

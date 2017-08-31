@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import com.pfchoice.springboot.model.Provider;
 
 public interface ProviderService {
-	
+
 	Provider findById(Integer id);
 
 	Provider findByName(String name);
@@ -23,8 +23,8 @@ public interface ProviderService {
 	void deleteAllProviders();
 
 	List<Provider> findAllProviders();
-	
-	Page<Provider> findAllProvidersByPage(Specification<Provider> spec,Pageable pageable);
+
+	Page<Provider> findAllProvidersByPage(Specification<Provider> spec, Pageable pageable);
 
 	boolean isProviderExist(Provider provider);
 }

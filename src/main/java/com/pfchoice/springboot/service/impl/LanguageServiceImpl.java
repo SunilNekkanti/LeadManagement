@@ -13,15 +13,12 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 @Service("LanguageService")
 @Transactional
-public class LanguageServiceImpl implements LanguageService{
+public class LanguageServiceImpl implements LanguageService {
 
 	@Autowired
 	private LanguageRepository languageRepository;
-
 
 	public Language findById(Short id) {
 		return languageRepository.findById(id);
@@ -35,26 +32,26 @@ public class LanguageServiceImpl implements LanguageService{
 		languageRepository.save(language);
 	}
 
-	public void updateLanguage(Language language){
+	public void updateLanguage(Language language) {
 		saveLanguage(language);
 	}
 
-	public void deleteLanguageById(Short id){
+	public void deleteLanguageById(Short id) {
 		languageRepository.delete(id);
 	}
 
-	public void deleteAllLanguages(){
+	public void deleteAllLanguages() {
 		languageRepository.deleteAll();
 	}
 
-	public List<Language> findAllLanguages(){
+	public List<Language> findAllLanguages() {
 		return (List<Language>) languageRepository.findAll();
 	}
 
-	public Page<Language> findAllLanguagesByPage(Specification<Language> spec,Pageable pageable){
+	public Page<Language> findAllLanguagesByPage(Specification<Language> spec, Pageable pageable) {
 		return languageRepository.findAll(spec, pageable);
 	}
-	
+
 	public boolean isLanguageExist(Language language) {
 		return findByDescription(language.getDescription()) != null;
 	}

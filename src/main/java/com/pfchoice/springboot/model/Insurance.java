@@ -20,20 +20,17 @@ import org.hibernate.annotations.NotFoundAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
-
 /**
  *
  * @author Mohanasundharam
  */
 @Entity
 @Table(name = "insurance")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Insurance extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
@@ -46,12 +43,12 @@ public class Insurance extends RecordDetails implements Serializable {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "plan_Type_id", referencedColumnName = "plan_type_id")
 	private PlanType planType;
-	
-	@NotFound(action=NotFoundAction.IGNORE) 
-	@OneToOne(cascade=CascadeType.ALL )
+
+	@NotFound(action = NotFoundAction.IGNORE)
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinTable(name = "insurance_contacts", joinColumns = {
-			@JoinColumn(name = "ins_id", referencedColumnName = "Insurance_Id",nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id",nullable = false, updatable = false, unique = true) })
+			@JoinColumn(name = "ins_id", referencedColumnName = "Insurance_Id", nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id", nullable = false, updatable = false, unique = true) })
 	private Contact contact;
 
 	/**
@@ -121,7 +118,8 @@ public class Insurance extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param contact the contact to set
+	 * @param contact
+	 *            the contact to set
 	 */
 	public void setContact(Contact contact) {
 		this.contact = contact;

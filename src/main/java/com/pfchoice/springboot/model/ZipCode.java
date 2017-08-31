@@ -14,19 +14,17 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
 /**
  *
  * @author sarath
  */
 @Entity
 @Table(name = "lu_state_zip")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class ZipCode extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	
 	@Id
 	// @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
@@ -81,7 +79,6 @@ public class ZipCode extends RecordDetails implements Serializable {
 	public void setStateCode(final State stateCode) {
 		this.stateCode = stateCode;
 	}
-
 
 	@Override
 	public boolean equals(Object object) {

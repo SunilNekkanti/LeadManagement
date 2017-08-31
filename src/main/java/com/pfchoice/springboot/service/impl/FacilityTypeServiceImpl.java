@@ -11,11 +11,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 @Service("facilityTypeService")
 @Transactional
-public class FacilityTypeServiceImpl implements FacilityTypeService{
+public class FacilityTypeServiceImpl implements FacilityTypeService {
 
 	@Autowired
 	private FacilityTypeRepository facilityTypeRepository;
@@ -23,7 +21,6 @@ public class FacilityTypeServiceImpl implements FacilityTypeService{
 	public FacilityType findById(Integer id) {
 		return facilityTypeRepository.findOne(id);
 	}
-
 
 	public FacilityType findByDescription(String name) {
 		return facilityTypeRepository.findByDescription(name);
@@ -33,19 +30,19 @@ public class FacilityTypeServiceImpl implements FacilityTypeService{
 		facilityTypeRepository.save(facilityType);
 	}
 
-	public void updateFacilityType(FacilityType facilityType){
+	public void updateFacilityType(FacilityType facilityType) {
 		saveFacilityType(facilityType);
 	}
 
-	public void deleteFacilityTypeById(Integer id){
+	public void deleteFacilityTypeById(Integer id) {
 		facilityTypeRepository.delete(id);
 	}
 
-	public void deleteAllFacilityTypes(){
+	public void deleteAllFacilityTypes() {
 		facilityTypeRepository.deleteAll();
 	}
 
-	public Page<FacilityType> findAllFacilityTypesByPage(Specification<FacilityType> spec,Pageable pageable){
+	public Page<FacilityType> findAllFacilityTypesByPage(Specification<FacilityType> spec, Pageable pageable) {
 		return facilityTypeRepository.findAll(spec, pageable);
 	}
 

@@ -9,41 +9,31 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.pfchoice.springboot.model.Language;
 
-public  class LanguageSpecifications  implements Specification<Language> {
- 
-    
-    private String searchTerm;
-    
+public class LanguageSpecifications implements Specification<Language> {
 
-    public LanguageSpecifications( String searchTerm) {
-        super();
-        this.searchTerm = searchTerm;
-    }
-    
-    public Predicate toPredicate(Root<Language> root, CriteriaQuery<?> cq,
-            CriteriaBuilder cb) {
+	private String searchTerm;
 
-    	  String containsLikePattern = getContainsLikePattern(searchTerm);
-    	  Predicate p = cb.conjunction();
-    	  if(!"".equals(searchTerm)){
-    		  p.getExpressions()
-              .add(
-                cb.or(
-                      cb.like(cb.lower(root.get("description")), containsLikePattern)
-              ));
-    	  }
-    	  p.getExpressions()
-          .add( cb.and(cb.equal(root.get("activeInd"),'Y')));
-          return p;
-    }
- 
- 
-    private static String getContainsLikePattern(String searchTerm) {
-        if (searchTerm == null || searchTerm.isEmpty()) {
-            return "%";
-        }
-        else {
-            return "%" + searchTerm.toLowerCase() + "%";
-        }
-    }
+	public LanguageSpecifications(String searchTerm) {
+		super();
+		this.searchTerm = searchTerm;
+	}
+
+	public Predicate toPredicate(Root<Language> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
+
+		String containsLikePattern = getContainsLikePattern(searchTerm);
+		Predicate p = cb.conjunction();
+		if (!"".equals(searchTerm)) {
+			p.getExpressions().add(cb.or(cb.like(cb.lower(root.get("description")), containsLikePattern)));
+		}
+		p.getExpressions().add(cb.and(cb.equal(root.get("activeInd"), 'Y')));
+		return p;
+	}
+
+	private static String getContainsLikePattern(String searchTerm) {
+		if (searchTerm == null || searchTerm.isEmpty()) {
+			return "%";
+		} else {
+			return "%" + searchTerm.toLowerCase() + "%";
+		}
+	}
 }

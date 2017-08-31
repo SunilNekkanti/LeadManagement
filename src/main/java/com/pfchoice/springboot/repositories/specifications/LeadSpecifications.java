@@ -14,7 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 import com.pfchoice.springboot.model.LeadMembership;
 
 public class LeadSpecifications implements Specification<LeadMembership> {
-	
+
 	private String roleName;
 	private String searchTerm;
 	private Integer userId;
@@ -40,23 +40,25 @@ public class LeadSpecifications implements Specification<LeadMembership> {
 						cb.like(root.join("status").get("description"), containsLikePattern)
 
 		));
-		
-		if("EVENT_COORDINATOR".equals(roleName)){
+
+		if ("EVENT_COORDINATOR".equals(roleName)) {
 			p.getExpressions().add(cb.and(cb.equal(root.get("createdBy").as(String.class), username)));
 		}
-		if("AGENT".equals(roleName) ){
-			
-			p.getExpressions().add(cb.and(cb.equal((root.join("agentLeadAppointmentList").join("user").get("id").as(Integer.class)), userId)));
+		if ("AGENT".equals(roleName)) {
+
+			p.getExpressions().add(cb.and(cb
+					.equal((root.join("agentLeadAppointmentList").join("user").get("id").as(Integer.class)), userId)));
 			p.getExpressions().add(cb.and(cb.equal(cb.upper(root.join("status").get("description")), "AGENT")));
 
 			Expression<Date> appointmentTime = root.join("agentLeadAppointmentList").get("appointmentTime");
-		    Expression<Date> allocationEndTime = cb.function("AGENT_ALLOCATION_ENDDATE",Date.class, appointmentTime , cb.literal(1440));
+			Expression<Date> allocationEndTime = cb.function("AGENT_ALLOCATION_ENDDATE", Date.class, appointmentTime,
+					cb.literal(1440));
 
-		    Calendar currentTime = Calendar.getInstance();
-		    Date currentDate = currentTime.getTime();
-		    
+			Calendar currentTime = Calendar.getInstance();
+			Date currentDate = currentTime.getTime();
+
 			p.getExpressions().add(cb.and(cb.between(cb.literal(currentDate), appointmentTime, allocationEndTime)));
-			
+
 		}
 		p.getExpressions().add(cb.and(cb.equal(root.get("activeInd"), 'Y')));
 		return p;

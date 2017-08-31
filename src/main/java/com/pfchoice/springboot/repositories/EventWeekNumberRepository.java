@@ -9,9 +9,8 @@ import com.pfchoice.springboot.model.EventWeekNumber;
 public interface EventWeekNumberRepository extends JpaRepository<EventWeekNumber, Integer> {
 
 	public EventWeekNumber findById(Integer id);
-	
+
 	public EventWeekNumber findByDescription(String description);
-	
+
 	public EventWeekNumber findByShortName(String shortName);
 }
-

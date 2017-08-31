@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * @author sarath
  */
 @Entity(name = "contact")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Contact extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -30,39 +30,30 @@ public class Contact extends RecordDetails implements Serializable {
 	@Column(name = "cnt_Id", nullable = false)
 	private Integer id;
 
-	
 	@Column(name = "contact_person")
 	private String contactPerson;
 
-	
 	@Column(name = "home_phone")
 	private String homePhone;
 
-	
 	@Column(name = "Extension")
 	private Integer extension;
 
-	
 	@Column(name = "mobile_phone")
 	private String mobilePhone;
 
-	
 	@Column(name = "fax_number")
 	private String faxNumber;
 
-	
 	@Column(name = "email")
 	private String email;
 
-	
 	@Column(name = "address1")
 	private String address1;
 
-	
 	@Column(name = "address2")
 	private String address2;
 
-	
 	@Column(name = "city")
 	private String city;
 
@@ -70,12 +61,10 @@ public class Contact extends RecordDetails implements Serializable {
 	@JoinColumn(name = "statecode", referencedColumnName = "code")
 	private State stateCode;
 
-	
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "zipcode", referencedColumnName = "zipcode")
 	private ZipCode zipCode;
 
-	
 	@Column(name = "file_id")
 	private Integer fileId;
 

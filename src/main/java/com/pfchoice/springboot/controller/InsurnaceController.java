@@ -31,21 +31,25 @@ public class InsurnaceController {
 	public static final Logger logger = LoggerFactory.getLogger(InsurnaceController.class);
 
 	@Autowired
-	InsuranceService insuranceService; //Service which will do all data retrieval/manipulation work
+	InsuranceService insuranceService; // Service which will do all data
+										// retrieval/manipulation work
 
-	// -------------------Retrieve All Insurances---------------------------------------------
-	
-	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER"  })
+	// -------------------Retrieve All
+	// Insurances---------------------------------------------
+
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
 	@RequestMapping(value = "/insurance/", method = RequestMethod.GET)
-	public ResponseEntity<?> listAllInsurances(@RequestParam(value = "page", required = false) Integer pageNo,  @RequestParam(value = "size", required = false) Integer pageSize,@RequestParam(value = "search", required = false) String search) {
-		
-		pageNo = (pageNo == null)?0:pageNo;
-		pageSize = (pageSize == null)?1000:pageSize;
-		
-		PageRequest pageRequest = new PageRequest(pageNo,pageSize );
-		Specification<Insurance> spec =null ;
-		if(!"".equals(search))
-		 spec = new InsuranceSpecifications(search);
+	public ResponseEntity<?> listAllInsurances(@RequestParam(value = "page", required = false) Integer pageNo,
+			@RequestParam(value = "size", required = false) Integer pageSize,
+			@RequestParam(value = "search", required = false) String search) {
+
+		pageNo = (pageNo == null) ? 0 : pageNo;
+		pageSize = (pageSize == null) ? 1000 : pageSize;
+
+		PageRequest pageRequest = new PageRequest(pageNo, pageSize);
+		Specification<Insurance> spec = null;
+		if (!"".equals(search))
+			spec = new InsuranceSpecifications(search);
 		Page<Insurance> insurances = insuranceService.findAllInsurancesByPage(spec, pageRequest);
 		if (insurances.getTotalElements() == 0) {
 			System.out.println("no insurances");
@@ -55,30 +59,34 @@ public class InsurnaceController {
 		return new ResponseEntity<Page<Insurance>>(insurances, HttpStatus.OK);
 	}
 
-	// -------------------Retrieve Single Insurance------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// -------------------Retrieve Single
+	// Insurance------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/insurance/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getInsurance(@PathVariable("id") int id) {
 		logger.info("Fetching Insurance with id {}", id);
 		Insurance insurance = insuranceService.findById(id);
 		if (insurance == null) {
 			logger.error("Insurance with id {} not found.", id);
-			return new ResponseEntity(new CustomErrorType("Insurance with id " + id 
-					+ " not found"), HttpStatus.NOT_FOUND);
+			return new ResponseEntity(new CustomErrorType("Insurance with id " + id + " not found"),
+					HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Insurance>(insurance, HttpStatus.OK);
 	}
 
-	// -------------------Create a Insurance-------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// -------------------Create a
+	// Insurance-------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/insurance/", method = RequestMethod.POST)
 	public ResponseEntity<?> createInsurance(@RequestBody Insurance insurance, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating Insurance : {}", insurance);
 
 		if (insuranceService.isInsuranceExist(insurance)) {
 			logger.error("Unable to create. A Insurance with name {} already exist", insurance.getId());
-			return new ResponseEntity(new CustomErrorType("Unable to create. A Insurance with name " + 
-			insurance.getId() + " already exist."),HttpStatus.CONFLICT);
+			return new ResponseEntity(
+					new CustomErrorType(
+							"Unable to create. A Insurance with name " + insurance.getId() + " already exist."),
+					HttpStatus.CONFLICT);
 		}
 		insurance.setCreatedBy("sarath");
 		insurance.setUpdatedBy("sarath");
@@ -89,8 +97,9 @@ public class InsurnaceController {
 		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
 	}
 
-	// ------------------- Update a Insurance ------------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// ------------------- Update a Insurance
+	// ------------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/insurance/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateInsurance(@PathVariable("id") int id, @RequestBody Insurance insurance) {
 		logger.info("Updating Insurance with id {}", id);
@@ -109,8 +118,9 @@ public class InsurnaceController {
 		return new ResponseEntity<Insurance>(currentInsurance, HttpStatus.OK);
 	}
 
-	// ------------------- Delete a Insurance-----------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// ------------------- Delete a
+	// Insurance-----------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/insurance/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteInsurance(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting Insurance with id {}", id);
@@ -126,7 +136,7 @@ public class InsurnaceController {
 	}
 
 	// ------------------- Delete All Insurances-----------------------------
-	@Secured({  "ROLE_ADMIN" })
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/insurance/", method = RequestMethod.DELETE)
 	public ResponseEntity<Insurance> deleteAllInsurances() {
 		logger.info("Deleting All Insurances");

@@ -28,10 +28,12 @@ public class EventWeekDayController {
 	public static final Logger logger = LoggerFactory.getLogger(EventWeekDayController.class);
 
 	@Autowired
-	EventWeekDayService eventWeekDayService; //Service which will do all data retrieval/manipulation work
+	EventWeekDayService eventWeekDayService; // Service which will do all data
+												// retrieval/manipulation work
 
-	// -------------------Retrieve All EventWeekDays---------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER" })
+	// -------------------Retrieve All
+	// EventWeekDays---------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
 	@RequestMapping(value = "/eventWeekDay/", method = RequestMethod.GET)
 	public ResponseEntity<List<EventWeekDay>> listAllEventWeekDays() {
 		List<EventWeekDay> eventWeekDays = eventWeekDayService.findAllEventWeekDays();
@@ -43,30 +45,35 @@ public class EventWeekDayController {
 		return new ResponseEntity<List<EventWeekDay>>(eventWeekDays, HttpStatus.OK);
 	}
 
-	// -------------------Retrieve Single EventWeekDay------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// -------------------Retrieve Single
+	// EventWeekDay------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/eventWeekDay/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getEventWeekDay(@PathVariable("id") int id) {
 		logger.info("Fetching EventWeekDay with id {}", id);
 		EventWeekDay eventWeekDay = eventWeekDayService.findById(id);
 		if (eventWeekDay == null) {
 			logger.error("EventWeekDay with id {} not found.", id);
-			return new ResponseEntity(new CustomErrorType("EventWeekDay with id " + id 
-					+ " not found"), HttpStatus.NOT_FOUND);
+			return new ResponseEntity(new CustomErrorType("EventWeekDay with id " + id + " not found"),
+					HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<EventWeekDay>(eventWeekDay, HttpStatus.OK);
 	}
 
-	// -------------------Create a EventWeekDay-------------------------------------------
-	@Secured({  "ROLE_ADMIN" })
+	// -------------------Create a
+	// EventWeekDay-------------------------------------------
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/eventWeekDay/", method = RequestMethod.POST)
-	public ResponseEntity<?> createEventWeekDay(@RequestBody EventWeekDay eventWeekDay, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<?> createEventWeekDay(@RequestBody EventWeekDay eventWeekDay,
+			UriComponentsBuilder ucBuilder) {
 		logger.info("Creating EventWeekDay : {}", eventWeekDay);
 
 		if (eventWeekDayService.isEventWeekDayExist(eventWeekDay)) {
 			logger.error("Unable to create. A EventWeekDay with name {} already exist", eventWeekDay.getId());
-			return new ResponseEntity(new CustomErrorType("Unable to create. A EventWeekDay with name " + 
-			eventWeekDay.getId() + " already exist."),HttpStatus.CONFLICT);
+			return new ResponseEntity(
+					new CustomErrorType(
+							"Unable to create. A EventWeekDay with name " + eventWeekDay.getId() + " already exist."),
+					HttpStatus.CONFLICT);
 		}
 		eventWeekDay.setCreatedBy("sarath");
 		eventWeekDay.setUpdatedBy("sarath");
@@ -77,8 +84,9 @@ public class EventWeekDayController {
 		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
 	}
 
-	// ------------------- Update a EventWeekDay ------------------------------------------------
-	@Secured({  "ROLE_ADMIN" })
+	// ------------------- Update a EventWeekDay
+	// ------------------------------------------------
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/eventWeekDay/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateEventWeekDay(@PathVariable("id") int id, @RequestBody EventWeekDay eventWeekDay) {
 		logger.info("Updating EventWeekDay with id {}", id);
@@ -87,7 +95,8 @@ public class EventWeekDayController {
 
 		if (currentEventWeekDay == null) {
 			logger.error("Unable to update. EventWeekDay with id {} not found.", id);
-			return new ResponseEntity(new CustomErrorType("Unable to upate. EventWeekDay with id " + id + " not found."),
+			return new ResponseEntity(
+					new CustomErrorType("Unable to upate. EventWeekDay with id " + id + " not found."),
 					HttpStatus.NOT_FOUND);
 		}
 
@@ -98,8 +107,9 @@ public class EventWeekDayController {
 		return new ResponseEntity<EventWeekDay>(currentEventWeekDay, HttpStatus.OK);
 	}
 
-	// ------------------- Delete a EventWeekDay-----------------------------------------
-	@Secured({  "ROLE_ADMIN" })
+	// ------------------- Delete a
+	// EventWeekDay-----------------------------------------
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/eventWeekDay/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteEventWeekDay(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting EventWeekDay with id {}", id);
@@ -107,7 +117,8 @@ public class EventWeekDayController {
 		EventWeekDay eventWeekDay = eventWeekDayService.findById(id);
 		if (eventWeekDay == null) {
 			logger.error("Unable to delete. EventWeekDay with id {} not found.", id);
-			return new ResponseEntity(new CustomErrorType("Unable to delete. EventWeekDay with id " + id + " not found."),
+			return new ResponseEntity(
+					new CustomErrorType("Unable to delete. EventWeekDay with id " + id + " not found."),
 					HttpStatus.NOT_FOUND);
 		}
 		eventWeekDayService.deleteEventWeekDayById(id);
@@ -115,7 +126,7 @@ public class EventWeekDayController {
 	}
 
 	// ------------------- Delete All EventWeekDays-----------------------------
-	@Secured({  "ROLE_ADMIN" })
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/eventWeekDay/", method = RequestMethod.DELETE)
 	public ResponseEntity<EventWeekDay> deleteAllEventWeekDays() {
 		logger.info("Deleting All EventWeekDays");

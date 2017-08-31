@@ -8,6 +8,4 @@ import com.pfchoice.springboot.model.Email;
 @Repository
 public interface EmailRepository extends JpaRepository<Email, Long> {
 
-
 }
-

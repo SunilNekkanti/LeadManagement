@@ -12,19 +12,17 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 
 public class JsonDateDeserializer extends JsonDeserializer<Date> {
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat(
-            "MM/dd/yyyy");
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
-    @Override
-    public Date deserialize(JsonParser paramJsonParser,
-            DeserializationContext paramDeserializationContext)
-            throws IOException, JsonProcessingException {
-        String str = paramJsonParser.getText().trim();
-        try {
-            return dateFormat.parse(str);
-        } catch (ParseException e) {
+	@Override
+	public Date deserialize(JsonParser paramJsonParser, DeserializationContext paramDeserializationContext)
+			throws IOException, JsonProcessingException {
+		String str = paramJsonParser.getText().trim();
+		try {
+			return dateFormat.parse(str);
+		} catch (ParseException e) {
 
-        }
-        return paramDeserializationContext.parseDate(str);
-    }
+		}
+		return paramDeserializationContext.parseDate(str);
+	}
 }

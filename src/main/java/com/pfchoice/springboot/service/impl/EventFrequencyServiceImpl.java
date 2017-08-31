@@ -10,11 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 @Service("eventFrequencyService")
 @Transactional
-public class EventFrequencyServiceImpl implements EventFrequencyService{
+public class EventFrequencyServiceImpl implements EventFrequencyService {
 
 	@Autowired
 	private EventFrequencyRepository eventFrequencyRepository;
@@ -30,24 +28,24 @@ public class EventFrequencyServiceImpl implements EventFrequencyService{
 	public EventFrequency findByShortName(String shortName) {
 		return eventFrequencyRepository.findByDescription(shortName);
 	}
-	
+
 	public void saveEventFrequency(EventFrequency eventFrequency) {
 		eventFrequencyRepository.save(eventFrequency);
 	}
 
-	public void updateEventFrequency(EventFrequency eventFrequency){
+	public void updateEventFrequency(EventFrequency eventFrequency) {
 		saveEventFrequency(eventFrequency);
 	}
 
-	public void deleteEventFrequencyById(Integer id){
+	public void deleteEventFrequencyById(Integer id) {
 		eventFrequencyRepository.delete(id);
 	}
 
-	public void deleteAllEventFrequencies(){
+	public void deleteAllEventFrequencies() {
 		eventFrequencyRepository.deleteAll();
 	}
 
-	public List<EventFrequency> findAllEventFrequencies(){
+	public List<EventFrequency> findAllEventFrequencies() {
 		return eventFrequencyRepository.findAll();
 	}
 

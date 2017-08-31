@@ -10,15 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 @Service("stateService")
 @Transactional
-public class StateServiceImpl implements StateService{
+public class StateServiceImpl implements StateService {
 
 	@Autowired
 	private StateRepository stateRepository;
-
 
 	public State findByCode(Integer code) {
 		return stateRepository.findByCode(code);
@@ -32,19 +29,19 @@ public class StateServiceImpl implements StateService{
 		stateRepository.save(state);
 	}
 
-	public void updateState(State state){
+	public void updateState(State state) {
 		saveState(state);
 	}
 
-	public void deleteStateById(Integer id){
+	public void deleteStateById(Integer id) {
 		stateRepository.delete(id);
 	}
 
-	public void deleteAllStates(){
+	public void deleteAllStates() {
 		stateRepository.deleteAll();
 	}
 
-	public List<State> findAllStates(){
+	public List<State> findAllStates() {
 		return stateRepository.findAll();
 	}
 

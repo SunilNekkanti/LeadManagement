@@ -9,7 +9,6 @@ import com.pfchoice.springboot.model.State;
 public interface StateRepository extends JpaRepository<State, Integer> {
 
 	public State findByCode(Integer code);
-	
+
 	public State findByDescription(String description);
 }
-

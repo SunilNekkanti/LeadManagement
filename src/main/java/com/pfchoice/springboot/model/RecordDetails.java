@@ -11,7 +11,6 @@ import javax.persistence.MappedSuperclass;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-
 /**
  * @author sarath
  *
@@ -20,13 +19,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class RecordDetails {
 
 	@JsonIgnore
-	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone="America/NewYork")
-	@Column(name = "created_date", updatable=false)
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "America/NewYork")
+	@Column(name = "created_date", updatable = false)
 	private Date createdDate = new Date();
-	
+
 	@JsonIgnore
-	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone="America/NewYork")
-	@Column(name = "updated_date",   updatable=false)
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "America/NewYork")
+	@Column(name = "updated_date", updatable = false)
 	private Date updatedDate = new Date();
 
 	@JsonIgnore

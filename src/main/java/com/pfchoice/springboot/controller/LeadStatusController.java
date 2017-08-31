@@ -32,21 +32,26 @@ public class LeadStatusController {
 	public static final Logger logger = LoggerFactory.getLogger(LeadStatusController.class);
 
 	@Autowired
-	LeadStatusService leadStatusService; //Service which will do all data retrieval/manipulation work
+	LeadStatusService leadStatusService; // Service which will do all data
+											// retrieval/manipulation work
 
-	// -------------------Retrieve All LeadStatuses---------------------------------------------
-	@Secured({  "ROLE_ADMIN", "ROLE_AGENT","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER"  })
+	// -------------------Retrieve All
+	// LeadStatuses---------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
 	@RequestMapping(value = "/leadStatus/", method = RequestMethod.GET)
-	public ResponseEntity<Page<LeadStatus>> listAllLeadStatuses(@RequestParam(value = "page", required = false) Integer pageNo,  @RequestParam(value = "size", required = false) Integer pageSize,@RequestParam(value = "search", required = false) String search) {
-		pageNo = (pageNo == null)?0:pageNo;
-		pageSize = (pageSize == null)?1000:pageSize;
-		PageRequest pageRequest = new PageRequest(pageNo,pageSize );
-		
-		Specification<LeadStatus> spec =null ;
-		if(!"".equals(search))
-		 spec = new LeadStatusSpecifications(search);
-		
-		Page<LeadStatus>   leadStatuss = leadStatusService.findAllLeadStatusesByPage(spec, pageRequest);
+	public ResponseEntity<Page<LeadStatus>> listAllLeadStatuses(
+			@RequestParam(value = "page", required = false) Integer pageNo,
+			@RequestParam(value = "size", required = false) Integer pageSize,
+			@RequestParam(value = "search", required = false) String search) {
+		pageNo = (pageNo == null) ? 0 : pageNo;
+		pageSize = (pageSize == null) ? 1000 : pageSize;
+		PageRequest pageRequest = new PageRequest(pageNo, pageSize);
+
+		Specification<LeadStatus> spec = null;
+		if (!"".equals(search))
+			spec = new LeadStatusSpecifications(search);
+
+		Page<LeadStatus> leadStatuss = leadStatusService.findAllLeadStatusesByPage(spec, pageRequest);
 		if (leadStatuss.getTotalElements() == 0) {
 			System.out.println("no leadStatuss");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -55,32 +60,35 @@ public class LeadStatusController {
 		return new ResponseEntity<Page<LeadStatus>>(leadStatuss, HttpStatus.OK);
 	}
 
-	// -------------------Retrieve Single LeadStatus------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// -------------------Retrieve Single
+	// LeadStatus------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/leadStatus/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getLeadStatus(@PathVariable("id") short id) {
 		logger.info("Fetching LeadStatus with id {}", id);
 		LeadStatus leadStatus = leadStatusService.findById(id);
 		if (leadStatus == null) {
 			logger.error("LeadStatus with id {} not found.", id);
-			return new ResponseEntity(new CustomErrorType("LeadStatus with id " + id 
-					+ " not found"), HttpStatus.NOT_FOUND);
+			return new ResponseEntity(new CustomErrorType("LeadStatus with id " + id + " not found"),
+					HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<LeadStatus>(leadStatus, HttpStatus.OK);
 	}
 
-	// -------------------Create a LeadStatus-------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// -------------------Create a
+	// LeadStatus-------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/leadStatus/", method = RequestMethod.POST)
 	public ResponseEntity<?> createLeadStatus(@RequestBody LeadStatus leadStatus, UriComponentsBuilder ucBuilder,
 			@ModelAttribute("username") String username) {
 		logger.info("Creating LeadStatus : {}", leadStatus);
-		
 
 		if (leadStatusService.isLeadStatusExist(leadStatus)) {
 			logger.error("Unable to create. A LeadStatus with name {} already exist", leadStatus.getId());
-			return new ResponseEntity(new CustomErrorType("Unable to create. A LeadStatus with name " + 
-			leadStatus.getId() + " already exist."),HttpStatus.CONFLICT);
+			return new ResponseEntity(
+					new CustomErrorType(
+							"Unable to create. A LeadStatus with name " + leadStatus.getId() + " already exist."),
+					HttpStatus.CONFLICT);
 		}
 		leadStatus.setCreatedBy(username);
 		leadStatus.setUpdatedBy(username);
@@ -91,8 +99,9 @@ public class LeadStatusController {
 		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
 	}
 
-	// ------------------- Update a LeadStatus ------------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// ------------------- Update a LeadStatus
+	// ------------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/leadStatus/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateLeadStatus(@PathVariable("id") short id, @RequestBody LeadStatus leadStatus,
 			@ModelAttribute("username") String username) {
@@ -107,13 +116,14 @@ public class LeadStatusController {
 		}
 
 		currentLeadStatus.setDescription(leadStatus.getDescription());
-        currentLeadStatus.setUpdatedBy(username);
+		currentLeadStatus.setUpdatedBy(username);
 		leadStatusService.updateLeadStatus(currentLeadStatus);
 		return new ResponseEntity<LeadStatus>(currentLeadStatus, HttpStatus.OK);
 	}
 
-	// ------------------- Delete a LeadStatus-----------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// ------------------- Delete a
+	// LeadStatus-----------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/leadStatus/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteLeadStatus(@PathVariable("id") short id) {
 		logger.info("Fetching & Deleting LeadStatus with id {}", id);
@@ -129,7 +139,7 @@ public class LeadStatusController {
 	}
 
 	// ------------------- Delete All LeadStatuses-----------------------------
-	@Secured({  "ROLE_ADMIN" })
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/leadStatus/", method = RequestMethod.DELETE)
 	public ResponseEntity<LeadStatus> deleteAllLeadStatuses() {
 		logger.info("Deleting All LeadStatuses");

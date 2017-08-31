@@ -9,9 +9,8 @@ import com.pfchoice.springboot.model.EventFrequency;
 public interface EventFrequencyRepository extends JpaRepository<EventFrequency, Integer> {
 
 	public EventFrequency findById(Integer id);
-	
+
 	public EventFrequency findByDescription(String description);
-	
+
 	public EventFrequency findByShortName(String shortName);
 }
-

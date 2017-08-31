@@ -11,8 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-
-
 /**
  *
  * @author sarath
@@ -22,18 +20,15 @@ public class File extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
 	@Column(name = "file_id", nullable = false)
 	private Integer id;
 
-	
 	@Column(name = "file_name")
 	private String fileName;
 
-	
 	@ManyToOne
 	@JoinColumn(name = "file_type_code", referencedColumnName = "code")
 	private FileType fileType;

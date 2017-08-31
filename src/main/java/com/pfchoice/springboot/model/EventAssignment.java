@@ -18,7 +18,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -31,42 +30,40 @@ import com.pfchoice.springboot.util.JsonDateAndTimeSerializer;
  */
 @Entity
 @Table(name = "event_assignment")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class EventAssignment extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	   
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
 	@Column(name = "event_assignment_id", nullable = false)
 	private Integer id;
 
-	@JsonIgnore
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "event_id", referencedColumnName = "event_id")
 	private Event event;
-	
+
 	@Column(name = "repeat_rule")
 	private String repeatRule;
-	
-	@JsonSerialize(using=JsonDateAndTimeSerializer.class)
- 	@JsonDeserialize(using=JsonDateAndTimeDeserializer.class)
-	@Column(name = "event_date_starttime", nullable= true)
-	private Date  eventDateStartTime;
 
-	@JsonSerialize(using=JsonDateAndTimeSerializer.class)
- 	@JsonDeserialize(using=JsonDateAndTimeDeserializer.class)
-	@Column(name = "event_date_endtime", nullable= true)
-	private Date  eventDateEndTime;
-	
-	@ManyToMany(cascade= {CascadeType.MERGE,CascadeType.REMOVE} ,fetch = FetchType.LAZY)
+	@JsonSerialize(using = JsonDateAndTimeSerializer.class)
+	@JsonDeserialize(using = JsonDateAndTimeDeserializer.class)
+	@Column(name = "event_date_starttime", nullable = true)
+	private Date eventDateStartTime;
+
+	@JsonSerialize(using = JsonDateAndTimeSerializer.class)
+	@JsonDeserialize(using = JsonDateAndTimeDeserializer.class)
+	@Column(name = "event_date_endtime", nullable = true)
+	private Date eventDateEndTime;
+
+	@ManyToMany(cascade = { CascadeType.MERGE, CascadeType.REMOVE }, fetch = FetchType.LAZY)
 	@JoinTable(name = "event_assignment_representatives", joinColumns = {
-			@JoinColumn(name = "event_assignment_id", referencedColumnName = "event_assignment_id",nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, updatable = false) })
+			@JoinColumn(name = "event_assignment_id", referencedColumnName = "event_assignment_id", nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, updatable = false) })
 	private Set<User> representatives;
-	
-	
 
 	/**
 	 * 
@@ -83,8 +80,6 @@ public class EventAssignment extends RecordDetails implements Serializable {
 		this.id = id;
 	}
 
-	
-	
 	/**
 	 * @return the id
 	 */
@@ -93,13 +88,12 @@ public class EventAssignment extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
-
 
 	/**
 	 * @return the repeatRule
@@ -109,7 +103,8 @@ public class EventAssignment extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param repeatRule the repeatRule to set
+	 * @param repeatRule
+	 *            the repeatRule to set
 	 */
 	public void setRepeatRule(String repeatRule) {
 		this.repeatRule = repeatRule;
@@ -123,12 +118,12 @@ public class EventAssignment extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param representatives the representatives to set
+	 * @param representatives
+	 *            the representatives to set
 	 */
 	public void setRepresentatives(Set<User> representatives) {
 		this.representatives = representatives;
 	}
-
 
 	/**
 	 * @return the event
@@ -138,7 +133,8 @@ public class EventAssignment extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param event the event to set
+	 * @param event
+	 *            the event to set
 	 */
 	public void setEvent(Event event) {
 		this.event = event;
@@ -152,7 +148,8 @@ public class EventAssignment extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param eventDateStartTime the eventDateStartTime to set
+	 * @param eventDateStartTime
+	 *            the eventDateStartTime to set
 	 */
 	public void setEventDateStartTime(Date eventDateStartTime) {
 		this.eventDateStartTime = eventDateStartTime;
@@ -166,7 +163,8 @@ public class EventAssignment extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @param eventDateEndTime the eventDateEndTime to set
+	 * @param eventDateEndTime
+	 *            the eventDateEndTime to set
 	 */
 	public void setEventDateEndTime(Date eventDateEndTime) {
 		this.eventDateEndTime = eventDateEndTime;
@@ -184,14 +182,12 @@ public class EventAssignment extends RecordDetails implements Serializable {
 		return true;
 	}
 
-
 	@Override
 	public int hashCode() {
 		int hash = 0;
 		hash += (id != null ? id.hashCode() : 0);
 		return hash;
 	}
-
 
 	@Override
 	public String toString() {

@@ -66,8 +66,7 @@ public class EventAssignmentController {
 	@RequestMapping(value = "/eventAssignment/", method = RequestMethod.GET)
 	public ResponseEntity<Page<EventAssignment>> listAllEventAssignments(@RequestParam("page") Integer pageNo,
 			@RequestParam("size") Integer pageSize, @RequestParam(value = "search", required = false) String search,
-			@ModelAttribute("userId") Integer userId,
-			@ModelAttribute("roleName") String roleName) {
+			@ModelAttribute("userId") Integer userId, @ModelAttribute("roleName") String roleName) {
 
 		pageNo = (pageNo == null) ? 0 : pageNo;
 		pageSize = (pageSize == null) ? 1000 : pageSize;
@@ -106,8 +105,7 @@ public class EventAssignmentController {
 	@RequestMapping(value = "/eventAssignment/", method = RequestMethod.POST)
 	public ResponseEntity<?> createEventAssignment(@RequestBody EventAssignment eventAssignment,
 			UriComponentsBuilder ucBuilder, @ModelAttribute("userId") Integer userId,
-			@ModelAttribute("username") String username)
-			throws MessagingException, IOException, InterruptedException {
+			@ModelAttribute("username") String username) throws MessagingException, IOException, InterruptedException {
 		logger.info("Creating EventAssignment : {}", eventAssignment);
 
 		eventAssignment.setCreatedBy(username);
@@ -151,7 +149,7 @@ public class EventAssignmentController {
 
 		// mail.setBody(emailService.geContentFromTemplate(emailAttributes,emailTemplateFileName
 		// ));
-		// emailService.sendMailWithAttachment(mail);
+		 emailService.sendMailWithAttachment(mail);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(
@@ -164,8 +162,7 @@ public class EventAssignmentController {
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/eventAssignment/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateEventAssignment(@PathVariable("id") int id,
-			@RequestBody EventAssignment eventAssignment,
-			@ModelAttribute("username") String username) {
+			@RequestBody EventAssignment eventAssignment, @ModelAttribute("username") String username) {
 		logger.info("Updating EventAssignment with id {}", id);
 
 		EventAssignment currentEventAssignment = eventAssignmentService.findById(id);
