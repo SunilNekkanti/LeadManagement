@@ -190,8 +190,8 @@ app
 										.then(
 												function(result) {
 													var records = {
-															'recordsTotal' : result.data.totalElements,
-															'recordsFiltered' : result.data.numberOfElements,
+															'recordsTotal' : result.data.totalElements||0,
+															'recordsFiltered' : result.data.numberOfElements||0,
 															'data' : result.data.content||{}
 													};
 													fnCallback(records);
@@ -498,7 +498,7 @@ app
 							}
 							
 							function  adminOrManager(){
-						    	if(($rootScope.loginUser.roleName == 'ADMIN' ||  $rootScope.loginUser.roleName == 'MANAGER') && !self.event.id){
+						    	if($rootScope.loginUser.roleName === 'ADMIN' ||  $rootScope.loginUser.roleName === 'MANAGER'){
 						    		return true;
 						    	}else{
 						    		return false;

@@ -63,7 +63,6 @@ public class User extends RecordDetails implements Serializable {
 					@JoinColumn(name = "insurance_id", referencedColumnName = "insurance_id",nullable = false, updatable = false) })
 	public Set<Insurance> insurances;
 	
-	
 	@OneToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY )
 	@JoinTable(name = "user_contacts", joinColumns = {
 			@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, updatable = false) }, inverseJoinColumns = {

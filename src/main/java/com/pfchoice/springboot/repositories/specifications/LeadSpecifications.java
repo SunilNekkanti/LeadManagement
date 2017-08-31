@@ -10,12 +10,18 @@ import org.springframework.data.jpa.domain.Specification;
 import com.pfchoice.springboot.model.LeadMembership;
 
 public class LeadSpecifications implements Specification<LeadMembership> {
-
+	
+	private String roleName;
 	private String searchTerm;
+	private Integer userId;
+	private String username;
 
-	public LeadSpecifications(String searchTerm) {
+	public LeadSpecifications(Integer userId, String username, String roleName, String searchTerm) {
 		super();
+		this.roleName = roleName;
 		this.searchTerm = searchTerm;
+		this.userId = userId;
+		this.username = username;
 	}
 
 	public Predicate toPredicate(Root<LeadMembership> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
@@ -30,6 +36,13 @@ public class LeadSpecifications implements Specification<LeadMembership> {
 						cb.like(root.join("status").get("description"), containsLikePattern)
 
 		));
+		
+		if("EVENT_COORDINATOR".equals(roleName)){
+			p.getExpressions().add(cb.and(cb.equal(root.get("createdBy").as(String.class), username)));
+		}
+		if("AGENT".equals(roleName) ){
+			p.getExpressions().add(cb.and(cb.equal((root.join("agentLeadAppointmentList").join("user").get("id").as(Integer.class)), userId)));
+		}
 		p.getExpressions().add(cb.and(cb.equal(root.get("activeInd"), 'Y')));
 		return p;
 

@@ -46,7 +46,7 @@ app.service('EventAssignmentService',
                 console.log('Fetching  events');
                 var deferred = $q.defer();
                 var pageable = {
-                  		 page:draw, size:length
+                		page:draw, size:length,search: search||''
                   		};
 
                   		var config = {

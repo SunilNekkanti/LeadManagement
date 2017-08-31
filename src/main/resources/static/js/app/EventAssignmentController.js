@@ -159,7 +159,6 @@ app
 								// All the parameters you need is in the aoData
 								// variable
 
-								var draw = parseInt("1");
 								var order = aoData[2].value;
 								var page = aoData[3].value / aoData[4].value;
 								var length = aoData[4].value;
@@ -168,14 +167,13 @@ app
 								// Then just call your service to get the
 								// records from server side
 								EventAssignmentService
-										.loadEventAssignments(page, length, search.value, order)
+								.loadEventAssignments(page, length, search.value, order)
 										.then(
 												function(result) {
 													var records = {
-														'draw' : (parseInt(result.data.number) + 1),
-														'recordsTotal' : result.data.totalElements,
-														'recordsFiltered' : result.data.numberOfElements,
-														'data' : result.data.content ||{}
+															'recordsTotal' : result.data.totalElements||0,
+															'recordsFiltered' : result.data.numberOfElements||0,
+															'data' : result.data.content||{}
 													};
 													fnCallback(records);
 												});

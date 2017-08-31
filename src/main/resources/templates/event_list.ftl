@@ -20,7 +20,10 @@
     <!-- Default panel contents -->
     <div class="panel-heading"><span class="event">Event </span>
     <button type="button"  ng-click="ctrl.addLead()" ng-show="ctrl.event.id"   class="btn btn-success  btn-sm floatRight">Add Lead</button>
-    <button type="button" ng-click="ctrl.cancelEdit()" class="btn btn-warning btn-sm floatRight"   ng-if="ctrl.event.id" >Cancel</button>
+    <button type="button" ng-click="ctrl.cancelEdit()" class="btn btn-warning btn-sm floatRight"   >Cancel</button>
+    <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-sm floatRight" ng-disabled="myForm.$pristine" ng-if="ctrl.adminOrManager() && !ctrl.event.id" >Reset Form</button>
+    <input type="button" value="{{!ctrl.event.id ? 'Add' : 'Update'}}" ng-click="ctrl.submit()" class="btn btn-primary btn-sm floatRight" ng-disabled="myForm.$invalid || myForm.$pristine" ng-show="ctrl.adminOrManager()">{{!ctrl.event.id ? 'Add' : 'Update'}}</button>
+            
    </div>
     <div class="panel-body">
       <div class="formcontainer">
@@ -28,10 +31,10 @@
         <div class="alert alert-danger" role="alert" ng-if="ctrl.errorMessage">{{ctrl.errorMessage}}</div>
         <form ng-submit="ctrl.submit()" name="myForm" class="form-horizontal">
 
+
           <div class="panel-heading">
             <div class="form-actions floatCenter col-md-offset-4">
-              <input type="submit" value="{{!ctrl.event.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid || myForm.$pristine" ng-if="ctrl.adminOrManager()">
-              <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-sm" ng-disabled="myForm.$pristine" ng-if="ctrl.adminOrManager()" >Reset Form</button>
+              
             </div>
           </div>
 
@@ -189,9 +192,10 @@
                   <div class="col-sm-6">
                     <div class="form-group col-sm-12">
                       <label for="homePhone">Phone</label>
-                      <input type="text" ng-model="ctrl.event.contact.homePhone" id="homePhone" name="homePhone" class="username form-control input-sm" placeholder="Enter Home phone" ng-required="!ctrl.event.address1" phone-input ng-minlength="10" />
+                      <input type="text" ng-model="ctrl.event.contact.homePhone" id="homePhone" name="homePhone" class="username form-control input-sm" placeholder="Enter Home phone" ng-required="!ctrl.event.address1"  ng-minlength="14" phone-input />
                       <div class="has-error" ng-show="myForm.$dirty">
                         <span ng-show="myForm.homePhone.$error.required">This is a required field</span>
+                        <span ng-show="myForm.homePhone.$error.minlength">Minimum length required is 10</span>
                       </div>
                     </div>
                   </div>
@@ -199,7 +203,10 @@
                   <div class="col-sm-6">
                     <div class="form-group col-sm-12">
                       <label for="mobilePhone">Mobile Phone</label>
-                      <input type="text" ng-model="ctrl.event.contact.mobilePhone" id="mobilePhone" class="username form-control input-sm" placeholder="Enter Mobile phone" phone-input ng-minlength="10" />
+                      <input type="text" ng-model="ctrl.event.contact.mobilePhone" id="mobilePhone" name="mobilePhone" class="username form-control input-sm" placeholder="Enter Mobile phone" ng-minlength="14" phone-input  />
+                        <div class="has-error" ng-show="myForm.$dirty">
+                        <span ng-show="myForm.mobilePhone.$error.minlength">Minimum length required is 10</span>
+                      </div>
                     </div>
                   </div>
 
@@ -209,14 +216,19 @@
                   <div class="col-sm-6">
                     <div class="form-group col-sm-12">
                       <label for="bestTimeToCall">Contact Person</label>
-                      <input type="text" class="form-control netto-input" ng-model="ctrl.event.contact.contactPerson" date-picker-input>
+                      <input type="text" class="form-control netto-input" name="contactPerson" ng-model="ctrl.event.contact.contactPerson" ng-required="true" ng-minlength="5" >
+                      <div class="has-error" ng-show="myForm.$dirty">
+                        <span ng-show="myForm.contactPerson.$error.required">This is a required field</span>
+                        <span ng-show="myForm.contactPerson.$error.minlength">Minimum length required is 5</span>
+                        <span ng-show="myForm.contactPerson.$invalid">This field is invalid </span>
+                      </div>
                     </div>
                   </div>
 
                   <div class="col-sm-6">
                     <div class="form-group col-sm-12">
                       <label for="email" require>Email </label>
-                      <input type="email" ng-model="ctrl.event.contact.email" id="email" name="email" class="username form-control input-sm" placeholder="Enter email" ng-required="true" ng-minlength="5" />
+                      <input type="email" ng-model="ctrl.event.contact.email" id="email" name="email" class="username form-control input-sm" placeholder="Enter email"  ng-minlength="8" />
                       <div class="has-error" ng-show="myForm.$dirty">
                         <span ng-show="myForm.email.$error.minlength">Minimum length required is 8</span>
                         <span ng-show="myForm.email.$invalid">This field is invalid </span>

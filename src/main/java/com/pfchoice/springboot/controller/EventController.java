@@ -56,13 +56,15 @@ public class EventController {
 	@RequestMapping(value = "/event/", method = RequestMethod.GET)
 	public ResponseEntity<Page<Event>> listAllEvents(@RequestParam(value = "page", required = false) Integer pageNo,
 			@RequestParam(value = "size", required = false) Integer pageSize,
-			@RequestParam(value = "search", required = false) String search) {
+			@RequestParam(value = "search", required = false) String search,
+			@ModelAttribute("userId") Integer userId,
+			@ModelAttribute("roleName") String roleName) {
 
 		pageNo = (pageNo == null) ? 0 : pageNo;
 		pageSize = (pageSize == null) ? 10 : pageSize;
 
 		PageRequest pageRequest = new PageRequest(pageNo, pageSize);
-		Specification<Event> spec = new EventSpecifications(search);
+		Specification<Event> spec = new EventSpecifications(userId, roleName, search);
 		Page<Event> events = eventService.findAllEventsByPage(spec, pageRequest);
 
 		if (events.getTotalElements() == 0) {

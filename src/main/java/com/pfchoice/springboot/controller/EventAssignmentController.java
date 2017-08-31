@@ -48,29 +48,35 @@ public class EventAssignmentController {
 	public static final Logger logger = LoggerFactory.getLogger(EventAssignmentController.class);
 
 	@Autowired
-	EventAssignmentService eventAssignmentService; //Service which will do all data retrieval/manipulation work
+	EventAssignmentService eventAssignmentService; // Service which will do all
+													// data
+													// retrieval/manipulation
+													// work
 
 	@Autowired
-	UserService userService; // Service which will do all data// retrieval/manipulation work
+	UserService userService; // Service which will do all data//
+								// retrieval/manipulation work
 
 	@Autowired
 	EmailService emailService;
-	// -------------------Retrieve All EventAssignments---------------------------------------------
+	// -------------------Retrieve All
+	// EventAssignments---------------------------------------------
 
-	
-	@Secured({  "ROLE_ADMIN", "ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER"  })
+	@Secured({ "ROLE_ADMIN", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
 	@RequestMapping(value = "/eventAssignment/", method = RequestMethod.GET)
-	public ResponseEntity<Page<EventAssignment>> listAllEventAssignments(@RequestParam("page") Integer pageNo,  @RequestParam("size") Integer pageSize, @RequestParam(value = "search", required = false) String search) {
-		
-		pageNo = (pageNo == null)?0:pageNo;
-		pageSize = (pageSize == null)?1000:pageSize;
-		
-		PageRequest pageRequest = new PageRequest(pageNo,pageSize );
-		Specification<EventAssignment> spec =null ;
-		if(!"".equals(search))
-		 spec = new EventAssignmentSpecifications(search);
-		Page<EventAssignment> eventAssignments = eventAssignmentService.findAllEventAssignmentsByPage(spec, pageRequest);
-		
+	public ResponseEntity<Page<EventAssignment>> listAllEventAssignments(@RequestParam("page") Integer pageNo,
+			@RequestParam("size") Integer pageSize, @RequestParam(value = "search", required = false) String search,
+			@ModelAttribute("userId") Integer userId,
+			@ModelAttribute("roleName") String roleName) {
+
+		pageNo = (pageNo == null) ? 0 : pageNo;
+		pageSize = (pageSize == null) ? 1000 : pageSize;
+
+		PageRequest pageRequest = new PageRequest(pageNo, pageSize);
+		Specification<EventAssignment> spec = new EventAssignmentSpecifications(userId, roleName, search);
+		Page<EventAssignment> eventAssignments = eventAssignmentService.findAllEventAssignmentsByPage(spec,
+				pageRequest);
+
 		if (eventAssignments.getTotalElements() == 0) {
 			System.out.println("no eventAssignments");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -79,25 +85,28 @@ public class EventAssignmentController {
 		return new ResponseEntity<Page<EventAssignment>>(eventAssignments, HttpStatus.OK);
 	}
 
-	// -------------------Retrieve Single EventAssignment------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_EVENT_COORDINATOR","ROLE_CARE_COORDINATOR","ROLE_MANAGER"   })
+	// -------------------Retrieve Single
+	// EventAssignment------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
 	@RequestMapping(value = "/eventAssignment/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getEventAssignment(@PathVariable("id") int id) {
 		logger.info("Fetching EventAssignment with id {}", id);
 		EventAssignment eventAssignment = eventAssignmentService.findById(id);
 		if (eventAssignment == null) {
 			logger.error("EventAssignment with id {} not found.", id);
-			return new ResponseEntity(new CustomErrorType("EventAssignment with id " + id 
-					+ " not found"), HttpStatus.NOT_FOUND);
+			return new ResponseEntity(new CustomErrorType("EventAssignment with id " + id + " not found"),
+					HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<EventAssignment>(eventAssignment, HttpStatus.OK);
 	}
 
-	// -------------------Create a EventAssignment-------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
+	// -------------------Create a
+	// EventAssignment-------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/eventAssignment/", method = RequestMethod.POST)
-	public ResponseEntity<?> createEventAssignment(@RequestBody EventAssignment eventAssignment, UriComponentsBuilder ucBuilder,
-			@ModelAttribute("userId") Integer userId) throws MessagingException, IOException, InterruptedException {
+	public ResponseEntity<?> createEventAssignment(@RequestBody EventAssignment eventAssignment,
+			UriComponentsBuilder ucBuilder, @ModelAttribute("userId") Integer userId)
+			throws MessagingException, IOException, InterruptedException {
 		logger.info("Creating EventAssignment : {}", eventAssignment);
 
 		eventAssignmentService.saveEventAssignment(eventAssignment);
@@ -107,19 +116,21 @@ public class EventAssignmentController {
 		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 
 		Event event = eventAssignment.getEvent();
-		String eventNotes = (event.getNotes() !=null)?event.getNotes():"";
-		
-	 //	String toEmailIds = eventAssignment.getRepresentatives().stream().map(rep -> rep.getEmail())
-	//			.collect(Collectors.joining(";"));
+		String eventNotes = (event.getNotes() != null) ? event.getNotes() : "";
+
+		// String toEmailIds =
+		// eventAssignment.getRepresentatives().stream().map(rep ->
+		// rep.getEmail())
+		// .collect(Collectors.joining(";"));
 		String toNamesList = eventAssignment.getRepresentatives().stream().map(rep -> rep.getUsername())
 				.collect(Collectors.joining(","));
 		String address = "";
-		
-	 	Email mail = new Email();
-	//	mail.setEmailTo(toEmailIds);
+
+		Email mail = new Email();
+		// mail.setEmailTo(toEmailIds);
 		mail.setEmailFrom("skumar@pfchoice.com");
 		mail.setEmailCc(user.getContact().getEmail());
-		mail.setSubject("New EventAssignment "+eventAssignment.getEvent().getEventName()+" Created");
+		mail.setSubject("New EventAssignment " + eventAssignment.getEvent().getEventName() + " Created");
 		Map<String, Object> emailAttributes = new HashMap<>();
 		emailAttributes.put("toNamesList", toNamesList);
 		emailAttributes.put("eventName", eventAssignment.getEvent().getEventName());
@@ -131,42 +142,48 @@ public class EventAssignmentController {
 		emailAttributes.put("currentTime", sdf.format(eventAssignment.getCreatedDate()));
 		emailAttributes.put("rrule", eventAssignment.getRepeatRule());
 		emailAttributes.put("location", address);
-		
+
 		mail.setModel(emailAttributes);
-	//	String emailTemplateFileName = "event_assignment_email_template.txt";
-		
-	//	mail.setBody(emailService.geContentFromTemplate(emailAttributes,emailTemplateFileName ));
-	  //   emailService.sendMailWithAttachment(mail); 
-			
+		// String emailTemplateFileName = "event_assignment_email_template.txt";
+
+		// mail.setBody(emailService.geContentFromTemplate(emailAttributes,emailTemplateFileName
+		// ));
+		// emailService.sendMailWithAttachment(mail);
+
 		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(ucBuilder.path("/api/eventAssignment/{id}").buildAndExpand(eventAssignment.getId()).toUri());
+		headers.setLocation(
+				ucBuilder.path("/api/eventAssignment/{id}").buildAndExpand(eventAssignment.getId()).toUri());
 		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
 	}
 
-	// ------------------- Update a EventAssignment ------------------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// ------------------- Update a EventAssignment
+	// ------------------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/eventAssignment/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<?> updateEventAssignment(@PathVariable("id") int id, @RequestBody EventAssignment eventAssignment) {
+	public ResponseEntity<?> updateEventAssignment(@PathVariable("id") int id,
+			@RequestBody EventAssignment eventAssignment) {
 		logger.info("Updating EventAssignment with id {}", id);
 
 		EventAssignment currentEventAssignment = eventAssignmentService.findById(id);
 
 		if (currentEventAssignment == null) {
 			logger.error("Unable to update. EventAssignment with id {} not found.", id);
-			return new ResponseEntity(new CustomErrorType("Unable to upate. EventAssignment with id " + id + " not found."),
+			return new ResponseEntity(
+					new CustomErrorType("Unable to upate. EventAssignment with id " + id + " not found."),
 					HttpStatus.NOT_FOUND);
 		}
-      
+
 		currentEventAssignment.setRepeatRule(eventAssignment.getRepeatRule());
 		currentEventAssignment.getRepresentatives().clear();
 		currentEventAssignment.getRepresentatives().addAll(eventAssignment.getRepresentatives());
 		eventAssignmentService.updateEventAssignment(currentEventAssignment);
-		
+
 		return new ResponseEntity<EventAssignment>(currentEventAssignment, HttpStatus.OK);
 	}
 
-	// ------------------- Delete a EventAssignment-----------------------------------------
-	@Secured({  "ROLE_ADMIN","ROLE_MANAGER" })
+	// ------------------- Delete a
+	// EventAssignment-----------------------------------------
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/eventAssignment/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteEventAssignment(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting EventAssignment with id {}", id);
@@ -174,15 +191,17 @@ public class EventAssignmentController {
 		EventAssignment eventAssignment = eventAssignmentService.findById(id);
 		if (eventAssignment == null) {
 			logger.error("Unable to delete. EventAssignment with id {} not found.", id);
-			return new ResponseEntity(new CustomErrorType("Unable to delete. EventAssignment with id " + id + " not found."),
+			return new ResponseEntity(
+					new CustomErrorType("Unable to delete. EventAssignment with id " + id + " not found."),
 					HttpStatus.NOT_FOUND);
 		}
 		eventAssignmentService.deleteEventAssignmentById(id);
 		return new ResponseEntity<EventAssignment>(HttpStatus.NO_CONTENT);
 	}
 
-	// ------------------- Delete All EventAssignments-----------------------------
-	@Secured({  "ROLE_ADMIN" })
+	// ------------------- Delete All
+	// EventAssignments-----------------------------
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/eventAssignment/", method = RequestMethod.DELETE)
 	public ResponseEntity<EventAssignment> deleteAllEventAssignments() {
 		logger.info("Deleting All EventAssignments");

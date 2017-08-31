@@ -13,10 +13,14 @@ public  class EventSpecifications  implements Specification<Event> {
  
     
     private String searchTerm;
+    private String roleName;
+	private Integer userId;
 
-    public EventSpecifications( String searchTerm) {
+    public EventSpecifications(Integer userId, String roleName, String searchTerm) {
         super();
         this.searchTerm = searchTerm;
+        this.roleName = roleName;
+		this.userId = userId;
     }
     
     public Predicate toPredicate(Root<Event> root, CriteriaQuery<?> cq,
@@ -27,6 +31,8 @@ public  class EventSpecifications  implements Specification<Event> {
     	  cq.distinct(true);
     	  
     	  Predicate p = cb.conjunction();
+    	  
+    	  if(searchTerm != null) {
     		  p.getExpressions()
               .add(
                 cb.or(
@@ -38,6 +44,12 @@ public  class EventSpecifications  implements Specification<Event> {
                            cb.like(root.join("contact").get("mobilePhone"), containsLikePattern)
                            
               ));
+    	  }
+    	  
+    	  if("AGENT".equals(roleName) || "EVENT_COORDINATOR".equals(roleName) ){
+  			p.getExpressions().add(cb.and(cb.equal(root.join("eventAssignments").join("representatives").get("id").as(Integer.class), userId)));
+  		  }	
+    	  
     	  p.getExpressions()
           .add( cb.and(cb.equal(root.get("activeInd"),'Y')));
           return p;

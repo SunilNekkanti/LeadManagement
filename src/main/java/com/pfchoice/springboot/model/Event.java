@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -77,6 +78,9 @@ public class Event extends RecordDetails implements Serializable {
 			@JoinColumn(name = "event_id", referencedColumnName = "event_id",nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "files_upload_id", referencedColumnName = "file_upload_id",nullable = false, updatable = false) })
 	private Set<FileUpload> attachments;
+	
+	@OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
+	private Set<EventAssignment> eventAssignments;
 	
 
 	/**
@@ -207,6 +211,20 @@ public class Event extends RecordDetails implements Serializable {
 	 */
 	public void setAttachments(Set<FileUpload> attachments) {
 		this.attachments = attachments;
+	}
+
+	/**
+	 * @return the eventAssignments
+	 */
+	public Set<EventAssignment> getEventAssignments() {
+		return eventAssignments;
+	}
+
+	/**
+	 * @param eventAssignments the eventAssignments to set
+	 */
+	public void setEventAssignments(Set<EventAssignment> eventAssignments) {
+		this.eventAssignments = eventAssignments;
 	}
 
 	@Override

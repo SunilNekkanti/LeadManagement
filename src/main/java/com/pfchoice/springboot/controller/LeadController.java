@@ -71,13 +71,15 @@ public class LeadController {
 			@RequestParam(value = "page", required = false) Integer pageNo,
 			@RequestParam(value = "size", required = false) Integer pageSize,
 			@RequestParam(value = "search", required = false) String search,
-			@ModelAttribute("roleName") String roleName) throws MessagingException, IOException {
+			@ModelAttribute("userId") Integer userId,
+			@ModelAttribute("roleName") String roleName,
+			@ModelAttribute("username") String username) throws MessagingException, IOException {
 
 		pageNo = (pageNo == null)?0:pageNo;
 		pageSize = (pageSize == null)?10:pageSize;
 		
 		PageRequest pageRequest = new PageRequest(pageNo, pageSize);
-		Specification<LeadMembership> spec = new LeadSpecifications(search);
+		Specification<LeadMembership> spec = new LeadSpecifications(userId,username, roleName, search);
 		Page<LeadMembership> leads = leadService.findAllLeadMembershipsByPage(spec, pageRequest);
 		if (leads.getTotalElements() == 0) {
 			System.out.println("no leads");
