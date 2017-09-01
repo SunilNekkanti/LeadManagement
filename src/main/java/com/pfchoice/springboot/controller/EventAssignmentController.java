@@ -130,7 +130,7 @@ public class EventAssignmentController {
 	    mail.setEmailTo(toEmailIds);
 		mail.setEmailFrom("skumar@pfchoice.com");
 		mail.setEmailCc(user.getContact().getEmail());
-		mail.setSubject("New EventAssignment " + eventAssignment.getEvent().getEventName() + " Created");
+		mail.setSubject("New Event " + eventAssignment.getEvent().getEventName() + " has been Assigned to you");
 		 
 		Map<String, Object> emailAttributes = new HashMap<>();
 		emailAttributes.put("toNamesList", toNamesList);

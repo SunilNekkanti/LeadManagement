@@ -46,7 +46,6 @@ app
 							self.displayEditButton = false;
 							self.submit = submit;
 							self.addEventAssignment = addEventAssignment;
-							self.eventAssignment.interval=self.eventAssignment.interval||1;
 							self.getAllEventAssignments = getAllEventAssignments;
 							self.createEventAssignment = createEventAssignment;
 							self.updateEventAssignment = updateEventAssignment;
@@ -192,7 +191,9 @@ app
 							function submit() {
 								console.log('Submitting');
 								self.eventAssignment.repeatRule = eventAssignmentrrule();
-								console.log('self.eventAssignment.repeatRule '+self.eventAssignment.repeatRule ); 
+								if(!self.repeatDisplay){
+									self.eventAssignment.repeatRule = '';
+								}
 								if (self.eventAssignment.id === undefined
 										|| self.eventAssignment.id === null) {
 									createEventAssignment(self.eventAssignment);
@@ -438,7 +439,7 @@ app
 							function repeat() {
 								self.repeatDisplay = !self.repeatDisplay;
 								if(self.repeatDisplay == true){
-									self.eventAssignment.interval = 1;
+									self.eventAssignment.interval = '1';
 									self.eventAssignment.frequency = 'DAILY';
 									self.eventAssignment.onWeekDay ={"id":1} ;
 									self.eventAssignment.onWeek='First';

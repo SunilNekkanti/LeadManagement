@@ -98,7 +98,7 @@
                 <span class="repeat-interval-panel">
                                 <label class="control-label col-md-1 repeat-interval-pretext">every</label>
                                 <span class="input-group spinner  col-md-2">
-                                   <select class="col-md-12 form-control" ng-init=" ctrl.eventAssignment.interval=ctrl.eventAssignment.interval|| 1"  ng-model="ctrl.eventAssignment.interval" name="interval" ng-options=" i as i for i in ctrl.eventAssignmentIntervals" >
+                                   <select class="col-md-12 form-control"  ng-model="ctrl.eventAssignment.interval" name="interval" ng-options="interval for interval in ctrl.eventAssignmentIntervals" >
 							       </select>
                                 </span>
                 <span ng-show="ctrl.eventAssignment.frequency=='DAILY'"><label class="control-label">&nbsp; day(s) </label></span>
