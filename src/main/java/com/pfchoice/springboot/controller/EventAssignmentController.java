@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
 
@@ -32,6 +33,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.pfchoice.springboot.model.Email;
 import com.pfchoice.springboot.model.Event;
 import com.pfchoice.springboot.model.EventAssignment;
+import com.pfchoice.springboot.model.FileUpload;
 import com.pfchoice.springboot.model.User;
 import com.pfchoice.springboot.repositories.specifications.EventAssignmentSpecifications;
 import com.pfchoice.springboot.service.EmailService;
@@ -119,36 +121,34 @@ public class EventAssignmentController {
 		Event event = eventAssignment.getEvent();
 		String eventNotes = (event.getNotes() != null) ? event.getNotes() : "";
 
-		// String toEmailIds =
-		// eventAssignment.getRepresentatives().stream().map(rep ->
-		// rep.getEmail())
-		// .collect(Collectors.joining(";"));
+		String toEmailIds = eventAssignment.getRepresentatives().stream().map(rep -> rep.getContact().getEmail()).collect(Collectors.joining(";"));
 		String toNamesList = eventAssignment.getRepresentatives().stream().map(rep -> rep.getUsername())
 				.collect(Collectors.joining(","));
-		String address = "";
-
+		String address = eventAssignment.getEvent().getContact().getAddress();
+		Set<FileUpload> attachments = eventAssignment.getEvent().getAttachments();
 		Email mail = new Email();
-		// mail.setEmailTo(toEmailIds);
+	    mail.setEmailTo(toEmailIds);
 		mail.setEmailFrom("skumar@pfchoice.com");
 		mail.setEmailCc(user.getContact().getEmail());
 		mail.setSubject("New EventAssignment " + eventAssignment.getEvent().getEventName() + " Created");
+		 
 		Map<String, Object> emailAttributes = new HashMap<>();
 		emailAttributes.put("toNamesList", toNamesList);
 		emailAttributes.put("eventName", eventAssignment.getEvent().getEventName());
 		emailAttributes.put("currentUser", user.getName());
 		emailAttributes.put("manager", user.getName());
 		emailAttributes.put("notes", eventNotes);
-		emailAttributes.put("eventStartTime", sdf.format(eventAssignment.getEvent().getEventDateStartTime().getTime()));
-		emailAttributes.put("eventEndTime", sdf.format(eventAssignment.getEvent().getEventDateEndTime().getTime()));
+		emailAttributes.put("eventStartTime", sdf.format(eventAssignment.getEventDateStartTime().getTime()));
+		emailAttributes.put("eventEndTime", sdf.format(eventAssignment.getEventDateEndTime().getTime()));
 		emailAttributes.put("currentTime", sdf.format(eventAssignment.getCreatedDate()));
 		emailAttributes.put("rrule", eventAssignment.getRepeatRule());
 		emailAttributes.put("location", address);
+		emailAttributes.put("attachments", attachments);
 
 		mail.setModel(emailAttributes);
-		// String emailTemplateFileName = "event_assignment_email_template.txt";
+		 String emailTemplateFileName = "event_assignment_email_template.txt";
 
-		// mail.setBody(emailService.geContentFromTemplate(emailAttributes,emailTemplateFileName
-		// ));
+		 mail.setBody(emailService.geContentFromTemplate(emailAttributes,emailTemplateFileName));
 		 emailService.sendMailWithAttachment(mail);
 
 		HttpHeaders headers = new HttpHeaders();

@@ -20,9 +20,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -67,7 +64,7 @@ public class Event extends RecordDetails implements Serializable {
 	@Column(name = "notes", length = 65535, columnDefinition = "TEXT")
 	private String notes;
 
-	@Fetch(FetchMode.SELECT) // remove this on data cleanup
+	//@Fetch(FetchMode.SELECT) // remove this on data cleanup
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinTable(name = "event_contacts", joinColumns = {
 			@JoinColumn(name = "event_id", referencedColumnName = "event_id", nullable = false, updatable = false) }, inverseJoinColumns = {

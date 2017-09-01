@@ -88,24 +88,24 @@ app
 															meta) {
 														 return '<a href="javascript:void(0)" class="'+full.id+'" ng-click="ctrl.editEventAssignment('+full.id+')">'+data+'</a>';
 													}).withClass("text-center"),
-									DTColumnBuilder.newColumn('event.eventDateStartTime')
+									DTColumnBuilder.newColumn('eventDateStartTime')
 											.withTitle('STARTDATE').renderWith(function(data, type) {
-												return $filter('date')(data, 'MM/dd/yyyy'); //date filter
+												return $filter('date')(new Date(data), 'MM/dd/yyyy'); //date filter
 											}).withOption(
 													'defaultContent', ''),
-									DTColumnBuilder.newColumn('event.eventDateStartTime')
+									DTColumnBuilder.newColumn('eventDateStartTime')
 													.withTitle('STARTTIME').renderWith(function(data, type) {
-														return $filter('date')(data, 'HH:mm'); //date filter
+														return $filter('date')(new Date(data), 'HH:mm'); //date filter
 													}).withOption(
 															'defaultContent', ''),				
-									DTColumnBuilder.newColumn('event.eventDateEndTime')
+									DTColumnBuilder.newColumn('eventDateEndTime')
 													.withTitle('ENDDATE').renderWith(function(data, type) {
-														return $filter('date')(data, 'MM/dd/yyyy'); //date filter
+														return $filter('date')(new Date(data), 'MM/dd/yyyy'); //date filter
 													}).withOption(
 															'defaultContent', ''),
-									DTColumnBuilder.newColumn('event.eventDateEndTime')
+									DTColumnBuilder.newColumn('eventDateEndTime')
 																	.withTitle('ENDTIME').renderWith(function(data, type) {
-																		return $filter('date')(data, 'HH:mm'); //date filter
+																		return $filter('date')(new Date(data), 'HH:mm'); //date filter
 																	}).withOption(
 																			'defaultContent', ''),
 								    DTColumnBuilder.newColumn('representatives[].username').withTitle(

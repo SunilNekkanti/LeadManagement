@@ -1,17 +1,18 @@
 package com.pfchoice.springboot.service.impl;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.activation.DataHandler;
-//import javax.activation.DataSource;
-//import javax.activation.FileDataSource;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import javax.mail.BodyPart;
-import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import com.pfchoice.springboot.model.Email;
+import com.pfchoice.springboot.model.FileUpload;
 import com.pfchoice.springboot.service.EmailService;
 
 import freemarker.template.Configuration;
@@ -65,27 +67,31 @@ public class EmailServiceImpl implements EmailService {
 	 * @throws MessagingException
 	 * @throws IOException
 	 */
+	@SuppressWarnings({ "unchecked", "resource" })
 	public void sendMailWithAttachment(Email mail) throws MessagingException, IOException, InterruptedException {
 
-	//	MimeMessage message = mailSender.createMimeMessage();
-	//	message.addHeaderLine("charset=UTF-8");
-	//	message.addHeaderLine("component=VEVENT");
-	//	message.addHeaderLine("method=REQUEST");
-//
-		//MimeMessageHelper helper = new MimeMessageHelper(message);
-		/*String[] toEmailList = mail.getEmailTo().split(";");
+		MimeMessage message = mailSender.createMimeMessage();
+		message.addHeaderLine("charset=UTF-8");
+		message.addHeaderLine("component=VEVENT");
+		message.addHeaderLine("method=REQUEST");
+
+		MimeMessageHelper helper = new MimeMessageHelper(message);
+		 String[] toEmailList = mail.getEmailTo().split(";");
 		helper.setTo(toEmailList);
 		helper.setFrom(mail.getEmailFrom());
 		helper.setSubject(mail.getSubject());
 		helper.setCc(mail.getEmailCc());
 		helper.setText(mail.getBody(), true);
 
-		Map<String, Object> emailAttributes = mail.getModel();
+		Map<String, Object> emailAttributes =  mail.getModel();
+		 String startDateTime = (emailAttributes.get("appointmentStartTime") ==null)? emailAttributes.get("eventStartTime").toString():emailAttributes.get("appointmentStartTime") .toString();
+		 String endDateTime = (emailAttributes.get("appointmentEndTime") ==null)? emailAttributes.get("eventEndTime").toString():emailAttributes.get("appointmentEndTime") .toString();
+         String location =   (emailAttributes.get("location") ==null)? "":emailAttributes.get("location").toString();
+         String currentTime = (emailAttributes.get("currentTime") ==null)? "":emailAttributes.get("currentTime").toString();
+         String eventName  = (emailAttributes.get("eventName") ==null)? "":emailAttributes.get("eventName").toString();
 		String rrule = (emailAttributes.get("rrule") != null)
 				? "RRULE:" + emailAttributes.get("rrule").toString() + "\n" : "";
-		System.out.println("rule" + rrule);
-		*/
-		
+		Set<FileUpload> attachments =  (Set<FileUpload>) emailAttributes.get("attachments");
 		 StringBuffer sb = new StringBuffer();
 
 		    StringBuffer buffer = sb.append(
@@ -97,7 +103,7 @@ public class EmailServiceImpl implements EmailService {
 		            + "TZID:America/New_York\n"
 		            + "X-LIC-LOCATION:America/New_York\n"
 		            + "BEGIN:STANDARD\n"
-		            + "DTSTART:20071104T020000Z\n"
+		            + "DTSTART:20071104T020000\n"
 		            + "TZOFFSETFROM:-0400\n"
 		            + "TZOFFSETTO:-0500\n"
 		            + "TZNAME:EST\n"
@@ -111,17 +117,18 @@ public class EmailServiceImpl implements EmailService {
 		            + "END:VTIMEZONE\n"
 		            + "BEGIN:VEVENT\n"
 		            + "ATTENDEE;ROLE=REQ-PARTICIPANT;RSVP=TRUE:MAILTO:skumar@pfchoice.com\n"
-		            + "ORGANIZER:MAILTO:skumar@pfchoice.com\n"
-		            + "DTSTART;TZID=America/New_York:20170831T100000Z\n"
-		            + "DTEND;TZID=America/New_York:20170831T110000Z\n"
-		            + "LOCATION:Conference room\n"
+		            + "ORGANIZER:MAILTO:lizfoster@pfchoice.com\n"
+		            + "DTSTART;TZID=America/New_York:"+startDateTime+"\n"
+		            + "DTEND;TZID=America/New_York:"+endDateTime+"\n"
+		            + "LOCATION:"+location+"\n"
 		            + "TRANSP:OPAQUE\n"
 		            + "SEQUENCE:0\n"
 		            + "UID:ABCDXXXXXEEEEEEEEEEEEEEDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDFFFFFFFFFFFFFFFFFFFFFFFF\n"
-		            + "DTSTAMP:20170831T120102Z\n"
+		            + rrule
+		            + "DTSTAMP:"+currentTime+"\n"
 		            + "CATEGORIES:Meeting\n"
-		            + "DESCRIPTION:testingemail calendar\n"
-		            + "SUMMARY:testing email calendar\n"
+		            + "DESCRIPTION:"+eventName+"\n"
+		            + "SUMMARY:"+eventName+"\n"
 		            + "PRIORITY:5\n"
 		            + "CLASS:PUBLIC\n"
 		            + "BEGIN:VALARM\n"
@@ -132,22 +139,46 @@ public class EmailServiceImpl implements EmailService {
 		            + "END:VEVENT\n"
 		            + "END:VCALENDAR");
 
-		    MimeMessage message = mailSender.createMimeMessage();
-		    message.addHeaderLine("charset=UTF-8");
-		    message.addHeaderLine("component=VEVENT");
-		    message.addHeaderLine("method=REQUEST");
 
-		    message.setFrom("skumar@pfchoice.com");
-		    message.addRecipient(Message.RecipientType.TO,  new InternetAddress("skumar@pfchoice.com"));
-		    message.setSubject("TTTTTesting calendar");
+			// Create the message part
+			BodyPart messageBodyPart = new MimeBodyPart();
+			messageBodyPart.setContent(mail.getBody(), "text/html");
 
-		    BodyPart messageBodyPart = new MimeBodyPart();
+			// Now set the actual message
+			//messageBodyPart.setText);
 
+			// Create a multipar message
+			Multipart multipart = new MimeMultipart();
+
+			// Set text message part
+			multipart.addBodyPart(messageBodyPart);
+
+			if( attachments != null && attachments.size()> 0) {
+				try {
+					for( FileUpload fileUpload: attachments) { 
+						BodyPart messageBodyPart1 = new MimeBodyPart();
+						messageBodyPart1.setContent(mail.getBody(), "text/html");
+						
+						File outputFile = new File(fileUpload.getFileName());
+						FileOutputStream outputStream = new FileOutputStream(outputFile); 
+						 outputStream.write(fileUpload.getData());  
+						// file attachment
+						DataSource source = new FileDataSource(fileUpload.getFileName());
+						messageBodyPart1.setDataHandler(new DataHandler(source));
+						messageBodyPart1.setFileName(fileUpload.getFileName());
+						multipart.addBodyPart(messageBodyPart1);
+					}
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+		
+			}
+			
 		    messageBodyPart.setHeader("Content-Class", "urn:content-classes:calendarmessage");
 		    messageBodyPart.setHeader("Content-ID", "calendar_message");
 		    messageBodyPart.setDataHandler(new DataHandler(new ByteArrayDataSource(buffer.toString(), "text/calendar")));
 
-		    Multipart multipart = new MimeMultipart();
+		  //  Multipart multipart = new MimeMultipart();
 
 		    multipart.addBodyPart(messageBodyPart);
 

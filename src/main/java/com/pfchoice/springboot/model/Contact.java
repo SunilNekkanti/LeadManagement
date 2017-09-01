@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -67,6 +68,9 @@ public class Contact extends RecordDetails implements Serializable {
 
 	@Column(name = "file_id")
 	private Integer fileId;
+
+	@Transient
+	private String address;
 
 	/**
 	 * 
@@ -275,6 +279,16 @@ public class Contact extends RecordDetails implements Serializable {
 	 */
 	public void setFileId(final Integer fileId) {
 		this.fileId = fileId;
+	}
+
+	/**
+	 * @return the address
+	 */
+	public String getAddress() {
+		StringBuffer sb = new StringBuffer();
+		sb.append(this.address1).append(",").append(this.address2).append(",").append(this.city).append(",").append(this.stateCode.getDescription())
+				.append(",").append(this.zipCode.getCode());
+		return sb.toString();
 	}
 
 	@Override
