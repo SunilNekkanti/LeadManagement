@@ -497,10 +497,13 @@ app.directive('date1Picker', function () {
 app.directive('fileModel', ['$parse', function ($parse) {
     return {
         restrict: 'A',
+        require: "ngModel",
         link: function (scope, element, attrs, ngModel) {
+        	
             var model = $parse(attrs.fileModel);
             var isMultiple = attrs.multiple;
             var modelSetter = model.assign;
+            var dirty = false;
             element.bind('change', function () {
                 var values = [];
                 angular.forEach(element[0].files, function (item) {
@@ -515,6 +518,7 @@ app.directive('fileModel', ['$parse', function ($parse) {
                         _file: item
                     };
                     values.push(value);
+                    scope.myForm.$setDirty();  
                 });
                 scope.$apply(function () {
                     if (isMultiple) {
@@ -523,6 +527,7 @@ app.directive('fileModel', ['$parse', function ($parse) {
                         modelSetter(scope, element[0].files[0]);
                     }
                 });
+              
             });
         }
     };

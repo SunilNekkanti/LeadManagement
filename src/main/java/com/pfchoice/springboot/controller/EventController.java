@@ -136,6 +136,8 @@ public class EventController {
 		currentEvent.setContact(event.getContact());
 		currentEvent.setNotes(event.getNotes());
 		currentEvent.setUpdatedBy(username);
+		currentEvent.getAttachments().clear();
+		currentEvent.getAttachments().addAll(event.getAttachments());
 		eventService.updateEvent(currentEvent);
 
 		return new ResponseEntity<Event>(currentEvent, HttpStatus.OK);

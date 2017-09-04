@@ -211,16 +211,8 @@ app
 							function submit() {
 								console.log('Submitting');
 								self.event.repeatRule = eventrrule();
-								console.log('self.event.repeatRule '+self.event.repeatRule ); 
-								if (self.event.id === undefined
-										|| self.event.id === null) {
-									uploadFile();
-									//createEvent(self.event);
-								} else {
-									updateEvent(self.event, self.event.id);
-									console.log('Event updated with id ',
-											self.event.id);
-								}
+								uploadFile();
+								
 								self.displayEditButton = false;
 							}
 
@@ -284,6 +276,8 @@ app
 													self.errorMessage = '';
 													self.done = true;
 													self.display = false;
+													self.event = {};
+													clearFiles();
 													$scope.myForm
 															.$setPristine();
 													self.dtInstance.reloadData();
@@ -396,7 +390,16 @@ app
 						                if(self.repeatDisplay === false){
 						                	self.event.repeatRule='';
 						                }
-						                createEvent(self.event);
+						                if (self.event.id === undefined
+												|| self.event.id === null) {
+											
+											createEvent(self.event);
+										} else {
+											updateEvent(self.event, self.event.id);
+											console.log('Event updated with id ',
+													self.event.id);
+										}
+						               // createEvent(self.event);
 						            }, function () {
 						                self.serverResponse = 'An error has occurred';
 						            })

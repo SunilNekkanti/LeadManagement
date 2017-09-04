@@ -113,7 +113,6 @@
                 </div>
                 <div class="col-md-3">
                   <input class="form-control input-md" type="file" name="files" file-model="ctrl.myFiles" ng-model="ctrl.myFiles" multiple />
-
                 </div>
               </div>
               
@@ -192,7 +191,7 @@
                   <div class="col-sm-6">
                     <div class="form-group col-sm-12">
                       <label for="homePhone">Phone</label>
-                      <input type="text" ng-model="ctrl.event.contact.homePhone" id="homePhone" name="homePhone" class="username form-control input-sm" placeholder="Enter Home phone" ng-required="!ctrl.event.address1"  ng-minlength="14" phone-input />
+                      <input type="text" ng-model="ctrl.event.contact.homePhone" id="homePhone" name="homePhone" class="username form-control input-sm" placeholder="Enter Home phone" ng-required="!ctrl.event.address1"  ng-minlength="10" phone-input />
                       <div class="has-error" ng-show="myForm.$dirty">
                         <span ng-show="myForm.homePhone.$error.required">This is a required field</span>
                         <span ng-show="myForm.homePhone.$error.minlength">Minimum length required is 10</span>
@@ -203,7 +202,7 @@
                   <div class="col-sm-6">
                     <div class="form-group col-sm-12">
                       <label for="mobilePhone">Mobile Phone</label>
-                      <input type="text" ng-model="ctrl.event.contact.mobilePhone" id="mobilePhone" name="mobilePhone" class="username form-control input-sm" placeholder="Enter Mobile phone" ng-minlength="14" phone-input  />
+                      <input type="text" ng-model="ctrl.event.contact.mobilePhone" id="mobilePhone" name="mobilePhone" class="username form-control input-sm" placeholder="Enter Mobile phone" ng-minlength="10" phone-input  />
                         <div class="has-error" ng-show="myForm.$dirty">
                         <span ng-show="myForm.mobilePhone.$error.minlength">Minimum length required is 10</span>
                       </div>
