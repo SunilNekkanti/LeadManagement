@@ -45,7 +45,6 @@ public class LeadSpecifications implements Specification<LeadMembership> {
 			p.getExpressions().add(cb.and(cb.equal(root.get("createdBy").as(String.class), username)));
 		}
 		if ("AGENT".equals(roleName)) {
-
 			p.getExpressions().add(cb.and(cb
 					.equal((root.join("agentLeadAppointmentList").join("user").get("id").as(Integer.class)), userId)));
 			p.getExpressions().add(cb.and(cb.equal(cb.upper(root.join("status").get("description")), "AGENT")));
@@ -56,8 +55,7 @@ public class LeadSpecifications implements Specification<LeadMembership> {
 
 			Calendar currentTime = Calendar.getInstance();
 			Date currentDate = currentTime.getTime();
-
-			p.getExpressions().add(cb.and(cb.between(cb.literal(currentDate), appointmentTime, allocationEndTime)));
+			p.getExpressions().add(cb.and(cb.between(appointmentTime,cb.literal(currentDate) , allocationEndTime)));
 
 		}
 		p.getExpressions().add(cb.and(cb.equal(root.get("activeInd"), 'Y')));
