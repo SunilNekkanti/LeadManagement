@@ -140,7 +140,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
           controller:'LeadController',
           controllerAs:'ctrl',
           params: {
-        	    'eventId': '0', 
+        	    'eventId': '', 
         	    'leadDisplay': false, 
         	  },
           resolve: {
@@ -341,7 +341,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
           controller:'EventAssignmentController',
           controllerAs:'ctrl',
           params: {
-        	    'eventId': '0', 
+        	    'eventId': '', 
         	    'leadDisplay': false, 
         	  },
           resolve: {

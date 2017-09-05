@@ -64,6 +64,8 @@ app
 							self.eventAssignmentrrule = eventAssignmentrrule;
 							self.convertToInt =convertToInt;
 							self.isOnDayorThe = isOnDayorThe;
+							self.addLead = addLead;
+							self.adminOrManager = adminOrManager;
 							self.sync =sync;
 							self.isChecked = isChecked;
 							self.dtInstance = {};
@@ -107,7 +109,7 @@ app
 																		return $filter('date')(new Date(data), 'HH:mm'); //date filter
 																	}).withOption(
 																			'defaultContent', ''),
-								    DTColumnBuilder.newColumn('representatives[].username').withTitle(
+								    DTColumnBuilder.newColumn('representatives[,].name').withTitle(
 																			'REPRESENTATIVES').withOption('defaultContent', ''),
 								    DTColumnBuilder.newColumn('repeatRule').withTitle('Rule').withOption('defaultContent', '')										];
 
@@ -218,8 +220,7 @@ app
 													self.done = true;
 													self.display = false;
 													self.eventAssignment = {};
-													$scope.myForm
-															.$setPristine();
+													$scope.myForm.$setPristine();
 													self.dtInstance.reloadData();
 							                        self.dtInstance.rerender();
 												},
@@ -525,6 +526,11 @@ app
 							      return match;
 							  };
 							  
+							  function addLead( ){
+									var params = {"eventId":self.eventAssignment.event.id,"leadDisplay":true};
+									$state.go('lead', params );
+									
+								}
 							  
 							 function sync(bool, item){
 								 
@@ -551,6 +557,14 @@ app
 									    return shortName.indexOf(weekday.shortName)> -1 ;
 									})[0];
 							  }
+							  
+							  function  adminOrManager(){
+							    	if($rootScope.loginUser.roleName === 'ADMIN' ||  $rootScope.loginUser.roleName === 'MANAGER'){
+							    		return true;
+							    	}else{
+							    		return false;
+							    	}
+							    }
 							  
 							self.inlineOptions = {
 								    customClass: getDayClass,

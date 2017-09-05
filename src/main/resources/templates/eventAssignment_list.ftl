@@ -3,7 +3,7 @@
   <div class="panel panel-default" ng-if="!ctrl.display">
     <!-- Default panel contents -->
     <div class="panel-heading"><span class="user">List of EventAssignments </span>
-      <button type="button" ng-click="ctrl.addEventAssignment()" ng-hide="ctrl.displayEditButton" class="btn btn-success btn-xs custom-width floatRight"> Add </button>
+      <button type="button" ng-click="ctrl.addEventAssignment()" ng-hide="ctrl.displayEditButton" class="btn btn-success btn-xs custom-width floatRight" ng-if="ctrl.adminOrManager()"> Add </button>
       <button type="button" ng-click="ctrl.editEventAssignment(ctrl.eventAssignmentId)" ng-show="ctrl.displayEditButton" class="btn btn-primary btn-xs custom-width floatRight">Edit</button>
       <button type="button" ng-click="ctrl.removeEventAssignment(ctrl.eventAssignmentId)" ng-show="ctrl.displayEditButton" class="btn btn-danger btn-xs custom-width floatRight">Remove</button>
     </div>
@@ -28,10 +28,12 @@
 
           <div class="panel-heading">
             <div class="form-actions floatCenter col-md-offset-4">
-              <input type="submit" value="{{!ctrl.eventAssignment.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid || myForm.$pristine">
+              <input type="button" value="{{!ctrl.eventAssignment.id ? 'Add' : 'Update'}}" ng-click="ctrl.submit()" class="btn btn-primary btn-sm " ng-disabled="myForm.$invalid || myForm.$pristine" ng-if="ctrl.adminOrManager()"></button>
               <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-sm" ng-disabled="myForm.$pristine">Reset Form</button>
               <button type="button" ng-click="ctrl.repeat()" class="btn  btn-primary btn-sm">Repeat</button>
               <button type="button"  ng-click="ctrl.addLead()" ng-show="ctrl.eventAssignment.id"   class="btn btn-success  btn-sm">Add Lead</button>
+              
+       
             </div>
           </div>
 

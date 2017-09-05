@@ -28,11 +28,29 @@ public class EventAssignmentSpecifications implements Specification<EventAssignm
 		cq.distinct(true);
 
 		Predicate p = cb.conjunction();
-		p.getExpressions().add(cb.or(cb.like(root.join("event").get("eventName"), containsLikePattern)
+		if (searchTerm != null && !"".equals(searchTerm)) {
+			p.getExpressions()
+					.add(cb.or(cb.like(root.join("event").get("eventName"), containsLikePattern),
+							cb.like(root.get("eventDateStartTime").as(String.class), containsLikePattern),
+							cb.like(root.get("eventDateEndTime").as(String.class), containsLikePattern),
+							cb.like(root.join("representatives").get("name"), containsLikePattern)
 
-		));
+			));
+		}
+		
+
 		if ("AGENT".equals(roleName) || "EVENT_COORDINATOR".equals(roleName)) {
 			p.getExpressions().add(cb.and(cb.equal(root.join("representatives").get("id").as(Integer.class), userId)));
+			
+			/*Expression<Date> eventStartTime = root.get("eventDateStartTime");
+			Expression<Date> eventEndTime = root.get("eventDateEndTime");
+
+			p.getExpressions()
+			.add(cb.and(cb.between(
+					cb.function("date_format", Date.class, cb.literal(new Date()), cb.literal("%Y-%m-%d")),
+					cb.function("date_format", Date.class, eventStartTime, cb.literal("%Y-%m-%d")),
+					cb.function("date_format", Date.class, eventEndTime, cb.literal("%Y-%m-%d")))));*/
+			
 		}
 		p.getExpressions().add(cb.and(cb.equal(root.get("activeInd"), 'Y')));
 		return p;

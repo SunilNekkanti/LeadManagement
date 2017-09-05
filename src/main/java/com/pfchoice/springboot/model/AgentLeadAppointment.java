@@ -12,8 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -21,6 +19,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pfchoice.springboot.util.JsonDateAndTimeDeserializer;
 import com.pfchoice.springboot.util.JsonDateAndTimeSerializer;
+import com.pfchoice.springboot.util.JsonDateDeserializer;
+import com.pfchoice.springboot.util.JsonDateSerializer;
 
 /**
  *
@@ -67,8 +67,9 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 	@JoinColumn(name = "ins_id", referencedColumnName = "insurance_id")
 	private Insurance insurance;
 
+	@JsonSerialize(using = JsonDateSerializer.class)
+	@JsonDeserialize(using = JsonDateDeserializer.class)
 	@Column(name = "effective_from")
-	@Temporal(TemporalType.DATE)
 	private Date effectiveFrom;
 
 	@Column(name = "transportation", insertable = false)

@@ -1,6 +1,5 @@
 package com.pfchoice.springboot.repositories.specifications;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -30,16 +29,18 @@ public class LeadSpecifications implements Specification<LeadMembership> {
 
 	public Predicate toPredicate(Root<LeadMembership> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
 		String containsLikePattern = getContainsLikePattern(searchTerm);
-
+		cq.distinct(true);
 		Predicate p = cb.conjunction();
-		p.getExpressions()
-				.add(cb.or(cb.like(cb.lower(root.get("firstName")), containsLikePattern),
-						cb.like(cb.lower(root.get("lastName")), containsLikePattern),
-						cb.like(root.join("gender").get("description"), containsLikePattern),
-						cb.like(root.join("language").get("description"), containsLikePattern),
-						cb.like(root.join("status").get("description"), containsLikePattern)
+		if (searchTerm != null && !"".equals(searchTerm)) {
+			p.getExpressions()
+					.add(cb.or(cb.like(cb.lower(root.get("firstName")), containsLikePattern),
+							cb.like(cb.lower(root.get("lastName")), containsLikePattern),
+							cb.like(root.join("gender").get("description"), containsLikePattern),
+							cb.like(root.join("language").get("description"), containsLikePattern),
+							cb.like(root.join("status").get("description"), containsLikePattern)
 
-		));
+			));
+		}
 
 		if ("EVENT_COORDINATOR".equals(roleName)) {
 			p.getExpressions().add(cb.and(cb.equal(root.get("createdBy").as(String.class), username)));
@@ -53,9 +54,7 @@ public class LeadSpecifications implements Specification<LeadMembership> {
 			Expression<Date> allocationEndTime = cb.function("AGENT_ALLOCATION_ENDDATE", Date.class, appointmentTime,
 					cb.literal(1440));
 
-			Calendar currentTime = Calendar.getInstance();
-			Date currentDate = currentTime.getTime();
-			p.getExpressions().add(cb.and(cb.between(appointmentTime,cb.literal(currentDate) , allocationEndTime)));
+			p.getExpressions().add(cb.lessThanOrEqualTo(appointmentTime, allocationEndTime));
 
 		}
 		p.getExpressions().add(cb.and(cb.equal(root.get("activeInd"), 'Y')));

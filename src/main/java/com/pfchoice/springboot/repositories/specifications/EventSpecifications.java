@@ -1,11 +1,7 @@
 package com.pfchoice.springboot.repositories.specifications;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -34,7 +30,7 @@ public class EventSpecifications implements Specification<Event> {
 
 		Predicate p = cb.conjunction();
 
-		if (searchTerm != null) {
+		if (searchTerm != null && !"".equals(searchTerm)) {
 			p.getExpressions()
 					.add(cb.or(cb.like(root.get("eventName"), containsLikePattern),
 							cb.like(root.get("eventDateStartTime").as(String.class), containsLikePattern),
@@ -50,13 +46,14 @@ public class EventSpecifications implements Specification<Event> {
 			p.getExpressions().add(cb.and(cb
 					.equal(root.join("eventAssignments").join("representatives").get("id").as(Integer.class), userId)));
 
-			Expression<Date> eventStartTime = root.get("eventDateStartTime");
+			/*	Expression<Date> eventStartTime = root.get("eventDateStartTime");
 			Expression<Date> eventEndTime = root.get("eventDateEndTime");
 
-			Calendar currentTime = Calendar.getInstance();
-			Date currentDate = currentTime.getTime();
-
-			p.getExpressions().add(cb.and(cb.between(cb.literal(currentDate), eventStartTime, eventEndTime)));
+			p.getExpressions()
+					.add(cb.and(cb.between(
+							cb.function("date_format", Date.class, cb.literal(new Date()), cb.literal("%Y-%m-%d")),
+							cb.function("date_format", Date.class, eventStartTime, cb.literal("%Y-%m-%d")),
+							cb.function("date_format", Date.class, eventEndTime, cb.literal("%Y-%m-%d")))));*/
 		}
 
 		p.getExpressions().add(cb.and(cb.equal(root.get("activeInd"), 'Y')));
