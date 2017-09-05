@@ -116,7 +116,7 @@ app.service('LeadService',
                 $http.post(urls.LEAD_SERVICE_API, lead)
                     .then(
                         function (response) {
-                            loadAllLeads();
+                        	loadLeads(0,10,'',null);
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
@@ -133,7 +133,7 @@ app.service('LeadService',
                 $http.put(urls.LEAD_SERVICE_API + id, lead)
                     .then(
                         function (response) {
-                            loadAllLeads();
+                        	loadLeads(0,10,'',null);
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
@@ -150,7 +150,7 @@ app.service('LeadService',
                 $http.delete(urls.LEAD_SERVICE_API + id)
                     .then(
                         function (response) {
-                            loadAllLeads();
+                        	loadLeads(0,10,'',null);
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {

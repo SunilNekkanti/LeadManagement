@@ -90,7 +90,7 @@ app.service('UserService',
                 $http.post(urls.USER_SERVICE_API, user)
                     .then(
                         function (response) {
-                            loadAllUsers();
+                        	loadUsers(0,10,'',null);
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
@@ -107,7 +107,7 @@ app.service('UserService',
                 $http.put(urls.USER_SERVICE_API + id, user)
                     .then(
                         function (response) {
-                            loadAllUsers();
+                        	loadUsers(0,10,'',null);
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
@@ -124,7 +124,7 @@ app.service('UserService',
                 $http.delete(urls.USER_SERVICE_API + id)
                     .then(
                         function (response) {
-                            loadAllUsers();
+                        	loadUsers(0,10,'',null);
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {

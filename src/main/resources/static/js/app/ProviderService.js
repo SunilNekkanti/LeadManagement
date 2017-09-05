@@ -19,7 +19,15 @@ app.service('ProviderService',
             function loadAllProviders() {
                 console.log('Fetching all providers');
                 var deferred = $q.defer();
-                $http.get(urls.PROVIDER_SERVICE_API)
+                var pageable = {
+                 		 page:0, size:1000
+                 		};
+
+                 		var config = {
+                 		 params: pageable,
+                 		 headers : {'Accept' : 'application/json'}
+                 		};
+                $http.get(urls.PROVIDER_SERVICE_API, config )
                     .then(
                         function (response) {
                             console.log('Fetched successfully all providers');

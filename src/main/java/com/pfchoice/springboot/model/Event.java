@@ -64,8 +64,7 @@ public class Event extends RecordDetails implements Serializable {
 	@Column(name = "notes", length = 65535, columnDefinition = "TEXT")
 	private String notes;
 
-	//@Fetch(FetchMode.SELECT) // remove this on data cleanup
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "event_contacts", joinColumns = {
 			@JoinColumn(name = "event_id", referencedColumnName = "event_id", nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id", nullable = false, updatable = false, unique = true) })

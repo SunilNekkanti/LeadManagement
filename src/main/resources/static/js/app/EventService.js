@@ -20,7 +20,7 @@ app.service('EventService',
                 console.log('Fetching all events');
                 var deferred = $q.defer();
                 var pageable = {
-                  		 page:0, size:10
+                  		 page:0, size:1000
                   		};
 
                   		var config = {

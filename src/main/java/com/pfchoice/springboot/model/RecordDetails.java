@@ -8,8 +8,9 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.pfchoice.springboot.util.JsonDateAndTimeDeserializer;
 
 /**
  * @author sarath
@@ -19,12 +20,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class RecordDetails {
 
 	@JsonIgnore
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "America/NewYork")
+	@JsonDeserialize(using = JsonDateAndTimeDeserializer.class)
 	@Column(name = "created_date", updatable = false)
 	private Date createdDate = new Date();
 
 	@JsonIgnore
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "America/NewYork")
+	@JsonDeserialize(using = JsonDateAndTimeDeserializer.class)
 	@Column(name = "updated_date", updatable = false)
 	private Date updatedDate = new Date();
 
@@ -36,6 +37,7 @@ public class RecordDetails {
 	@Column(name = "updated_by")
 	private String updatedBy = "sarath";
 
+	@JsonIgnore
 	@Column(name = "active_ind", insertable = false)
 	private Character activeInd = new Character('Y');
 
