@@ -1,7 +1,6 @@
 package com.pfchoice.springboot.model;
 
 import java.io.Serializable;
-import java.util.Set;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -13,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
@@ -52,11 +50,11 @@ public class User extends RecordDetails implements Serializable {
 	@JoinColumn(name = "language_id", referencedColumnName = "code")
 	private Language language;
 
-	@ManyToMany(cascade = { CascadeType.MERGE, CascadeType.REMOVE, CascadeType.DETACH }, fetch = FetchType.LAZY)
+	@ManyToOne(cascade =  CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "user_insurances", joinColumns = {
 			@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "insurance_id", referencedColumnName = "insurance_id", nullable = false, updatable = false) })
-	public Set<Insurance> insurances;
+					@JoinColumn(name = "insurance_id", referencedColumnName = "insurance_id", nullable = false) })
+	private  Insurance insurance;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "user_contacts", joinColumns = {
@@ -191,18 +189,17 @@ public class User extends RecordDetails implements Serializable {
 	}
 
 	/**
-	 * @return the insurances
+	 * @return the insurance
 	 */
-	public Set<Insurance> getInsurances() {
-		return insurances;
+	public Insurance getInsurance() {
+		return insurance;
 	}
 
 	/**
-	 * @param insurances
-	 *            the insurances to set
+	 * @param insurance the insurance to set
 	 */
-	public void setInsurances(Set<Insurance> insurances) {
-		this.insurances = insurances;
+	public void setInsurance(Insurance insurance) {
+		this.insurance = insurance;
 	}
 
 	/**

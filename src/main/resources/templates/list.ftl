@@ -102,7 +102,7 @@
                   <div class="form-group col-md-12">
                     <label class="col-md-2 control-lable" for="insurance">Insurance</label>
                     <div class="col-md-9">
-                      <select ng-model="ctrl.user.insurances" name="insurance" ng-options="insurance.name for insurance in ctrl.insurances | orderBy:'name' track by insurance.name" ng-required="(ctrl.user.roles|filter:{role:'AGENT'}).length > 0">
+                      <select ng-model="ctrl.user.insurance" name="insurance" ng-options="insurance.name for insurance in ctrl.insurances | orderBy:'name' track by insurance.name" ng-required="(ctrl.user.roles|filter:{role:'AGENT'}).length > 0">
                         <option value="">ALL</option>
                       </select>
                       <div class="has-error" ng-show="myForm.$dirty">

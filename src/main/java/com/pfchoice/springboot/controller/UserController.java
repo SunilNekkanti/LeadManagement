@@ -115,8 +115,7 @@ public class UserController {
 		currentUser.setPassword(user.getPassword());
 		currentUser.setLicenseNo(user.getLicenseNo());
 		currentUser.setRole(user.getRole());
-		currentUser.getInsurances().clear();
-		currentUser.setInsurances(user.getInsurances());
+		currentUser.setInsurance(user.getInsurance());
 		currentUser.setContact(user.getContact());
 		currentUser.setLanguage(user.getLanguage());
 		currentUser.setUpdatedBy(username);

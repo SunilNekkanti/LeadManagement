@@ -43,7 +43,7 @@ app
 							self.eventAssignmentMonths = [];
 							self.eventAssignmentMonth = {};
 							self.users = [];
-							self.display = false;
+							self.display = $stateParams.eventAssignmentDisplay||false;
 							self.displayEditButton = false;
 							self.submit = submit;
 							self.addEventAssignment = addEventAssignment;
@@ -80,7 +80,7 @@ app
 							self.successMessage = '';
 							self.errorMessage = '';
 							self.done = false;
-
+							self.cancelEdit = cancelEdit;
 							self.onlyIntegers = /^\d+$/;
 							self.onlyNumbers = /^\d+([,.]\d+)?$/;
 							self.checkBoxChange = checkBoxChange;
@@ -175,7 +175,7 @@ app
 												function(result) {
 													var records = {
 															'recordsTotal' : result.data.totalElements||0,
-															'recordsFiltered' : result.data.numberOfElements||0,
+															'recordsFiltered' : result.data.totalElements||0,
 															'data' : result.data.content||{}
 													};
 													fnCallback(records);
@@ -338,6 +338,15 @@ app
 								self.eventAssignment = {};
 								$scope.myForm.$setPristine(); // reset Form
 							}
+							
+							function cancelEdit(){
+								self.successMessage = '';
+								self.errorMessage = '';
+								self.eventAssignment = {};
+					            $state.go('eventAssignment');
+					            self.display  = false;
+					        }
+							
 							
                             function convertToInt(id){
                                 return parseInt(id, 10);

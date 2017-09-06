@@ -62,7 +62,7 @@ public class EventAssignment extends RecordDetails implements Serializable {
 	@ManyToMany(cascade = { CascadeType.MERGE, CascadeType.REMOVE }, fetch = FetchType.LAZY)
 	@JoinTable(name = "event_assignment_representatives", joinColumns = {
 			@JoinColumn(name = "event_assignment_id", referencedColumnName = "event_assignment_id", nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, updatable = false) })
+					@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false) })
 	private Set<User> representatives;
 
 	/**

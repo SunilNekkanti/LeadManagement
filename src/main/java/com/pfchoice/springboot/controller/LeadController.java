@@ -1,13 +1,8 @@
 package com.pfchoice.springboot.controller;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
 
 import javax.mail.MessagingException;
 
@@ -188,83 +183,99 @@ public class LeadController {
 		User user = userService.findById(userId);
 
 		List<LeadNotes> leadNotes = new ArrayList<>();
+
 		for (LeadNotes ln : lead.getLeadNotes()) {
-			ln.setUser(user);
-			ln.setLead(currentLeadMembership);
-			leadNotes.add(ln);
+			if (!"".equals(ln.getNotes().trim())) {
+				//ln.setUser(user);
+				ln.setLead(currentLeadMembership);
+				leadNotes.add(ln);
+			}
 		}
 
-		currentLeadMembership.getLeadNotes().clear();
-		currentLeadMembership.getLeadNotes().addAll(leadNotes);
+		if (leadNotes.size() > 0) {
+			currentLeadMembership.getLeadNotes().clear();
+			currentLeadMembership.getLeadNotes().addAll(leadNotes);
+		}
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
-		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-
+ 	List<AgentLeadAppointment> finalAgentLeadAppointList = new ArrayList<>();
 		List<AgentLeadAppointment> agntLeadAppointList = lead.getAgentLeadAppointmentList();
 
-		currentLeadMembership.getAgentLeadAppointmentList().clear();
-		currentLeadMembership.getAgentLeadAppointmentList().addAll(agntLeadAppointList);
-		currentLeadMembership.setUpdatedBy(username);
-		leadService.updateLeadMembership(currentLeadMembership);
+		for (AgentLeadAppointment ala : agntLeadAppointList) {
+			if (ala.getAppointmentTime() != null) {
+				ala.setUser(user);
+				finalAgentLeadAppointList.add(ala);
+			}
+		}
+		System.out.println("finalAgentLeadAppointList.size()"+finalAgentLeadAppointList.size());
+		if(finalAgentLeadAppointList.size() > 0){
+			currentLeadMembership.getAgentLeadAppointmentList().clear();
+			currentLeadMembership.getAgentLeadAppointmentList().addAll(finalAgentLeadAppointList);
+		} 
+		
+	 currentLeadMembership.setUpdatedBy(username);
+	 leadService.updateLeadMembership(currentLeadMembership);
 
-		/*
-		 * String toEmailIds = agntLeadAppointList.stream().map(la ->
-		 * la.getUser().getEmail()) .collect(Collectors.joining(",")); String
-		 * agentName = agntLeadAppointList.size() > 0 ?
-		 * agntLeadAppointList.stream().filter(ala ->
-		 * ala.getActiveInd()=='Y').findAny().get().getUser().getUsername() :
-		 * ""; Calendar calApptTime = (agntLeadAppointList.size() > 0) ?
-		 * agntLeadAppointList.stream().filter(ala ->
-		 * ala.getActiveInd()=='Y').findAny().get().getAppointmentTime() :
-		 * Calendar.getInstance();
-		 * 
-		 * String appointmentTime = agntLeadAppointList.size() > 0 ?
-		 * sdf.format(agntLeadAppointList.stream().filter(ala ->
-		 * ala.getActiveInd()=='Y').findAny().get().getAppointmentTime().getTime
-		 * ()) : new String(""); calApptTime.add(Calendar.MINUTE, 60); String
-		 * appointmentEndTime = agntLeadAppointList.size() > 0 ?
-		 * sdf.format(calApptTime.getTime()) : new String("");
-		 */
+	//SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+	/*
+	 * String toEmailIds = agntLeadAppointList.stream().map(la ->
+	 * la.getUser().getEmail()) .collect(Collectors.joining(",")); String
+	 * agentName = agntLeadAppointList.size() > 0 ?
+	 * agntLeadAppointList.stream().filter(ala ->
+	 * ala.getActiveInd()=='Y').findAny().get().getUser().getUsername() : "";
+	 * Calendar calApptTime = (agntLeadAppointList.size() > 0) ?
+	 * agntLeadAppointList.stream().filter(ala ->
+	 * ala.getActiveInd()=='Y').findAny().get().getAppointmentTime() :
+	 * Calendar.getInstance();
+	 * 
+	 * String appointmentTime = agntLeadAppointList.size() > 0 ?
+	 * sdf.format(agntLeadAppointList.stream().filter(ala ->
+	 * ala.getActiveInd()=='Y').findAny().get().getAppointmentTime().getTime ())
+	 * : new String(""); calApptTime.add(Calendar.MINUTE, 60); String
+	 * appointmentEndTime = agntLeadAppointList.size() > 0 ?
+	 * sdf.format(calApptTime.getTime()) : new String("");
+	 */
 
-		String address = "";
-		String leadNotesString = lead.getLeadNotes().stream().sorted((a, b) -> -1).findFirst().get().getNotes();
-		String careCoordinator = agntLeadAppointList.stream().filter(ala -> ala.getActiveInd() == 'Y').findAny().get()
-				.getCreatedBy();
-		String currentTime = sdf.format((new Date()).getTime());
+	// String address = "";
+	// String leadNotesString = lead.getLeadNotes().stream().sorted((a, b)
+	// -> -1).findFirst().get().getNotes();
+	// String careCoordinator = agntLeadAppointList.stream().filter(ala ->
+	// ala.getActiveInd() == 'Y').findAny().get()
+	// .getCreatedBy();
+	// currentTime = sdf.format((new Date()).getTime());
 
-		// calApptTime.setTimeZone(TimeZone.getTimeZone("UTC"));
+	// calApptTime.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-		Email mail = new Email();
-		// mail.setEmailTo(toEmailIds);
-		mail.setEmailFrom("skumar@pfchoice.com");
-		// mail.setEmailCc(user.getEmail());
-		mail.setSubject("Agent Lead Assignment");
-		Map<String, Object> emailAttributes = new HashMap<>();
-		// emailAttributes.put("agent", agentName);
-		emailAttributes.put("currentUser", user.getUsername());
-		emailAttributes.put("careCoordinator", careCoordinator);
-		emailAttributes.put("firstName", lead.getFirstName());
-		emailAttributes.put("lastName", lead.getLastName());
-		emailAttributes.put("notes", leadNotesString);
-		// emailAttributes.put("appointmentStartTime", appointmentTime);
-		// emailAttributes.put("appointmentEndTime", appointmentEndTime);
-		emailAttributes.put("currentTime", currentTime);
-		emailAttributes.put("location", address);
+	// Email mail = new Email();
+	// mail.setEmailTo(toEmailIds);
+	// mail.setEmailFrom("skumar@pfchoice.com");
+	// mail.setEmailCc(user.getEmail());
+	// mail.setSubject("Agent Lead Assignment");
+	// Map<String, Object> emailAttributes = new HashMap<>();
+	// emailAttributes.put("agent", agentName);
+	// emailAttributes.put("currentUser", user.getUsername());
+	// emailAttributes.put("careCoordinator", careCoordinator);
+	// emailAttributes.put("firstName", lead.getFirstName());
+	// emailAttributes.put("lastName", lead.getLastName());
+	// emailAttributes.put("notes", leadNotesString);
+	// // emailAttributes.put("appointmentStartTime", appointmentTime);
+	// emailAttributes.put("appointmentEndTime", appointmentEndTime);
+	// emailAttributes.put("currentTime", currentTime);
+	// emailAttributes.put("location", address);
 
-		mail.setModel(emailAttributes);
-		// String emailTemplateFileName =
-		// "agent_lead_assignment_email_template_"+roleName+".txt";
+	// mail.setModel(emailAttributes);
+	// String emailTemplateFileName =
+	// "agent_lead_assignment_email_template_"+roleName+".txt";
 
-		// mail.setBody(emailService.geContentFromTemplate(emailAttributes,emailTemplateFileName
-		// ));
-		// if("ROLE_CARE_COORDINATOR".equals(roleName)){
-		// emailService.sendMailWithAttachment(mail);
-		// } else{
-		// emailService.sendMail(mail);
-		// }
-		// emailService.sendMailWithAttachment(eParams);
+	// mail.setBody(emailService.geContentFromTemplate(emailAttributes,emailTemplateFileName
+	// ));
+	// if("ROLE_CARE_COORDINATOR".equals(roleName)){
+	// emailService.sendMailWithAttachment(mail);
+	// } else{
+	// emailService.sendMail(mail);
+	// }
+	// emailService.sendMailWithAttachment(eParams);
 
-		return new ResponseEntity<LeadMembership>(currentLeadMembership, HttpStatus.OK);
+	return new ResponseEntity<LeadMembership>(currentLeadMembership,HttpStatus.OK);
 	}
 
 	// ------------------- Delete a

@@ -90,8 +90,8 @@ app.controller('UserController',
 					.then(
 							function(result) {
 								var records = {
-									'recordsTotal' : result.data.totalElements,
-									'recordsFiltered' : result.data.numberOfElements,
+									'recordsTotal' : result.data.totalElements||0,
+									'recordsFiltered' : result.data.totalElements||0,
 									'data' : result.data.content||{}
 								};
 								fnCallback(records);
@@ -145,8 +145,6 @@ app.controller('UserController',
                         self.errorMessage='';
                         self.done = true;
                         self.display =false;
-                        self.languages = getAllLanguages();
-                        console.log(self.languages);
                         self.user={};
                         $scope.myForm.$setPristine();
                         self.dtInstance.reloadData();
@@ -257,7 +255,6 @@ app.controller('UserController',
             self.successMessage='';
             self.errorMessage='';
             self.user={};
-            $scope.myForm.$setPristine(); //reset Form
             self.display = false;
         }
        

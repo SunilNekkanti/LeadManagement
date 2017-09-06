@@ -87,6 +87,7 @@ app
 							self.configLeadEvent = configLeadEvent;
 							self.showAddorUpdateButton = showAddorUpdateButton;
 							self.leadEdit = leadEdit;
+							self.cancelEdit = cancelEdit;
 							 configLeadEvent();
 							self.reset = reset;
 							self.today = today;
@@ -184,7 +185,7 @@ app
 												function(result) {
 													var records = {
 														'recordsTotal' : result.data.totalElements||0,
-														'recordsFiltered' : result.data.numberOfElements||0,
+														'recordsFiltered' : result.data.totalElements||0,
 														'data' : result.data.content||{}
 													};
 													fnCallback(records);
@@ -205,8 +206,10 @@ app
 								console.log('Submitting');
 								if(self.lead.agentLeadAppointmentList){
 									self.lead.agentLeadAppointmentList = self.lead.agentLeadAppointmentList.filter(function( obj ) {
+										console.log("obj.id: "+obj.id +"  self.selectedAgentLeadAppointment.id "+ self.selectedAgentLeadAppointment.id);
 										  return obj.id != self.selectedAgentLeadAppointment.id;
 										});
+									
 									self.lead.agentLeadAppointmentList.push(self.selectedAgentLeadAppointment);
 								}
 								
@@ -263,8 +266,6 @@ app
 													self.lead = {};
 													self.notes ='';
 													clearFiles();
-													$scope.myForm
-															.$setPristine();
 													self.dtInstance.reloadData();
 							                        self.dtInstance.rerender();
 												},
@@ -291,8 +292,6 @@ app
 													self.display = false;
 													self.notes ='';
 													clearFiles();
-													$scope.myForm
-															.$setPristine();
 													self.dtInstance.reloadData();
 							                        self.dtInstance.rerender();
 												},
@@ -350,7 +349,8 @@ app
 															self.selectedAgentLeadAppointment= {} ;
 														} 			
 														else{
-															self.selectedAgentLeadAppointments = $filter("filter")(self.lead.agentLeadAppointmentList, {activeInd :'Y'});	
+															self.selectedAgentLeadAppointments = self.lead.agentLeadAppointmentList;
+															//self.selectedAgentLeadAppointments = $filter("filter")(self.lead.agentLeadAppointmentList, {activeInd :'Y'});	
 															if(self.selectedAgentLeadAppointments.length>0){
 																self.selectedAgentLeadAppointment = self.selectedAgentLeadAppointments[0];
 															}
@@ -389,6 +389,13 @@ app
 								self.lead = {};
 								$scope.myForm.$setPristine(); // reset Form
 							}
+							
+							function cancelEdit(){
+					            self.successMessage='';
+					            self.errorMessage='';
+					            self.lead={};
+					            self.display = false;
+					        }
 
 							function uploadFile() {
 						           var  promise = FileUploadService.uploadFileToUrl(self.myFile);
@@ -443,7 +450,12 @@ app
 						    }
 						    function showAddorUpdateButton(){
 						    	if($rootScope.loginUser.roleName === 'EVENT_COORDINATOR'){
-						    		return !self.myFile || self.lead.consentFormSigned == 'N' || self.invalid  || self.pristine ;
+						    		if(self.lead.id){
+						    			return  self.invalid  || self.pristine ;
+						    		}else{
+						    			return !self.myFile || self.lead.consentFormSigned == 'N' || self.invalid  || self.pristine ;
+						    		}
+						    		
 						    	}else{
 						    		return  self.invalid || self.pristine;
 						    	}

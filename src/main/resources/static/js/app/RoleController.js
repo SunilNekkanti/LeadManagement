@@ -75,8 +75,8 @@ app.controller('RoleController',
 					.then(
 							function(result) {
 								var records = {
-									'recordsTotal' : result.data.totalElements,
-									'recordsFiltered' : result.data.numberOfElements,
+									'recordsTotal' : result.data.totalElements||0,
+									'recordsFiltered' : result.data.totalElements||0,
 									'data' : result.data.content||{}
 								};
 								fnCallback(records);

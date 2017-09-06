@@ -294,7 +294,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
           controllerAs:'ctrl',
           params: {
         	    'id': '', 
-        	    'eventAssignmentDisplay': false, 
+        	    'eventAssignmentDisplay': false
         	  }
       })
       .state('eventAssignment.edit', {

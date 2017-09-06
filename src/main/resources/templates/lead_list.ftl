@@ -105,9 +105,9 @@
                 <div class="col-sm-6" >
                   <div class="form-group col-sm-12">
                     <label for="currentPlan">Current Plan</label>
-                    <input type="text" ng-model="ctrl.lead.presentInsurance"   name="presentInsurance" class="username  form-control input-sm" placeholder="Enter Present Insurance"  ng-minlength="3" />
+                    <input type="text" ng-model="ctrl.lead.initialInsurance"   name="initialInsurance" class="username  form-control input-sm" placeholder="Enter Present Insurance"  ng-minlength="3" />
                     <div class="has-error" ng-show="myForm.$dirty">
-                   	 <span ng-show="myForm.presentInsurance.$error.minlength">Minimum length required is 3</span>
+                   	 <span ng-show="myForm.initialInsurance.$error.minlength">Minimum length required is 3</span>
                     </div>
                   </div>
                 </div>
@@ -337,8 +337,8 @@
                		<div class="col-sm-6" ng-if="ctrl.showStatusNotes()">
                   		<div class="form-group col-sm-12">
                   			 <label class="control-label" for="statusNotes">Notes</label>	
-                  			 <textarea name="notes" class="form-control" ></textarea>
-                    		 <textarea name="notes" disabled class="form-control"></textarea>	
+                  			 <textarea name="notes" class="form-control" id="notes" ng-model="ctrl.notes" ></textarea>
+                    		 <textarea name="notes" disabled class="form-control" id="notes" ng-model="ctrl.lead.notesHistory"></textarea>	
                   		</div>
                		</div> 
                		
@@ -416,13 +416,13 @@
 
           </div>
         </div>
-        
-            <span style="display:hidden" >{{ ctrl.invalid = myForm.$inValid}}</span>
-            <span style="display:hidden" >{{ ctrl.pristine = myForm.$pristine}}</span>
+            <span style="display:hidden" ng-show="flase">{{ ctrl.invalid = myForm.$inValid}}</span>
+            <span style="display:hidden" ng-show="flase">{{ ctrl.pristine = myForm.$pristine}}</span>
           <div class="row col-sm-12" style="padding-bottom:20px;">
             <div class="form-actions floatCenter col-sm-offset-9">
-              <input type="submit" value="{{!ctrl.lead.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-sm" ng-disabled="ctrl.showAddorUpdateButton()">
-              <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-sm" ng-disabled="myForm.$pristine">Reset Form</button>
+              <input type="submit" value="{{!ctrl.lead.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-sm" ng-disabled="ctrl.showAddorUpdateButton()"/>
+              <button type="button" ng-click="ctrl.cancelEdit()" class="btn btn-warning btn-sm"   ng-if="ctrl.lead.id"  >Cancel</button>
+              <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-sm"  ng-if="!ctrl.lead.id"  ng-disabled="myForm.$pristine">Reset Form</button>
             </div>
           </div>
 

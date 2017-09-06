@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -41,13 +42,13 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 	@Column(name = "notes", length = 65535, columnDefinition = "TEXT")
 	private String notes;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	@ManyToOne(cascade = { CascadeType.MERGE},fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", referencedColumnName = "id", nullable=false)
 	private User user;
 
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "lead_mbr_id", referencedColumnName = "lead_mbr_id")
+	@JoinColumn(name = "lead_mbr_id", referencedColumnName = "lead_mbr_id", nullable=false)
 	private LeadMembership lead;
 
 	@JsonSerialize(using = JsonDateAndTimeSerializer.class)

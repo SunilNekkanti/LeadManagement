@@ -38,7 +38,6 @@ public class LeadNotes extends RecordDetails implements Serializable {
 	@JoinColumn(name = "lead_mbr_id", referencedColumnName = "lead_mbr_id", nullable = false)
 	private LeadMembership lead;
 
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
 	private User user;

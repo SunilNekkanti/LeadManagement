@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -58,6 +59,7 @@ public class LeadSpecifications implements Specification<LeadMembership> {
 
 		}
 		p.getExpressions().add(cb.and(cb.equal(root.get("activeInd"), 'Y')));
+		p.getExpressions().add(cb.and(cb.equal(root.join("agentLeadAppointmentList", JoinType.LEFT).get("activeInd"), 'Y')));
 		return p;
 
 	}
