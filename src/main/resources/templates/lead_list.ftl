@@ -7,13 +7,13 @@
       <button type="button" ng-click="ctrl.removeLead(ctrl.leadId)" ng-show="ctrl.displayEditButton" class="btn btn-danger btn-xs  custom-width floatRight">Remove</button>
     </div>
 
+
     <div class="panel-body">
       <div class="table-responsive">
         <table datatable="" id="content" dt-options="ctrl.dtOptions" dt-columns="ctrl.dtColumns" dt-instance="ctrl.dtInstance" class="table table-hover table-responsive  bordered table-striped table-condensed datatable "></table>
       </div>
     </div>
   </div>
-  
   
   <div class="panel panel-default" ng-if="ctrl.display">
     <div class="panel-heading">List Details</div>

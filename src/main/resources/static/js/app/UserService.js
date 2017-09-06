@@ -32,7 +32,12 @@ app.service('UserService',
                     .then(
                         function (response) {
                             console.log('Fetched successfully  leads');
+                            if (localStorage.getItem("users") === null) {
                             $localStorage.users = response.data.content;
+                            }else{
+                            	localStorage.removeItem("users") ;
+                            	$localStorage.users = response.data.content;
+                            }
                             deferred.resolve(response);
                          return     response ;
                         },
@@ -51,7 +56,12 @@ app.service('UserService',
                     .then(
                         function (response) {
                             console.log('Fetched successfully all users');
+                            if (localStorage.getItem("users") === null) {
                             $localStorage.users = response.data.content;
+                            }else{
+                            	localStorage.removeItem("users") ;
+                            	$localStorage.users = response.data.content;
+                            }
                             deferred.resolve(response);
                         },
                         function (errResponse) {

@@ -22,12 +22,13 @@ app
 						'$location',
 						'$stateParams',
 						'$compile',
+						'$state',
 						'$filter',
 						'DTOptionsBuilder',
 						'DTColumnBuilder',
 						function(LeadService, GenderService, StateService,
 								LeadStatusService, LanguageService,
-								InsuranceService, PlanTypeService, ProviderService, UserService, BestTimeToCallService, EventService, FileUploadService, $sce, $scope,$rootScope, $location, $stateParams, $compile, $filter,
+								InsuranceService, PlanTypeService, ProviderService, UserService, BestTimeToCallService, EventService, FileUploadService, $sce, $scope,$rootScope, $location, $stateParams, $compile, $state,$filter,
 								 DTOptionsBuilder, DTColumnBuilder) {
 
 							var self = this;
@@ -85,6 +86,7 @@ app
 							self.showLeadAdditionalDetails = showLeadAdditionalDetails;
 							self.configLeadEvent = configLeadEvent;
 							self.showAddorUpdateButton = showAddorUpdateButton;
+							self.leadEdit = leadEdit;
 							 configLeadEvent();
 							self.reset = reset;
 							self.today = today;
@@ -101,7 +103,7 @@ app
 											.withTitle('FIRSTNAME').renderWith(
 													function(data, type, full,
 															meta) {
-														 return '<a href="javascript:void(0)" class="'+full.id+'" ng-click="ctrl.editLead('+full.id+')">'+data+'</a>';
+														 return '<a href="javascript:void(0)" class="'+full.id+'" ng-click="ctrl.leadEdit(' +full.id+')">'+data+'</a>';
 													}).withClass("text-center"),
 									DTColumnBuilder.newColumn('lastName')
 											.withTitle('LASTNAME').withOption(
@@ -561,6 +563,12 @@ app
 							function getAllEvents() {
 								return EventService
 										.getAllEvents();
+							}
+							
+							function leadEdit(id){
+								var params = {"id":id,"leadDisplay":true};
+								$state.go('lead.edit',params);
+								editLead(id);
 							}
 							
 							function clearFiles(){

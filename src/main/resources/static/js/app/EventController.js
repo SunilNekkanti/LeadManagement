@@ -16,11 +16,12 @@ app
 						'$scope',
 						'$rootScope',
 						'$state',
+						'$stateParams',
 						'$compile',
 						'$filter',
 						'DTOptionsBuilder',
 						'DTColumnBuilder',
-						function(EventService,  FacilityTypeService, UserService, StateService,   FileUploadService, EventFrequencyService,EventMonthService, EventWeekDayService,EventWeekNumberService, $scope,$rootScope,$state, $compile, $filter,
+						function(EventService,  FacilityTypeService, UserService, StateService,   FileUploadService, EventFrequencyService,EventMonthService, EventWeekDayService,EventWeekNumberService, $scope,$rootScope,$state,$stateParams, $compile, $filter,
 								DTOptionsBuilder, DTColumnBuilder) {
 
 							var self = this;
@@ -44,7 +45,7 @@ app
 							self.eventMonths = [];
 							self.eventMonth = {};
 							self.users = [];
-							self.display = false;
+							self.display = $stateParams.eventDisplay||false;;
 							self.states = [];
 							self.displayEditButton = false;
 							self.submit = submit;
@@ -85,6 +86,7 @@ app
 							self.repeatDisplay = false;
 							self.repeat = repeat;
 							self.toggleMin = toggleMin;
+							self.eventEdit = eventEdit;
 							self.successMessage = '';
 							self.errorMessage = '';
 							self.done = false;
@@ -98,7 +100,7 @@ app
 											.withOption('defaultContent', '').renderWith(
 													function(data, type, full,
 															meta) {
-														 return '<a href="javascript:void(0)" class="'+full.id+'" ng-click="ctrl.editEvent('+full.id+')">'+data+'</a>';
+														 return '<a href="javascript:void(0)" class="'+full.id+'" ng-click="ctrl.eventEdit('+full.id+')">'+data+'</a>';
 													}).withClass("text-center"),
 									DTColumnBuilder.newColumn('eventDateStartTime')
 											.withTitle('STARTDATE').renderWith(function(data, type) {
@@ -579,6 +581,11 @@ app
 							}
 
 							
+							function eventEdit(id){
+								var params = {"id":id,"eventDisplay":true};
+								$state.go('event.edit',params);
+								editEvent(id);
+							}
 							
 							function addLead( ){
 								var params = {"eventId":self.event.id,"leadDisplay":true};

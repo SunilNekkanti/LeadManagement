@@ -14,11 +14,12 @@ app
 						'$scope',
 						'$rootScope',
 						'$state',
+						'$stateParams',
 						'$compile',
 						'$filter',
 						'DTOptionsBuilder',
 						'DTColumnBuilder',
-						function(EventAssignmentService,  UserService,  EventService, EventFrequencyService,EventMonthService, EventWeekDayService,EventWeekNumberService, $scope,$rootScope,$state, $compile, $filter,
+						function(EventAssignmentService,  UserService,  EventService, EventFrequencyService,EventMonthService, EventWeekDayService,EventWeekNumberService, $scope,$rootScope,$state,$stateParams, $compile, $filter,
 								DTOptionsBuilder, DTColumnBuilder) {
 
 							var self = this;
@@ -66,6 +67,7 @@ app
 							self.isOnDayorThe = isOnDayorThe;
 							self.addLead = addLead;
 							self.adminOrManager = adminOrManager;
+							self.eventAssignmentEdit = eventAssignmentEdit;
 							self.sync =sync;
 							self.isChecked = isChecked;
 							self.dtInstance = {};
@@ -87,7 +89,7 @@ app
 											.withTitle('EVENT NAME').renderWith(
 													function(data, type, full,
 															meta) {
-														 return '<a href="javascript:void(0)" class="'+full.id+'" ng-click="ctrl.editEventAssignment('+full.id+')">'+data+'</a>';
+														 return '<a href="javascript:void(0)" class="'+full.id+'" ng-click="ctrl.eventAssignmentEdit('+full.id+')">'+data+'</a>';
 													}).withClass("text-center"),
 									DTColumnBuilder.newColumn('eventDateStartTime')
 											.withTitle('STARTDATE').renderWith(function(data, type) {
@@ -601,6 +603,11 @@ app
 								    self.popup2.opened = true;
 								  };
 
+						  function eventAssignmentEdit(id){
+										var params = {"id":id,"eventAssignmentDisplay":true};
+										$state.go('eventAssignment.edit',params);
+										editEventAssignment(id);
+						 }		  
 						  function setDate(year, month, day) {
 							  self.eventAssignment.eventAssignmentDateTime = new Date(year, month, day);
 								  };
