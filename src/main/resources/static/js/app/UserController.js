@@ -169,7 +169,6 @@ app.controller('UserController',
                         self.errorMessage='';
                         self.done = true;
                         self.display =false;
-                        $scope.myForm.$setPristine();
                         self.dtInstance.reloadData();
                         self.dtInstance.rerender();
                     },

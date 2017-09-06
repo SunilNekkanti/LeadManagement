@@ -45,7 +45,7 @@ public class Insurance extends RecordDetails implements Serializable {
 	private PlanType planType;
 
 	@NotFound(action = NotFoundAction.IGNORE)
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade =  { CascadeType.MERGE, CascadeType.REMOVE }, fetch = FetchType.LAZY)
 	@JoinTable(name = "insurance_contacts", joinColumns = {
 			@JoinColumn(name = "ins_id", referencedColumnName = "Insurance_Id", nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id", nullable = false, updatable = false, unique = true) })

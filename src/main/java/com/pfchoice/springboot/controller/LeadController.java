@@ -178,7 +178,7 @@ public class LeadController {
 		currentLeadMembership.setLanguage(lead.getLanguage());
 		currentLeadMembership.setBestTimeToCall(lead.getBestTimeToCall());
 		currentLeadMembership.setStatus(lead.getStatus());
-		// currentLeadMembership.setContact(lead.getContact());
+		currentLeadMembership.setContact(lead.getContact());
 
 		User user = userService.findById(userId);
 

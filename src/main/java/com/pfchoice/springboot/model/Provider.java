@@ -53,7 +53,7 @@ public class Provider extends RecordDetails implements Serializable {
 	public Set<Language> languages;
 
 	@NotFound(action = NotFoundAction.IGNORE)
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = { CascadeType.MERGE, CascadeType.REMOVE }, fetch = FetchType.LAZY)
 	@JoinTable(name = "provider_contacts", joinColumns = {
 			@JoinColumn(name = "prvdr_id", referencedColumnName = "prvdr_id", nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id", nullable = false, updatable = false, unique = true) })

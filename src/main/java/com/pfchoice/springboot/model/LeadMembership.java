@@ -88,7 +88,7 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@JoinColumn(name = "lead_Mbr_Status", referencedColumnName = "code", insertable = false)
 	private LeadStatus status;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(cascade =  { CascadeType.MERGE, CascadeType.REMOVE }, fetch = FetchType.LAZY)
 	@JoinTable(name = "lead_contacts", joinColumns = {
 			@JoinColumn(name = "lead_mbr_id", referencedColumnName = "lead_mbr_id", nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id", nullable = false, updatable = false, unique = true) })

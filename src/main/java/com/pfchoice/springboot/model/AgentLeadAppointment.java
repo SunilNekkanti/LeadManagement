@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -42,7 +41,7 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 	@Column(name = "notes", length = 65535, columnDefinition = "TEXT")
 	private String notes;
 
-	@ManyToOne(cascade = { CascadeType.MERGE},fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", referencedColumnName = "id", nullable=false)
 	private User user;
 
