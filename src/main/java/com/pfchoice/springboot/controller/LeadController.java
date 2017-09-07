@@ -180,13 +180,11 @@ public class LeadController {
 		currentLeadMembership.setStatus(lead.getStatus());
 		currentLeadMembership.setContact(lead.getContact());
 
-		User user = userService.findById(userId);
-
+		
 		List<LeadNotes> leadNotes = new ArrayList<>();
 
 		for (LeadNotes ln : lead.getLeadNotes()) {
 			if (!"".equals(ln.getNotes().trim())) {
-				//ln.setUser(user);
 				ln.setLead(currentLeadMembership);
 				leadNotes.add(ln);
 			}
@@ -197,20 +195,24 @@ public class LeadController {
 			currentLeadMembership.getLeadNotes().addAll(leadNotes);
 		}
 
- 	List<AgentLeadAppointment> finalAgentLeadAppointList = new ArrayList<>();
-		List<AgentLeadAppointment> agntLeadAppointList = lead.getAgentLeadAppointmentList();
+		
+		if(!"EVENT_COORDINATOR".equals(roleName)){
 
-		for (AgentLeadAppointment ala : agntLeadAppointList) {
-			if (ala.getAppointmentTime() != null) {
-				ala.setUser(user);
-				finalAgentLeadAppointList.add(ala);
-			}
+		 	List<AgentLeadAppointment> finalAgentLeadAppointList = new ArrayList<>();
+				List<AgentLeadAppointment> agntLeadAppointList = lead.getAgentLeadAppointmentList();
+
+				for (AgentLeadAppointment ala : agntLeadAppointList) {
+					if (ala.getAppointmentTime() != null) {
+						finalAgentLeadAppointList.add(ala);
+					}
+				}
+				if(finalAgentLeadAppointList.size() > 0){
+					currentLeadMembership.getAgentLeadAppointmentList().clear();
+					currentLeadMembership.getAgentLeadAppointmentList().addAll(finalAgentLeadAppointList);
+				} 
+			
 		}
-		System.out.println("finalAgentLeadAppointList.size()"+finalAgentLeadAppointList.size());
-		if(finalAgentLeadAppointList.size() > 0){
-			currentLeadMembership.getAgentLeadAppointmentList().clear();
-			currentLeadMembership.getAgentLeadAppointmentList().addAll(finalAgentLeadAppointList);
-		} 
+
 		
 	 currentLeadMembership.setUpdatedBy(username);
 	 leadService.updateLeadMembership(currentLeadMembership);

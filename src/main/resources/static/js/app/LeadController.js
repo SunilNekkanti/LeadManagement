@@ -210,6 +210,7 @@ app
 										  return obj.id != self.selectedAgentLeadAppointment.id;
 										});
 									
+									console.log("self.selectedAgentLeadAppointment   ============"+JSON.stringify(self.selectedAgentLeadAppointment));
 									self.lead.agentLeadAppointmentList.push(self.selectedAgentLeadAppointment);
 								}
 								

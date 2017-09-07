@@ -56,10 +56,10 @@ public class LeadSpecifications implements Specification<LeadMembership> {
 					cb.literal(1440));
 
 			p.getExpressions().add(cb.lessThanOrEqualTo(appointmentTime, allocationEndTime));
-
+			p.getExpressions().add(cb.and(cb.equal(root.join("agentLeadAppointmentList", JoinType.LEFT).get("activeInd"), 'Y')));
 		}
 		p.getExpressions().add(cb.and(cb.equal(root.get("activeInd"), 'Y')));
-		p.getExpressions().add(cb.and(cb.equal(root.join("agentLeadAppointmentList", JoinType.LEFT).get("activeInd"), 'Y')));
+	
 		return p;
 
 	}
