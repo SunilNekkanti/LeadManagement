@@ -1,3 +1,4 @@
+
 <div class="generic-container">
   <div class="panel panel-default" ng-if="!ctrl.display">
     <!-- Default panel contents -->
@@ -116,9 +117,9 @@
                   <div class="form-group col-md-12">
                     <label class="col-md-2 control-lable" for="licenseNo">License No</label>
                     <div class="col-md-7">
-                      <input type="text" ng-model="ctrl.user.licenseNo" name="licenseNo" class="form-control input-sm" placeholder="Enter agent LicenseNo." ng-required="(ctrl.user.roles|filter:{role:'AGENT'}).length > 0" ng-minlength="6" />
+                      <input type="text" ng-model="ctrl.user.licenseNo" name="licenseNo" class="form-control input-sm" placeholder="Enter agent LicenseNo." ng-required="(ctrl.user.role.role=='AGENT')" ng-minlength="6" />
                       <div class="has-error" ng-show="myForm.$dirty">
-                        <span ng-show="(ctrl.user.roles|filter:{role:'AGENT'}).length > 0 &&  myForm.licenseNo.$error.required">This is a required field</span>
+                        <span ng-show="(ctrl.user.role.role=='AGENT') &&  myForm.licenseNo.$error.required">This is a required field</span>
                       </div>
                     </div>
                   </div>

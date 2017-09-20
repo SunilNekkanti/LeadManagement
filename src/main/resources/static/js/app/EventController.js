@@ -18,10 +18,11 @@ app
 						'$state',
 						'$stateParams',
 						'$compile',
+						'$sce',
 						'$filter',
 						'DTOptionsBuilder',
 						'DTColumnBuilder',
-						function(EventService,  FacilityTypeService, UserService, StateService,   FileUploadService, EventFrequencyService,EventMonthService, EventWeekDayService,EventWeekNumberService, $scope,$rootScope,$state,$stateParams, $compile, $filter,
+						function(EventService,  FacilityTypeService, UserService, StateService,   FileUploadService, EventFrequencyService,EventMonthService, EventWeekDayService,EventWeekNumberService, $scope,$rootScope,$state,$stateParams, $compile, $sce, $filter,
 								DTOptionsBuilder, DTColumnBuilder) {
 
 							var self = this;
@@ -101,7 +102,7 @@ app
 													function(data, type, full,
 															meta) {
 														 return '<a href="javascript:void(0)" class="'+full.id+'" ng-click="ctrl.eventEdit('+full.id+')">'+data+'</a>';
-													}).withClass("text-center"),
+													}).withClass("text-left"),
 									DTColumnBuilder.newColumn('eventDateStartTime')
 											.withTitle('STARTDATE').renderWith(function(data, type) {
 												return $filter('date')(new Date(data), 'MM/dd/yyyy'); //date filter
@@ -324,9 +325,9 @@ app
 								self.states = getAllStates();
 								self.facilityTypes = getAllFacilityTypes();
 								//self.eventFrequencies = getAllEventFrequencies();
-								self.eventMonths =getAllEventMonths();
-								self.eventOnWeekDays =getAllEventWeekDays();
-								self.eventOnWeeks =getAllEventWeekNumbers();
+								//self.eventMonths =getAllEventMonths();
+								//self.eventOnWeekDays =getAllEventWeekDays();
+								//self.eventOnWeeks =getAllEventWeekNumbers();
 									EventService
 										.getEvent(id)
 										.then(
@@ -349,16 +350,17 @@ app
 							function addEvent() {
 								self.successMessage = '';
 								self.errorMessage = '';
-								self.display = true;
+								$state.go('event.edit');
 								self.users = getAllAgents();
 								self.states = getAllStates();
 								self.facilityTypes = getAllFacilityTypes();
-								self.eventMonths =getAllEventMonths();
+								/*self.eventMonths =getAllEventMonths();
 								self.eventMonth = self.eventMonths[0];
 								self.eventOnWeekDays =getAllEventWeekDays();
-								//self.eventOnWeekDaysss = self.eventOnWeekDays[0];
+								// self.eventOnWeekDaysss = self.eventOnWeekDays[0]; //not required
 								self.eventOnWeeks =getAllEventWeekNumbers();
-								self.eventOnWeek = self.eventOnWeeks[0];
+								self.eventOnWeek = self.eventOnWeeks[0];*/
+								self.display = true;
 								
 							}
 
@@ -582,8 +584,8 @@ app
 
 							
 							function eventEdit(id){
-								var params = {"id":id,"eventDisplay":true};
-								$state.go('event.edit',params);
+							//	var params = {"id":id,"eventDisplay":true};
+								$state.go('event.edit');
 								editEvent(id);
 							}
 							

@@ -11,6 +11,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
+import org.hibernate.bytecode.internal.javassist.FieldHandled;
+import org.hibernate.bytecode.internal.javassist.FieldHandler;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -21,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(name = "lu_state_zip")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class ZipCode extends RecordDetails implements Serializable {
+public class ZipCode extends RecordDetails implements Serializable, FieldHandled {
 
 	private static final long serialVersionUID = 1L;
 
@@ -32,9 +37,13 @@ public class ZipCode extends RecordDetails implements Serializable {
 	private Integer code;
 
 	@JsonIgnore
+	@LazyToOne(LazyToOneOption.NO_PROXY)
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "statecode", referencedColumnName = "code")
 	private State stateCode;
+
+	@JsonIgnore
+	private FieldHandler fieldHandler;
 
 	/**
 	 * 
@@ -69,6 +78,9 @@ public class ZipCode extends RecordDetails implements Serializable {
 	 * @return the stateCode
 	 */
 	public State getStateCode() {
+		if (fieldHandler != null) {
+			return (State) fieldHandler.readObject(this, "stateCode", stateCode);
+		}
 		return stateCode;
 	}
 
@@ -77,7 +89,28 @@ public class ZipCode extends RecordDetails implements Serializable {
 	 *            the stateCode to set
 	 */
 	public void setStateCode(final State stateCode) {
+		if (fieldHandler != null) {
+			this.stateCode = (State) fieldHandler.writeObject(this, "stateCode", this.stateCode, stateCode);
+			return;
+		}
 		this.stateCode = stateCode;
+	}
+
+	@Override
+	public void setFieldHandler(FieldHandler fieldHandler) {
+		this.fieldHandler = fieldHandler;
+	}
+
+	@Override
+	public FieldHandler getFieldHandler() {
+		return fieldHandler;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 0;
+		hash += (code != null ? code.hashCode() : 0);
+		return hash;
 	}
 
 	@Override

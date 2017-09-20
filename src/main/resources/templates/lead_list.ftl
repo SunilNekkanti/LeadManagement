@@ -48,10 +48,10 @@
                 <div class="col-sm-6">
                   <div class="form-group col-sm-12">
                     <label for="firstName"> First Name </label>
-                    <input type="text" ng-model="ctrl.lead.firstName" id="firstName" name="firstName" class="username form-control input-sm" placeholder="Enter firstname" required ng-minlength="5" />
+                    <input type="text" ng-model="ctrl.lead.firstName" id="firstName" name="firstName" class="username form-control input-sm" placeholder="Enter firstname" required ng-minlength="2" />
                     <div class="has-error" ng-show="myForm.$dirty">
                       <span ng-show="myForm.firstName.$error.required">This is a required field</span>
-                      <span ng-show="myForm.firstName.$error.minlength">Minimum length required is 5</span>
+                      <span ng-show="myForm.firstName.$error.minlength">Minimum length required is 2</span>
                       <span ng-show="myForm.firstName.$invalid">This field is invalid </span>
                     </div>
                   </div>
@@ -59,10 +59,10 @@
                 <div class="col-sm-6">
                   <div class="form-group col-sm-12">
                     <label for="lastName">Last Name</label>
-                    <input type="text" ng-model="ctrl.lead.lastName" id="lastName" name="lastName" class="username  form-control input-sm" placeholder="Enter last name" required ng-minlength="5" />
+                    <input type="text" ng-model="ctrl.lead.lastName" id="lastName" name="lastName" class="username  form-control input-sm" placeholder="Enter last name" required ng-minlength="2" />
                     <div class="has-error" ng-show="myForm.$dirty">
                       <span ng-show="myForm.lastName.$error.required">This is a required field</span>
-                      <span ng-show="myForm.lastName.$error.minlength">Minimum length required is 5</span>
+                      <span ng-show="myForm.lastName.$error.minlength">Minimum length required is 2</span>
                       <span ng-show="myForm.lastName.$invalid">This field is invalid </span>
                     </div>
                   </div>
@@ -243,7 +243,7 @@
           </div>
         </div>
 
-        <div class="col-sm-12 additionalInfo" ng-if="ctrl.showLeadAdditionalDetails()">
+        <div class="col-sm-12 additionalInfo" ng-if="ctrl.showLeadAdditionalDetails()" ng-show="!ctrl.lead.id">
           <div class="panel panel-default">
             <div class="panel-heading">Additional Details</div>
             <div class="panel-body">
@@ -284,7 +284,7 @@
             </div>
           </div>
         </div>
-    <div class="col-sm-12 agentInfo" ng-if="ctrl.showAgentAssignment()">
+    <div class="col-sm-12 agentInfo" ng-if="ctrl.showAgentAssignment()" ng-show="ctrl.lead.id">
           <div class="panel panel-default">
             <div class="panel-heading">Agent Assignment</div>
             <div class="panel-body">

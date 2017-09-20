@@ -59,7 +59,7 @@ public class UserController {
 
 	// -------------------Retrieve Single
 	// User------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN",  "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getUser(@PathVariable("id") int id) {
 		logger.info("Fetching User with id {}", id);
@@ -111,6 +111,7 @@ public class UserController {
 					HttpStatus.NOT_FOUND);
 		}
 
+		currentUser.setName(user.getName());
 		currentUser.setUsername(user.getUsername());
 		currentUser.setPassword(user.getPassword());
 		currentUser.setLicenseNo(user.getLicenseNo());

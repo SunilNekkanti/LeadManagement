@@ -7,7 +7,9 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -47,24 +49,25 @@ public class AppController {
 	 */
 	@RequestMapping("/home")
 	String home(HttpSession session, ModelMap modal, @ModelAttribute("username") String username) {
-
+		LoginForm loginForm ;
 		if (!modal.containsAttribute("username")) {
 			modal.addAttribute("username", username);
 		}
 		User user = userService.findByUsername(username);
-
-		LoginForm loginForm = new LoginForm();
-		loginForm.setUsername(username);
+		
 		if (user != null && !modal.containsAttribute("userId")) {
+			loginForm = new LoginForm();
+			loginForm.setUsername(username);
 			modal.addAttribute("userId", user.getId());
 			loginForm.setUserId(user.getId());
+			Role role = user.getRole();
+			modal.addAttribute("roleId", role.getId());
+			modal.addAttribute("roleName", role.getRole());
+			loginForm.setRoleName(role.getRole());
+			loginForm.setRoleId(role.getId());
+			session.setAttribute("loginUser", loginForm);
 		}
-		Role role = user.getRole();
-		modal.addAttribute("roleId", role.getId());
-		modal.addAttribute("roleName", role.getRole());
-		loginForm.setRoleName(role.getRole());
-		loginForm.setRoleId(role.getId());
-		session.setAttribute("loginUser", loginForm);
+		
 
 		return "home";
 	}
@@ -101,12 +104,14 @@ public class AppController {
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
 
-		System.out.println("inside /logout");
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth != null) {
-			new SecurityContextLogoutHandler().logout(request, response, auth);
+			new SecurityContextLogoutHandler().logout(request, response, null);
 		}
-		return "redirect:/";// You can redirect wherever you want,
+		new CookieClearingLogoutHandler(AbstractRememberMeServices.SPRING_SECURITY_REMEMBER_ME_COOKIE_KEY)
+        .logout(request, response, null);
+
+		return "redirect:/login";// You can redirect wherever you want,
 										// but generally it's a good practice to
 										// show login screen again.
 	}

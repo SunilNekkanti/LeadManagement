@@ -53,7 +53,7 @@ app.service('LeadService',
                         function (response) {
                             console.log('Fetched successfully all leads');
                             $localStorage.leads = response.data.content;
-                            deferred.resolve(response.data.content);
+                            deferred.resolve(response);
                         },
                         function (errResponse) {
                             console.error('Error while loading leads');

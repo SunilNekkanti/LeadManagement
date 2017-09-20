@@ -1,7 +1,5 @@
 package com.pfchoice.springboot.controller;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -9,17 +7,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.pfchoice.springboot.model.FileUpload;
@@ -138,7 +132,7 @@ public class FileUploadController {
 		return new ResponseEntity<FileUpload>(HttpStatus.NO_CONTENT);
 	}
 
-	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_MANAGER", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR" })
+	/*@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_MANAGER", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR" })
 	@RequestMapping(value = { "/fileUpload/fileProcessing.do" }, method = RequestMethod.POST)
 	public List<FileUpload> uploadFileProcessing(Model model, @RequestParam MultipartFile[] files) throws IOException {
 		logger.info("started file processsing" + files.toString());
@@ -154,7 +148,7 @@ public class FileUploadController {
 				try {
 					// String ext = FilenameUtils.getExtension(fileName);
 					logger.info("fileName is : " + fileName);
-					FileUpload fileUploader = new FileUpload();
+					FileUploadContent fileUploader = new FileUploadContent();
 					fileUploader.setFileName(fileName);
 					fileUploader.setContentType(fileUpload.getContentType());
 					fileUploader.setData(fileUpload.getBytes());
@@ -171,8 +165,8 @@ public class FileUploadController {
 		return fileUploaders;
 
 	}
-
-	// -------------------Retrieve FileUploaded data
+*/
+/*	// -------------------Retrieve FileUploaded data
 	// ------------------------------------------
 	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_MANAGER", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR" })
 	@RequestMapping(value = "/fileUploaded/{id}", method = RequestMethod.GET)
@@ -184,12 +178,12 @@ public class FileUploadController {
 					HttpStatus.NOT_FOUND);
 		}
 
-		byte[] contents = fileUpload.getData();
+	//	byte[] contents = fileUpload.getData();
 		HttpHeaders headers = new HttpHeaders();
 		String filename = fileUpload.getFileName();
 		headers.setContentDispositionFormData("inline", filename);
 		headers.setContentType(MediaType.parseMediaType(fileUpload.getContentType()));
 
 		return new ResponseEntity<byte[]>(contents, headers, HttpStatus.OK);
-	}
+	}*/
 }

@@ -180,13 +180,13 @@ public class LeadController {
 		currentLeadMembership.setStatus(lead.getStatus());
 		currentLeadMembership.setContact(lead.getContact());
 
-		
 		List<LeadNotes> leadNotes = new ArrayList<>();
-
-		for (LeadNotes ln : lead.getLeadNotes()) {
-			if (!"".equals(ln.getNotes().trim())) {
-				ln.setLead(currentLeadMembership);
-				leadNotes.add(ln);
+		if(lead.getLeadNotes() != null){
+			for (LeadNotes ln : lead.getLeadNotes()) {
+				if (!"".equals(ln.getNotes().trim())) {
+					ln.setLead(currentLeadMembership);
+					leadNotes.add(ln);
+				}
 			}
 		}
 
@@ -198,7 +198,8 @@ public class LeadController {
 		
 		if(!"EVENT_COORDINATOR".equals(roleName)){
 
-		 	List<AgentLeadAppointment> finalAgentLeadAppointList = new ArrayList<>();
+			if(!"New".equalsIgnoreCase(lead.getStatus().getDescription())){
+				List<AgentLeadAppointment> finalAgentLeadAppointList = new ArrayList<>();
 				List<AgentLeadAppointment> agntLeadAppointList = lead.getAgentLeadAppointmentList();
 
 				for (AgentLeadAppointment ala : agntLeadAppointList) {
@@ -210,6 +211,7 @@ public class LeadController {
 					currentLeadMembership.getAgentLeadAppointmentList().clear();
 					currentLeadMembership.getAgentLeadAppointmentList().addAll(finalAgentLeadAppointList);
 				} 
+			}
 			
 		}
 

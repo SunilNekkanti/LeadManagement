@@ -19,8 +19,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.pfchoice.springboot.security.CustomAuthenticationSuccessHandler;
+import com.pfchoice.springboot.security.CustomLogoutHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -79,6 +81,8 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.anyRequest().authenticated().and().formLogin().loginPage("/").usernameParameter("username")
 				.passwordParameter("password").loginProcessingUrl("/loginform.do")
 				.successHandler(new CustomAuthenticationSuccessHandler()).failureUrl("/login?error").and()
+				.logout().addLogoutHandler(customLogoutHandler())   
+                .logoutRequestMatcher(new AntPathRequestMatcher("/login")).and()
 				.exceptionHandling().accessDeniedPage("/403").and()
 
 				.csrf().disable()
@@ -99,5 +103,10 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		auth.userDetailsService(authenticationService).passwordEncoder(encoder);
 		auth.userDetailsService(authenticationService);
+	}
+	
+	@Bean
+	public CustomLogoutHandler customLogoutHandler() {
+	    return new CustomLogoutHandler();
 	}
 }

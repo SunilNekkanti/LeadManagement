@@ -20,7 +20,7 @@ app.service('EventService',
                 console.log('Fetching all events');
                 var deferred = $q.defer();
                 var pageable = {
-                  		 page:0, size:1000
+                  		 page:0, size:100
                   		};
 
                   		var config = {
@@ -32,7 +32,7 @@ app.service('EventService',
                         function (response) {
                             console.log('Fetched successfully all events');
                             $localStorage.events = response.data.content;
-                            deferred.resolve(response.data.content);
+                            deferred.resolve(response);
                         },
                         function (errResponse) {
                             console.error('Error while loading events');
@@ -42,11 +42,11 @@ app.service('EventService',
                 return deferred.promise;
             }
             
-            function loadEvents(draw, length, search, order) {
+            function loadEvents(pageNo, length, search, order) {
                 console.log('Fetching  events');
                 var deferred = $q.defer();
                 var pageable = {
-                  		 page:draw, size:length,search: search||''
+                  		 page:pageNo, size:length,search: search||''
                   		};
 
                   		var config = {

@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -59,7 +58,7 @@ public class EventAssignment extends RecordDetails implements Serializable {
 	@Column(name = "event_date_endtime", nullable = true)
 	private Date eventDateEndTime;
 
-	@ManyToMany(cascade = { CascadeType.MERGE, CascadeType.REMOVE }, fetch = FetchType.LAZY)
+	@ManyToMany( fetch = FetchType.LAZY)
 	@JoinTable(name = "event_assignment_representatives", joinColumns = {
 			@JoinColumn(name = "event_assignment_id", referencedColumnName = "event_assignment_id", nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false) })

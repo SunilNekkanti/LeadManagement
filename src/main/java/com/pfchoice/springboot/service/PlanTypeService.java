@@ -20,5 +20,5 @@ public interface PlanTypeService {
 
 	List<PlanType> findAllPlanTypes();
 
-	boolean isPlanTypeExist(PlanType gender);
+	boolean isPlanTypeExist(PlanType planType);
 }

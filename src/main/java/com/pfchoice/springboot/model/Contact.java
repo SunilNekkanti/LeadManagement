@@ -13,6 +13,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
+import org.hibernate.bytecode.internal.javassist.FieldHandled;
+import org.hibernate.bytecode.internal.javassist.FieldHandler;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
@@ -21,7 +27,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 @Entity(name = "contact")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class Contact extends RecordDetails implements Serializable {
+
+public class Contact extends RecordDetails implements Serializable, FieldHandled {
 
 	private static final long serialVersionUID = 1L;
 
@@ -58,10 +65,12 @@ public class Contact extends RecordDetails implements Serializable {
 	@Column(name = "city")
 	private String city;
 
+	@LazyToOne(LazyToOneOption.NO_PROXY)
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "statecode", referencedColumnName = "code")
 	private State stateCode;
 
+	@LazyToOne(LazyToOneOption.NO_PROXY)
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "zipcode", referencedColumnName = "zipcode")
 	private ZipCode zipCode;
@@ -71,6 +80,9 @@ public class Contact extends RecordDetails implements Serializable {
 
 	@Transient
 	private String address;
+
+	@JsonIgnore
+	private FieldHandler fieldHandler;
 
 	/**
 	 * 
@@ -240,6 +252,9 @@ public class Contact extends RecordDetails implements Serializable {
 	 * @return the zipCode
 	 */
 	public ZipCode getZipCode() {
+		if (fieldHandler != null) {
+			return (ZipCode) fieldHandler.readObject(this, "zipCode", zipCode);
+		}
 		return zipCode;
 	}
 
@@ -248,6 +263,10 @@ public class Contact extends RecordDetails implements Serializable {
 	 *            the zipCode to set
 	 */
 	public void setZipCode(final ZipCode zipCode) {
+		if (fieldHandler != null) {
+			this.zipCode = (ZipCode) fieldHandler.writeObject(this, "zipCode", this.zipCode, zipCode);
+			return;
+		}
 		this.zipCode = zipCode;
 	}
 
@@ -255,6 +274,9 @@ public class Contact extends RecordDetails implements Serializable {
 	 * @return the stateCode
 	 */
 	public State getStateCode() {
+		if (fieldHandler != null) {
+			return (State) fieldHandler.readObject(this, "stateCode", stateCode);
+		}
 		return stateCode;
 	}
 
@@ -263,6 +285,10 @@ public class Contact extends RecordDetails implements Serializable {
 	 *            the stateCode to set
 	 */
 	public void setStateCode(final State stateCode) {
+		if (fieldHandler != null) {
+			this.stateCode = (State) fieldHandler.writeObject(this, "stateCode", this.stateCode, stateCode);
+			return;
+		}
 		this.stateCode = stateCode;
 	}
 
@@ -285,10 +311,25 @@ public class Contact extends RecordDetails implements Serializable {
 	 * @return the address
 	 */
 	public String getAddress() {
-		StringBuffer sb = new StringBuffer();
-		sb.append(this.address1).append(",").append(this.address2).append(",").append(this.city).append(",").append(this.stateCode.getDescription())
-				.append(",").append(this.zipCode.getCode());
-		return sb.toString();
+		if (fieldHandler != null && stateCode != null && zipCode != null) {
+			StringBuffer sb = new StringBuffer();
+			sb.append(this.address1).append(",").append(this.address2).append(",").append(this.city).append(",")
+					.append(this.stateCode.getDescription()).append(",").append(this.zipCode.getCode());
+			return sb.toString();
+		} else {
+			return null;
+		}
+
+	}
+
+	@Override
+	public void setFieldHandler(FieldHandler fieldHandler) {
+		this.fieldHandler = fieldHandler;
+	}
+
+	@Override
+	public FieldHandler getFieldHandler() {
+		return fieldHandler;
 	}
 
 	@Override

@@ -215,10 +215,10 @@
                   <div class="col-sm-6">
                     <div class="form-group col-sm-12">
                       <label for="bestTimeToCall">Contact Person</label>
-                      <input type="text" class="form-control netto-input" name="contactPerson" ng-model="ctrl.event.contact.contactPerson" ng-required="true" ng-minlength="5" >
+                      <input type="text" class="form-control netto-input" name="contactPerson" ng-model="ctrl.event.contact.contactPerson" ng-required="true" ng-minlength="3" >
                       <div class="has-error" ng-show="myForm.$dirty">
                         <span ng-show="myForm.contactPerson.$error.required">This is a required field</span>
-                        <span ng-show="myForm.contactPerson.$error.minlength">Minimum length required is 5</span>
+                        <span ng-show="myForm.contactPerson.$error.minlength">Minimum length required is 3</span>
                         <span ng-show="myForm.contactPerson.$invalid">This field is invalid </span>
                       </div>
                     </div>

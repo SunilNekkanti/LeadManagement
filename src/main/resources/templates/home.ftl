@@ -68,6 +68,8 @@
   <script src="js/app/EventAssignmentService.js"></script>
   <script src="js/app/EventAssignmentController.js"></script>
   <script src="js/app/BestTimeToCallService.js"></script>
+    <script src="js/app/datetimepicker.js"></script>
+      <script src="js/app/datetimepicker.templates.js"></script>
 </head>
 
 <body class="ng-cloak" ng-controller="NavbarController">

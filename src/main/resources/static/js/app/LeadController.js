@@ -37,13 +37,14 @@ app
 							self.pristine = true;
 							self.serverResponse = {};
 							self.lead = {};
+							self.user = {};
 							self.notes ='';
 							self.leads = [];
 							self.leadEventId = $stateParams.eventId;
 							self.genders = [];
 							self.bestTimeToCalls = [];
 							self.states = [];
-							$location.url('/');
+							//$location.url('/');
 							self.languages = [];
 							self.statuses = [];
 							self.insurances = [];
@@ -90,6 +91,7 @@ app
 							self.cancelEdit = cancelEdit;
 							 configLeadEvent();
 							self.reset = reset;
+							self.getCurrentUser = getCurrentUser; 
 							self.today = today;
 							self.toggleMin = toggleMin;
 							self.successMessage = '';
@@ -105,7 +107,7 @@ app
 													function(data, type, full,
 															meta) {
 														 return '<a href="javascript:void(0)" class="'+full.id+'" ng-click="ctrl.leadEdit(' +full.id+')">'+data+'</a>';
-													}).withClass("text-center"),
+													}).withClass("text-left"),
 									DTColumnBuilder.newColumn('lastName')
 											.withTitle('LASTNAME').withOption(
 													'defaultContent', ''),
@@ -206,26 +208,29 @@ app
 								console.log('Submitting');
 								if(self.lead.agentLeadAppointmentList){
 									self.lead.agentLeadAppointmentList = self.lead.agentLeadAppointmentList.filter(function( obj ) {
-										console.log("obj.id: "+obj.id +"  self.selectedAgentLeadAppointment.id "+ self.selectedAgentLeadAppointment.id);
+										console.log("obj.id: "+obj.id +"  self.selectedAgentLeadAppointment.id ");
 										  return obj.id != self.selectedAgentLeadAppointment.id;
 										});
 									
-									console.log("self.selectedAgentLeadAppointment   ============"+JSON.stringify(self.selectedAgentLeadAppointment));
 									self.lead.agentLeadAppointmentList.push(self.selectedAgentLeadAppointment);
 								}
 								
+								 if(self.notes && self.notes != ''){
+				            		 self.lead.leadNotes = [];
+				            		// getCurrentUser($rootScope.loginUser.userId);
+				            		// console.log("********************self.user*******"+JSON.stringify(self.user));
+				            		 self.lead.leadNotes.push({notes:self.notes});
+				            	 }
+								
 								if (self.lead.id === undefined
 										|| self.lead.id === null) {
-									console.log('Saving New Lead', self.lead);
+									console.log('Saving New Lead');
 									
 									uploadFile();
 									
 									
 								} else {
-									 if(self.notes && self.notes != ''){
-					            		 self.lead.leadNotes = [];
-					            		 self.lead.leadNotes.push({notes:self.notes});
-					            	 }
+									 
 									updateLead(self.lead, self.lead.id);
 									console.log('Lead updated with id ',
 											self.lead.id);
@@ -328,8 +333,10 @@ app
 												});
 							}
 							function editLead(id) {
+								
 								self.successMessage = '';
 								self.errorMessage = '';
+								self.events = getAllEvents();
 								self.genders = getAllGenders();
 								self.bestTimeToCalls = getAllBestTimeToCalls();
 								self.states = getAllStates();
@@ -339,13 +346,12 @@ app
 								self.planTypes = getAllPlanTypes();
 								self.providers = getAllProviders();
 								self.users = getAllAgents();
-								self.events = getAllEvents();
 									LeadService
 										.getLead(id)
 										.then(
 												function(lead) {
 													self.lead = lead;
-													self.display = true;
+													
 														if(self.lead.agentLeadAppointmentList === undefined){
 															self.selectedAgentLeadAppointment= {} ;
 														} 			
@@ -356,7 +362,7 @@ app
 																self.selectedAgentLeadAppointment = self.selectedAgentLeadAppointments[0];
 															}
 														}
-												
+													self.display = true;
 												},
 												function(errResponse) {
 													console
@@ -368,10 +374,9 @@ app
 							}
 
 							function addLead() {
-								
+								$state.go("lead.add");
 								self.successMessage = '';
 								self.errorMessage = '';
-								self.display = true;
 								self.genders = getAllGenders();
 								self.bestTimeToCalls = getAllBestTimeToCalls(); 
 								self.states = getAllStates();
@@ -382,6 +387,7 @@ app
 								self.providers = getAllProviders();
 								self.users = getAllAgents();
 								self.events = getAllEvents();
+								self.display = true;
 							}
 
 							function reset() {
@@ -512,7 +518,7 @@ app
 						    }
 						    
 						    function showLeadAdditionalDetails(){
-						    	if($rootScope.loginUser.roleName == 'EVENT_COORDINATOR' || $rootScope.loginUser.roleName == 'ADMIN'){
+						    	if($rootScope.loginUser.roleName == 'CARE_COORDINATOR' || $rootScope.loginUser.roleName == 'EVENT_COORDINATOR' || $rootScope.loginUser.roleName == 'ADMIN'){
 						    		return true;
 						    	}else{
 						    		return false;
@@ -579,7 +585,7 @@ app
 							}
 							
 							function leadEdit(id){
-								var params = {"id":id,"leadDisplay":true};
+								var params = {'id':id,'leadDisplay':false};
 								$state.go('lead.edit',params);
 								editLead(id);
 							}
@@ -637,6 +643,17 @@ app
 								    self.popup2.opened = true;
 								  };
 
+						    function getCurrentUser(id) {
+							  
+							  UserService.getUser(id).then(
+						                function (user) {
+						                    self.user = user;
+						                },
+						                function (errResponse) {
+						                    console.error('Error while removing user ' + id + ', Error :' + errResponse.data);
+						                });
+							}  
+								  
 								  
 						  function setDate(year, month, day) {
 							  self.bestTimeToCall = new Date(year, month, day);

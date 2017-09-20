@@ -1,12 +1,13 @@
 'use strict';
 
 app.controller('UserController',
-    ['UserService', 'RoleService', 'LanguageService', 'StateService', 'InsuranceService', 'CountyService', '$scope', '$compile','DTOptionsBuilder', 'DTColumnBuilder', function( UserService, RoleService, LanguageService, StateService, InsuranceService,CountyService, $scope,$compile,  DTOptionsBuilder, DTColumnBuilder) {
+    ['UserService', 'RoleService', 'LanguageService', 'StateService', 'InsuranceService', 'CountyService', '$scope', '$compile','$location','$state','$stateParams','DTOptionsBuilder', 'DTColumnBuilder', function( UserService, RoleService, LanguageService, StateService, InsuranceService,CountyService, $scope,$compile,$location,$state, $stateParams, DTOptionsBuilder, DTColumnBuilder) {
 
         var self = this;
+      //$location.url('/');
         self.user = {};
         self.users=[];
-        self.display =false;
+        self.display =  $stateParams.userDisplay||false;
         self.displayEditButton = false;
         self.submit = submit;
         self.roles=[];
@@ -21,6 +22,7 @@ app.controller('UserController',
         self.editUser = editUser;
 		self.userId = null;
         self.reset = reset;
+        self.userEdit = userEdit;
         self.cancelEdit = cancelEdit;
         self.getAllLanguages = getAllLanguages;
         self.getAllCounties = getAllCounties;
@@ -41,7 +43,7 @@ app.controller('UserController',
 					function(data, type, full,
 							meta) {
 						 return '<a href="javascript:void(0)" class="'+full.id+'" ng-click="ctrl.editUser('+full.id+')">'+data+'</a>';
-					}).withClass("text-center"),
+					}).withClass("text-left"),
             DTColumnBuilder.newColumn('role.role').withTitle('ROLE').withOption('defaultContent', ''),
             DTColumnBuilder.newColumn('contact.mobilePhone').withTitle('MOBILE').withOption('defaultContent', ''),
             DTColumnBuilder.newColumn('contact.email').withTitle('EMAIL').withOption('defaultContent', '')
@@ -258,6 +260,7 @@ app.controller('UserController',
         }
        
         function addUser() {
+        	 $state.go('user.add');
             self.successMessage='';
             self.errorMessage='';
             self.languages = getAllLanguages();
@@ -268,7 +271,11 @@ app.controller('UserController',
             self.display =true;
         }
         
-    
+        function userEdit(id){
+			var params = {"id":id,"userDisplay":true};
+			$state.go('user.edit',params);
+			editUser(id);
+		}
     }
     
 

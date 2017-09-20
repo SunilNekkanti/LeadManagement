@@ -90,7 +90,7 @@ app
 													function(data, type, full,
 															meta) {
 														 return '<a href="javascript:void(0)" class="'+full.id+'" ng-click="ctrl.eventAssignmentEdit('+full.id+')">'+data+'</a>';
-													}).withClass("text-center"),
+													}).withClass("text-left"),
 									DTColumnBuilder.newColumn('eventDateStartTime')
 											.withTitle('STARTDATE').renderWith(function(data, type) {
 												return $filter('date')(new Date(data), 'MM/dd/yyyy'); //date filter
@@ -221,8 +221,8 @@ app
 													self.errorMessage = '';
 													self.done = true;
 													self.display = false;
+													//$scope.myForm.$setPristine();
 													self.eventAssignment = {};
-													$scope.myForm.$setPristine();
 													self.dtInstance.reloadData();
 							                        self.dtInstance.rerender();
 												},
@@ -613,8 +613,7 @@ app
 								  };
 
 						  function eventAssignmentEdit(id){
-										var params = {"id":id,"eventAssignmentDisplay":true};
-										$state.go('eventAssignment.edit',params);
+										$state.go('eventAssignment.edit');
 										editEventAssignment(id);
 						 }		  
 						  function setDate(year, month, day) {

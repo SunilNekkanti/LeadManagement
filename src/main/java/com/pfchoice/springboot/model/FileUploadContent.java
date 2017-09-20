@@ -10,6 +10,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.bytecode.internal.javassist.FieldHandled;
+import org.hibernate.bytecode.internal.javassist.FieldHandler;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
@@ -19,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(name = "file_upload")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class FileUpload extends RecordDetails implements Serializable {
+public class FileUploadContent extends RecordDetails implements Serializable, FieldHandled {
 
 	private static final long serialVersionUID = 1L;
 
@@ -35,10 +39,16 @@ public class FileUpload extends RecordDetails implements Serializable {
 	@Column(name = "content_type")
 	private String contentType;
 
+	@Column(name = "file_data", nullable = false, columnDefinition = "mediumblob")
+	private byte[] data;
+
+	@JsonIgnore
+	private FieldHandler fieldHandler;
+
 	/**
 	 * 
 	 */
-	public FileUpload() {
+	public FileUploadContent() {
 		super();
 	}
 
@@ -46,7 +56,7 @@ public class FileUpload extends RecordDetails implements Serializable {
 	 * 
 	 * @param id
 	 */
-	public FileUpload(final Integer id) {
+	public FileUploadContent(final Integer id) {
 		super();
 		this.id = id;
 	}
@@ -97,6 +107,31 @@ public class FileUpload extends RecordDetails implements Serializable {
 		this.fileName = fileName;
 	}
 
+	/**
+	 * @return the data
+	 */
+	public byte[] getData() {
+		return data;
+	}
+
+	/**
+	 * @param data
+	 *            the data to set
+	 */
+	public void setData(byte[] data) {
+		this.data = data;
+	}
+
+	@Override
+	public void setFieldHandler(FieldHandler fieldHandler) {
+		this.fieldHandler = fieldHandler;
+	}
+
+	@Override
+	public FieldHandler getFieldHandler() {
+		return fieldHandler;
+	}
+
 	@Override
 	public int hashCode() {
 		int hash = 0;
@@ -106,10 +141,10 @@ public class FileUpload extends RecordDetails implements Serializable {
 
 	@Override
 	public boolean equals(Object object) {
-		if (!(object instanceof FileUpload)) {
+		if (!(object instanceof FileUploadContent)) {
 			return false;
 		}
-		FileUpload other = (FileUpload) object;
+		FileUploadContent other = (FileUploadContent) object;
 		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
 			return false;
 		}

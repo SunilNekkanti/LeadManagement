@@ -11,6 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.bytecode.internal.javassist.FieldHandled;
+import org.hibernate.bytecode.internal.javassist.FieldHandler;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
@@ -20,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(name = "lu_state")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class State extends RecordDetails implements Serializable {
+public class State extends RecordDetails implements Serializable, FieldHandled {
 
 	private static final long serialVersionUID = 1L;
 
@@ -36,8 +42,12 @@ public class State extends RecordDetails implements Serializable {
 	@Column(name = "shot_name")
 	private String shortName;
 
+	@LazyCollection(LazyCollectionOption.EXTRA)
 	@OneToMany(mappedBy = "stateCode", fetch = FetchType.LAZY)
 	private Set<ZipCode> zipCodes;
+
+	@JsonIgnore
+	private FieldHandler fieldHandler;
 
 	/**
 	 * 
@@ -101,16 +111,35 @@ public class State extends RecordDetails implements Serializable {
 	/**
 	 * @return the zipCode
 	 */
+	@SuppressWarnings("unchecked")
 	public Set<ZipCode> getZipCodes() {
-		return zipCodes;
+		if (fieldHandler != null) {
+			return (Set<ZipCode>) fieldHandler.readObject(this, "zipCodes", zipCodes);
+		} else {
+			return zipCodes;
+		}
+
 	}
 
 	/**
 	 * @param zipCode
 	 *            the zipCode to set
 	 */
+	@SuppressWarnings("unchecked")
 	public void setZipCodes(final Set<ZipCode> zipCodes) {
+		if (fieldHandler != null) {
+			this.zipCodes = (Set<ZipCode>) fieldHandler.writeObject(this, "zipCodes", this.zipCodes, zipCodes);
+			return;
+		}
 		this.zipCodes = zipCodes;
+	}
+
+	public void setFieldHandler(FieldHandler fieldHandler) {
+		this.fieldHandler = fieldHandler;
+	}
+
+	public FieldHandler getFieldHandler() {
+		return fieldHandler;
 	}
 
 	@Override

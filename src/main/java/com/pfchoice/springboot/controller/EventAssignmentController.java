@@ -3,6 +3,7 @@ package com.pfchoice.springboot.controller;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
@@ -34,10 +35,12 @@ import com.pfchoice.springboot.model.Email;
 import com.pfchoice.springboot.model.Event;
 import com.pfchoice.springboot.model.EventAssignment;
 import com.pfchoice.springboot.model.FileUpload;
+import com.pfchoice.springboot.model.FileUploadContent;
 import com.pfchoice.springboot.model.User;
 import com.pfchoice.springboot.repositories.specifications.EventAssignmentSpecifications;
 import com.pfchoice.springboot.service.EmailService;
 import com.pfchoice.springboot.service.EventAssignmentService;
+import com.pfchoice.springboot.service.FileUploadContentService;
 import com.pfchoice.springboot.service.UserService;
 import com.pfchoice.springboot.util.CustomErrorType;
 
@@ -61,6 +64,10 @@ public class EventAssignmentController {
 
 	@Autowired
 	EmailService emailService;
+	
+	@Autowired
+	FileUploadContentService fileUploadContentService;
+	
 	// -------------------Retrieve All
 	// EventAssignments---------------------------------------------
 
@@ -126,6 +133,13 @@ public class EventAssignmentController {
 				.collect(Collectors.joining(","));
 		String address = eventAssignment.getEvent().getContact().getAddress();
 		Set<FileUpload> attachments = eventAssignment.getEvent().getAttachments();
+		Set<FileUploadContent> attachmentContents = new HashSet<>();
+		if(attachments!= null && !attachments.isEmpty()){
+			for(FileUpload fileupload: attachments ){
+				FileUploadContent fileUploadContent = fileUploadContentService.findById(fileupload.getId());
+				attachmentContents.add(fileUploadContent);
+			}
+		}
 		Email mail = new Email();
 	    mail.setEmailTo(toEmailIds);
 		mail.setEmailFrom("skumar@pfchoice.com");
@@ -143,7 +157,7 @@ public class EventAssignmentController {
 		emailAttributes.put("currentTime", sdf.format(eventAssignment.getCreatedDate()));
 		emailAttributes.put("rrule", eventAssignment.getRepeatRule());
 		emailAttributes.put("location", address);
-		emailAttributes.put("attachments", attachments);
+		emailAttributes.put("attachments", attachmentContents);
 
 		mail.setModel(emailAttributes);
 		 String emailTemplateFileName = "event_assignment_email_template.txt";
@@ -176,6 +190,7 @@ public class EventAssignmentController {
 
 		currentEventAssignment.setRepeatRule(eventAssignment.getRepeatRule());
 		currentEventAssignment.getRepresentatives().clear();
+		System.out.println("eventAssignment.getRepresentatives()"+eventAssignment.getRepresentatives());
 		currentEventAssignment.getRepresentatives().addAll(eventAssignment.getRepresentatives());
 		currentEventAssignment.setUpdatedBy(username);
 		eventAssignmentService.updateEventAssignment(currentEventAssignment);

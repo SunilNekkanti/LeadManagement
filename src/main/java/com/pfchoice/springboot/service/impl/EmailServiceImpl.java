@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import com.pfchoice.springboot.model.Email;
-import com.pfchoice.springboot.model.FileUpload;
+import com.pfchoice.springboot.model.FileUploadContent;
 import com.pfchoice.springboot.service.EmailService;
 
 import freemarker.template.Configuration;
@@ -91,7 +91,7 @@ public class EmailServiceImpl implements EmailService {
          String eventName  = (emailAttributes.get("eventName") ==null)? "":emailAttributes.get("eventName").toString();
 		String rrule = (emailAttributes.get("rrule") != null)
 				? "RRULE:" + emailAttributes.get("rrule").toString() + "\n" : "";
-		Set<FileUpload> attachments =  (Set<FileUpload>) emailAttributes.get("attachments");
+		Set<FileUploadContent> attachments =  (Set<FileUploadContent>) emailAttributes.get("attachments");
 		 StringBuffer sb = new StringBuffer();
 
 		    StringBuffer buffer = sb.append(
@@ -155,13 +155,13 @@ public class EmailServiceImpl implements EmailService {
 
 			if( attachments != null && attachments.size()> 0) {
 				try {
-					for( FileUpload fileUpload: attachments) { 
+					for( FileUploadContent fileUpload: attachments) { 
 						BodyPart messageBodyPart1 = new MimeBodyPart();
 						messageBodyPart1.setContent(mail.getBody(), "text/html");
 						
 						File outputFile = new File(fileUpload.getFileName());
 						FileOutputStream outputStream = new FileOutputStream(outputFile); 
-						 outputStream.write(fileUpload.getData());  
+						outputStream.write(fileUpload.getData());  
 						// file attachment
 						DataSource source = new FileDataSource(fileUpload.getFileName());
 						messageBodyPart1.setDataHandler(new DataHandler(source));
