@@ -17,6 +17,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -58,6 +61,7 @@ public class EventAssignment extends RecordDetails implements Serializable {
 	@Column(name = "event_date_endtime", nullable = true)
 	private Date eventDateEndTime;
 
+	@Fetch(FetchMode.SELECT)
 	@ManyToMany( fetch = FetchType.LAZY)
 	@JoinTable(name = "event_assignment_representatives", joinColumns = {
 			@JoinColumn(name = "event_assignment_id", referencedColumnName = "event_assignment_id", nullable = false, updatable = false) }, inverseJoinColumns = {

@@ -146,15 +146,6 @@ app
 									.withOption("bPaginate", true)
 									.withOption('bProcessing', true)
 									.withOption('bSaveState', true)
-							        .withDisplayLength(10).withOption( 'columnDefs', [ {
-										                                orderable : false,
-																		className : 'select-checkbox',
-																		targets : 0,
-																		sortable : false,
-																		aTargets : [ 0, 1 ] } ])
-									.withOption('select', {
-															style : 'os',
-															selector : 'td:first-child' })
 								    .withOption('createdRow', createdRow)
 							        .withPaginationType('full_numbers')
 							        

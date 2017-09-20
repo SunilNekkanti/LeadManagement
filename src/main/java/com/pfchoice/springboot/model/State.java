@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.bytecode.internal.javassist.FieldHandled;
@@ -42,6 +44,7 @@ public class State extends RecordDetails implements Serializable, FieldHandled {
 	@Column(name = "shot_name")
 	private String shortName;
 
+	@Fetch(FetchMode.SELECT)
 	@LazyCollection(LazyCollectionOption.EXTRA)
 	@OneToMany(mappedBy = "stateCode", fetch = FetchType.LAZY)
 	private Set<ZipCode> zipCodes;

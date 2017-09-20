@@ -21,6 +21,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -47,6 +50,7 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@Column(name = "lead_Mbr_LastName")
 	private String lastName;
 
+	@Fetch(FetchMode.SELECT)
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "lead")
 	private List<AgentLeadAppointment> agentLeadAppointmentList;
 
@@ -108,6 +112,7 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@Column(name = "is_homeless")
 	private Character isHomeless = new Character('N');
 
+	@Fetch(FetchMode.SELECT)
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "lead")
 	private List<LeadNotes> leadNotes;
 

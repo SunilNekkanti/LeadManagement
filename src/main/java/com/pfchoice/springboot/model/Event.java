@@ -19,6 +19,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -69,6 +72,7 @@ public class Event extends RecordDetails implements Serializable {
 					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id", nullable = false, updatable = false, unique = true) })
 	private Contact contact;
 
+	@Fetch(FetchMode.SELECT)
 	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.REMOVE }, fetch = FetchType.LAZY)
 	@JoinTable(name = "event_files_upload", joinColumns = {
 			@JoinColumn(name = "event_id", referencedColumnName = "event_id", nullable = false, updatable = false) }, inverseJoinColumns = {
@@ -76,6 +80,7 @@ public class Event extends RecordDetails implements Serializable {
 	private Set<FileUpload> attachments;
 
 	@JsonIgnore
+	@Fetch(FetchMode.SELECT)
 	@OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
 	private Set<EventAssignment> eventAssignments;
 

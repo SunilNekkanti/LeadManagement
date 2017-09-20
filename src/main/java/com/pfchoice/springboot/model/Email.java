@@ -18,6 +18,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 /**
  *
  * @author Mohanasundharam
@@ -49,6 +52,7 @@ public class Email extends RecordDetails implements Serializable {
 	@Column(name = "body", length = 65535, columnDefinition = "TEXT")
 	private String body;
 
+	@Fetch(FetchMode.SELECT)
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "emails_files_upload", joinColumns = {
 			@JoinColumn(name = "email_id", referencedColumnName = "email_id") }, inverseJoinColumns = {
