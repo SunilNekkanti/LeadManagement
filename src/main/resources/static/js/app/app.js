@@ -32,13 +32,11 @@ app.constant('urls', {
 app.controller('NavbarController',  ['$rootScope', '$scope', '$state', '$stateParams', 'LeadService', '$localStorage', function( $rootScope, $scope, $state, $stateParams, LeadService, $localStorage){
 
 	$rootScope.displayNavbar =   false;
-	 if($localStorage.loginUser === undefined || $localStorage.loginUser.userId !== null || !$localStorage.loginUser.userId  ){
-      loginUser();
-	 }
-	 $rootScope.loginUser = $localStorage.loginUser;
+	  loginUser();
   
   function loginUser() {
-	 
+	  if($localStorage.loginUser === undefined  ){
+		     
 			console.log('About to fetch loginUser');
 			LeadService
 					.loginUser()
@@ -55,9 +53,13 @@ app.controller('NavbarController',  ['$rootScope', '$scope', '$state', '$statePa
 										.error('Error while fetching loginUser');
 								
 							});
+	  }else{
+			 $rootScope.loginUser = $localStorage.loginUser;
+			 $rootScope.displayNavbar =   true;
+		}
 	}
   $scope.callMe = function(url,params){
-	  if(url == 'logout'){
+	  if(url === 'logout'){
 		  $rootScope.displayNavbar = false;
 		 
 	  }
@@ -173,169 +175,85 @@ app.config(['$stateProvider', '$urlRouterProvider',
 		      }
           }
       })
-      .state('lead', {
-          url: '/lead/:id' ,
+       .state('lead', {
+          url: '/lead' ,
+          templateUrl: 'partials/lead_list',
+          controller:'LeadController',
+          controllerAs:'ctrl',
+          resolve: {
+		     
+          }
+      })
+      .state('lead.edit', {
+          url: '/' ,
           templateUrl: 'partials/lead_list',
           controller:'LeadController',
           controllerAs:'ctrl',
           params: {
         	    'id': '',  
+        	    'eventId': '',   
         	    'leadDisplay': false
         	  },
           resolve: {
 		      events: function ($stateParams, $q,  EventService) {
-		    	  if($stateParams.id !== ''){
 		    		  console.log('Load all events');
 			          var deferred = $q.defer();
 			          EventService.loadAllEvents().then(deferred.resolve, deferred.resolve);
 			          return deferred.promise;
-		    	  }
 		      },
 		      users: function ($stateParams, $q,  UserService) {
-		    	  if($stateParams.id !== ''){
 		    		  console.log('Load all users');
 			          var deferred = $q.defer();
 			          UserService.loadAllUsers().then(deferred.resolve, deferred.resolve);
 			          return deferred.promise;
-		    	  }
 		      },
 		      providers: function ($stateParams, $q,  ProviderService) {
-		    	  if($stateParams.id !== ''){
 		    		  console.log('Load all users');
 			          var deferred = $q.defer();
 			          ProviderService.loadAllProviders().then(deferred.resolve, deferred.resolve);
 			          return deferred.promise;
-		    	  }
 		      },
       		  states: function ($stateParams, $q,  StateService) {
-      			  if($stateParams.id !== ''){
       				console.log('Load all leads');
       				var deferred = $q.defer();
       				StateService.loadAllStates().then(deferred.resolve, deferred.resolve);
-      				return deferred.promise;
-      			}
 		      },
               genders: function ($stateParams, $q,  GenderService) {
-            	  if($stateParams.id !== ''){
             		  console.log('Load all leads');
     		          var deferred = $q.defer();
     		          GenderService.loadAllGenders().then(deferred.resolve, deferred.resolve);
     		          return deferred.promise;
-            	  }
 		      },
 		      statuses: function ($stateParams, $q,  LeadStatusService) {
-		    	  if($stateParams.id !== ''){
 		    		  console.log('Load all leadStatuses');
 			          var deferred = $q.defer();
 			          LeadStatusService.loadAllLeadStatuses().then(deferred.resolve, deferred.resolve);
 			          return deferred.promise;
-		    	  }
 		      },
 		      languages: function ($stateParams, $q,  LanguageService) {
-		    	  if($stateParams.id !== ''){
 		    		  console.log('Load all languages');
 			          var deferred = $q.defer();
 			          LanguageService.loadAllLanguages().then(deferred.resolve, deferred.resolve);
 			          return deferred.promise;
-		    	  }
 		      },
 		      insurances: function ($stateParams, $q,  InsuranceService) {
-		    	  if($stateParams.id !== ''){
 		    		  console.log('Load all leadInsurances');
 			          var deferred = $q.defer();
 			          InsuranceService.loadAllInsurances().then(deferred.resolve, deferred.resolve);
 			          return deferred.promise;
-		    	  }
-		          
 		      },
 		      planTypes: function ($stateParams, $q,  PlanTypeService) {
-		    	  if($stateParams.id !== ''){
 		    		  console.log('Load all users');
 			          var deferred = $q.defer();
 			          PlanTypeService.loadAllPlanTypes().then(deferred.resolve, deferred.resolve);
 			          return deferred.promise;
-		    	  }
 		      },
 		      bestTimeToCalls: function ($stateParams, $q,  BestTimeToCallService) {
-		    	  if($stateParams.id !== ''){
 		    		  console.log('Load all bestTimeToCalls');
 			          var deferred = $q.defer();
 			          BestTimeToCallService.loadAllBestTimeToCalls().then(deferred.resolve, deferred.resolve);
 			          return deferred.promise;
-		    	  }
 		      }
-          }
-      })
-.state('lead.add', {
-          url: '/lead' ,
-          templateUrl: 'partials/lead_list',
-          controller:'LeadController',
-          controllerAs:'ctrl',
-          params: {
-        	  'eventId': '',     
-        	    'leadDisplay': true
-        	  },
-          resolve: {
-		      events: function ( $q,  EventService) {
-		          console.log('Load all events');
-		          var deferred = $q.defer();
-		          EventService.loadAllEvents().then(deferred.resolve, deferred.resolve);
-		          return deferred.promise;
-		      },
-		      users: function ($q,  UserService) {
-		          console.log('Load all users');
-		          var deferred = $q.defer();
-		          UserService.loadAllUsers().then(deferred.resolve, deferred.resolve);
-		          return deferred.promise;
-		      },
-		      providers: function ($q,  ProviderService) {
-		          console.log('Load all users');
-		          var deferred = $q.defer();
-		          ProviderService.loadAllProviders().then(deferred.resolve, deferred.resolve);
-		          return deferred.promise;
-		      },
-      		  states: function ($q,  StateService) {
-		          console.log('Load all leads');
-		          var deferred = $q.defer();
-		          StateService.loadAllStates().then(deferred.resolve, deferred.resolve);
-		          return deferred.promise;
-		      },
-              genders: function ($q,  GenderService) {
-		          console.log('Load all leads');
-		          var deferred = $q.defer();
-		          GenderService.loadAllGenders().then(deferred.resolve, deferred.resolve);
-		          return deferred.promise;
-		      },
-		      statuses: function ($q,  LeadStatusService) {
-		          console.log('Load all leadStatuses');
-		          var deferred = $q.defer();
-		          LeadStatusService.loadAllLeadStatuses().then(deferred.resolve, deferred.resolve);
-		          return deferred.promise;
-		      },
-		      languages: function ($q,  LanguageService) {
-		          console.log('Load all languages');
-		          var deferred = $q.defer();
-		          LanguageService.loadAllLanguages().then(deferred.resolve, deferred.resolve);
-		          return deferred.promise;
-		      },
-		      insurances: function ($q,  InsuranceService) {
-		          console.log('Load all leadInsurances');
-		          var deferred = $q.defer();
-		          InsuranceService.loadAllInsurances().then(deferred.resolve, deferred.resolve);
-		          return deferred.promise;
-		      },
-		      planTypes: function ($q,  PlanTypeService) {
-		          console.log('Load all users');
-		          var deferred = $q.defer();
-		          PlanTypeService.loadAllPlanTypes().then(deferred.resolve, deferred.resolve);
-		          return deferred.promise;
-		      },
-		      bestTimeToCalls: function ($q,  BestTimeToCallService) {
-		          console.log('Load all bestTimeToCalls');
-		          var deferred = $q.defer();
-		          BestTimeToCallService.loadAllBestTimeToCalls().then(deferred.resolve, deferred.resolve);
-		          return deferred.promise;
-		      } 
           }
       })
       .state('role', {

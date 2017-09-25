@@ -574,8 +574,8 @@ app
 							}
 							
 							function leadEdit(id){
-								var params = {'id':id,'leadDisplay':false};
-								$state.go('lead',params);
+								var params = {'id':id,'leadDisplay':true};
+								$state.go('lead.edit',params);
 								editLead(id);
 							}
 							

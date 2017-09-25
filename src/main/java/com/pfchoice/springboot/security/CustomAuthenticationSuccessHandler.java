@@ -97,7 +97,7 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
 		        
 		 
 		        if (isLead) {
-		            return "/home#/lead/";
+		            return "/home#/lead";
 		        } else if (isEvent) {
 		            return "/home#/event";
 		        } else {

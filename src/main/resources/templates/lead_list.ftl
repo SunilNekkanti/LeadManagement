@@ -280,7 +280,7 @@
             </div>
           </div>
         </div>
-    <div class="col-sm-12 agentInfo" ng-if="ctrl.showAgentAssignment()" ng-show="ctrl.lead.status.id!=1">
+    <div class="col-sm-12 agentInfo" ng-if="ctrl.showAgentAssignment()" ng-show="ctrl.lead.status && ctrl.lead.status.id!=1">
           <div class="panel panel-default">
             <div class="panel-heading">Agent Assignment</div>
             <div class="panel-body">
