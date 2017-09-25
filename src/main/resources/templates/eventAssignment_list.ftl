@@ -82,7 +82,7 @@
               <div class="form-group col-md-12">
                 <label class="col-md-2  control-label" for="agent">Representatives</label>
                 <div class="col-md-10">
-                  <select ng-model="ctrl.eventAssignment.representatives" class="form-control" name="eventAssignmentRepresentatives" ng-options="agent.username for agent in ctrl.users | nonAdminUsersFilter:ctrl.nonAdminRoles   track by agent.username" multiple required>
+                  <select ng-model="ctrl.eventAssignment.representatives" class="form-control" name="eventAssignmentRepresentatives" ng-options="agent.username for agent in ctrl.users   track by agent.username" multiple required>
                   </select>
                 </div>
                

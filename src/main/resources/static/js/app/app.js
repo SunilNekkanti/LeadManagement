@@ -29,12 +29,13 @@ app.constant('urls', {
     BESTTIMETOCALL_SERVICE_API : '/LeadManagement/api/bestTimeToCall/'
 });
 
-app.controller('NavbarController',  ['$rootScope', '$scope', '$state', '$stateParams', 'LeadService', '$localStorage', function( $rootScope, $scope, $state, $stateParams, LeadService, $localStorage){
+app.controller('NavbarController',  ['$rootScope', '$scope', '$state', '$stateParams', 'LeadService', '$localStorage', '$window' , function( $rootScope, $scope, $state, $stateParams, LeadService, $localStorage, $window){
 
 	$rootScope.displayNavbar =   false;
 	  loginUser();
   
   function loginUser() {
+	  console.log("login $localStorage.loginUser"+JSON.stringify($localStorage.loginUser));
 	  if($localStorage.loginUser === undefined  ){
 		     
 			console.log('About to fetch loginUser');
@@ -45,6 +46,7 @@ app.controller('NavbarController',  ['$rootScope', '$scope', '$state', '$statePa
 								console
 										.log('fetched loginUser details successfully');
 								$rootScope.displayNavbar =true;
+								$rootScope.loginUser = $localStorage.loginUser;
 							},
 							function(errResponse) {
 								 callMe('logout')
@@ -61,6 +63,9 @@ app.controller('NavbarController',  ['$rootScope', '$scope', '$state', '$statePa
   $scope.callMe = function(url,params){
 	  if(url === 'logout'){
 		  $rootScope.displayNavbar = false;
+		  $rootScope.loginUser = undefined;
+		  $window.localStorage.clear();
+		   
 		 
 	  }
 	  if( params !==''){

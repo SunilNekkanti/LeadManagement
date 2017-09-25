@@ -83,7 +83,7 @@
             <a href="#" class="dropdown-toggle" dropdown-toggle role="button" aria-expanded="false">Events <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <li><a  ng-click="callMe('event','')">Event List</a></li>
-              <li ng-if="(loginUser.roleName == 'ADMIN' || loginUser.roleName == 'MANAGER')"><a   ng-click="callMe('eventAssignment','')">Event Assignments</a> </li>
+              <li ng-if="(loginUser.roleName === 'ADMIN' || loginUser.roleName === 'MANAGER')"><a   ng-click="callMe('eventAssignment','')">Event Assignments</a> </li>
             </ul>
           </li>
         <li><a  href="javascript:void(0)" ng-click="callMe('lead','')">Leads</a></li>
