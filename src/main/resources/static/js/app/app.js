@@ -29,14 +29,16 @@ app.constant('urls', {
     BESTTIMETOCALL_SERVICE_API : '/LeadManagement/api/bestTimeToCall/'
 });
 
-app.controller('NavbarController',  ['$rootScope', '$scope', '$state', '$stateParams', 'LeadService',function( $rootScope, $scope, $state, $stateParams, LeadService){
+app.controller('NavbarController',  ['$rootScope', '$scope', '$state', '$stateParams', 'LeadService', '$localStorage', function( $rootScope, $scope, $state, $stateParams, LeadService, $localStorage){
 
-  $rootScope.loginUser = undefined; 
-  $rootScope.displayNavbar = false;
-   loginUser();
+	$rootScope.displayNavbar =   false;
+	 if($localStorage.loginUser === undefined || $localStorage.loginUser.userId !== null || !$localStorage.loginUser.userId  ){
+      loginUser();
+	 }
+	 $rootScope.loginUser = $localStorage.loginUser;
   
   function loginUser() {
-	  if($rootScope.loginUser === undefined || $rootScope.loginUser.userId !== null || !$rootScope.loginUser.userId  ){
+	 
 			console.log('About to fetch loginUser');
 			LeadService
 					.loginUser()
@@ -44,25 +46,18 @@ app.controller('NavbarController',  ['$rootScope', '$scope', '$state', '$statePa
 							function(loginUser) {
 								console
 										.log('fetched loginUser details successfully');
-								
-							//	$scope.loginUser = loginUser;
-								
-								$rootScope.loginUser  =  loginUser;
 								$rootScope.displayNavbar =true;
 							},
 							function(errResponse) {
 								 callMe('logout')
-								$rootScope.loginUser  =undefined;
-								$rootScope.displayNavbar =false;
+								 $rootScope.displayNavbar =false;
 								console
 										.error('Error while fetching loginUser');
 								
 							});
-	  }
 	}
   $scope.callMe = function(url,params){
 	  if(url == 'logout'){
-		  $rootScope.loginUser = undefined;
 		  $rootScope.displayNavbar = false;
 		 
 	  }

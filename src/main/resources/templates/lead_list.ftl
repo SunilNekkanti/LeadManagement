@@ -129,7 +129,7 @@
                   <div class="form-group col-sm-12">
                     <label for="language">File</label>
                     	<a  ng-click="ctrl.readUploadedFile()" style="display:block;">
-          					<span class="glyphicon glyphicon-file"></span>
+          					<span class="glyphicon glyphicon-file">{{ctrl.lead.fileUpload.fileName}}</span>
         				</a>
                   </div>
                 </div>
@@ -222,8 +222,10 @@
                 <div class="col-sm-6">
                   <div class="form-group col-sm-12">
                     <label for="bestTimeToCall">Best Time to Call</label>
-                     <select ng-model="ctrl.lead.bestTimeToCall" class="form-control" name="bestTimeToCall" ng-options="bestTimeToCall.description for bestTimeToCall in ctrl.bestTimeToCalls track by bestTimeToCall.description" ></select>
-                     
+                     <select ng-model="ctrl.lead.bestTimeToCall" class="form-control" name="bestTimeToCall" ng-options="bestTimeToCall.description for bestTimeToCall in ctrl.bestTimeToCalls track by bestTimeToCall.description" required></select>
+                      <div class="has-error" ng-show="myForm.$dirty">
+                      <span ng-show="myForm.bestTimeToCall.$error.required">This is a required field</span>
+                    </div>
                   </div>
                 </div>
 
@@ -243,7 +245,7 @@
           </div>
         </div>
 
-        <div class="col-sm-12 additionalInfo" ng-if="ctrl.showLeadAdditionalDetails()" ng-show="!ctrl.lead.id">
+        <div class="col-sm-12 additionalInfo" ng-if="ctrl.showLeadAdditionalDetails()" >
           <div class="panel panel-default">
             <div class="panel-heading">Additional Details</div>
             <div class="panel-body">
@@ -251,28 +253,22 @@
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
                     <label for="agree consent form">Agree Consent Form </label>
-                    <input type="checkbox" class="form-control bigCheckBox" ng-model="ctrl.lead.consentFormSigned" name="consentFormSigned" ng-true-value="'Y'" ng-false-value="'N'" required="!ctrl.lead.id">
-                    <div ng-if="!ctrl.lead.id">
-                      <div class="has-error" ng-show="myForm.$dirty">
-                        <span ng-show="myForm.consentFormSigned.$error.required">This is a required field</span>
-                      </div>
-                    </div>
+                    <input type="checkbox" class="form-control bigCheckBox" ng-model="ctrl.consentFormSigned" name="consentFormSigned" ng-true-value="'Y'" ng-false-value="'N'" >
                   </div>
                 </div>
 
-                <div class="col-sm-12" ng-if="!ctrl.lead.id">
+                <div class="col-sm-12" >
                   <div class="form-group col-sm-12">
                     <label for="file">File </label>
-                    <input class="col-sm-12  control-label form-control" name="fileUpload" type="file" file-model="ctrl.myFile"  ng-model="ctrl.myFile" id="myFileField"  required="!ctrl.lead.id"/>
-                    
-                      <div class="has-error" ng-show="!ctrl.lead.id && myForm.$dirty && !ctrl.myFile">
+                    <input class="col-sm-12  control-label form-control" name="fileUpload" type="file" file-model="ctrl.myFile"  ng-model="ctrl.myFile" id="myFileField"  ng-required="ctrl.consentFormSigned==='Y'"/>
+                      <div class="has-error" ng-show="ctrl.consentFormSigned==='Y' && myForm.$dirty && !ctrl.myFile">
                         <span ng-show="myForm.fileUpload.$error.required">This is a required field</span>
                       </div>
                   </div>
                 </div>
               </div>
 
-              <div class="row col-md-6">
+              <div class="row col-md-6" ng-if="!ctrl.showAgentAssignment()">
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
                     <label for="leadcreation">Notes </label>
@@ -284,7 +280,7 @@
             </div>
           </div>
         </div>
-    <div class="col-sm-12 agentInfo" ng-if="ctrl.showAgentAssignment()" ng-show="ctrl.lead.id">
+    <div class="col-sm-12 agentInfo" ng-if="ctrl.showAgentAssignment()" ng-show="ctrl.lead.status.id!=1">
           <div class="panel panel-default">
             <div class="panel-heading">Agent Assignment</div>
             <div class="panel-body">

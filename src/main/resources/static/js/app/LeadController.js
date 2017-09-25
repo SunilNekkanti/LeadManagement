@@ -24,12 +24,13 @@ app
 						'$compile',
 						'$state',
 						'$filter',
+						'$localStorage',
 						'DTOptionsBuilder',
 						'DTColumnBuilder',
 						function(LeadService, GenderService, StateService,
 								LeadStatusService, LanguageService,
 								InsuranceService, PlanTypeService, ProviderService, UserService, BestTimeToCallService, EventService, FileUploadService, $sce, $scope,$rootScope, $location, $stateParams, $compile, $state,$filter,
-								 DTOptionsBuilder, DTColumnBuilder) {
+								$localStorage, DTOptionsBuilder, DTColumnBuilder) {
 
 							var self = this;
 							self.myFile;
@@ -76,6 +77,7 @@ app
 							self.getAllInsuranceTypes = getAllInsuranceTypes;
 							self.getAllProviders = getAllProviders;
 							self.getAllEvents = getAllEvents;
+							self.consentFormSigned = 'N';
 							self.uploadFile = uploadFile;
 							self.readUploadedFile = readUploadedFile;
 							self.addAgentLeadAppointment = addAgentLeadAppointment;
@@ -150,7 +152,7 @@ app
 							function createdRow(row, data, dataIndex) {
 								// Recompiling so we can bind Angular directive
 								// to the DT
-								$compile(angular.element(row).contents())(
+								 $compile(angular.element(row).contents())(
 										$scope);
 							}
 
@@ -199,7 +201,6 @@ app
 								console.log('Submitting');
 								if(self.lead.agentLeadAppointmentList){
 									self.lead.agentLeadAppointmentList = self.lead.agentLeadAppointmentList.filter(function( obj ) {
-										console.log("obj.id: "+obj.id +"  self.selectedAgentLeadAppointment.id ");
 										  return obj.id != self.selectedAgentLeadAppointment.id;
 										});
 									
@@ -208,25 +209,11 @@ app
 								
 								 if(self.notes && self.notes != ''){
 				            		 self.lead.leadNotes = [];
-				            		// getCurrentUser($rootScope.loginUser.userId);
-				            		// console.log("********************self.user*******"+JSON.stringify(self.user));
-				            		 self.lead.leadNotes.push({notes:self.notes});
+				            		 self.lead.leadNotes.push({notes:self.notes, user: $locaStorage.user});
+				            		 getCurrentUser($localStorage.loginUser.userId);
 				            	 }
-								
-								if (self.lead.id === undefined
-										|| self.lead.id === null) {
-									console.log('Saving New Lead');
-									
-									uploadFile();
-									
-									
-								} else {
-									 
-									updateLead(self.lead, self.lead.id);
-									console.log('Lead updated with id ',
-											self.lead.id);
-								}
-								self.displayEditButton = false;
+								 uploadFile();
+							
 							}
 							
 							
@@ -396,7 +383,8 @@ app
 					        }
 
 							function uploadFile() {
-						           var  promise = FileUploadService.uploadFileToUrl(self.myFile);
+								if(self.myFile){
+									var  promise = FileUploadService.uploadFileToUrl(self.myFile);
 
 						            promise.then(function (response) {
 						            	if(!self.lead.fileUpload){
@@ -405,17 +393,37 @@ app
 						            	 var fileuploads = response;
 						            	 if(fileuploads.length >0 )
 						                self.lead.fileUpload= fileuploads[0];
-						            	 
-						            	 if(self.notes && self.notes != ''){
-						            		 
-						            		 self.lead.leadNotes = [];
-						            		 self.lead.leadNotes.push({notes:self.notes});
-						            	 }
-						                createLead(self.lead);
+						            	 if (self.lead.id === undefined || self.lead.id === null) {
+												console.log('Saving New Lead');
+												createLead(self.lead);
+												
+											} else {
+												 
+												updateLead(self.lead, self.lead.id);
+												console.log('Lead updated with id ',
+														self.lead.id);
+											}
+											self.displayEditButton = false;
+						                
 						            }, function () {
 						                self.serverResponse = 'An error has occurred';
-						            })
-						        };
+						            });
+								}else{
+									if (self.lead.id === undefined || self.lead.id === null) {
+										console.log('Saving New Lead');
+										createLead(self.lead);
+										
+									} else {
+										 
+										updateLead(self.lead, self.lead.id);
+										console.log('Lead updated with id ',
+												self.lead.id);
+									}
+									self.displayEditButton = false;
+								}
+						           
+						            
+						        }
 							
 						        function configLeadEvent(){
 						        	self.successMessage = '';
@@ -439,29 +447,19 @@ app
 						        }
 						    
 						    function showAgentAssignment(){
-						    	
-						    	if($rootScope.loginUser.roleName != 'AGENT' && $rootScope.loginUser.roleName != 'EVENT_COORDINATOR'){
+						    	if($localStorage.loginUser.roleName !== undefined &&  $localStorage.loginUser.roleName != 'AGENT' && $localStorage.loginUser.roleName != 'EVENT_COORDINATOR'){
 						    		return true;
 						    	}else{
 						    		return false;
 						    	}
 						    }
 						    function showAddorUpdateButton(){
-						    	if($rootScope.loginUser.roleName === 'EVENT_COORDINATOR'){
-						    		if(self.lead.id){
-						    			return  self.invalid  || self.pristine ;
-						    		}else{
-						    			return !self.myFile || self.lead.consentFormSigned == 'N' || self.invalid  || self.pristine ;
-						    		}
-						    		
-						    	}else{
-						    		return  self.invalid || self.pristine;
-						    	}
+						    			return (self.consentFormSigned === 'Y' && !self.myFile) || self.invalid  || self.pristine ;
 						    }
 						    
 						    
 						    function showCurrentPlan(){
-						    	if($rootScope.loginUser.roleName == 'EVENT_COORDINATOR'){
+						    	if($localStorage.loginUser.roleName == 'EVENT_COORDINATOR'){
 						    		return true;
 						    	}else{
 						    		return  false;
@@ -469,7 +467,7 @@ app
 						    }
 						    
 						    function showEventStatus(){
-						    	if($rootScope.loginUser.roleName != 'EVENT_COORDINATOR'){
+						    	if($localStorage.loginUser.roleName != 'EVENT_COORDINATOR'){
 						    		return true;
 						    	}else{
 						    		return false;
@@ -477,7 +475,7 @@ app
 						    }
 						    
 						    function showStatusNotes(){
-						    	if($rootScope.loginUser.roleName == 'AGENT'){
+						    	if($localStorage.loginUser.roleName == 'AGENT'){
 						    		return true;
 						    	}else{
 						    		return false;
@@ -485,7 +483,7 @@ app
 						    }
 						    
 						    function showEventSource(){
-						    	if($rootScope.loginUser.roleName != 'AGENT'){
+						    	if($localStorage.loginUser.roleName != 'AGENT'){
 						    		return true;
 						    	}else{
 						    		return false;
@@ -493,7 +491,7 @@ app
 						    }
 						    
 						    function showEventStatus(){
-						    	if($rootScope.loginUser.roleName != 'EVENT_COORDINATOR'){
+						    	if($localStorage.loginUser.roleName != 'EVENT_COORDINATOR'){
 						    		return true;
 						    	}else{
 						    		return false;
@@ -501,7 +499,7 @@ app
 						    }
  
 						    function showStatusChangeDetails(){
-						    	if($rootScope.loginUser.roleName != 'EVENT_COORDINATOR' && self.lead.status && self.lead.status.description == 'Converted'){
+						    	if($localStorage.loginUser.roleName != 'EVENT_COORDINATOR' && self.lead.status && self.lead.status.description == 'Converted'){
 						    		return true;
 						    	}else{
 						    		return false;
@@ -509,7 +507,7 @@ app
 						    }
 						    
 						    function showLeadAdditionalDetails(){
-						    	if($rootScope.loginUser.roleName == 'CARE_COORDINATOR' || $rootScope.loginUser.roleName == 'EVENT_COORDINATOR' || $rootScope.loginUser.roleName == 'ADMIN'){
+						    	if($localStorage.loginUser.roleName == 'CARE_COORDINATOR' || $localStorage.loginUser.roleName == 'EVENT_COORDINATOR' || $localStorage.loginUser.roleName == 'ADMIN'){
 						    		return true;
 						    	}else{
 						    		return false;
@@ -577,7 +575,7 @@ app
 							
 							function leadEdit(id){
 								var params = {'id':id,'leadDisplay':false};
-								$state.go('lead.edit',params);
+								$state.go('lead',params);
 								editLead(id);
 							}
 							
@@ -638,7 +636,7 @@ app
 							  
 							  UserService.getUser(id).then(
 						                function (user) {
-						                    self.user = user;
+						                   
 						                },
 						                function (errResponse) {
 						                    console.error('Error while removing user ' + id + ', Error :' + errResponse.data);

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.pfchoice.springboot.model.FileUpload;
 import com.pfchoice.springboot.model.FileUploadContent;
 import com.pfchoice.springboot.service.FileUploadContentService;
 import com.pfchoice.springboot.util.CustomErrorType;
@@ -140,10 +141,11 @@ public class FileUploadContentController {
 
 	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_MANAGER", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR" })
 	@RequestMapping(value = { "/fileUpload/fileProcessing.do" }, method = RequestMethod.POST)
-	public List<FileUploadContent> uploadFileProcessing(Model model, @RequestParam MultipartFile[] files) throws IOException {
+	public List<FileUpload> uploadFileProcessing(Model model, @RequestParam MultipartFile[] files) throws IOException {
 		logger.info("started file processsing" + files.toString());
 		logger.info("fileUploadContent.length:" + files.length);
 		List<FileUploadContent> fileUploadContenters = new ArrayList<>();
+		List<FileUpload> fileUploaders = new ArrayList<>();
 
 		for (MultipartFile fileUploadContent : files) {
 			logger.info("fileUploadContent.getOriginalFilename() :" + fileUploadContent.getOriginalFilename());
@@ -159,7 +161,12 @@ public class FileUploadContentController {
 					fileUploadContenter.setContentType(fileUploadContent.getContentType());
 					fileUploadContenter.setData(fileUploadContent.getBytes());
 					fileUploadContentService.saveFileUploadContent(fileUploadContenter);
-
+					
+					FileUpload fileupload = new FileUpload();
+					fileupload.setId(fileUploadContenter.getId());
+					fileupload.setFileName(fileUploadContenter.getFileName());
+					fileupload.setContentType(fileUploadContenter.getContentType());
+					fileUploaders.add(fileupload);
 					fileUploadContenters.add(fileUploadContenter);
 
 				} catch (IOException e) {
@@ -168,7 +175,7 @@ public class FileUploadContentController {
 
 			}
 		}
-		return fileUploadContenters;
+		return fileUploaders;
 
 	}
 

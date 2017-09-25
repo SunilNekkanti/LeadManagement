@@ -14,7 +14,7 @@ app
 						'EventWeekDayService',
 						'EventWeekNumberService',
 						'$scope',
-						'$rootScope',
+						'$localStorage',
 						'$state',
 						'$stateParams',
 						'$compile',
@@ -22,7 +22,7 @@ app
 						'$filter',
 						'DTOptionsBuilder',
 						'DTColumnBuilder',
-						function(EventService,  FacilityTypeService, UserService, StateService,   FileUploadService, EventFrequencyService,EventMonthService, EventWeekDayService,EventWeekNumberService, $scope,$rootScope,$state,$stateParams, $compile, $sce, $filter,
+						function(EventService,  FacilityTypeService, UserService, StateService,   FileUploadService, EventFrequencyService,EventMonthService, EventWeekDayService,EventWeekNumberService, $scope,$localStorage,$state,$stateParams, $compile, $sce, $filter,
 								DTOptionsBuilder, DTColumnBuilder) {
 
 							var self = this;
@@ -496,7 +496,7 @@ app
 							}
 							
 							function  adminOrManager(){
-						    	if($rootScope.loginUser.roleName === 'ADMIN' ||  $rootScope.loginUser.roleName === 'MANAGER'){
+						    	if($localStorage.loginUser.roleName === 'ADMIN' ||  $localStorage.loginUser.roleName === 'MANAGER'){
 						    		return true;
 						    	}else{
 						    		return false;

@@ -178,6 +178,8 @@ public class LeadController {
 		currentLeadMembership.setLanguage(lead.getLanguage());
 		currentLeadMembership.setBestTimeToCall(lead.getBestTimeToCall());
 		currentLeadMembership.setStatus(lead.getStatus());
+		currentLeadMembership.setFileUpload(lead.getFileUpload());
+		currentLeadMembership.setConsentFormSigned(lead.getConsentFormSigned());
 		currentLeadMembership.setContact(lead.getContact());
 
 		List<LeadNotes> leadNotes = new ArrayList<>();
