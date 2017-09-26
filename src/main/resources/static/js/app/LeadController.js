@@ -93,7 +93,6 @@ app
 							self.cancelEdit = cancelEdit;
 							 configLeadEvent();
 							self.reset = reset;
-							self.getCurrentUser = getCurrentUser; 
 							self.today = today;
 							self.toggleMin = toggleMin;
 							self.successMessage = '';
@@ -209,8 +208,7 @@ app
 								
 								 if(self.notes && self.notes != ''){
 				            		 self.lead.leadNotes = [];
-				            		 self.lead.leadNotes.push({notes:self.notes, user: $locaStorage.user});
-				            		 getCurrentUser($localStorage.loginUser.userId);
+				            		 self.lead.leadNotes.push({notes:self.notes, user:{id:$localStorage.loginUser.userId}});
 				            	 }
 								 uploadFile();
 							
@@ -314,16 +312,6 @@ app
 								
 								self.successMessage = '';
 								self.errorMessage = '';
-								self.events = getAllEvents();
-								self.genders = getAllGenders();
-								self.bestTimeToCalls = getAllBestTimeToCalls();
-								self.states = getAllStates();
-								self.languages = getAllLanguages();
-								self.statuses = getAllLeadStatuses();
-								self.insurances = getAllInsurances();
-								self.planTypes = getAllPlanTypes();
-								self.providers = getAllProviders();
-								self.users = getAllAgents();
 									LeadService
 										.getLead(id)
 										.then(
@@ -340,6 +328,16 @@ app
 																self.selectedAgentLeadAppointment = self.selectedAgentLeadAppointments[0];
 															}
 														}
+													self.events = getAllEvents();
+													self.genders = getAllGenders();
+													self.bestTimeToCalls = getAllBestTimeToCalls();
+													self.states = getAllStates();
+													self.languages = getAllLanguages();
+													self.statuses = getAllLeadStatuses();
+													self.insurances = getAllInsurances();
+													self.planTypes = getAllPlanTypes();
+													self.providers = getAllProviders();
+													self.users = getAllAgents();
 													self.display = true;
 												},
 												function(errResponse) {
@@ -352,20 +350,25 @@ app
 							}
 
 							function addLead() {
-								$state.go("lead.add");
-								self.successMessage = '';
-								self.errorMessage = '';
-								self.genders = getAllGenders();
-								self.bestTimeToCalls = getAllBestTimeToCalls(); 
-								self.states = getAllStates();
-								self.languages = getAllLanguages();
-								self.statuses = getAllLeadStatuses();
-								self.insurances = getAllInsurances();
-								self.planTypes = getAllPlanTypes();
-								self.providers = getAllProviders();
-								self.users = getAllAgents();
-								self.events = getAllEvents();
-								self.display = true;
+								$state.go("lead.edit");
+								var trans =  $state.go('lead.edit').transition;
+								trans.onSuccess({}, function() {
+									self.successMessage = '';
+									self.errorMessage = '';
+									self.providers = getAllProviders();
+									self.users = getAllAgents();
+									self.events = getAllEvents();
+									self.genders = getAllGenders();
+									self.bestTimeToCalls = getAllBestTimeToCalls(); 
+									self.states = getAllStates();
+									self.languages = getAllLanguages();
+									self.statuses = getAllLeadStatuses();
+									self.insurances = getAllInsurances();
+									self.planTypes = getAllPlanTypes();
+									
+									self.display = true;
+								}, { priority: 10 });
+								 
 							}
 
 							function reset() {
@@ -574,9 +577,10 @@ app
 							}
 							
 							function leadEdit(id){
-								var params = {'id':id,'leadDisplay':true};
-								$state.go('lead.edit',params);
-								editLead(id);
+								var params = {'leadDisplay':true};
+								var trans =  $state.go('lead.edit',params).transition;
+								trans.onSuccess({}, function() { editLead(id); }, { priority: -1 });
+								 
 							}
 							
 							function clearFiles(){
@@ -632,17 +636,6 @@ app
 								    self.popup2.opened = true;
 								  };
 
-						    function getCurrentUser(id) {
-							  
-							  UserService.getUser(id).then(
-						                function (user) {
-						                   
-						                },
-						                function (errResponse) {
-						                    console.error('Error while removing user ' + id + ', Error :' + errResponse.data);
-						                });
-							}  
-								  
 								  
 						  function setDate(year, month, day) {
 							  self.bestTimeToCall = new Date(year, month, day);

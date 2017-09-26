@@ -200,60 +200,60 @@ app.config(['$stateProvider', '$urlRouterProvider',
         	    'leadDisplay': false
         	  },
           resolve: {
-		      events: function ($stateParams, $q,  EventService) {
+		      events: function ($q,  EventService) {
 		    		  console.log('Load all events');
 			          var deferred = $q.defer();
 			          EventService.loadAllEvents().then(deferred.resolve, deferred.resolve);
 			          return deferred.promise;
 		      },
-		      users: function ($stateParams, $q,  UserService) {
+		      users: function ( $q,  UserService) {
 		    		  console.log('Load all users');
 			          var deferred = $q.defer();
 			          UserService.loadAllUsers().then(deferred.resolve, deferred.resolve);
 			          return deferred.promise;
 		      },
-		      providers: function ($stateParams, $q,  ProviderService) {
+		      providers: function ( $q,  ProviderService) {
 		    		  console.log('Load all users');
 			          var deferred = $q.defer();
 			          ProviderService.loadAllProviders().then(deferred.resolve, deferred.resolve);
 			          return deferred.promise;
 		      },
-      		  states: function ($stateParams, $q,  StateService) {
+      		  states: function ( $q,  StateService) {
       				console.log('Load all leads');
       				var deferred = $q.defer();
       				StateService.loadAllStates().then(deferred.resolve, deferred.resolve);
 		      },
-              genders: function ($stateParams, $q,  GenderService) {
+              genders: function ( $q,  GenderService) {
             		  console.log('Load all leads');
     		          var deferred = $q.defer();
     		          GenderService.loadAllGenders().then(deferred.resolve, deferred.resolve);
     		          return deferred.promise;
 		      },
-		      statuses: function ($stateParams, $q,  LeadStatusService) {
+		      statuses: function ( $q,  LeadStatusService) {
 		    		  console.log('Load all leadStatuses');
 			          var deferred = $q.defer();
 			          LeadStatusService.loadAllLeadStatuses().then(deferred.resolve, deferred.resolve);
 			          return deferred.promise;
 		      },
-		      languages: function ($stateParams, $q,  LanguageService) {
+		      languages: function ( $q,  LanguageService) {
 		    		  console.log('Load all languages');
 			          var deferred = $q.defer();
 			          LanguageService.loadAllLanguages().then(deferred.resolve, deferred.resolve);
 			          return deferred.promise;
 		      },
-		      insurances: function ($stateParams, $q,  InsuranceService) {
+		      insurances: function ( $q,  InsuranceService) {
 		    		  console.log('Load all leadInsurances');
 			          var deferred = $q.defer();
 			          InsuranceService.loadAllInsurances().then(deferred.resolve, deferred.resolve);
 			          return deferred.promise;
 		      },
-		      planTypes: function ($stateParams, $q,  PlanTypeService) {
+		      planTypes: function ( $q,  PlanTypeService) {
 		    		  console.log('Load all users');
 			          var deferred = $q.defer();
 			          PlanTypeService.loadAllPlanTypes().then(deferred.resolve, deferred.resolve);
 			          return deferred.promise;
 		      },
-		      bestTimeToCalls: function ($stateParams, $q,  BestTimeToCallService) {
+		      bestTimeToCalls: function ( $q,  BestTimeToCallService) {
 		    		  console.log('Load all bestTimeToCalls');
 			          var deferred = $q.defer();
 			          BestTimeToCallService.loadAllBestTimeToCalls().then(deferred.resolve, deferred.resolve);

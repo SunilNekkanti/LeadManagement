@@ -582,7 +582,7 @@ app
 							
 							function addLead( ){
 								var params = {"eventId":self.event.id,"leadDisplay":true};
-								$state.go('lead.add', params );
+								$state.go('lead.edit', params );
 								
 							}
 
