@@ -1,8 +1,15 @@
 package com.pfchoice.springboot.controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
 
@@ -27,11 +34,13 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.pfchoice.springboot.model.AgentLeadAppointment;
+import com.pfchoice.springboot.model.CurrentUser;
 import com.pfchoice.springboot.model.Email;
 import com.pfchoice.springboot.model.LeadMembership;
 import com.pfchoice.springboot.model.LeadNotes;
 import com.pfchoice.springboot.model.User;
 import com.pfchoice.springboot.repositories.specifications.LeadSpecifications;
+import com.pfchoice.springboot.service.CurrentUserService;
 import com.pfchoice.springboot.service.EmailService;
 import com.pfchoice.springboot.service.LeadMembershipService;
 import com.pfchoice.springboot.service.UserService;
@@ -52,7 +61,10 @@ public class LeadController {
 	@Autowired
 	UserService userService; // Service which will do all data
 								// retrieval/manipulation work
-
+	@Autowired
+	CurrentUserService currentUserService; // Service which will do all data
+								// retrieval/manipulation work
+	
 	@Autowired
 	EmailService emailService;
 
@@ -68,13 +80,13 @@ public class LeadController {
 			throws MessagingException, IOException {
 
 		pageNo = (pageNo == null) ? 0 : pageNo;
-		pageSize = (pageSize == null) ? 10 : pageSize;
+		pageSize = (pageSize == null) ? 20 : pageSize;
 
 		PageRequest pageRequest = new PageRequest(pageNo, pageSize);
 		Specification<LeadMembership> spec = new LeadSpecifications(userId, username, roleName, search);
 		Page<LeadMembership> leads = leadService.findAllLeadMembershipsByPage(spec, pageRequest);
 		if (leads.getTotalElements() == 0) {
-			System.out.println("no leads");
+			logger.info("no leads" );
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
@@ -104,7 +116,12 @@ public class LeadController {
 			@ModelAttribute("userId") Integer userId, @ModelAttribute("username") String username) throws Exception {
 		logger.info("Creating LeadMembership : {}", lead);
 
-		if (leadService.isLeadMembershipExists(lead.getFirstName(), lead.getLastName(), lead.getDob())) {
+		final String firstName = lead.getFirstName();
+		final String lastName = lead.getLastName();
+		final String address1 = lead.getContact().getAddress1();
+		final String phoneNumber = lead.getContact().getHomePhone();
+		
+		if (leadService.isLeadMembershipExists(firstName, lastName, address1,phoneNumber)) {
 			logger.error("Unable to create. A LeadMembership with name {} already exist",
 					lead.getFirstName() + lead.getLastName());
 			return new ResponseEntity(new CustomErrorType("Unable to create. A LeadMembership with name "
@@ -117,6 +134,8 @@ public class LeadController {
 			leadNotes.forEach(ln -> {
 				ln.setUser(user);
 				ln.setLead(lead);
+				ln.setUpdatedBy(username);
+				ln.setCreatedBy(username);
 				emailBody.append(ln.getNotes());
 			});
 		} else {
@@ -160,6 +179,7 @@ public class LeadController {
 
 		LeadMembership currentLeadMembership = leadService.findById(id);
 
+		CurrentUser loginUser = currentUserService.findById(userId);
 		if (currentLeadMembership == null) {
 			logger.error("Unable to update. LeadMembership with id {} not found.", id);
 			return new ResponseEntity(
@@ -183,10 +203,12 @@ public class LeadController {
 		currentLeadMembership.setContact(lead.getContact());
 
 		List<LeadNotes> leadNotes = new ArrayList<>();
-		if(lead.getLeadNotes() != null){
+		if (lead.getLeadNotes() != null) {
 			for (LeadNotes ln : lead.getLeadNotes()) {
 				if (!"".equals(ln.getNotes().trim())) {
 					ln.setLead(currentLeadMembership);
+					ln.setCreatedBy(loginUser.getUsername());
+					ln.setUpdatedBy(loginUser.getUsername());
 					leadNotes.add(ln);
 				}
 			}
@@ -197,11 +219,11 @@ public class LeadController {
 			currentLeadMembership.getLeadNotes().addAll(leadNotes);
 		}
 
+		List<AgentLeadAppointment> finalAgentLeadAppointList = new ArrayList<>();
 		
-		if(!"EVENT_COORDINATOR".equals(roleName)){
+		if (!"EVENT_COORDINATOR".equals(roleName)) {
 
-			if(!"New".equalsIgnoreCase(lead.getStatus().getDescription())){
-				List<AgentLeadAppointment> finalAgentLeadAppointList = new ArrayList<>();
+			if (!"New".equalsIgnoreCase(lead.getStatus().getDescription())) {
 				List<AgentLeadAppointment> agntLeadAppointList = lead.getAgentLeadAppointmentList();
 
 				for (AgentLeadAppointment ala : agntLeadAppointList) {
@@ -209,79 +231,73 @@ public class LeadController {
 						finalAgentLeadAppointList.add(ala);
 					}
 				}
-				if(finalAgentLeadAppointList.size() > 0){
+				if (finalAgentLeadAppointList.size() > 0) {
 					currentLeadMembership.getAgentLeadAppointmentList().clear();
 					currentLeadMembership.getAgentLeadAppointmentList().addAll(finalAgentLeadAppointList);
-				} 
+				}
 			}
-			
+
 		}
 
+		currentLeadMembership.setUpdatedBy(username);
+		leadService.updateLeadMembership(currentLeadMembership);
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
+ 		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+		String toEmailIds = finalAgentLeadAppointList.stream().map(la -> la.getUser().getContact().getEmail())
+				.collect(Collectors.joining(";"));
+		String agentName = finalAgentLeadAppointList.size() > 0 ? finalAgentLeadAppointList.stream()
+				.filter(ala -> ala.getActiveInd() == 'Y').findAny().get().getUser().getName() : "";
+		Date calApptTime = (finalAgentLeadAppointList.size() > 0) ? finalAgentLeadAppointList.stream()
+				.filter(ala -> ala.getActiveInd() == 'Y').findAny().get().getAppointmentTime() : new Date();
+
+		String appointmentTime = finalAgentLeadAppointList.size() > 0 ? sdf.format(finalAgentLeadAppointList.stream()
+				.filter(ala -> ala.getActiveInd() == 'Y').findAny().get().getAppointmentTime().getTime())
+				: new String("");
+
+      Calendar cal = Calendar.getInstance();
+        cal.setTime(calApptTime);
+        cal.add(Calendar.MINUTE, 60);
+		String appointmentEndTime = finalAgentLeadAppointList.size() > 0 ? sdf.format(cal.getTime()) : new String(""); 
+
+		 String careCoordinator = finalAgentLeadAppointList.stream().filter(ala ->
+		 ala.getActiveInd() == 'Y').findAny().get()
+		 .getCreatedBy();
 		
-	 currentLeadMembership.setUpdatedBy(username);
-	 leadService.updateLeadMembership(currentLeadMembership);
+		 String currentTime = sdf.format((new Date()).getTime());
 
-	//SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-	/*
-	 * String toEmailIds = agntLeadAppointList.stream().map(la ->
-	 * la.getUser().getEmail()) .collect(Collectors.joining(",")); String
-	 * agentName = agntLeadAppointList.size() > 0 ?
-	 * agntLeadAppointList.stream().filter(ala ->
-	 * ala.getActiveInd()=='Y').findAny().get().getUser().getUsername() : "";
-	 * Calendar calApptTime = (agntLeadAppointList.size() > 0) ?
-	 * agntLeadAppointList.stream().filter(ala ->
-	 * ala.getActiveInd()=='Y').findAny().get().getAppointmentTime() :
-	 * Calendar.getInstance();
-	 * 
-	 * String appointmentTime = agntLeadAppointList.size() > 0 ?
-	 * sdf.format(agntLeadAppointList.stream().filter(ala ->
-	 * ala.getActiveInd()=='Y').findAny().get().getAppointmentTime().getTime ())
-	 * : new String(""); calApptTime.add(Calendar.MINUTE, 60); String
-	 * appointmentEndTime = agntLeadAppointList.size() > 0 ?
-	 * sdf.format(calApptTime.getTime()) : new String("");
-	 */
+		 cal.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-	// String address = "";
-	// String leadNotesString = lead.getLeadNotes().stream().sorted((a, b)
-	// -> -1).findFirst().get().getNotes();
-	// String careCoordinator = agntLeadAppointList.stream().filter(ala ->
-	// ala.getActiveInd() == 'Y').findAny().get()
-	// .getCreatedBy();
-	// currentTime = sdf.format((new Date()).getTime());
+		 Email mail = new Email();
+		 mail.setEmailTo(toEmailIds);
+		 mail.setEmailFrom(loginUser.getContact().getEmail());
+		 mail.setEmailCc(loginUser.getContact().getEmail());
+		 mail.setSubject("Agent Lead Appointment");
+		 
+		 Map<String, Object> emailAttributes = new HashMap<>();
+		 emailAttributes.put("agent", agentName);
+		 emailAttributes.put("currentUser", loginUser.getName());
+		 emailAttributes.put("careCoordinator", careCoordinator);
+		  emailAttributes.put("appointmentStartTime", appointmentTime);
+		 emailAttributes.put("appointmentEndTime", appointmentEndTime);
+		 emailAttributes.put("currentTime", currentTime);
 
-	// calApptTime.setTimeZone(TimeZone.getTimeZone("UTC"));
+		 mail.setModel(emailAttributes);
+		 String emailTemplateFileName =
+		 "agent_lead_assignment_email_template_"+roleName+".txt";
 
-	// Email mail = new Email();
-	// mail.setEmailTo(toEmailIds);
-	// mail.setEmailFrom("skumar@pfchoice.com");
-	// mail.setEmailCc(user.getEmail());
-	// mail.setSubject("Agent Lead Assignment");
-	// Map<String, Object> emailAttributes = new HashMap<>();
-	// emailAttributes.put("agent", agentName);
-	// emailAttributes.put("currentUser", user.getUsername());
-	// emailAttributes.put("careCoordinator", careCoordinator);
-	// emailAttributes.put("firstName", lead.getFirstName());
-	// emailAttributes.put("lastName", lead.getLastName());
-	// emailAttributes.put("notes", leadNotesString);
-	// // emailAttributes.put("appointmentStartTime", appointmentTime);
-	// emailAttributes.put("appointmentEndTime", appointmentEndTime);
-	// emailAttributes.put("currentTime", currentTime);
-	// emailAttributes.put("location", address);
+		 mail.setBody(emailService.geContentFromTemplate(emailAttributes,emailTemplateFileName
+		 ));
+		 if("ROLE_CARE_COORDINATOR".equals(roleName)){
+		 emailService.sendMailWithAttachment(mail);
+		 } else{
+		  // emailService.sendMail(mail);
+		 emailService.sendMailWithAttachment(mail);
+		 }
+		 
 
-	// mail.setModel(emailAttributes);
-	// String emailTemplateFileName =
-	// "agent_lead_assignment_email_template_"+roleName+".txt";
-
-	// mail.setBody(emailService.geContentFromTemplate(emailAttributes,emailTemplateFileName
-	// ));
-	// if("ROLE_CARE_COORDINATOR".equals(roleName)){
-	// emailService.sendMailWithAttachment(mail);
-	// } else{
-	// emailService.sendMail(mail);
-	// }
-	// emailService.sendMailWithAttachment(eParams);
-
-	return new ResponseEntity<LeadMembership>(currentLeadMembership,HttpStatus.OK);
+		return new ResponseEntity<LeadMembership>(currentLeadMembership, HttpStatus.OK);
 	}
 
 	// ------------------- Delete a

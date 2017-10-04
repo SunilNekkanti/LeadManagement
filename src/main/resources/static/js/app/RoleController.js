@@ -1,7 +1,7 @@
 'use strict';
 
 app.controller('RoleController',
-    ['RoleService', '$scope', '$compile','DTOptionsBuilder', 'DTColumnBuilder',  function( RoleService, $scope, $compile,DTOptionsBuilder, DTColumnBuilder) {
+    ['RoleService', '$scope', '$compile','$state','DTOptionsBuilder', 'DTColumnBuilder',  function( RoleService, $scope, $compile,$state,DTOptionsBuilder, DTColumnBuilder) {
     	
         var self = this;
         self.role = {};
@@ -44,7 +44,7 @@ app.controller('RoleController',
 				.withOption("bPaginate", true)
 				.withOption('bProcessing', true)
 				.withOption('bStateSave', true)
-		        .withDisplayLength(5).withOption( 'columnDefs', [ {
+		        .withDisplayLength(20).withOption( 'columnDefs', [ {
 					                                orderable : false,
 													className : 'select-checkbox',
 													targets : 0,
@@ -214,8 +214,8 @@ app.controller('RoleController',
             self.successMessage='';
             self.errorMessage='';
             self.role={};
-            $scope.myForm.$setPristine(); //reset Form
             self.display = false;
+            $state.go('role');
         }
     }
 

@@ -1,7 +1,7 @@
 'use strict';
 
 app.controller('FacilityTypeController',
-    ['FacilityTypeService', '$scope', '$compile','DTOptionsBuilder', 'DTColumnBuilder',  function( FacilityTypeService, $scope, $compile,  DTOptionsBuilder, DTColumnBuilder) {
+    ['FacilityTypeService', '$scope', '$compile','$state','DTOptionsBuilder', 'DTColumnBuilder',  function( FacilityTypeService, $scope, $compile, $state, DTOptionsBuilder, DTColumnBuilder) {
 
     	
         var self = this;
@@ -36,6 +36,7 @@ app.controller('FacilityTypeController',
      
         
         self.dtOptions = DTOptionsBuilder.newOptions()
+        .withDisplayLength(20)
 		.withOption(
 				'ajax',
 				{
@@ -46,7 +47,7 @@ app.controller('FacilityTypeController',
 				.withOption("bPaginate", true)
 				.withOption('bProcessing', true)
 				.withOption('bStateSave', true)
-		        .withDisplayLength(5).withOption( 'columnDefs', [ {
+		        .withOption( 'columnDefs', [ {
 					                                orderable : false,
 													className : 'select-checkbox',
 													targets : 0,
@@ -218,8 +219,8 @@ app.controller('FacilityTypeController',
             self.successMessage='';
             self.errorMessage='';
             self.facilityType={};
-            $scope.myForm.$setPristine(); //reset Form
             self.display = false;
+            $state.go('facilityType');
         }
     }
 

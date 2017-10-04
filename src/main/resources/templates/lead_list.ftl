@@ -2,7 +2,7 @@
   <div class="panel panel-default" ng-if="!ctrl.display">
     <!-- Default panel contents -->
     <div class="panel-heading"><span class="user">List of Leads </span>
-      <button type="button" ng-click="ctrl.addLead()" ng-hide="ctrl.displayEditButton" ng-show="ctrl.loginUser.roleName != 'AGENT'" class="btn btn-success  btn-xs  custom-width floatRight"> Add </button>
+      <button type="button" ng-click="ctrl.addLead()" ng-hide="ctrl.displayEditButton || ctrl.loginUserRole === 'AGENT'" class="btn btn-success  btn-xs  custom-width floatRight"> Add </button>
       <button type="button" ng-click="ctrl.editLead(ctrl.leadId)" ng-show="ctrl.displayEditButton" class="btn btn-primary btn-xs custom-width floatRight">Edit</button>
       <button type="button" ng-click="ctrl.removeLead(ctrl.leadId)" ng-show="ctrl.displayEditButton" class="btn btn-danger btn-xs  custom-width floatRight">Remove</button>
     </div>
@@ -16,8 +16,11 @@
   </div>
   
   <div class="panel panel-default" ng-if="ctrl.display">
-    <div class="panel-heading">List Details</div>
+    <div class="panel-heading">List Details </div>
     <div class="panel-body">
+     <div class="formcontainer">
+     <div class="alert alert-success" role="alert" ng-if="ctrl.successMessage">{{ctrl.successMessage}}</div>
+     <div class="alert alert-danger" role="alert" ng-if="ctrl.errorMessage">{{ctrl.errorMessage}}</div>
       <form ng-submit="ctrl.submit()" name="myForm" class="form-horizontal">
         <input type="hidden" ng-model="ctrl.lead.id" />
 
@@ -202,7 +205,7 @@
                 <div class="col-sm-6">
                   <div class="form-group col-sm-12">
                     <label for="homePhone">Home Phone</label>
-                    <input type="text" ng-model="ctrl.lead.contact.homePhone" id="homePhone" name="homePhone" class="username form-control input-sm" placeholder="Enter Home phone" ng-required="!ctrl.lead.address1" phone-input ng-minlength="10" />
+                    <input type="text" ng-model="ctrl.lead.contact.homePhone" id="homePhone" name="homePhone" class="username form-control input-sm" placeholder="Enter Home phone" ng-required="!ctrl.lead.contact.address1" phone-input ng-minlength="10" />
                     <div class="has-error" ng-show="myForm.$dirty">
                       <span ng-show="myForm.homePhone.$error.required">This is a required field</span>
                     </div>
@@ -245,7 +248,7 @@
           </div>
         </div>
 
-        <div class="col-sm-12 additionalInfo" ng-if="ctrl.showLeadAdditionalDetails()" >
+        <div class="col-sm-12 additionalInfo"  >
           <div class="panel panel-default">
             <div class="panel-heading">Additional Details</div>
             <div class="panel-body">
@@ -267,8 +270,7 @@
                   </div>
                 </div>
               </div>
-
-              <div class="row col-md-6" ng-if="!ctrl.showAgentAssignment()">
+              <div class="row col-md-6" ng-if="(ctrl.loginUserRole == 'EVENT_COORDINATOR'  || ctrl.lead.agentLeadAppointmentList.length == 0)">
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
                     <label for="leadcreation">Notes </label>
@@ -280,7 +282,7 @@
             </div>
           </div>
         </div>
-    <div class="col-sm-12 agentInfo" ng-if="ctrl.showAgentAssignment()" ng-show="ctrl.lead.status && ctrl.lead.status.id!=1">
+    <div class="col-sm-12 agentInfo" ng-if="ctrl.showAgentAssignment()" ng-show="(ctrl.lead.status && ctrl.lead.status.description == 'Agent')||ctrl.lead.agentLeadAppointmentList.length > 0 ">
           <div class="panel panel-default">
             <div class="panel-heading">Agent Assignment</div>
             <div class="panel-body">
@@ -288,7 +290,7 @@
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
                     <label for="	First Name ">Agent Name</label>
-                    <select ng-model="ctrl.selectedAgentLeadAppointment.user" class="form-control" ng-options="agent.username for agent in ctrl.users  | filter:{role:'AGENT'} | orderBy:'username'  track by agent.username" required></select>
+                    <select ng-model="ctrl.selectedAgentLeadAppointment.user" class="form-control" ng-options="agent.name for agent in ctrl.users  | filter:{role:'AGENT'} | orderBy:'name'  track by agent.name" required></select>
                   </div>
                 </div>
 
@@ -372,40 +374,20 @@
                     </div>
                   </div>
                 </div>
-
-                <div class="col-sm-4">
-                  <div class="form-group col-sm-12">
-                    <label for="planType">Plan Type</label>
-                    <select class=" form-control" ng-model="ctrl.selectedAgentLeadAppointment.planType" ng-options="planType.description for planType in ctrl.planTypes | orderBy:'description' track by planType.description" required="ctrl.lead.status.id && ctrl.lead.status.id == 2"></select>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
                 <div class="col-sm-4">
                   <div class="form-group col-sm-12">
                     <label for="plan">Plan</label>
-                    <select class=" form-control" ng-model="ctrl.selectedAgentLeadAppointment.insurance"  ng-options="insurance.name for insurance in ctrl.insurances | orderBy:'description' | filter :{planType:{id:ctrl.selectedAgentLeadAppointment.planType.id}} track by insurance.name"></select>
+                      <div ng-if="(ctrl.loggedUserInsId == 0)">
+                      <select class=" form-control" ng-model="ctrl.selectedAgentLeadAppointment.insurance"  ng-options="insurance.name for insurance in ctrl.insurances | orderBy:'description' track by insurance.name"></select>
+                      </div>
+                      <div  ng-if="(ctrl.loggedUserInsId != 0)">
+                      <select class=" form-control" ng-model="ctrl.selectedAgentLeadAppointment.insurance" ng-init="ctrl.selectedAgentLeadAppointment.insurance = ctrl.selectedAgentLeadAppointment.insurance||(ctrl.insurances | orderBy:'description' | filter :{id:ctrl.loggedUserInsId})[0]"  ng-options="insurance.name for insurance in ctrl.insurances  | filter :{id:ctrl.loggedUserInsId} | orderBy:'description' track by insurance.name"></select>
+                      </div>
+                    
                   </div>
                 </div>
-
-                <div class="col-sm-4">
-                  <div class="form-group col-sm-12">
-                    <label class="control-label" for="drappointment">Dr Appointment </label>
-                    <div class="input-group" name="drappointment" ng-model="ctrl.selectedAgentLeadAppointment.drAppointmentTime" date-picker>
-                      <input type="text" class="form-control netto-input" ng-model="ctrl.selectedAgentLeadAppointment.drAppointmentTime" date-picker-input required="ctrl.lead.status.id && ctrl.lead.status.id == 2">
-                      <span class="input-group-addon">
-			           							<span class="glyphicon glyphicon-calendar"></span>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-sm-4">
-                  <div class="form-group col-sm-12">
-                    <label for="transportation">Transportation</label>
-                    <input type="checkbox" class="form-control bigCheckBox" ng-model="ctrl.selectedAgentLeadAppointment.transportation" name="transportation" ng-true-value="'Y'" ng-false-value="'N'" />
-                  </div>
-                </div>
+                
+                
               </div>
 
             </div>
@@ -424,8 +406,8 @@
 
       </form>
       </div>
-
     </div>
+   </div>
 
 
 </div>

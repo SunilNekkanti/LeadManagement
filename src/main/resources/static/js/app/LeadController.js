@@ -39,6 +39,9 @@ app
 							self.serverResponse = {};
 							self.lead = {};
 							self.user = {};
+							self.loggedUserInsId = $localStorage.loginUser.insuranceId||'0';
+							console.log('leadcontroller.js$localStorage.loginUser.roleName'+$localStorage.loginUser.roleName);
+							self.loginUserRole = $localStorage.loginUser.roleName;
 							self.notes ='';
 							self.leads = [];
 							self.leadEventId = $stateParams.eventId;
@@ -127,6 +130,7 @@ app
 
 							self.dtOptions = DTOptionsBuilder
 									.newOptions()
+									 .withDisplayLength(20)
 									.withOption(
 											'ajax',
 											{
@@ -250,6 +254,7 @@ app
 													clearFiles();
 													self.dtInstance.reloadData();
 							                        self.dtInstance.rerender();
+							                        $state.go('lead');
 												},
 												function(errResponse) {
 													console
@@ -276,6 +281,7 @@ app
 													clearFiles();
 													self.dtInstance.reloadData();
 							                        self.dtInstance.rerender();
+							                        $state.go('lead');
 												},
 												function(errResponse) {
 													console
@@ -350,10 +356,6 @@ app
 							}
 
 							function addLead() {
-								$state.go("lead.edit");
-								var trans =  $state.go('lead.edit').transition;
-								trans.onSuccess({}, function() {
-									self.successMessage = '';
 									self.errorMessage = '';
 									self.providers = getAllProviders();
 									self.users = getAllAgents();
@@ -365,9 +367,7 @@ app
 									self.statuses = getAllLeadStatuses();
 									self.insurances = getAllInsurances();
 									self.planTypes = getAllPlanTypes();
-									
 									self.display = true;
-								}, { priority: 10 });
 								 
 							}
 
@@ -383,6 +383,7 @@ app
 					            self.errorMessage='';
 					            self.lead={};
 					            self.display = false;
+					            $state.go('lead');
 					        }
 
 							function uploadFile() {
@@ -450,7 +451,7 @@ app
 						        }
 						    
 						    function showAgentAssignment(){
-						    	if($localStorage.loginUser.roleName !== undefined &&  $localStorage.loginUser.roleName != 'AGENT' && $localStorage.loginUser.roleName != 'EVENT_COORDINATOR'){
+						    	if(  $localStorage.loginUser.roleName != 'AGENT' && $localStorage.loginUser.roleName != 'EVENT_COORDINATOR'){
 						    		return true;
 						    	}else{
 						    		return false;
@@ -510,7 +511,7 @@ app
 						    }
 						    
 						    function showLeadAdditionalDetails(){
-						    	if($localStorage.loginUser.roleName == 'CARE_COORDINATOR' || $localStorage.loginUser.roleName == 'EVENT_COORDINATOR' || $localStorage.loginUser.roleName == 'ADMIN'){
+						    	if($localStorage.loginUser.roleName == 'MANAGER'  || $localStorage.loginUser.roleName == 'CARE_COORDINATOR' || $localStorage.loginUser.roleName == 'EVENT_COORDINATOR' || $localStorage.loginUser.roleName == 'ADMIN'){
 						    		return true;
 						    	}else{
 						    		return false;

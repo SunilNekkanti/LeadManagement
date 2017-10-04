@@ -6,11 +6,10 @@
 <body>
     <p><b>Dear ${careCoordinator} </b>,</p>
     
-    <p>Met with ${firstName} ${lastName} on  ${appointmentTime}</p>
-    <p>at ${location}</b></p>
-    
-     Notes:<p> ${notes}  </p>
-     
+    <p>Completed scheduled appointment  ${appointmentStartTime}</p>
+  
+    <p>Please login to Lead Management System for more details </p>
+
     <p>Thanks</p>
     <p>${agent}</p>
     <p>${currentTime}</p>

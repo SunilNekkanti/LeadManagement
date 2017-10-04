@@ -89,7 +89,7 @@ app.service('FacilityTypeService',
                 $http.post(urls.FACILITYTYPE_SERVICE_API, user)
                     .then(
                         function (response) {
-                        	loadFacilityTypes(0,10,'',null);
+                        	loadFacilityTypes(0,20,'',null);
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
@@ -106,7 +106,7 @@ app.service('FacilityTypeService',
                 $http.put(urls.FACILITYTYPE_SERVICE_API + id, user)
                     .then(
                         function (response) {
-                        	loadFacilityTypes(0,10,'',null);
+                        	loadFacilityTypes(0,20,'',null);
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
@@ -123,7 +123,7 @@ app.service('FacilityTypeService',
                 $http.delete(urls.FACILITYTYPE_SERVICE_API + id)
                     .then(
                         function (response) {
-                        	loadFacilityTypes(0,10,'',null);
+                        	loadFacilityTypes(0,20,'',null);
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {

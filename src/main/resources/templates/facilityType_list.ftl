@@ -36,7 +36,7 @@
 	                    <div class="form-actions floatCenter col-md-offset-8">
 	                        <input type="submit"  value="{{!ctrl.facilityType.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid || myForm.$pristine">
 	                        <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-sm" ng-show="!ctrl.facilityType.id" ng-disabled="myForm.$pristine">Reset Form</button>
-	                        <button type="button" ng-click="ctrl.cancelEdit()" class="btn btn-warning btn-sm" ng-show="ctrl.user.id" >Cancel</button>
+	                        <button type="button" ng-click="ctrl.cancelEdit()" class="btn btn-warning btn-sm" ng-show="ctrl.facilityType.id" >Cancel</button>
 	                    </div>
 	                </div>
 	            </form>

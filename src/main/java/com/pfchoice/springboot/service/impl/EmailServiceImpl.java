@@ -84,8 +84,8 @@ public class EmailServiceImpl implements EmailService {
 		helper.setText(mail.getBody(), true);
 
 		Map<String, Object> emailAttributes =  mail.getModel();
-		 String startDateTime = (emailAttributes.get("appointmentStartTime") ==null)? emailAttributes.get("eventStartTime").toString():emailAttributes.get("appointmentStartTime") .toString();
-		 String endDateTime = (emailAttributes.get("appointmentEndTime") ==null)? emailAttributes.get("eventEndTime").toString():emailAttributes.get("appointmentEndTime") .toString();
+		 String startDateTime = (emailAttributes.get("appointmentStartTime") ==null)? emailAttributes.get("eventStartTime").toString():emailAttributes.get("appointmentStartTime").toString();
+		 String endDateTime = (emailAttributes.get("appointmentEndTime") ==null)? emailAttributes.get("eventEndTime").toString():emailAttributes.get("appointmentEndTime").toString();
          String location =   (emailAttributes.get("location") ==null)? "":emailAttributes.get("location").toString();
          String currentTime = (emailAttributes.get("currentTime") ==null)? "":emailAttributes.get("currentTime").toString();
          String eventName  = (emailAttributes.get("eventName") ==null)? "":emailAttributes.get("eventName").toString();

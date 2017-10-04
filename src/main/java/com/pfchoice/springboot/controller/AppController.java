@@ -20,16 +20,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.pfchoice.springboot.model.Role;
-import com.pfchoice.springboot.model.User;
+import com.pfchoice.springboot.model.CurrentUser;
 import com.pfchoice.springboot.model.LoginForm;
-import com.pfchoice.springboot.service.UserService;
+import com.pfchoice.springboot.service.CurrentUserService;
 
 @Controller
 @SessionAttributes({ "username", "roleId", "userId", "roleName" })
 public class AppController {
 
 	@Autowired
-	UserService userService;
+	CurrentUserService currentUserService;
 
 	/**
 	 * @param modal
@@ -53,7 +53,7 @@ public class AppController {
 		if (!modal.containsAttribute("username")) {
 			modal.addAttribute("username", username);
 		}
-		User user = userService.findByUsername(username);
+		CurrentUser user = currentUserService.findByCurrentUsername(username);
 		
 		if (user != null && !modal.containsAttribute("userId")) {
 			loginForm = new LoginForm();
@@ -65,6 +65,9 @@ public class AppController {
 			modal.addAttribute("roleName", role.getRole());
 			loginForm.setRoleName(role.getRole());
 			loginForm.setRoleId(role.getId());
+			if(user.getInsurance() != null)
+				loginForm.setInsuranceId(user.getInsurance().getId());
+			modal.addAttribute("loginUser", loginForm);
 			session.setAttribute("loginUser", loginForm);
 		}
 		

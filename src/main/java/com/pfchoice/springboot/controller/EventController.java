@@ -60,7 +60,7 @@ public class EventController {
 			@ModelAttribute("roleName") String roleName) {
 
 		pageNo = (pageNo == null) ? 0 : pageNo;
-		pageSize = (pageSize == null) ? 10 : pageSize;
+		pageSize = (pageSize == null) ? 20 : pageSize;
 
 		PageRequest pageRequest = new PageRequest(pageNo, pageSize);
 		Specification<Event> spec = new EventSpecifications(userId, roleName, search);

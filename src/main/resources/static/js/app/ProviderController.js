@@ -64,7 +64,7 @@ app.controller('ProviderController',
 				.withOption("bPaginate", true)
 				.withOption('bProcessing', true)
 				.withOption('bSaveState', true)
-		        .withDisplayLength(10).withOption( 'columnDefs', [ {
+		        .withDisplayLength(20).withOption( 'columnDefs', [ {
 					                                orderable : false,
 													className : 'select-checkbox',
 													targets : 0,

@@ -1,7 +1,5 @@
 package com.pfchoice.springboot.service.impl;
 
-import java.util.Date;
-
 import com.pfchoice.springboot.model.LeadMembership;
 import com.pfchoice.springboot.repositories.LeadMembershipRepository;
 import com.pfchoice.springboot.service.LeadMembershipService;
@@ -44,8 +42,8 @@ public class LeadMembershipServiceImpl implements LeadMembershipService {
 		return leadMembershipRepository.findAll(spec, pageable);
 	}
 
-	public boolean isLeadMembershipExists(String leadFirstName, String leadLastName, Date dob) {
-		return !leadMembershipRepository.findLeadMembershipByLastNameFirstNameDob(leadFirstName, leadLastName, dob)
+	public boolean isLeadMembershipExists(String leadFirstName, String leadLastName, String address, String phoneNumber) {
+		return !leadMembershipRepository.findLeadMembershipByLastNameFirstNameDob(leadFirstName, leadLastName, address, phoneNumber)
 				.isEmpty();
 	}
 

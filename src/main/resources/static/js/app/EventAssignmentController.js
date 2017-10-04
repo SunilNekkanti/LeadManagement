@@ -117,6 +117,7 @@ app
 
 							self.dtOptions = DTOptionsBuilder
 									.newOptions()
+									 .withDisplayLength(20)
 									.withOption(
 											'ajax',
 											{
@@ -128,7 +129,7 @@ app
 											"bPaginate", true).withOption(
 											'processing', true).withOption(
 											'saveState', true)
-									.withDisplayLength(10).withOption(
+									 .withOption(
 											'columnDefs', [ {
 												orderable : false,
 												className : 'select-checkbox',
@@ -225,6 +226,7 @@ app
 													self.eventAssignment = {};
 													self.dtInstance.reloadData();
 							                        self.dtInstance.rerender();
+							                        $state.go('eventAssignment');
 												},
 												function(errResponse) {
 													console
@@ -251,6 +253,7 @@ app
 															.$setPristine();
 													self.dtInstance.reloadData();
 							                        self.dtInstance.rerender();
+							                        $state.go('eventAssignment');
 												},
 												function(errResponse) {
 													console
@@ -313,17 +316,19 @@ app
 							}
 
 							function addEventAssignment() {
-								self.successMessage = '';
-								self.errorMessage = '';
-								self.display = true;
-								self.users = getAllAgents();
-								self.events =getAllEvents();
-								self.eventAssignmentMonths =getAllEventMonths();
-								self.eventAssignmentMonth = self.eventAssignmentMonths[0];
-								self.eventAssignmentOnWeekDays =getAllEventWeekDays();
-								//self.eventAssignmentOnWeekDaysss = self.eventAssignmentOnWeekDays[0];
-								self.eventAssignmentOnWeeks =getAllEventWeekNumbers();
-								self.eventAssignmentOnWeek = self.eventAssignmentOnWeeks[0];
+								
+									$state.go('eventAssignment.edit');
+									self.successMessage = '';
+									self.errorMessage = '';
+									self.users = getAllAgents();
+									self.events =getAllEvents();
+									self.eventAssignmentMonths =getAllEventMonths();
+									self.eventAssignmentMonth = self.eventAssignmentMonths[0];
+									self.eventAssignmentOnWeekDays =getAllEventWeekDays();
+									//self.eventAssignmentOnWeekDaysss = self.eventAssignmentOnWeekDays[0];
+									self.eventAssignmentOnWeeks =getAllEventWeekNumbers();
+									self.eventAssignmentOnWeek = self.eventAssignmentOnWeeks[0];
+									self.display = true;
 								
 							}
 							
@@ -343,8 +348,8 @@ app
 								self.successMessage = '';
 								self.errorMessage = '';
 								self.eventAssignment = {};
-					            $state.go('eventAssignment');
 					            self.display  = false;
+					            $state.go('eventAssignment');
 					        }
 							
 							
@@ -539,7 +544,7 @@ app
 							  
 							  function addLead( ){
 									var params = {"eventId":self.eventAssignment.event.id,"leadDisplay":true};
-									$state.go('lead', params );
+									$state.go('lead.edit', params );
 									
 								}
 							  
@@ -613,8 +618,9 @@ app
 								  };
 
 						  function eventAssignmentEdit(id){
-										$state.go('eventAssignment.edit');
-										editEventAssignment(id);
+							  $state.go('eventAssignment.edit'); 
+									editEventAssignment(id);
+										
 						 }		  
 						  function setDate(year, month, day) {
 							  self.eventAssignment.eventAssignmentDateTime = new Date(year, month, day);

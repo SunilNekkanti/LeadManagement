@@ -20,7 +20,7 @@ app.service('EventAssignmentService',
                 console.log('Fetching all events');
                 var deferred = $q.defer();
                 var pageable = {
-                  		 page:0, size:10
+                  		 page:0, size:20
                   		};
 
                   		var config = {
@@ -97,7 +97,7 @@ app.service('EventAssignmentService',
                 $http.post(urls.EVENT_ASSIGNMENT_SERVICE_API, event)
                     .then(
                         function (response) {
-                        	loadEventAssignments(0,10,'',null);
+                        	loadEventAssignments(0,20,'',null);
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
@@ -114,7 +114,7 @@ app.service('EventAssignmentService',
                 $http.put(urls.EVENT_ASSIGNMENT_SERVICE_API + id, event)
                     .then(
                         function (response) {
-                        	loadEventAssignments(0,10,'',null);
+                        	loadEventAssignments(0,20,'',null);
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {

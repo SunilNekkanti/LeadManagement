@@ -14,6 +14,8 @@ public class LoginForm {
 	private String roleName;
 	private Integer roleId;
 	private Integer userId;
+	private Integer insuranceId;
+	
 
 	/**
 	 * @return the username
@@ -88,6 +90,20 @@ public class LoginForm {
 	 */
 	public void setUserId(Integer userId) {
 		this.userId = userId;
+	}
+
+	/**
+	 * @return the insuranceId
+	 */
+	public Integer getInsuranceId() {
+		return insuranceId;
+	}
+
+	/**
+	 * @param insuranceId the insuranceId to set
+	 */
+	public void setInsuranceId(Integer insuranceId) {
+		this.insuranceId = insuranceId;
 	}
 
 }

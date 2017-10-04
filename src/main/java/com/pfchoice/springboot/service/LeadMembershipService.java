@@ -1,7 +1,5 @@
 package com.pfchoice.springboot.service;
 
-import java.util.Date;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -22,5 +20,5 @@ public interface LeadMembershipService {
 
 	Page<LeadMembership> findAllLeadMembershipsByPage(Specification<LeadMembership> spec, Pageable pageable);
 
-	boolean isLeadMembershipExists(String leadFirstName, String leadLastName, Date dob);
+	boolean isLeadMembershipExists(String leadFirstName, String leadLastName, String address, String phoneNumber);
 }

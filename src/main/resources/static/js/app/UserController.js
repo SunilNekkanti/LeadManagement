@@ -42,7 +42,7 @@ app.controller('UserController',
             DTColumnBuilder.newColumn('name').withTitle('USERNAME').renderWith(
 					function(data, type, full,
 							meta) {
-						 return '<a href="javascript:void(0)" class="'+full.id+'" ng-click="ctrl.editUser('+full.id+')">'+data+'</a>';
+						 return '<a href="javascript:void(0)" class="'+full.id+'" ng-click="ctrl.userEdit('+full.id+')">'+data+'</a>';
 					}).withClass("text-left"),
             DTColumnBuilder.newColumn('role.role').withTitle('ROLE').withOption('defaultContent', ''),
             DTColumnBuilder.newColumn('contact.mobilePhone').withTitle('MOBILE').withOption('defaultContent', ''),
@@ -61,7 +61,7 @@ app.controller('UserController',
 				.withOption("bPaginate", true)
 				.withOption('bProcessing', true)
 				.withOption('bStateSave', true)
-		        .withDisplayLength(10).withOption( 'columnDefs', [ {
+		        .withDisplayLength(20).withOption( 'columnDefs', [ {
 					                                orderable : false,
 													className : 'select-checkbox',
 													targets : 0,
@@ -151,6 +151,7 @@ app.controller('UserController',
                         $scope.myForm.$setPristine();
                         self.dtInstance.reloadData();
                         self.dtInstance.rerender();
+                        $state.go('user');
                     },
                     function (errResponse) {
                         console.error('Error while creating User');
@@ -173,6 +174,7 @@ app.controller('UserController',
                         self.display =false;
                         self.dtInstance.reloadData();
                         self.dtInstance.rerender();
+                        $state.go('user');
                     },
                     function(errResponse){
                         console.error('Error while updating User');
@@ -257,24 +259,32 @@ app.controller('UserController',
             self.errorMessage='';
             self.user={};
             self.display = false;
+            $state.go('user');
         }
        
         function addUser() {
-        	 $state.go('user.add');
-            self.successMessage='';
-            self.errorMessage='';
-            self.languages = getAllLanguages();
-            self.roles = getAllRoles();
-            self.counties = getAllCounties();
-            self.insurances = getAllInsurances();
-            self.states = getAllStates();
-            self.display =true;
+        	var params = {'userDisplay':true};
+			var trans =  $state.go('user.edit',params).transition;
+			trans.onSuccess({}, function() { 
+				   self.successMessage='';
+		            self.errorMessage='';
+		            self.languages = getAllLanguages();
+		            self.roles = getAllRoles();
+		            self.counties = getAllCounties();
+		            self.insurances = getAllInsurances();
+		            self.states = getAllStates();
+		            self.display =true;
+			}, { priority: -1 });
+			
+         
         }
         
         function userEdit(id){
-			var params = {"id":id,"userDisplay":true};
-			$state.go('user.edit',params);
-			editUser(id);
+        	
+        	var params = {'userDisplay':true};
+			var trans =  $state.go('user.edit',params).transition;
+			trans.onSuccess({}, function() { editUser(id); }, { priority: -1 });
+			 
 		}
     }
     

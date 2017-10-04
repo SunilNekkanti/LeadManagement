@@ -1,7 +1,7 @@
 'use strict';
 
 app.controller('LeadStatusController',
-    ['LeadStatusService','$scope', '$compile','DTOptionsBuilder', 'DTColumnBuilder', function( LeadStatusService,  $scope,$compile,  DTOptionsBuilder, DTColumnBuilder) {
+    ['LeadStatusService','$scope', '$compile','$state','DTOptionsBuilder', 'DTColumnBuilder', function( LeadStatusService,  $scope,$compile, $state, DTOptionsBuilder, DTColumnBuilder) {
 
         var self = this;
         self.leadStatus = {};
@@ -37,6 +37,7 @@ app.controller('LeadStatusController',
      
         
         self.dtOptions = DTOptionsBuilder.newOptions()
+        .withDisplayLength(20)
 		.withOption(
 				'ajax',
 				{
@@ -47,7 +48,7 @@ app.controller('LeadStatusController',
 				.withOption("bPaginate", true)
 				.withOption('bProcessing', true)
 				.withOption('bSaveState', true)
-		        .withDisplayLength(10).withOption( 'columnDefs', [ {
+		        .withOption( 'columnDefs', [ {
 					                                orderable : false,
 													className : 'select-checkbox',
 													targets : 0,
@@ -208,9 +209,9 @@ app.controller('LeadStatusController',
         function cancelEdit(){
             self.successMessage='';
             self.errorMessage='';
-            self.facilityType={};
-            $scope.myForm.$setPristine(); //reset Form
+            self.leadStatus={};
             self.display = false;
+            $state.go('leadStatus');
         }
         
         function addLeadStatus() {

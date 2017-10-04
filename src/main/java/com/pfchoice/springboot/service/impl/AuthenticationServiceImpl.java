@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.pfchoice.springboot.model.Role;
-import com.pfchoice.springboot.repositories.UserRepository;
+import com.pfchoice.springboot.repositories.CurrentUserRepository;
 
 /**
  *
@@ -28,7 +28,7 @@ import com.pfchoice.springboot.repositories.UserRepository;
 public class AuthenticationServiceImpl implements UserDetailsService {
 
 	@Autowired
-	private UserRepository userRepository;
+	private CurrentUserRepository currentUserRepository;
 
 	/*
 	 * (non-Javadoc)
@@ -38,7 +38,7 @@ public class AuthenticationServiceImpl implements UserDetailsService {
 	 */
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		com.pfchoice.springboot.model.User user = userRepository.findByUsername(username);
+		com.pfchoice.springboot.model.CurrentUser user = currentUserRepository.findByUsername(username);
 		Role role = user.getRole();
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.getRole());

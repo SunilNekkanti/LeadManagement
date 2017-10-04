@@ -136,6 +136,7 @@ app
 							
 							self.dtOptions = DTOptionsBuilder
 							.newOptions()
+							.withDisplayLength(20)
 							.withOption(
 									'ajax',
 									{
@@ -248,6 +249,7 @@ app
 															.$setPristine();
 													self.dtInstance.reloadData();
 							                        self.dtInstance.rerender();
+							                        $state.go('event');
 												},
 												function(errResponse) {
 													console
@@ -276,6 +278,7 @@ app
 															.$setPristine();
 													self.dtInstance.reloadData();
 							                        self.dtInstance.rerender();
+							                        $state.go('event');
 												},
 												function(errResponse) {
 													console
@@ -341,18 +344,19 @@ app
 							function addEvent() {
 								self.successMessage = '';
 								self.errorMessage = '';
-								$state.go('event.edit');
-								self.users = getAllAgents();
-								self.states = getAllStates();
-								self.facilityTypes = getAllFacilityTypes();
-								/*self.eventMonths =getAllEventMonths();
-								self.eventMonth = self.eventMonths[0];
-								self.eventOnWeekDays =getAllEventWeekDays();
-								// self.eventOnWeekDaysss = self.eventOnWeekDays[0]; //not required
-								self.eventOnWeeks =getAllEventWeekNumbers();
-								self.eventOnWeek = self.eventOnWeeks[0];*/
-								self.display = true;
-								
+								var trans =  $state.go('event.edit').transition;
+								trans.onSuccess({}, function() {
+									self.users = getAllAgents();
+									self.states = getAllStates();
+									self.facilityTypes = getAllFacilityTypes();
+									/*self.eventMonths =getAllEventMonths();
+									self.eventMonth = self.eventMonths[0];
+									self.eventOnWeekDays =getAllEventWeekDays();
+									// self.eventOnWeekDaysss = self.eventOnWeekDays[0]; //not required
+									self.eventOnWeeks =getAllEventWeekNumbers();
+									self.eventOnWeek = self.eventOnWeeks[0];*/
+									self.display = true;
+								});
 							}
 
 							function reset() {
@@ -368,6 +372,7 @@ app
 					            self.event={};
 					            $scope.myForm.$setPristine(); //reset Form
 					            self.display = false;
+					            $state.go('event');
 					        }
 							
                             function convertToInt(id){
@@ -576,14 +581,16 @@ app
 							
 							function eventEdit(id){
 							//	var params = {"id":id,"eventDisplay":true};
-								$state.go('event.edit');
+								var trans =  $state.go('event.edit').transition;
+								trans.onSuccess({}, function() {
+								
 								editEvent(id);
+								});
 							}
 							
 							function addLead( ){
 								var params = {"eventId":self.event.id,"leadDisplay":true};
 								$state.go('lead.edit', params );
-								
 							}
 
 							function clearFiles(){

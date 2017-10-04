@@ -47,6 +47,7 @@ app.controller('NavbarController',  ['$rootScope', '$scope', '$state', '$statePa
 										.log('fetched loginUser details successfully');
 								$rootScope.displayNavbar =true;
 								$rootScope.loginUser = $localStorage.loginUser;
+								 console.log("  after fetch $localStorage.loginUser"+JSON.stringify($localStorage.loginUser));
 							},
 							function(errResponse) {
 								 callMe('logout')
@@ -89,47 +90,16 @@ app.config(['$stateProvider', '$urlRouterProvider',
         url: '/home',
         templateUrl: 'home'
        })
-       .state('user.add', {
+       .state('user', {
           url: '/user',
           templateUrl: 'partials/list',
           controller:'UserController',
           controllerAs:'ctrl',
           resolve: {
-        	  roles: function ($stateParams, $q, RoleService) {
-        			  console.log('Load all roles');
-                      var deferred = $q.defer();
-                      RoleService.loadAllRoles().then(deferred.resolve, deferred.resolve);
-                      console.log('deferred.promise'+deferred.promise);
-                      return deferred.promise;
-                
-              },
-		      languages: function ($stateParams,$q,  LanguageService) {
-		    		  console.log('Load all languages');
-			          var deferred = $q.defer();
-			          LanguageService.loadAllLanguages().then(deferred.resolve, deferred.resolve);
-			          console.log('deferred.promise'+deferred.promise);
-			          return deferred.promise; 
-		        
-		      },
-		      insurances: function ($stateParams,$q,  InsuranceService) {
-		    		    console.log('Load all insurances');
-				          var deferred = $q.defer();
-				          InsuranceService.loadAllInsurances().then(deferred.resolve, deferred.resolve);
-				          console.log('deferred.promise'+deferred.promise);
-				          return deferred.promise;	  
-		      
-		      },
-		      states: function ($stateParams,$q,  StateService) {
-		    		  console.log('Load all states');
-			          var deferred = $q.defer();
-			          StateService.loadAllStates().then(deferred.resolve, deferred.resolve);
-			          console.log('deferred.promise'+deferred.promise);
-			          return deferred.promise; 
-		      }
           }
       })
-      .state('user', {
-          url: '/user/:id',
+      .state('user.edit', {
+          url: '/',
           templateUrl: 'partials/list',
           controller:'UserController',
           controllerAs:'ctrl',
@@ -138,45 +108,33 @@ app.config(['$stateProvider', '$urlRouterProvider',
       	    'userDisplay': false, 
       	  },
           resolve: {
-        	  roles: function ($stateParams, $q, RoleService) {
-        		  if($stateParams.id !== ''){
+        	  roles: function ( $q, RoleService) {
         			  console.log('Load all users');
                       var deferred = $q.defer();
                       RoleService.loadAllRoles().then(deferred.resolve, deferred.resolve);
                       console.log('deferred.promise'+deferred.promise);
                       return deferred.promise;
-        		  }
-                
               },
-		      languages: function ($stateParams,$q,  LanguageService) {
-		    	  if($stateParams.id !== ''){
+		      languages: function ( $q,  LanguageService) {
 		    		  console.log('Load all languages');
 			          var deferred = $q.defer();
 			          LanguageService.loadAllLanguages().then(deferred.resolve, deferred.resolve);
 			          console.log('deferred.promise'+deferred.promise);
 			          return deferred.promise; 
-		    	  }
-		        
 		      },
-		      insurances: function ($stateParams,$q,  InsuranceService) {
-		    	  if($stateParams.id !== ''){
+		      insurances: function ($q,  InsuranceService) {
 		    		    console.log('Load all insurances');
 				          var deferred = $q.defer();
 				          InsuranceService.loadAllInsurances().then(deferred.resolve, deferred.resolve);
 				          console.log('deferred.promise'+deferred.promise);
 				          return deferred.promise;	  
-		    	  }
-		      
 		      },
-		      states: function ($stateParams,$q,  StateService) {
-		    	  if($stateParams.id !== ''){
+		      states: function ($q,  StateService) {
 		    		  console.log('Load all states');
 			          var deferred = $q.defer();
 			          StateService.loadAllStates().then(deferred.resolve, deferred.resolve);
 			          console.log('deferred.promise'+deferred.promise);
 			          return deferred.promise; 
-		    	  }
-		         
 		      }
           }
       })
@@ -195,9 +153,8 @@ app.config(['$stateProvider', '$urlRouterProvider',
           controller:'LeadController',
           controllerAs:'ctrl',
           params: {
-        	    'id': '',  
         	    'eventId': '',   
-        	    'leadDisplay': false
+        	    'leadDisplay': true
         	  },
           resolve: {
 		      events: function ($q,  EventService) {
@@ -213,18 +170,18 @@ app.config(['$stateProvider', '$urlRouterProvider',
 			          return deferred.promise;
 		      },
 		      providers: function ( $q,  ProviderService) {
-		    		  console.log('Load all users');
+		    		  console.log('Load all providers');
 			          var deferred = $q.defer();
 			          ProviderService.loadAllProviders().then(deferred.resolve, deferred.resolve);
 			          return deferred.promise;
 		      },
       		  states: function ( $q,  StateService) {
-      				console.log('Load all leads');
+      				console.log('Load all states');
       				var deferred = $q.defer();
       				StateService.loadAllStates().then(deferred.resolve, deferred.resolve);
 		      },
               genders: function ( $q,  GenderService) {
-            		  console.log('Load all leads');
+            		  console.log('Load all genders');
     		          var deferred = $q.defer();
     		          GenderService.loadAllGenders().then(deferred.resolve, deferred.resolve);
     		          return deferred.promise;
@@ -279,7 +236,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
         	  facilityTypes: function ($q,FacilityTypeService) {
                   console.log('Load all facilityTypes');
                   var deferred = $q.defer();
-                  FacilityTypeService.loadFacilityTypes(0,10,'',null).then(deferred.resolve, deferred.resolve);
+                  FacilityTypeService.loadFacilityTypes(0,20,'',null).then(deferred.resolve, deferred.resolve);
                   console.log('deferred.promise'+deferred.promise);
                   return deferred.promise;
               }
@@ -294,7 +251,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
               leadStatuses: function ($q,LeadStatusService) {
                   console.log('Load all leadStatuses');
                   var deferred = $q.defer();
-                  LeadStatusService.loadLeadStatuses(0,10,'',null).then(deferred.resolve, deferred.resolve);
+                  LeadStatusService.loadLeadStatuses(0,20,'',null).then(deferred.resolve, deferred.resolve);
                   console.log('deferred.promise'+deferred.promise);
                   return deferred.promise;
               }
@@ -332,7 +289,14 @@ app.config(['$stateProvider', '$urlRouterProvider',
                   FacilityTypeService.loadAllFacilityTypes().then(deferred.resolve, deferred.resolve);
                   console.log('deferred.promise'+deferred.promise);
                   return deferred.promise;
-              }
+              },
+		      states: function ($stateParams,$q,  StateService) {
+	    		  console.log('Load all states');
+		          var deferred = $q.defer();
+		          StateService.loadAllStates().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise; 
+	      }
           }
       })
        .state('eventAssignment', {
@@ -351,8 +315,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
           controller:'EventAssignmentController',
           controllerAs:'ctrl',
           params: {
-        	    'eventId': '', 
-        	    'eventAssignmentDisplay': false, 
+        	    'eventAssignmentDisplay': true, 
         	  },
           resolve: {
         	  events: function ($q,  EventService) {
@@ -366,6 +329,27 @@ app.config(['$stateProvider', '$urlRouterProvider',
 		          console.log('Load all users');
 		          var deferred = $q.defer();
 		          UserService.loadAllUsers().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise;
+		      },
+      		  eventMonths: function ($q,  EventMonthService) {
+		          console.log('Load all eventMonths');
+		          var deferred = $q.defer();
+		          EventMonthService.loadAllEventMonths().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise;
+		      },
+      		  eventWeekDays: function ($q,  EventWeekDayService) {
+		          console.log('Load all eventWeekDays');
+		          var deferred = $q.defer();
+		          EventWeekDayService.loadAllEventWeekDays().then(deferred.resolve, deferred.resolve);
+		          console.log('deferred.promise'+deferred.promise);
+		          return deferred.promise;
+		      },
+      		  eventWeekNumbers: function ($q,  EventWeekNumberService) {
+		          console.log('Load all eventWeekNumbers');
+		          var deferred = $q.defer();
+		          EventWeekNumberService.loadAllEventWeekNumbers().then(deferred.resolve, deferred.resolve);
 		          console.log('deferred.promise'+deferred.promise);
 		          return deferred.promise;
 		      }
@@ -404,7 +388,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
         	  insurances: function ($q,InsuranceService) {
                   console.log('Load all insurances');
                   var deferred = $q.defer();
-                  InsuranceService.loadInsurances(0,10,'',null).then(deferred.resolve, deferred.resolve);
+                  InsuranceService.loadInsurances(0,20,'',null).then(deferred.resolve, deferred.resolve);
                   
                   console.log('deferred.promise'+deferred.promise);
                   return deferred.promise;
@@ -459,7 +443,7 @@ app.directive('datePicker', function () {
                         return moment(new Date(data));
                     }
                 },
-                minDate:   new Date(new Date().setDate(new Date().getDate()-7)),
+                minDate:   new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
                 maxDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
             });
 
@@ -486,7 +470,7 @@ app.directive('date1Picker', function () {
                         return moment(new Date(data));
                     }
                 },
-                maxDate: new Date()
+                maxDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
             });
 
             $(element).on("dp.change", function (e) {
