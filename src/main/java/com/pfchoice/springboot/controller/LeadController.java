@@ -248,7 +248,7 @@ public class LeadController {
 		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 		String currentTime = sdf.format((new Date()).getTime());
 
-		SimpleDateFormat sdf1 = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+		SimpleDateFormat sdf1 = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
 		String currentLocalTime = sdf1.format((new Date()).getTime());
 
 		final Email mail = new Email();

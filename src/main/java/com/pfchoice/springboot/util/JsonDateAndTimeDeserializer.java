@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 
 public class JsonDateAndTimeDeserializer extends JsonDeserializer<Date> {
 
-	private SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
 
 	@Override
 	public Date deserialize(JsonParser paramJsonParser, DeserializationContext paramDeserializationContext)

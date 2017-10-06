@@ -435,7 +435,7 @@ app.directive('datePicker', function () {
         link: function (scope, element, attr, ngModel) {
             $(element).datetimepicker({
                 locale: 'en-us',
-                format: 'MM/DD/YYYY HH:mm',
+                format: 'MM/DD/YYYY hh:mm a',
                 parseInputDate: function (data) {
                     if (data instanceof Date) {
                         return moment(data);
@@ -448,7 +448,7 @@ app.directive('datePicker', function () {
             });
 
             $(element).on("dp.change", function (e) {
-                ngModel.$viewValue = moment(e.date).format('MM/DD/YYYY HH:mm')  ;
+                ngModel.$viewValue = moment(e.date).format('MM/DD/YYYY hh:mm a')  ;
                 ngModel.$commitViewValue();
             });
         }

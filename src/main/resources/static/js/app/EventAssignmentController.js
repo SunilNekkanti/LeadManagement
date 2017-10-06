@@ -98,7 +98,7 @@ app
 													'defaultContent', ''),
 									DTColumnBuilder.newColumn('eventDateStartTime')
 													.withTitle('STARTTIME').renderWith(function(data, type) {
-														return $filter('date')(new Date(data), 'HH:mm'); //date filter
+														return $filter('date')(new Date(data), 'hh:mm a'); //date filter
 													}).withOption(
 															'defaultContent', ''),				
 									DTColumnBuilder.newColumn('eventDateEndTime')
@@ -108,7 +108,7 @@ app
 															'defaultContent', ''),
 									DTColumnBuilder.newColumn('eventDateEndTime')
 																	.withTitle('ENDTIME').renderWith(function(data, type) {
-																		return $filter('date')(new Date(data), 'HH:mm'); //date filter
+																		return $filter('date')(new Date(data), 'hh:mm a'); //date filter
 																	}).withOption(
 																			'defaultContent', ''),
 								    DTColumnBuilder.newColumn('representatives[,].name').withTitle(
