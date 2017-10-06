@@ -6,13 +6,14 @@
 <body>
    <p><b>Dear ${agent} </b>,</p>
     
-    <p>You have been scheduled for an appointment  on   ${appointmentStartTime}</p>
+    <p>You have been scheduled for an appointment  on   ${appointmentLocalTime}</p>
   
     <p>Please login to Lead Management System for more details </p>
      
     <p>Thanks</p>
     <p>${currentUser}</p>
-    <p>${currentTime}</p>
+     <p>${currentUserRole}</p>
+    <p>${currentLocalTime}</p>
     
     
 </body>

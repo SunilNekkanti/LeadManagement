@@ -39,12 +39,15 @@ public class AuthenticationServiceImpl implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		com.pfchoice.springboot.model.CurrentUser user = currentUserRepository.findByUsername(username);
-		Role role = user.getRole();
-		List<GrantedAuthority> authorities = new ArrayList<>();
-		GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.getRole());
-		authorities.add(authority);
+		if(user!= null  && user.getActiveInd() == 'Y'){
+			Role role = user.getRole();
+			List<GrantedAuthority> authorities = new ArrayList<>();
+			GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.getRole());
+			authorities.add(authority);
 
-		return new User(user.getUsername(), user.getPassword(), authorities);
+			return new User(user.getUsername(), user.getPassword(), authorities);
+		} 
+			throw new UsernameNotFoundException("could not find the user '" + username + "'");
 
 	}
 }

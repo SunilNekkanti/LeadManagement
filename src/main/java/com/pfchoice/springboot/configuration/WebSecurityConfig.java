@@ -79,8 +79,8 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.hasAnyAuthority("ROLE_AGENT", "ROLE_ADMIN", "ROLE_CARE_COORDINATOR", "ROLE_EVENT_COORDINATOR",
 						"ROLE_MANAGER")
 				.anyRequest().authenticated().and().formLogin().loginPage("/").usernameParameter("username")
-				.passwordParameter("password").loginProcessingUrl("/loginform.do")
-				.successHandler(new CustomAuthenticationSuccessHandler()).failureUrl("/login?error").and()
+				.passwordParameter("password").loginProcessingUrl("/loginform.do").failureUrl("/login?error")
+				.successHandler( customAuthenticationSuccessHandler()).and()
 				.logout().addLogoutHandler(customLogoutHandler())   
                 .logoutRequestMatcher(new AntPathRequestMatcher("/login")).and()
 				.exceptionHandling().accessDeniedPage("/403").and()
@@ -108,5 +108,10 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public CustomLogoutHandler customLogoutHandler() {
 	    return new CustomLogoutHandler();
+	}
+	
+	@Bean
+	public CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+	    return new CustomAuthenticationSuccessHandler();
 	}
 }

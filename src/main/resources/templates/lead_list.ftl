@@ -10,7 +10,7 @@
 
     <div class="panel-body">
       <div class="table-responsive">
-        <table datatable="" id="content" dt-options="ctrl.dtOptions" dt-columns="ctrl.dtColumns" dt-instance="ctrl.dtInstance" class="table table-hover table-responsive  bordered table-striped table-condensed datatable "></table>
+        <table datatable="" id="content" dt-options="ctrl.dtOptions" dt-columns="ctrl.dtColumns" dt-instance="ctrl.dtInstance" class="table table-hover table-responsive  bordered table-striped table-condensed datatable dt-responsive nowrap dataTable row-border hover "></table>
       </div>
     </div>
   </div>
@@ -33,6 +33,9 @@
                   <div class="form-group col-sm-12">
                     <label for="agentEvent">Event </label>
                      <select ng-model="ctrl.lead.event" class="form-control" ng-options="event.eventName for event in ctrl.events  | orderBy:'eventName'  track by event.eventName" required></select>
+                     <div class="has-error" ng-show="myForm.$dirty">
+                      <span ng-show="myForm.eventName.$error.required">This is a required field</span>
+                    </div>
                   </div>
                 </div>
 

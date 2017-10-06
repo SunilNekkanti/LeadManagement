@@ -58,7 +58,7 @@ public class CurrentUser extends RecordDetails implements Serializable {
 					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id", nullable = false, unique = true) })
 	private Contact contact;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "role_id", referencedColumnName = "id")
 	private Role role;
 

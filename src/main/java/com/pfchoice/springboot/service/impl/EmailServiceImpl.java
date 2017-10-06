@@ -21,6 +21,7 @@ import javax.mail.util.ByteArrayDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
@@ -47,16 +48,18 @@ public class EmailServiceImpl implements EmailService {
 	 * @throws MessagingException
 	 * @throws InterruptedException
 	 */
-	public void sendMail(Email mail) throws MessagingException, InterruptedException {
-		Thread.sleep(10000);
+	@Async
+	public void sendMail(final Email mail) throws MessagingException, InterruptedException {
+		
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
 		String[] toEmailList = mail.getEmailTo().split(";");
 		helper.setTo(toEmailList);
-		helper.setFrom(mail.getEmailFrom());
+		helper.setFrom("skumar@pfchoice.com");
 		helper.setSubject(mail.getSubject());
 		helper.setText(mail.getBody(), true);
 		helper.setCc(mail.getEmailCc());
+		Thread.sleep(10000);
 		mailSender.send(message);
 		LOGGER.info("an email sent from the server");
 	}
@@ -68,8 +71,9 @@ public class EmailServiceImpl implements EmailService {
 	 * @throws IOException
 	 */
 	@SuppressWarnings({ "unchecked", "resource" })
-	public void sendMailWithAttachment(Email mail) throws MessagingException, IOException, InterruptedException {
-
+	@Async
+	public void sendMailWithAttachment(final Email mail) throws MessagingException, IOException, InterruptedException {
+		Thread.sleep(10000);
 		MimeMessage message = mailSender.createMimeMessage();
 		message.addHeaderLine("charset=UTF-8");
 		message.addHeaderLine("component=VEVENT");
@@ -78,7 +82,7 @@ public class EmailServiceImpl implements EmailService {
 		MimeMessageHelper helper = new MimeMessageHelper(message);
 		 String[] toEmailList = mail.getEmailTo().split(";");
 		helper.setTo(toEmailList);
-		helper.setFrom(mail.getEmailFrom());
+		helper.setFrom("skumar@pfchoice.com");
 		helper.setSubject(mail.getSubject());
 		helper.setCc(mail.getEmailCc());
 		helper.setText(mail.getBody(), true);
@@ -117,7 +121,7 @@ public class EmailServiceImpl implements EmailService {
 		            + "END:VTIMEZONE\n"
 		            + "BEGIN:VEVENT\n"
 		            + "ATTENDEE;ROLE=REQ-PARTICIPANT;RSVP=TRUE:MAILTO:skumar@pfchoice.com\n"
-		            + "ORGANIZER:MAILTO:lizfoster@pfchoice.com\n"
+		            + "ORGANIZER:MAILTO:maria.ortiz@pfchoice.com\n"
 		            + "DTSTART;TZID=America/New_York:"+startDateTime+"\n"
 		            + "DTEND;TZID=America/New_York:"+endDateTime+"\n"
 		            + "LOCATION:"+location+"\n"
@@ -142,8 +146,7 @@ public class EmailServiceImpl implements EmailService {
 
 			// Create the message part
 			BodyPart messageBodyPart = new MimeBodyPart();
-			messageBodyPart.setContent(mail.getBody(), "text/html");
-
+			 messageBodyPart.setContent(mail.getBody(), "text/html");
 			// Now set the actual message
 			//messageBodyPart.setText);
 
@@ -173,18 +176,20 @@ public class EmailServiceImpl implements EmailService {
 				}
 		
 			}
-			
-		    messageBodyPart.setHeader("Content-Class", "urn:content-classes:calendarmessage");
-		    messageBodyPart.setHeader("Content-ID", "calendar_message");
-		    messageBodyPart.setDataHandler(new DataHandler(new ByteArrayDataSource(buffer.toString(), "text/calendar")));
+			BodyPart messageBodyPart3 = new MimeBodyPart();
+		    messageBodyPart3.setHeader("Content-Class", "urn:content-classes:calendarmessage");
+		    messageBodyPart3.setHeader("Content-ID", "calendar_message");
+		    messageBodyPart3.setDataHandler(new DataHandler(new ByteArrayDataSource(buffer.toString(), "text/calendar")));
 
 		  //  Multipart multipart = new MimeMultipart();
 
-		    multipart.addBodyPart(messageBodyPart);
+		   
+		    multipart.addBodyPart(messageBodyPart3);
 
 		    message.setContent(multipart);
-
+		    Thread.sleep(10000);
 		mailSender.send(message);
+		LOGGER.info("an email with calendar sent from the server");
 	}
 
 	public String geContentFromTemplate(Object model, String emailTemplateFile) {

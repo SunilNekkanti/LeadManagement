@@ -144,7 +144,9 @@ app
 										    .withOption('createdRow', createdRow)
 									        .withPaginationType('full_numbers')
 									        
-									        .withFnServerData(serverData);
+									        .withFnServerData(serverData)
+									        .withOption('order', []).withOption('bDestroy',true).withOption('deferRender',true)
+									         ;
 
 							
 							if(self.display){
