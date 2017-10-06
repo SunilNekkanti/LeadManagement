@@ -28,11 +28,11 @@
 
           <div class="panel-heading">
             <div class="form-actions floatCenter col-md-offset-4">
-              <input type="button" value="{{!ctrl.eventAssignment.id ? 'Add' : 'Update'}}" ng-click="ctrl.submit()" class="btn btn-primary btn-sm " ng-disabled="myForm.$invalid || myForm.$pristine" ng-if="ctrl.adminOrManager()"></button>
-              <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-sm" ng-disabled="myForm.$pristine"  ng-if="ctrl.adminOrManager() && !ctrl.eventAssignment.id"  >Reset Form</button>
-              <button type="button" ng-click="ctrl.cancelEdit()" class="btn btn-warning btn-sm"   ng-if="ctrl.eventAssignment.id"  >Cancel</button>
-              <button type="button" ng-click="ctrl.repeat()" class="btn  btn-primary btn-sm">Repeat</button>
-              <button type="button"  ng-click="ctrl.addLead()" ng-show="ctrl.eventAssignment.id"   class="btn btn-success  btn-sm">Add Lead</button>
+              <input type="button" value="{{!ctrl.eventAssignment.id ? 'Add' : 'Update'}}" ng-click="ctrl.submit()" class="btn btn-primary btn-xs " ng-disabled="myForm.$invalid || myForm.$pristine" ng-if="ctrl.adminOrManager()"></button>
+              <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-xs" ng-disabled="myForm.$pristine"  ng-if="ctrl.adminOrManager() && !ctrl.eventAssignment.id"  >Reset Form</button>
+              <button type="button" ng-click="ctrl.cancelEdit()" class="btn btn-warning btn-xs"   ng-if="ctrl.eventAssignment.id"  >Cancel</button>
+              <button type="button" ng-click="ctrl.repeat()" class="btn  btn-primary btn-xs">Repeat</button>
+              <button type="button"  ng-click="ctrl.addLead()" ng-show="ctrl.eventAssignment.id"   class="btn btn-success  btn-xs">Add Lead</button>
               
        
             </div>

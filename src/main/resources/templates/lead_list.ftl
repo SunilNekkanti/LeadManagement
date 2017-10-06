@@ -273,7 +273,7 @@
                   </div>
                 </div>
               </div>
-              <div class="row col-md-6" ng-if="(ctrl.loginUserRole == 'EVENT_COORDINATOR'  || ctrl.lead.agentLeadAppointmentList.length == 0)">
+              <div class="row col-md-6" ng-if="(ctrl.loginUserRole == 'EVENT_COORDINATOR'  || !((ctrl.lead.status && ctrl.lead.status.description == 'Agent')||ctrl.lead.agentLeadAppointmentList.length > 0))">
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
                     <label for="leadcreation">Notes </label>
@@ -401,9 +401,9 @@
             <span style="display:hidden" ng-show="flase">{{ ctrl.pristine = myForm.$pristine}}</span>
           <div class="row col-sm-12" style="padding-bottom:20px;">
             <div class="form-actions floatCenter col-sm-offset-9">
-              <input type="submit" value="{{!ctrl.lead.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-sm" ng-disabled="ctrl.showAddorUpdateButton()"/>
-              <button type="button" ng-click="ctrl.cancelEdit()" class="btn btn-warning btn-sm"   ng-if="ctrl.lead.id"  >Cancel</button>
-              <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-sm"  ng-if="!ctrl.lead.id"  ng-disabled="myForm.$pristine">Reset Form</button>
+              <input type="submit" value="{{!ctrl.lead.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-xs" ng-disabled="ctrl.showAddorUpdateButton()"/>
+              <button type="button" ng-click="ctrl.cancelEdit()" class="btn btn-warning btn-xs"    >Cancel</button>
+              <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-xs"  ng-if="!ctrl.lead.id"  ng-disabled="myForm.$pristine">Reset Form</button>
             </div>
           </div>
 

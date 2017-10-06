@@ -121,7 +121,7 @@ public class EmailServiceImpl implements EmailService {
 		            + "END:VTIMEZONE\n"
 		            + "BEGIN:VEVENT\n"
 		            + "ATTENDEE;ROLE=REQ-PARTICIPANT;RSVP=TRUE:MAILTO:skumar@pfchoice.com\n"
-		            + "ORGANIZER:MAILTO:maria.ortiz@pfchoice.com\n"
+		            + "ORGANIZER:MAILTO:lizfoster@pfchoice.com\n"
 		            + "DTSTART;TZID=America/New_York:"+startDateTime+"\n"
 		            + "DTEND;TZID=America/New_York:"+endDateTime+"\n"
 		            + "LOCATION:"+location+"\n"
@@ -187,7 +187,7 @@ public class EmailServiceImpl implements EmailService {
 		    multipart.addBodyPart(messageBodyPart3);
 
 		    message.setContent(multipart);
-		    Thread.sleep(10000);
+		    Thread.sleep(5000);
 		mailSender.send(message);
 		LOGGER.info("an email with calendar sent from the server");
 	}
