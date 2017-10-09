@@ -252,6 +252,7 @@ app
 													self.done = true;
 													self.display = false;
 													self.lead = {};
+													self.selectedAgentLeadAppointment = {};
 													self.notes ='';
 													clearFiles();
 													self.dtInstance.reloadData();
@@ -278,12 +279,13 @@ app
 													self.successMessage = 'Lead updated successfully';
 													self.errorMessage = '';
 													self.done = true;
-													self.display = false;
 													self.notes ='';
 													clearFiles();
 													self.dtInstance.reloadData();
 							                        self.dtInstance.rerender();
+													self.selectedAgentLeadAppointment = {};
 							                        $state.go('lead');
+							                        self.display = false;
 												},
 												function(errResponse) {
 													console
@@ -358,7 +360,9 @@ app
 							}
 
 							function addLead() {
-									self.errorMessage = '';
+								self.errorMessage = '';
+								self.successMessage = '';
+								if(self.display){
 									self.providers = getAllProviders();
 									self.users = getAllAgents();
 									self.events = getAllEvents();
@@ -370,7 +374,23 @@ app
 									self.insurances = getAllInsurances();
 									self.planTypes = getAllPlanTypes();
 									self.display = true;
-								 
+								}else{
+									var trans =  $state.go('lead.edit').transition;
+									 trans.onSuccess({}, function() {   
+										 self.providers = getAllProviders();
+											self.users = getAllAgents();
+											self.events = getAllEvents();
+											self.genders = getAllGenders();
+											self.bestTimeToCalls = getAllBestTimeToCalls(); 
+											self.states = getAllStates();
+											self.languages = getAllLanguages();
+											self.statuses = getAllLeadStatuses();
+											self.insurances = getAllInsurances();
+											self.planTypes = getAllPlanTypes();
+											self.display = true;
+									 }, { priority: -1 });
+								}
+									
 							}
 
 							function reset() {
@@ -453,7 +473,7 @@ app
 						        }
 						    
 						    function showAgentAssignment(){
-						    	if(  $localStorage.loginUser.roleName != 'AGENT' && $localStorage.loginUser.roleName != 'EVENT_COORDINATOR'){
+						    	if(   $localStorage.loginUser.roleName != 'EVENT_COORDINATOR'){
 						    		return true;
 						    	}else{
 						    		return false;
@@ -533,7 +553,7 @@ app
 							function getAllGenders() {
 								return GenderService.getAllGenders();
 							}
-
+							
 							function getAllBestTimeToCalls() {
 								return BestTimeToCallService.getAllBestTimeToCalls();
 							}
@@ -597,10 +617,9 @@ app
 							function today() {
 								    self.bestTimeToCall = new Date();
 							}
-								  
-
+							
 							function clear() {
-								self.bestTimeToCall  = null;
+							self.bestTimeToCall  = null;
 							}
 
 
@@ -640,10 +659,9 @@ app
 								  };
 
 								  
-						  function setDate(year, month, day) {
+							function setDate(year, month, day) {
 							  self.bestTimeToCall = new Date(year, month, day);
 								  };
-
 							self.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
 							self.format = self.formats[1];
 							self.altInputFormats = ['M!/d!/yyyy'];

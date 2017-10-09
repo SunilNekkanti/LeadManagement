@@ -228,6 +228,8 @@ public class LeadController {
 
 				for (AgentLeadAppointment ala : agntLeadAppointList) {
 					if (ala.getAppointmentTime() != null) {
+						ala.setCreatedBy(loginUser.getUsername());
+						ala.setUpdatedBy(loginUser.getUsername());
 						finalAgentLeadAppointList.add(ala);
 					}
 				}
