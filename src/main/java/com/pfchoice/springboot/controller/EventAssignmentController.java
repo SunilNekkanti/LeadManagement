@@ -15,8 +15,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,23 +65,19 @@ public class EventAssignmentController {
 
 	@Autowired
 	EmailService emailService;
-	
+
 	@Autowired
 	FileUploadContentService fileUploadContentService;
-	
+
 	// -------------------Retrieve All
 	// EventAssignments---------------------------------------------
 
 	@Secured({ "ROLE_ADMIN", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
 	@RequestMapping(value = "/eventAssignment/", method = RequestMethod.GET)
-	public ResponseEntity<Page<EventAssignment>> listAllEventAssignments(@RequestParam("page") Integer pageNo,
-			@RequestParam("size") Integer pageSize, @RequestParam(value = "search", required = false) String search,
-			@ModelAttribute("userId") Integer userId, @ModelAttribute("roleName") String roleName) {
+	public ResponseEntity<Page<EventAssignment>> listAllEventAssignments(@PageableDefault(page=0 ,size=100) Pageable pageRequest,
+			@RequestParam(value = "search", required = false) String search, @ModelAttribute("userId") Integer userId,
+			@ModelAttribute("roleName") String roleName) {
 
-		pageNo = (pageNo == null) ? 0 : pageNo;
-		pageSize = (pageSize == null) ? 1000 : pageSize;
-
-		PageRequest pageRequest = new PageRequest(pageNo, pageSize);
 		Specification<EventAssignment> spec = new EventAssignmentSpecifications(userId, roleName, search);
 		Page<EventAssignment> eventAssignments = eventAssignmentService.findAllEventAssignmentsByPage(spec,
 				pageRequest);
@@ -128,24 +125,25 @@ public class EventAssignmentController {
 		Event event = eventAssignment.getEvent();
 		String eventNotes = (event.getNotes() != null) ? event.getNotes() : "";
 
-		String toEmailIds = eventAssignment.getRepresentatives().stream().map(rep -> rep.getContact().getEmail()).collect(Collectors.joining(";"));
+		String toEmailIds = eventAssignment.getRepresentatives().stream().map(rep -> rep.getContact().getEmail())
+				.collect(Collectors.joining(";"));
 		String toNamesList = eventAssignment.getRepresentatives().stream().map(rep -> rep.getUsername())
 				.collect(Collectors.joining(","));
 		String address = eventAssignment.getEvent().getContact().getAddress();
 		Set<FileUpload> attachments = eventAssignment.getEvent().getAttachments();
 		Set<FileUploadContent> attachmentContents = new HashSet<>();
-		if(attachments!= null && !attachments.isEmpty()){
-			for(FileUpload fileupload: attachments ){
+		if (attachments != null && !attachments.isEmpty()) {
+			for (FileUpload fileupload : attachments) {
 				FileUploadContent fileUploadContent = fileUploadContentService.findById(fileupload.getId());
 				attachmentContents.add(fileUploadContent);
 			}
 		}
 		Email mail = new Email();
-	    mail.setEmailTo(toEmailIds);
+		mail.setEmailTo(toEmailIds);
 		mail.setEmailFrom("skumar@pfchoice.com");
 		mail.setEmailCc(user.getContact().getEmail());
 		mail.setSubject("New Event " + eventAssignment.getEvent().getEventName() + " has been Assigned to you");
-		 
+
 		Map<String, Object> emailAttributes = new HashMap<>();
 		emailAttributes.put("toNamesList", toNamesList);
 		emailAttributes.put("eventName", eventAssignment.getEvent().getEventName());
@@ -160,10 +158,10 @@ public class EventAssignmentController {
 		emailAttributes.put("attachments", attachmentContents);
 
 		mail.setModel(emailAttributes);
-		 String emailTemplateFileName = "event_assignment_email_template.txt";
+		String emailTemplateFileName = "event_assignment_email_template.txt";
 
-		 mail.setBody(emailService.geContentFromTemplate(emailAttributes,emailTemplateFileName));
-		 emailService.sendMailWithAttachment(mail);
+		mail.setBody(emailService.geContentFromTemplate(emailAttributes, emailTemplateFileName));
+		emailService.sendMailWithAttachment(mail);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(
@@ -190,7 +188,7 @@ public class EventAssignmentController {
 
 		currentEventAssignment.setRepeatRule(eventAssignment.getRepeatRule());
 		currentEventAssignment.getRepresentatives().clear();
-		System.out.println("eventAssignment.getRepresentatives()"+eventAssignment.getRepresentatives());
+		System.out.println("eventAssignment.getRepresentatives()" + eventAssignment.getRepresentatives());
 		currentEventAssignment.getRepresentatives().addAll(eventAssignment.getRepresentatives());
 		currentEventAssignment.setUpdatedBy(username);
 		eventAssignmentService.updateEventAssignment(currentEventAssignment);

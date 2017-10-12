@@ -22,11 +22,14 @@ public class RoleSpecifications implements Specification<Role> {
 
 		String containsLikePattern = getContainsLikePattern(searchTerm);
 		cq.distinct(true);
-
 		Predicate p = cb.conjunction();
-		p.getExpressions().add(cb.or(cb.like(cb.lower(root.get("role")), containsLikePattern)
+		
+		if (searchTerm != null && !"".equals(searchTerm)) {
+			p.getExpressions().add(cb.or(cb.like(cb.lower(root.get("role")), containsLikePattern)
 
-		));
+					));
+		}
+		
 		p.getExpressions().add(cb.and(cb.equal(root.get("activeInd"), 'Y')));
 		return p;
 

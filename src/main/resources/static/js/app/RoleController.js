@@ -34,25 +34,11 @@ app.controller('RoleController',
      
         
         self.dtOptions = DTOptionsBuilder.newOptions()
-		.withOption(
-				'ajax',
-				{
-					url : '/LeadManagement/api/role/',
-					type : 'GET'
-				}).withDataProp('data').withOption('bServerSide', true)
+		.withOption('bServerSide', true)
 				.withOption("bLengthChange", false)
 				.withOption("bPaginate", true)
 				.withOption('bProcessing', true)
 				.withOption('bStateSave', true)
-		        .withDisplayLength(20).withOption( 'columnDefs', [ {
-					                                orderable : false,
-													className : 'select-checkbox',
-													targets : 0,
-													sortable : false,
-													aTargets : [ 0, 1 ] } ])
-				.withOption('select', {
-										style : 'os',
-										selector : 'td:first-child' })
 			    .withOption('createdRow', createdRow)
 		        .withPaginationType('full_numbers')
 		        
@@ -68,10 +54,24 @@ app.controller('RoleController',
 			var length = aoData[4].value;
 			var search = aoData[5].value;
 
+			var paramMap = {};
+			for ( var i = 0; i < aoData.length; i++) {
+			  paramMap[aoData[i].name] = aoData[i].value;
+			}
+			
+			var sortCol ='';
+			var sortDir ='';
+			// extract sort information
+			 if(paramMap['columns'] !== undefined && paramMap['columns'] !== null && paramMap['order'] !== undefined && paramMap['order'] !== null ){
+				 sortCol = paramMap['columns'][paramMap['order'][0]['column']].data;
+				  sortDir = paramMap['order'][0]['dir'];
+			 }
+			 
+			 
 			// Then just call your service to get the
 			// records from server side
 			RoleService
-					.loadRoles(page, length, search.value, order)
+					.loadRoles(page, length, search.value, sortCol+','+sortDir)
 					.then(
 							function(result) {
 								var records = {

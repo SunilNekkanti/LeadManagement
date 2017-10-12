@@ -23,9 +23,13 @@ public class LeadStatusSpecifications implements Specification<LeadStatus> {
 		String containsLikePattern = getContainsLikePattern(searchTerm);
 		cq.distinct(true);
 		Predicate p = cb.conjunction();
-		p.getExpressions().add(cb.or(cb.like(cb.lower(root.get("description")), containsLikePattern)
+		
+		if (searchTerm != null && !"".equals(searchTerm)) {
+			p.getExpressions().add(cb.or(cb.like(cb.lower(root.get("description")), containsLikePattern)
 
-		));
+					));
+		}
+		
 		p.getExpressions().add(cb.and(cb.equal(root.get("activeInd"), 'Y')));
 		return p;
 

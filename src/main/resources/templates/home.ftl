@@ -2,6 +2,7 @@
 <html ng-app="my-app">
 
 <head>
+ <base href="/LeadManagement/" />
   <link href="css/app.css" rel="stylesheet" />
   <link href="css/bootstrap.css" rel="stylesheet" />
   <link href="css/ui-navbar.css" rel="stylesheet" />
@@ -10,6 +11,8 @@
 <link rel="stylesheet" href="css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="css/dataTables.bootstrap.min.css">
 <link rel="stylesheet" href="css/bootstrap-datepicker.min.css">
+   
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.2/css/angular-datatables.min.css">
    
 <script src="js/lib/jquery-1.10.1.min.js"></script>
 <script src="js/lib/jquery.dataTables.min.js"></script>
@@ -29,8 +32,6 @@
 <script src="js/lib/angular-ui-router.min.js"></script>
 <script src="js/lib/ui-bootstrap-tpls-0.12.0.min.js"></script>
 
-
- 
   <script src="js/app/app.js"></script>
   <script src="js/app/UserService.js"></script>
   <script src="js/app/UserController.js"></script>
@@ -70,7 +71,6 @@
   <script src="js/app/BestTimeToCallService.js"></script>
   <script src="js/app/datetimepicker.js"></script>
   <script src="js/app/datetimepicker.templates.js"></script>
-      
 </head>
 
 <body class="ng-cloak" ng-controller="NavbarController">

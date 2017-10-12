@@ -27,10 +27,11 @@ app
 						'$localStorage',
 						'DTOptionsBuilder',
 						'DTColumnBuilder',
+						'$timeout',
 						function(LeadService, GenderService, StateService,
 								LeadStatusService, LanguageService,
 								InsuranceService, PlanTypeService, ProviderService, UserService, BestTimeToCallService, EventService, FileUploadService, $sce, $scope,$rootScope, $location, $stateParams, $compile, $state,$filter,
-								$localStorage, DTOptionsBuilder, DTColumnBuilder) {
+								$localStorage, DTOptionsBuilder, DTColumnBuilder,$timeout) {
 
 							var self = this;
 							self.myFile;
@@ -67,6 +68,7 @@ app
 							self.updateLead = updateLead;
 							self.removeLead = removeLead;
 							self.editLead = editLead;
+							
 							self.dtInstance = {};
 							self.leadId = null;
 							self.getAllGenders = getAllGenders;
@@ -104,55 +106,44 @@ app
 							self.onlyIntegers = /^\d+$/;
 							self.onlyNumbers = /^\d+([,.]\d+)?$/;
 							self.checkBoxChange = checkBoxChange;
-							self.reloadData = reloadData;
+							$localStorage.pageNumber ;
+							self.dtInstanceCallback = dtInstanceCallback;
+						    function dtInstanceCallback(dtInstance) {
+						        self.dtInstance = dtInstance;
+						    }
+						    
 							self.dtColumns = [
-									DTColumnBuilder.newColumn('firstName')
-											.withTitle('FIRSTNAME').renderWith(
+									DTColumnBuilder.newColumn('firstName','FIRSTNAME').renderWith(
 													function(data, type, full,
 															meta) {
 														 return '<a href="javascript:void(0)" class="'+full.id+'" ng-click="ctrl.leadEdit(' +full.id+')">'+data+'</a>';
 													}).withClass("text-left"),
-									DTColumnBuilder.newColumn('lastName')
-											.withTitle('LASTNAME').withOption(
-													'defaultContent', ''),
+									DTColumnBuilder.newColumn('lastName','LASTNAME').withOption(),
 									DTColumnBuilder.newColumn(
-											'gender.description').withTitle(
-											'GENDER').withOption(
-													'defaultContent', ''),
+											'gender.description','GENDER'),
 									DTColumnBuilder.newColumn(
-											'language.description').withTitle(
-											'LANGUAGE').withOption(
-													'defaultContent', ''),
+											'language.description','LANGUAGE'),
 									DTColumnBuilder.newColumn(
-											'status.description').withTitle(
-											'STATUS').withOption(
-													'defaultContent', '')];
+											'status.description','STATUS')];
 
-							self.dtOptions = DTOptionsBuilder
-									.newOptions()
+							self.dtOptions = DTOptionsBuilder.newOptions()
 									 .withDisplayLength(20)
-									.withOption(
-											'ajax',
-											{
-												url : '/LeadManagement/api/lead/',
-												type : 'GET'
-											}).withDataProp('data').withOption('bServerSide', true)
+									.withOption('bServerSide', true)
+											.withOption('responsive', true)
 											.withOption("bLengthChange", false)
 											.withOption("bPaginate", true)
 											.withOption('bProcessing', true)
 											.withOption('bSaveState', true)
+											.withOption("retrieve", true)
 										    .withOption('createdRow', createdRow)
 									        .withPaginationType('full_numbers')
-									        
-									        .withFnServerData(serverData)
-									        .withOption('order', []).withOption('bDestroy',true).withOption('deferRender',true)
-									         ;
-
-							
+									        .withOption('ordering', true)
+											.withOption('order', [[0,'ASC'],[1,'ASC']])
+											.withOption('aLengthMenu', [[15, 20, -1],[ 15, 20, "All"]])
+									        .withFnServerData(serverData);
 							if(self.display){
 								 addLead();
 						    }
-							
 							
 							function createdRow(row, data, dataIndex) {
 								// Recompiling so we can bind Angular directive
@@ -173,14 +164,27 @@ app
 								// All the parameters you need is in the aoData
 								// variable
 								var order = aoData[2].value;
-								var page = aoData[3].value / aoData[4].value;
+								var page = 	aoData[3].value / aoData[4].value;
 								var length = aoData[4].value;
 								var search = aoData[5].value;
 
+								var paramMap = {};
+								for ( var i = 0; i < aoData.length; i++) {
+								  paramMap[aoData[i].name] = aoData[i].value;
+								}
+								
+								var sortCol ='';
+								var sortDir ='';
+								// extract sort information
+								 if(paramMap['columns'] !== undefined && paramMap['columns'] !== null && paramMap['order'] !== undefined && paramMap['order'] !== null ){
+									 sortCol = paramMap['columns'][paramMap['order'][0]['column']].data;
+									  sortDir = paramMap['order'][0]['dir'];
+								 }
+								 
 								// Then just call your service to get the
 								// records from server side
 								LeadService
-										.loadLeads(page, length, search.value, order)
+										.loadLeads(page, length, search.value, sortCol+','+sortDir )
 										.then(
 												function(result) {
 													var records = {
@@ -191,13 +195,7 @@ app
 													fnCallback(records);
 												});
 							}
-
-							 function reloadData() {
-								var resetPaging = false;
-								self.dtInstance.reloadData(callback,
-										resetPaging);
-							} 
-
+							
 							function callback(json) {
 								console.log(json);
 							}
@@ -256,7 +254,7 @@ app
 													self.notes ='';
 													clearFiles();
 													self.dtInstance.reloadData();
-							                        self.dtInstance.rerender();
+							                       // self.dtInstance.rerender();
 							                        $state.go('lead');
 												},
 												function(errResponse) {
@@ -282,7 +280,7 @@ app
 													self.notes ='';
 													clearFiles();
 													self.dtInstance.reloadData();
-							                        self.dtInstance.rerender();
+							                      //  self.dtInstance.rerender();
 													self.selectedAgentLeadAppointment = {};
 							                        $state.go('lead');
 							                        self.display = false;
@@ -308,7 +306,7 @@ app
 																	+ id
 																	+ ' removed successfully');
 													self.dtInstance.reloadData();
-							                        self.dtInstance.rerender();
+							                      //  self.dtInstance.rerender();
 												},
 												function(errResponse) {
 													console
@@ -397,15 +395,18 @@ app
 								self.successMessage = '';
 								self.errorMessage = '';
 								self.lead = {};
+								self.selectedAgentLeadAppointment = {};
 								$scope.myForm.$setPristine(); // reset Form
 							}
 							
 							function cancelEdit(){
+								$state.go('lead');
 					            self.successMessage='';
 					            self.errorMessage='';
 					            self.lead={};
+					            self.selectedAgentLeadAppointment = {};
 					            self.display = false;
-					            $state.go('lead');
+					            
 					        }
 
 							function uploadFile() {

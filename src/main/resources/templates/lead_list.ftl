@@ -10,7 +10,7 @@
 
     <div class="panel-body">
       <div class="table-responsive">
-        <table datatable="" id="content" dt-options="ctrl.dtOptions" dt-columns="ctrl.dtColumns" dt-instance="ctrl.dtInstance" class="table table-hover table-responsive  bordered table-striped table-condensed datatable dt-responsive nowrap dataTable row-border hover "></table>
+        <table dataTable="" id="content" dt-options="ctrl.dtOptions" dt-columns="ctrl.dtColumns" dt-instance="ctrl.dtInstanceCallback" dt-disable-deep-watchers="true"   class="table table-hover table-responsive  bordered table-striped table-condensed datatable dt-responsive nowrap dataTable row-border hover " cellspacing="0" width="100%" ></table>
       </div>
     </div>
   </div>
@@ -188,6 +188,7 @@
                        
                         <div class="has-error" ng-show="myForm.$dirty">
                       	<span ng-show="myForm.zipcode.$error.required">Zipcode is a required field</span>
+                      	<span ng-show="myForm.zipcode.$error.minlength">Zipcode Minimum length required is 5</span>
                        </div>
                        
                     <div class="input-group">
@@ -195,7 +196,7 @@
                       <span class="input-group-addon">-</span>
                       <select ng-model="ctrl.lead.contact.stateCode" class="form-control" name="state" ng-options="state.description for state in ctrl.states | orderBy:'description' track by state.description" ng-required="!ctrl.lead.contact.homePhone"></select>
                       <span class="input-group-addon">-</span>
-                      <select ng-model="ctrl.lead.contact.zipCode" name="zipcode" class="form-control" ng-options="zipCode.code for zipCode in ctrl.lead.contact.stateCode.zipCodes | orderBy:'code'  track by zipCode.code" ng-required="!ctrl.lead.contact.homePhone"></select>
+                      <input type="text" ng-model="ctrl.lead.contact.zipCode" name="zipcode" id="zipcode" class="username form-control input-sm" placeholder="Enter zipcode" zip-code  ng-required="!ctrl.lead.contact.homePhone" ng-minlength="5" />
                       
                     </div>
                   </div>
@@ -273,7 +274,9 @@
                   </div>
                 </div>
               </div>
-              <div class="row col-md-6" ng-if="(ctrl.loginUserRole == 'EVENT_COORDINATOR'  || !((ctrl.lead.status && ctrl.lead.status.description == 'Agent')||ctrl.lead.agentLeadAppointmentList.length > 0))">
+              
+              
+              <div class="row col-md-6" ng-if="(ctrl.loginUserRole === 'EVENT_COORDINATOR'  || !((ctrl.lead.status && ctrl.lead.status.description === 'Agent') ||ctrl.lead.agentLeadAppointmentList.length > 0))">
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
                     <label for="leadcreation">Notes </label>
@@ -285,6 +288,7 @@
             </div>
           </div>
         </div>
+        
     <div class="col-sm-12 agentInfo" ng-if="ctrl.showAgentAssignment()" ng-show="(ctrl.lead.status && ctrl.lead.status.description == 'Agent')||ctrl.lead.agentLeadAppointmentList.length > 0 ">
           <div class="panel panel-default">
             <div class="panel-heading">Agent Assignment</div>
@@ -293,7 +297,7 @@
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
                     <label for="	First Name ">Agent Name</label>
-                    <select ng-model="ctrl.selectedAgentLeadAppointment.user" class="form-control" ng-options="agent.name for agent in ctrl.users  | filter:{role:'AGENT'} | orderBy:'name'  track by agent.name" required></select>
+                    <select ng-model="ctrl.selectedAgentLeadAppointment.user"  ng-disabled="ctrl.loginUserRole === 'AGENT'"  class="form-control" ng-options="agent.name for agent in ctrl.users  | filter:{role:'AGENT'} | orderBy:'name'  track by agent.name"  required></select>
                   </div>
                 </div>
 
@@ -310,7 +314,7 @@
                 </div>
               </div>
 
-              <div class="row col-md-6">
+              <div class="row col-md-6" ng-if="ctrl.loginUserRole !== 'AGENT'">
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
                     <label for="	Last Name ">Notes </label>

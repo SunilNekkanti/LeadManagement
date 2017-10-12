@@ -9,7 +9,7 @@
         </div>
         <div class="table-responsive">
 			<div class="panel-body">
-	        	<table datatable="" id="content"   dt-options="ctrl.dtOptions"  dt-columns="ctrl.dtColumns" dt-instance="ctrl.dtInstance" class="table-responsive table  bordered table-striped table-condensed datatable "></table>
+	        	<table datatable="" id="content"   dt-options="ctrl.dtOptions"  dt-columns="ctrl.dtColumns" dt-instance="ctrl.dtInstance" class="table-responsive table  bordered table-striped table-condensed datatable "  cellspacing="0" width="100%" ></table>
             </div>
 		</div>
     </div>

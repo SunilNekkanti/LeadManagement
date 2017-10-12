@@ -21,7 +21,7 @@ app.service('UserService',
                 console.log('Fetching  users');
                 var deferred = $q.defer();
                 var pageable = {
-                 		 page:pageNo, size:length,search: search||''
+                 		 page:pageNo, size:length,sort:order,search: search||''
                  		};
 
                  		var config = {

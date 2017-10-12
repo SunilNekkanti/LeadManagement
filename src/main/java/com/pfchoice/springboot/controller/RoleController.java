@@ -4,8 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,12 +39,8 @@ public class RoleController {
 	// Roles---------------------------------------------
 	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
 	@RequestMapping(value = "/role/", method = RequestMethod.GET)
-	public ResponseEntity<Page<Role>> listAllRoles(@RequestParam(value = "page", required = false) Integer pageNo,
-			@RequestParam(value = "size", required = false) Integer pageSize,
+	public ResponseEntity<Page<Role>> listAllRoles(@PageableDefault(page=0 ,size=100) Pageable pageRequest,
 			@RequestParam(value = "search", required = false) String search) {
-		pageNo = (pageNo == null) ? 0 : pageNo;
-		pageSize = (pageSize == null) ? 1000 : pageSize;
-		PageRequest pageRequest = new PageRequest(pageNo, pageSize);
 
 		Specification<Role> spec = new RoleSpecifications(search);
 

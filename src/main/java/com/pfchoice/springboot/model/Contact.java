@@ -70,10 +70,10 @@ public class Contact extends RecordDetails implements Serializable, FieldHandled
 	@JoinColumn(name = "statecode", referencedColumnName = "code")
 	private State stateCode;
 
-	@LazyToOne(LazyToOneOption.NO_PROXY)
-	@OneToOne(fetch = FetchType.LAZY)
+//	@LazyToOne(LazyToOneOption.NO_PROXY)
+	//@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "zipcode", referencedColumnName = "zipcode")
-	private ZipCode zipCode;
+	private Integer zipCode;
 
 	@Column(name = "file_id")
 	private Integer fileId;
@@ -251,10 +251,7 @@ public class Contact extends RecordDetails implements Serializable, FieldHandled
 	/**
 	 * @return the zipCode
 	 */
-	public ZipCode getZipCode() {
-		if (fieldHandler != null) {
-			return (ZipCode) fieldHandler.readObject(this, "zipCode", zipCode);
-		}
+	public Integer getZipCode() {
 		return zipCode;
 	}
 
@@ -262,11 +259,7 @@ public class Contact extends RecordDetails implements Serializable, FieldHandled
 	 * @param zipCode
 	 *            the zipCode to set
 	 */
-	public void setZipCode(final ZipCode zipCode) {
-		if (fieldHandler != null) {
-			this.zipCode = (ZipCode) fieldHandler.writeObject(this, "zipCode", this.zipCode, zipCode);
-			return;
-		}
+	public void setZipCode(final Integer zipCode) {
 		this.zipCode = zipCode;
 	}
 
@@ -314,7 +307,7 @@ public class Contact extends RecordDetails implements Serializable, FieldHandled
 		if (fieldHandler != null && stateCode != null && zipCode != null) {
 			StringBuffer sb = new StringBuffer();
 			sb.append(this.address1).append(",").append(this.address2).append(",").append(this.city).append(",")
-					.append(this.stateCode.getDescription()).append(",").append(this.zipCode.getCode());
+					.append(this.stateCode.getDescription()).append(",").append(this.zipCode);
 			return sb.toString();
 		} else {
 			return null;

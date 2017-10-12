@@ -20,7 +20,7 @@ app.service('RoleService',
                 console.log('Fetching  Roles');
                 var deferred = $q.defer();
                 var pageable = {
-                 		 page:pageNo, size:length,search: search||''
+                 		 page:pageNo, size:length,sort:order, search: search||''
                  		};
 
                  		var config = {

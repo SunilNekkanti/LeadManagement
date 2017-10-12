@@ -9,7 +9,7 @@
     </div>
     <div class="panel-body">
       <div class="table-responsive">
-        <table datatable="" id="content" dt-options="ctrl.dtOptions" dt-columns="ctrl.dtColumns" dt-instance="ctrl.dtInstance" class="table table-hover table-responsive  bordered table-striped table-condensed datatable"></table>
+        <table datatable="" id="content" dt-options="ctrl.dtOptions" dt-columns="ctrl.dtColumns" dt-instance="ctrl.dtInstance" class="table table-hover table-responsive  bordered table-striped table-condensed datatable"  cellspacing="0" width="100%" ></table>
 
       </div>
     </div>
@@ -171,6 +171,7 @@
 
                       <div class="has-error" ng-show="myForm.$dirty">
                         <span ng-show="myForm.zipcode.$error.required">Zipcode is a required field</span>
+                        <span ng-show="myForm.zipcode.$error.minlength">Zipcode Minimum length required is 5</span>
                       </div>
 
                       <div class="input-group">
@@ -178,7 +179,7 @@
                         <span class="input-group-addon">-</span>
                         <select ng-model="ctrl.event.contact.stateCode" class="form-control" name="state" ng-options="state.description for state in ctrl.states | orderBy:'description' track by state.description" ng-required="!ctrl.event.homePhone"></select>
                         <span class="input-group-addon">-</span>
-                        <select ng-model="ctrl.event.contact.zipCode" name="zipcode" class="form-control" ng-options="zipCode.code for zipCode in ctrl.event.contact.stateCode.zipCodes | orderBy:'code'  track by zipCode.code" ng-required="!ctrl.event.homePhone"></select>
+                        <input type="text" ng-model="ctrl.event.contact.zipCode" name="zipcode" id="zipcode" class="username form-control input-sm" placeholder="Enter zipcode" zip-code  ng-required="!ctrl.event.contact.homePhone" ng-minlength="5" />
 
                       </div>
                     </div>

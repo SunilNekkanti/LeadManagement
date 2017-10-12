@@ -134,15 +134,9 @@ app
 																'defaultContent', '')];
 
 							
-							self.dtOptions = DTOptionsBuilder
-							.newOptions()
+							self.dtOptions = DTOptionsBuilder.newOptions()
 							.withDisplayLength(20)
-							.withOption(
-									'ajax',
-									{
-										url : '/LeadManagement/api/event/',
-										type : 'GET'
-									}).withDataProp('data').withOption('bServerSide', true)
+						    .withOption('bServerSide', true)
 									.withOption("bLengthChange", false)
 									.withOption("bPaginate", true)
 									.withOption('bProcessing', true)
@@ -178,10 +172,23 @@ app
 								var length = aoData[4].value;
 								var search = aoData[5].value;
 
+								var paramMap = {};
+								for ( var i = 0; i < aoData.length; i++) {
+								  paramMap[aoData[i].name] = aoData[i].value;
+								}
+								
+								var sortCol ='';
+								var sortDir ='';
+								// extract sort information
+								 if(paramMap['columns'] !== undefined && paramMap['columns'] !== null && paramMap['order'] !== undefined && paramMap['order'] !== null ){
+									 sortCol = paramMap['columns'][paramMap['order'][0]['column']].data;
+									  sortDir = paramMap['order'][0]['dir'];
+								 }
+								 
 								// Then just call your service to get the
 								// records from server side
 								EventService
-										.loadEvents(page, length, search.value, order)
+										.loadEvents(page, length, search.value, sortCol+','+sortDir)
 										.then(
 												function(result) {
 													var records = {

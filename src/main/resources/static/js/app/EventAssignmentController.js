@@ -93,55 +93,43 @@ app
 													}).withClass("text-left"),
 									DTColumnBuilder.newColumn('eventDateStartTime')
 											.withTitle('STARTDATE').renderWith(function(data, type) {
-												return $filter('date')(new Date(data), 'MM/dd/yyyy'); //date filter
+												return $filter('date')(new Date(data), 'MM/dd/yyyy'); // date
+																										// filter
 											}).withOption(
 													'defaultContent', ''),
 									DTColumnBuilder.newColumn('eventDateStartTime')
 													.withTitle('STARTTIME').renderWith(function(data, type) {
-														return $filter('date')(new Date(data), 'hh:mm a'); //date filter
+														return $filter('date')(new Date(data), 'hh:mm a'); // date
+																											// filter
 													}).withOption(
 															'defaultContent', ''),				
 									DTColumnBuilder.newColumn('eventDateEndTime')
 													.withTitle('ENDDATE').renderWith(function(data, type) {
-														return $filter('date')(new Date(data), 'MM/dd/yyyy'); //date filter
+														return $filter('date')(new Date(data), 'MM/dd/yyyy'); // date
+																												// filter
 													}).withOption(
 															'defaultContent', ''),
 									DTColumnBuilder.newColumn('eventDateEndTime')
 																	.withTitle('ENDTIME').renderWith(function(data, type) {
-																		return $filter('date')(new Date(data), 'hh:mm a'); //date filter
+																		return $filter('date')(new Date(data), 'hh:mm a'); // date
+																															// filter
 																	}).withOption(
 																			'defaultContent', ''),
 								    DTColumnBuilder.newColumn('representatives[,].name').withTitle(
 																			'REPRESENTATIVES').withOption('defaultContent', ''),
 								    DTColumnBuilder.newColumn('repeatRule').withTitle('Rule').withOption('defaultContent', '')										];
 
-							self.dtOptions = DTOptionsBuilder
-									.newOptions()
-									 .withDisplayLength(20)
-									.withOption(
-											'ajax',
-											{
-												url : '/LeadManagement/api/eventAssignment/',
-												type : 'GET'
-											}).withDataProp('data').withOption(
-											'serverSide', true).withOption(
-											"bLengthChange", false).withOption(
-											"bPaginate", true).withOption(
-											'processing', true).withOption(
-											'saveState', true)
-									 .withOption(
-											'columnDefs', [ {
-												orderable : false,
-												className : 'select-checkbox',
-												targets : 0,
-												sortable : false,
-												aTargets : [ 0, 1 ]
-											} ]).withOption('select', {
-										style : 'os',
-										selector : 'td:first-child'
-									}).withOption('createdRow', createdRow)
-									.withPaginationType('full_numbers')
-									.withFnServerData(serverData);
+							self.dtOptions = DTOptionsBuilder.newOptions()
+							.withDisplayLength(20)
+						    .withOption('bServerSide', true)
+									.withOption("bLengthChange", false)
+									.withOption("bPaginate", true)
+									.withOption('bProcessing', true)
+									.withOption('bSaveState', true)
+								    .withOption('createdRow', createdRow)
+							        .withPaginationType('full_numbers')
+							        
+							        .withFnServerData(serverData);
 
 							self.reloadData = reloadData;
 
@@ -168,10 +156,23 @@ app
 								var length = aoData[4].value;
 								var search = aoData[5].value;
 
+								var paramMap = {};
+								for ( var i = 0; i < aoData.length; i++) {
+								  paramMap[aoData[i].name] = aoData[i].value;
+								}
+								
+								var sortCol ='';
+								var sortDir ='';
+								// extract sort information
+								 if(paramMap['columns'] !== undefined && paramMap['columns'] !== null && paramMap['order'] !== undefined && paramMap['order'] !== null ){
+									 sortCol = paramMap['columns'][paramMap['order'][0]['column']].data;
+									  sortDir = paramMap['order'][0]['dir'];
+								 }
+								 
 								// Then just call your service to get the
 								// records from server side
 								EventAssignmentService
-								.loadEventAssignments(page, length, search.value, order)
+								.loadEventAssignments(page, length, search.value, sortCol+','+sortDir)
 										.then(
 												function(result) {
 													var records = {
@@ -222,7 +223,7 @@ app
 													self.errorMessage = '';
 													self.done = true;
 													self.display = false;
-													//$scope.myForm.$setPristine();
+													// $scope.myForm.$setPristine();
 													self.eventAssignment = {};
 													self.dtInstance.reloadData();
 							                        self.dtInstance.rerender();
@@ -325,7 +326,8 @@ app
 									self.eventAssignmentMonths =getAllEventMonths();
 									self.eventAssignmentMonth = self.eventAssignmentMonths[0];
 									self.eventAssignmentOnWeekDays =getAllEventWeekDays();
-									//self.eventAssignmentOnWeekDaysss = self.eventAssignmentOnWeekDays[0];
+									// self.eventAssignmentOnWeekDaysss =
+									// self.eventAssignmentOnWeekDays[0];
 									self.eventAssignmentOnWeeks =getAllEventWeekNumbers();
 									self.eventAssignmentOnWeek = self.eventAssignmentOnWeeks[0];
 									self.display = true;
@@ -376,8 +378,10 @@ app
 						    			var byMonthDay =';BYMONTHDAY='+self.eventAssignment.onDay;
 							    		rrule.push(byMonthDay);
 						    		}else{
-						    		//	self.eventAssignmentOnWeek = self.eventAssignmentOnWeek||{};
-						    		//	self.eventAssignmentOnWeekDayss = self.eventAssignmentOnWeekDayss||{};
+						    		// self.eventAssignmentOnWeek =
+									// self.eventAssignmentOnWeek||{};
+						    		// self.eventAssignmentOnWeekDayss =
+									// self.eventAssignmentOnWeekDayss||{};
 						    			var byMonthWeekAndDay = ';BYSETPOS='+self.eventAssignmentOnWeek.id+';BYDAY='+self.eventAssignmentOnWeekDay.shortName;
 						    			rrule.push(byMonthWeekAndDay);
 						    		}
@@ -468,7 +472,7 @@ app
 									self.eventAssignment.onWeekDay ={} ;
 									self.eventAssignment.onWeek='';
 									self.eventAssignment.onDay=0;
-									//self.eventAssignment.frequency = {};
+									// self.eventAssignment.frequency = {};
 									self.eventAssignment.month = {};
 									self.eventAssignment.repeatRule = '';
 								}
@@ -491,9 +495,11 @@ app
 							}
 
 							
-							/*function getAllEventAssignmentFrequencies(){
-								return EventAssignmentFrequencyService.getAllEventAssignmentFrequencies();
-							}*/
+							/*
+							 * function getAllEventAssignmentFrequencies(){
+							 * return
+							 * EventAssignmentFrequencyService.getAllEventAssignmentFrequencies(); }
+							 */
 
 							function getAllEventAssignments() {
 								return EventAssignmentService.getAllEventAssignments();
