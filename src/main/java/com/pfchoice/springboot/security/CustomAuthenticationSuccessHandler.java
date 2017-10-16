@@ -41,21 +41,6 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
 		clearAuthenticationAttributes(request);
 		clearAuthenticationAttributess(request);
 
-		// since we have created our custom success handler, its up to us to
-		// where
-		// we will redirect the user after successfully login
-		/*if (redirectUrl != null) {
-			response.sendRedirect(redirectUrl);
-		} else {
-			if (authUser.getAuthorities().stream().filter(auth -> leadHomePageRoles.contains(auth.getAuthority()))
-					.findAny().isPresent()) {
-				response.sendRedirect("home#/lead/");
-			} else {
-				response.sendRedirect("home#/event");
-			}
-
-		}*/
-
 	}
 	
 	protected void handle(HttpServletRequest request, 
@@ -64,8 +49,15 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
 		  
 		        String targetUrl = determineTargetUrl(authentication);
 		    	HttpSession session = request.getSession();
+		    	
+		    /*	String ipAddress = request.getHeader("X-FORWARDED-FOR");  
+		    	System.out.println("X-FORWARDED-FOR ipAddress"+ipAddress);
+		    	if (ipAddress == null) {  
+		    	   ipAddress = request.getRemoteAddr();  
+		    	}
+		    	System.out.println("getRemoteAddr ipAddress"+ipAddress);
+		    	*/
 		 		User authUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
 				session.setAttribute("username", authUser.getUsername());
 				session.setMaxInactiveInterval(30 * 60);
 				// set our response to OK status

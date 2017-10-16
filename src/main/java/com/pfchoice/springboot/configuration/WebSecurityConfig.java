@@ -2,9 +2,11 @@ package com.pfchoice.springboot.configuration;
 
 import java.util.Properties;
 
+import org.apache.catalina.filters.RemoteAddrFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -23,6 +25,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.pfchoice.springboot.security.CustomAuthenticationSuccessHandler;
 import com.pfchoice.springboot.security.CustomLogoutHandler;
+import com.pfchoice.springboot.security.CustomWebSecurityExpressionHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -75,9 +78,13 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		http.authorizeRequests().antMatchers()
-				.hasAnyAuthority("ROLE_AGENT", "ROLE_ADMIN", "ROLE_CARE_COORDINATOR", "ROLE_EVENT_COORDINATOR",
-						"ROLE_MANAGER")
+		http.csrf().disable()
+		       .authorizeRequests()
+		         .expressionHandler(new CustomWebSecurityExpressionHandler())
+		         //.antMatchers("/api/**").access("hasAnyIpAddress('192.168.1.0/8')").anyRequest()
+		         .antMatchers("/api/**").access("(hasRole('ROLE_CARE_COORDINATOR') and hasAnyIpAddress('108.190.27.18')) or hasAnyRole('ROLE_AGENT', 'ROLE_ADMIN','ROLE_EVENT_COORDINATOR','ROLE_MANAGER') ").anyRequest()
+		        //  .antMatchers("/api/**").access("(hasRole('ROLE_CARE_COORDINATOR') and (hasIpAddress('108.190.27.18') or hasIpAddress('172.31.0.0/16'))) or hasAnyRole('ROLE_AGENT', 'ROLE_ADMIN','ROLE_EVENT_COORDINATOR','ROLE_MANAGER') ").anyRequest()
+				.hasAnyAuthority("ROLE_AGENT", "ROLE_ADMIN", "ROLE_CARE_COORDINATOR", "ROLE_EVENT_COORDINATOR","ROLE_MANAGER")
 				.anyRequest().authenticated().and().formLogin().loginPage("/").usernameParameter("username")
 				.passwordParameter("password").loginProcessingUrl("/loginform.do").failureUrl("/login?error")
 				.successHandler( customAuthenticationSuccessHandler()).and()
@@ -85,7 +92,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutRequestMatcher(new AntPathRequestMatcher("/login")).and()
 				.exceptionHandling().accessDeniedPage("/403").and()
 
-				.csrf().disable()
+				
 
 				.sessionManagement().maximumSessions(1);
 	}
@@ -114,4 +121,21 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler() {
 	    return new CustomAuthenticationSuccessHandler();
 	}
+	
+	@Bean
+	public FilterRegistrationBean remoteAddressFilter() {
+
+	    FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
+	    RemoteAddrFilter filter = new RemoteAddrFilter();
+	    filter.setAllow("192.168.1.151");
+	  //  filter.setDenyStatus(404);
+
+	    filterRegistrationBean.setFilter(filter);
+	    filterRegistrationBean.addUrlPatterns("/api/**");
+
+	    return filterRegistrationBean;
+
+	}
+	
+	
 }

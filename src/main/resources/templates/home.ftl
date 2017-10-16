@@ -2,7 +2,6 @@
 <html ng-app="my-app">
 
 <head>
- <base href="/LeadManagement/" />
   <link href="css/app.css" rel="stylesheet" />
   <link href="css/bootstrap.css" rel="stylesheet" />
   <link href="css/ui-navbar.css" rel="stylesheet" />

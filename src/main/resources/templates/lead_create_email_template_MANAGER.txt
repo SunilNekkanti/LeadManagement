@@ -1,11 +1,22 @@
 <html>
  
-<head></head>
+<head>
+</head>
  
 <body>
-    <p>Dear ${firstName} ${lastName},</p>
-    <p>Sending Email using Spring 4 with <b>FreeMarker template !!!</b></p>
+    <p><b>Dear ${careCoordinator} </b>,</p>
+    
+    <p>New Lead with ${lastName},${firstName} has been created in system</p>
+  
+    <p>Please login to Lead Management System for more details </p>
+     <br/>
+     
     <p>Thanks</p>
+    <p>${currentUser}</p>
+    <p>${currentUserRole}</p>
+    <p>${currentLocalTime}</p>
+    
+    
 </body>
  
 </html>

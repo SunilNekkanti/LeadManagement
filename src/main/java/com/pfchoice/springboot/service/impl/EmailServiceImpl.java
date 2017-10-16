@@ -59,7 +59,7 @@ public class EmailServiceImpl implements EmailService {
 		helper.setSubject(mail.getSubject());
 		helper.setText(mail.getBody(), true);
 		helper.setCc(mail.getEmailCc());
-		Thread.sleep(10000);
+		Thread.sleep(5000);
 		mailSender.send(message);
 		LOGGER.info("an email sent from the server");
 	}
@@ -92,7 +92,11 @@ public class EmailServiceImpl implements EmailService {
 		 String endDateTime = (emailAttributes.get("appointmentEndTime") ==null)? emailAttributes.get("eventEndTime").toString():emailAttributes.get("appointmentEndTime").toString();
          String location =   (emailAttributes.get("location") ==null)? "":emailAttributes.get("location").toString();
          String currentTime = (emailAttributes.get("currentTime") ==null)? "":emailAttributes.get("currentTime").toString();
-         String eventName  = (emailAttributes.get("eventName") ==null)? "":emailAttributes.get("eventName").toString();
+         String firstName  = (emailAttributes.get("firstName") ==null)? "":emailAttributes.get("firstName").toString();
+         String lastName  = (emailAttributes.get("lastName") ==null)? "":emailAttributes.get("lastName").toString();
+         String leadName = lastName+","+firstName;
+         String eventName  = ("".equals(leadName))? (emailAttributes.get("eventName") ==null)? "":emailAttributes.get("eventName").toString():leadName;
+         
 		String rrule = (emailAttributes.get("rrule") != null)
 				? "RRULE:" + emailAttributes.get("rrule").toString() + "\n" : "";
 		Set<FileUploadContent> attachments =  (Set<FileUploadContent>) emailAttributes.get("attachments");

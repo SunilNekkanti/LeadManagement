@@ -109,9 +109,11 @@ public class LeadController {
 	@Secured({ "ROLE_ADMIN", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
 	@RequestMapping(value = "/lead/", method = RequestMethod.POST)
 	public ResponseEntity<?> createLeadMembership(@RequestBody LeadMembership lead, UriComponentsBuilder ucBuilder,
-			@ModelAttribute("userId") Integer userId, @ModelAttribute("username") String username) throws Exception {
+			@ModelAttribute("userId") Integer userId, 
+			@ModelAttribute("roleName") String roleName,@ModelAttribute("username") String username) throws Exception {
 		logger.info("Creating LeadMembership : {}", lead);
 
+		
 		final String firstName = lead.getFirstName();
 		final String lastName = lead.getLastName();
 		final String address1 = lead.getContact().getAddress1();
@@ -143,21 +145,34 @@ public class LeadController {
 		lead.setUpdatedBy(username);
 		leadService.saveLeadMembership(lead);
 
+		SimpleDateFormat sdf1 = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+		String currentLocalTime = sdf1.format((new Date()).getTime());
+		
 		/*
 		 * String toEmailIds =
 		 * lead.getEvent().getRepresentatives().stream().map(rep ->
 		 * rep.getEmail()) .collect(Collectors.joining(","));
 		 */
 		Email mail = new Email();
-		mail.setEmailTo("skumar@pfchoice.com");
+		mail.setEmailTo("maria.ortiz@pfchoice.com");  
 		mail.setEmailFrom("skumar@pfchoice.com");
-		mail.setEmailCc("skumar@pfchoice.com");
-		mail.setSubject("New lead created");
+		mail.setEmailCc("lizfoster@pfchoice.com");
+		mail.setSubject("New lead : "+lead.getLastName()+","+lead.getFirstName()+" has been created:");
 
-		// mail.setBody(emailService.geContentFromTemplate(lead,
-		// "lead_create_email_template.txt"));
-		// emailService.sendMail(mail);
-		// emailService.sendMailWithAttachment(eParams);
+		String careCoordinator = "Maria Ortiz";
+		
+		Map<String, Object> emailAttributes = new HashMap<>();
+		emailAttributes.put("currentUser", user.getName());
+		emailAttributes.put("currentUserRole", roleName);
+		emailAttributes.put("currentLocalTime", currentLocalTime);
+		emailAttributes.put("careCoordinator", careCoordinator);
+		emailAttributes.put("firstName", lead.getFirstName());
+		emailAttributes.put("lastName", lead.getLastName());
+		
+		String emailTemplateFileName = "lead_create_email_template_" + roleName + ".txt";
+		mail.setBody(emailService.geContentFromTemplate(emailAttributes, emailTemplateFileName));
+
+		emailService.sendMail(mail);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(ucBuilder.path("/api/lead/{id}").buildAndExpand(lead.getId()).toUri());
@@ -257,7 +272,10 @@ public class LeadController {
 		emailAttributes.put("currentUser", loginUser.getName());
 		emailAttributes.put("currentUserRole", roleName);
 		emailAttributes.put("currentLocalTime", currentLocalTime);
-				
+		emailAttributes.put("firstName", currentLeadMembership.getFirstName());
+		emailAttributes.put("lastName", currentLeadMembership.getLastName());
+		emailAttributes.put("location",	currentLeadMembership.getContact().getAddress());
+		
 		if(!"EVENT_COORDINATOR".equals(roleName)  && finalAgentLeadAppointList.size() > 0)  {
 				String toEmailIds = finalAgentLeadAppointList.stream().map(la -> la.getUser().getContact().getEmail())
 						.collect(Collectors.joining(";"));
@@ -283,19 +301,19 @@ public class LeadController {
 				String emailTemplateFileName = "agent_lead_assignment_email_template_" + roleName + ".txt";
 				mail.setBody(emailService.geContentFromTemplate(emailAttributes, emailTemplateFileName));
 				mail.setModel(emailAttributes);
-				mail.setSubject("Agent Lead Appointment");
+				mail.setSubject("Scheduled an Appointment with lead: "+currentLeadMembership.getLastName()+","+currentLeadMembership.getFirstName());
 				mail.setEmailTo(toEmailIds);
 				
 				emailService.sendMailWithAttachment(mail);
 		} else {
-			String toEmailIds =  "maria.ortiz@pfchoice.com";
+			String toEmailIds =  "maria.ortiz@pfchoice.com";  
 			String careCoordinator = "Maria Ortiz";
 			String emailTemplateFileName = "lead_update_email_template_" + roleName + ".txt";
 			
 			emailAttributes.put("careCoordinator", careCoordinator);
 			mail.setBody(emailService.geContentFromTemplate(emailAttributes, emailTemplateFileName));
 			mail.setModel(emailAttributes);
-			mail.setSubject("Updated Lead details");
+			mail.setSubject("Updated Lead details for "+currentLeadMembership.getLastName()+","+currentLeadMembership.getFirstName());
 			mail.setEmailTo(toEmailIds);
 			
 			emailService.sendMail(mail);
