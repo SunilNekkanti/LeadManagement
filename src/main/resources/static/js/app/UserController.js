@@ -255,11 +255,12 @@ app.controller('UserController',
         }
         
         function cancelEdit(){
-            self.successMessage='';
+          
+        	self.successMessage='';
             self.errorMessage='';
             self.user={};
             self.display = false;
-            $state.go('user');
+            $state.go('user', {}, {reload: true}); 
         }
        
         function addUser() {

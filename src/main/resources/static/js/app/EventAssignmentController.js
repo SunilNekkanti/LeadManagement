@@ -73,13 +73,12 @@ app
 							self.dtInstance = {};
 							self.eventAssignmentId = null;
 							self.reset = reset;
-							self.today = today;
 							self.repeatDisplay = false;
 							self.repeat = repeat;
-							self.toggleMin = toggleMin;
 							self.successMessage = '';
 							self.errorMessage = '';
 							self.done = false;
+							self.validEventDate = validEventDate;
 							self.cancelEdit = cancelEdit;
 							self.onlyIntegers = /^\d+$/;
 							self.onlyNumbers = /^\d+([,.]\d+)?$/;
@@ -347,11 +346,12 @@ app
 							}
 							
 							function cancelEdit(){
+							    
 								self.successMessage = '';
 								self.errorMessage = '';
 								self.eventAssignment = {};
 					            self.display  = false;
-					            $state.go('eventAssignment');
+					            $state.go('eventAssignment', {}, {reload: true}); 
 					        }
 							
 							
@@ -588,40 +588,21 @@ app
 							    	}
 							    }
 							  
-							self.inlineOptions = {
-								    customClass: getDayClass,
-								    minDate: new Date(),
-								    showWeeks: true
-								  } ;
-
-							self.dateOptions = {
-								    dateDisabled: disabled,
-								    formatYear: 'yy',
-								    maxDate: new Date(2020, 5, 22),
-								    minDate: new Date(),
-								    startingDay: 1
-								  };
-
-								  // Disable weekend selection
-							function disabled(data) {
-								    var date = data.date,
-								      mode = data.mode;
-								    return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
-								  }
-
-						    function toggleMin() {
-								    self.inlineOptions.minDate = self.inlineOptions.minDate ? null : new Date();
-								    self.dateOptions.minDate = self.inlineOptions.minDate;
-								  };
-
-
-						   function open1() {
-								    self.popup1.opened = true;
-								  };
-
-						   function   open2() {
-								    self.popup2.opened = true;
-								  };
+							  function validEventDate(startDate,endDate) {
+								   
+								  //  var curDate = new Date();
+								    if(new Date(startDate) >= new Date(endDate)){
+								      self.errMessage = 'End Date should be greater than start date';
+								      return true;
+								    }
+								    return false;
+								   /* if(new Date(startDate) < curDate){
+								       $scope.errMessage = 'Start date should not be before today.';
+								       return false;
+								    }*/
+								};
+								
+								
 
 						  function eventAssignmentEdit(id){
 							  $state.go('eventAssignment.edit'); 
@@ -632,51 +613,6 @@ app
 							  self.eventAssignment.eventAssignmentDateTime = new Date(year, month, day);
 								  };
 
-							self.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-							self.format = self.formats[1];
-							self.altInputFormats = ['M!/d!/yyyy'];
-
-							self.popup1 = {
-								    opened: false
-								  };
-
-							self.popup2 = {
-								    opened: false
-								  };
-
-								  var tomorrow = new Date();
-								  tomorrow.setDate(tomorrow.getDate() + 1);
-								  var afterTomorrow = new Date();
-								  afterTomorrow.setDate(tomorrow.getDate() + 1);
-								  self.eventAssignmentss = [
-								    {
-								      date: tomorrow,
-								      status: 'full'
-								    },
-								    {
-								      date: afterTomorrow,
-								      status: 'partially'
-								    }
-								  ];
-
-								  function getDayClass(data) {
-								    var date = data.date,
-								      mode = data.mode;
-								    if (mode === 'day') {
-								      var dayToCheck = new Date(date).setHours(0,0,0,0);
-
-								      for (var i = 0; i < self.eventAssignmentss.length; i++) {
-								        var currentDay = new Date(self.eventAssignmentss[i].date).setHours(0,0,0,0);
-
-								        if (dayToCheck === currentDay) {
-								          return self.eventAssignmentss[i].status;
-								        }
-								      }
-								    }
-
-								    return '';
-								  }
-								  
 								  
 	} 
 ]);

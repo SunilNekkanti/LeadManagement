@@ -215,7 +215,7 @@ app.controller('RoleController',
             self.errorMessage='';
             self.role={};
             self.display = false;
-            $state.go('role');
+            $state.go('role', {}, {reload: true});
         }
     }
 

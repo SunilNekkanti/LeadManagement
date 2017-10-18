@@ -10,7 +10,7 @@
 
     <div class="panel-body">
       <div class="table-responsive">
-        <table dataTable="" id="content" dt-options="ctrl.dtOptions" dt-columns="ctrl.dtColumns" dt-instance="ctrl.dtInstanceCallback" dt-disable-deep-watchers="true"   class="table table-hover table-responsive  bordered table-striped table-condensed datatable dt-responsive nowrap dataTable row-border hover " cellspacing="0" width="100%" ></table>
+        <table dataTable="" id="content" dt-options="ctrl.dtOptions" dt-columns="ctrl.dtColumns" dt-instance="ctrl.dtInstanceCallback" dt-disable-deep-watchers="true"   class="table table-hover table-responsive  bordered table-striped table-condensed datatable dt-responsive   dataTable row-border hover " cellspacing="0" width="100%" ></table>
       </div>
     </div>
   </div>
@@ -46,7 +46,6 @@
             </div>
           </div>
         </div>
-
 
         <div class="col-sm-6 ptInfo">
           <div class="panel panel-default">
@@ -309,7 +308,7 @@
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
                     <label for="	First Name ">Agent Name</label>
-                    <select ng-model="ctrl.selectedAgentLeadAppointment.user"  name="agentAssignment" ng-disabled="ctrl.loginUserRole === 'AGENT'"  class="form-control" ng-options="agent.name for agent in ctrl.users  | filter:{role:'AGENT'} | orderBy:'name'  track by agent.name"   ng-required="ctrl.lead.status.description=='Agent'">
+                    <select ng-model="ctrl.selectedAgentLeadAppointment.user"  name="agentAssignment" ng-disabled="ctrl.loginUserRole === 'AGENT'"  class="form-control" ng-options="agent.name for agent in ctrl.users |filter:{role:{role:'AGENT'}} | orderBy:'name'  track by agent.name"   ng-required="ctrl.lead.status.description=='Agent'">
                       <option></option>
                     </select>
                     	<div class="has-error" ng-show="myForm.$dirty">
@@ -321,16 +320,17 @@
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
                     <label for="appointmentnotes">Appointment </label>
-                    <div class="input-group date" id="appointment" ng-model="ctrl.selectedAgentLeadAppointment.appointmentTime" ng-required="ctrl.lead.status.description=='Agent'" name="appointmentTime" date-picker>
-                      <input type="text" class="form-control netto-input" ng-model="ctrl.selectedAgentLeadAppointment.appointmentTime" date-picker-input>
+                     <div class="input-group date" id="appointment" name="appointmentTime" ng-model="ctrl.selectedAgentLeadAppointment.appointmentTime" ng-required="ctrl.lead.status.description=='Agent'" name="appointmentTime" date-picker >
+                      <input type="datetime" class="form-control netto-input" ng-model="ctrl.selectedAgentLeadAppointment.appointmentTime" date-picker-input>
                       <span class="input-group-addon">
 		           								<span class="glyphicon glyphicon-calendar"></span>
                       </span>
-                    </div>
-                    <div class="has-error" ng-show="myForm.$dirty">
+                       <div class="has-error" ng-show="myForm.$dirty">
                         <span ng-show="myForm.appointmentTime.$invalid">This field is invalid </span>
                          <span ng-show="myForm.appointmentTime.$error.required">This is a required field</span>
                       </div>
+                    </div>
+                    
                   </div>
                 </div>
               </div>
@@ -356,7 +356,7 @@
                 	<div class="col-sm-6">
                   		<div class="form-group col-sm-12">
                   			<label class="control-label" for="selectbasic">Status</label>
-              				<select ng-model="ctrl.lead.status" class="form-control" ng-options="status.description for status in ctrl.statuses | orderBy:'description' track by status.description" required="ctrl.lead.id">
+              				<select ng-model="ctrl.lead.status" class="form-control" ng-change="ctrl.resetAssignment()"  ng-options="status.description for status in ctrl.statuses | orderBy:'description' track by status.description" ng-required="ctrl.lead.id">
               				  <option></option>
               				</select>
                  	 	</div>
@@ -428,7 +428,7 @@
             <span style="display:hidden" ng-show="flase">{{ ctrl.pristine = myForm.$pristine}}</span>
           <div class="row col-sm-12" style="padding-bottom:20px;">
             <div class="form-actions floatCenter col-sm-offset-9">
-              <input type="submit" value="{{!ctrl.lead.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-xs" ng-disabled="ctrl.showAddorUpdateButton()"/>
+              <input type="submit" value="{{!ctrl.lead.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-xs" ng-disabled="ctrl.showAddorUpdateButton() || myForm.$pristine || myForm.$invalid "/>
               <button type="button" ng-click="ctrl.cancelEdit()" class="btn btn-warning btn-xs"    >Cancel</button>
               <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-xs"  ng-if="!ctrl.lead.id"  ng-disabled="myForm.$pristine">Reset Form</button>
             </div>

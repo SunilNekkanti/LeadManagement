@@ -2,35 +2,39 @@
 <html ng-app="my-app">
 
 <head>
-  <link href="css/app.css" rel="stylesheet" />
-  <link href="css/bootstrap.css" rel="stylesheet" />
-  <link href="css/ui-navbar.css" rel="stylesheet" />
-  
-<link rel="stylesheet" href="css/bootstrap.min.css">
-<link rel="stylesheet" href="css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="css/dataTables.bootstrap.min.css">
-<link rel="stylesheet" href="css/bootstrap-datepicker.min.css">
-   
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.2/css/angular-datatables.min.css">
-   
-<script src="js/lib/jquery-1.10.1.min.js"></script>
-<script src="js/lib/jquery.dataTables.min.js"></script>
-<script src="js/lib/angular.min.js"></script>  
-<script src="js/lib/angular-resource.min.js"></script> 
-<script src="js/lib/angular-datatables.bootstrap.js"></script>
-<script src="js/lib/moment-with-locales.js"></script>
-<script src="js/lib/bootstrap.min.js"></script>
-<script src="js/lib/bootstrap-datepicker.min.js"></script>
-<script src="js/lib/bootstrap-datetimepicker.min.js"></script>
-<script src="js/lib/dataTables.bootstrap.min.js"></script>
- <script src="js/lib/angular-animate.js"></script>
-<script src="js/lib/angular-sanitize.min.js"></script>
-<script src="js/lib/ui-bootstrap-tpls-2.5.0.min.js"></script>
-<script src="js/lib/angular-datatables.min.js"></script>
-<script src="js/lib/ngStorage.min.js"></script>
-<script src="js/lib/angular-ui-router.min.js"></script>
-<script src="js/lib/ui-bootstrap-tpls-0.12.0.min.js"></script>
+  <link href="css/app.css" rel="stylesheet" />     
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+   <link href="css/ui-navbar.css" rel="stylesheet" />
+ 
 
+  <link rel="stylesheet" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+  <link rel="stylesheet" href="//cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" />
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.2/css/angular-datatables.min.css">
+  
+  <script src="js/lib/jquery-1.10.1.min.js"></script>
+  
+  <script  src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script  src="http://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+     <script   src="//cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script> 
+   
+  <script src="http://code.angularjs.org/1.3.7/angular.min.js"></script>
+  <script src="https://code.angularjs.org/1.3.7/angular-resource.min.js"></script>
+  <script type="text/javascript" src="https://rawgit.com/vivendi/angular-datatables/master/src/angular-datatables.bootstrap.js"></script>
+
+   <script   src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>      
+   <script   src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+  
+   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.7/angular-animate.min.js"></script>
+   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.7/angular-sanitize.min.js"></script>
+   <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.0.js"></script>
+   <!-- script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script -->
+   <script src="js/lib/angular-datatables.min.js"></script>
+    <script data-require="ngStorage@0.3.0" data-semver="0.3.0" src="http://rawgit.com/gsklee/ngStorage/0.3.0/ngStorage.min.js"></script>
+   <script src="//unpkg.com/@uirouter/angularjs/release/angular-ui-router.min.js"></script>
+ 
   <script src="js/app/app.js"></script>
   <script src="js/app/UserService.js"></script>
   <script src="js/app/UserController.js"></script>
@@ -70,6 +74,10 @@
   <script src="js/app/BestTimeToCallService.js"></script>
   <script src="js/app/datetimepicker.js"></script>
   <script src="js/app/datetimepicker.templates.js"></script>
+  
+  <style>
+     .dataTable > thead > tr > th[class*="sort"]::after{display: none}
+</style>
 </head>
 
 <body class="ng-cloak" ng-controller="NavbarController">

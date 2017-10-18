@@ -68,7 +68,7 @@ app
 							self.updateLead = updateLead;
 							self.removeLead = removeLead;
 							self.editLead = editLead;
-							
+							self.resetAssignment = resetAssignment;
 							self.dtInstance = {};
 							self.leadId = null;
 							self.getAllGenders = getAllGenders;
@@ -98,8 +98,6 @@ app
 							self.cancelEdit = cancelEdit;
 							 configLeadEvent();
 							self.reset = reset;
-							self.today = today;
-							self.toggleMin = toggleMin;
 							self.successMessage = '';
 							self.errorMessage = '';
 							self.done = false;
@@ -134,7 +132,6 @@ app
 											.withOption("bPaginate", true)
 											.withOption('bProcessing', true)
 											.withOption('bSaveState', true)
-											.withOption("retrieve", true)
 										    .withOption('createdRow', createdRow)
 									        .withPaginationType('full_numbers')
 									        .withOption('ordering', true)
@@ -400,12 +397,12 @@ app
 							}
 							
 							function cancelEdit(){
-								$state.go('lead');
 					            self.successMessage='';
 					            self.errorMessage='';
 					            self.lead={};
 					            self.selectedAgentLeadAppointment = {};
 					            self.display = false;
+								$state.go('lead', {}, {reload: true});
 					            
 					        }
 
@@ -615,97 +612,19 @@ app
 									    });
 							}
 							
-							function today() {
-								    self.bestTimeToCall = new Date();
+							function resetAssignment(){
+								if(self.lead.agentLeadAppointmentList === undefined || self.lead.agentLeadAppointmentList.length ===0){
+									self.selectedAgentLeadAppointment= {} ;
+								} 			
+								else{
+									self.selectedAgentLeadAppointments = self.lead.agentLeadAppointmentList;
+									//self.selectedAgentLeadAppointments = $filter("filter")(self.lead.agentLeadAppointmentList, {activeInd :'Y'});	
+									if(self.selectedAgentLeadAppointments.length>0){
+										
+										self.selectedAgentLeadAppointment = self.selectedAgentLeadAppointments[0];
+									}
+							   }
 							}
-							
-							function clear() {
-							self.bestTimeToCall  = null;
-							}
 
-
-							self.inlineOptions = {
-								    customClass: getDayClass,
-								    minDate: new Date(),
-								    showWeeks: true
-								  } ;
-
-							self.dateOptions = {
-								    dateDisabled: disabled,
-								    formatYear: 'yy',
-								    maxDate: new Date(2020, 5, 22),
-								    minDate: new Date(),
-								    startingDay: 1
-								  };
-
-								  // Disable weekend selection
-							function disabled(data) {
-								    var date = data.date,
-								      mode = data.mode;
-								    return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
-								  }
-
-						    function toggleMin() {
-								    self.inlineOptions.minDate = self.inlineOptions.minDate ? null : new Date();
-								    self.dateOptions.minDate = self.inlineOptions.minDate;
-								  };
-
-
-						   function open1() {
-								    self.popup1.opened = true;
-								  };
-
-						   function   open2() {
-								    self.popup2.opened = true;
-								  };
-
-								  
-							function setDate(year, month, day) {
-							  self.bestTimeToCall = new Date(year, month, day);
-								  };
-							self.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-							self.format = self.formats[1];
-							self.altInputFormats = ['M!/d!/yyyy'];
-
-							self.popup1 = {
-								    opened: false
-								  };
-
-							self.popup2 = {
-								    opened: false
-								  };
-
-								  var tomorrow = new Date();
-								  tomorrow.setDate(tomorrow.getDate() + 1);
-								  var afterTomorrow = new Date();
-								  afterTomorrow.setDate(tomorrow.getDate() + 1);
-								  self.events = [
-								    {
-								      date: tomorrow,
-								      status: 'full'
-								    },
-								    {
-								      date: afterTomorrow,
-								      status: 'partially'
-								    }
-								  ];
-
-								  function getDayClass(data) {
-								    var date = data.date,
-								      mode = data.mode;
-								    if (mode === 'day') {
-								      var dayToCheck = new Date(date).setHours(0,0,0,0);
-
-								      for (var i = 0; i < self.events.length; i++) {
-								        var currentDay = new Date(self.events[i].date).setHours(0,0,0,0);
-
-								        if (dayToCheck === currentDay) {
-								          return self.events[i].status;
-								        }
-								      }
-								    }
-
-								    return '';
-								  }
 	} 
 ]);

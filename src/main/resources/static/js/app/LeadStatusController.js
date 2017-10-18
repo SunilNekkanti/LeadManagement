@@ -210,7 +210,7 @@ app.controller('LeadStatusController',
             self.errorMessage='';
             self.leadStatus={};
             self.display = false;
-            $state.go('leadStatus');
+            $state.go('leadStatus', {}, {reload: true});
         }
         
         function addLeadStatus() {

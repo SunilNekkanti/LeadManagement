@@ -62,18 +62,17 @@ app.controller('NavbarController',  ['$rootScope', '$scope', '$state', '$statePa
 		}
 	}
   $scope.callMe = function(url,params){
+	  
 	  if(url === 'logout'){
 		  $rootScope.displayNavbar = false;
 		  $rootScope.loginUser = undefined;
 		  $window.localStorage.clear();
-		   
-		 
 	  }
 	  if( params !==''){
-		  $state.go(url,params);
+		  $state.go(url, params, {reload: true, inherit: false,notify: true});
 		  
 	  }else{
-		  $state.go(url);
+		 $state.go(url, {}, {reload: true, inherit: false,notify: true});
 	  }
   }
 }]);
@@ -88,10 +87,12 @@ app.config(['$stateProvider', '$urlRouterProvider',
     $stateProvider
       .state('home', {
         url: '/home',
+        cache: false, 
         templateUrl: 'home'
        })
        .state('user', {
           url: '/user',
+          cache: false, 
           templateUrl: 'partials/list',
           controller:'UserController',
           controllerAs:'ctrl',
@@ -100,6 +101,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
       })
       .state('user.edit', {
           url: '/',
+          cache: false, 
           templateUrl: 'partials/list',
           controller:'UserController',
           controllerAs:'ctrl',
@@ -140,6 +142,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
       })
        .state('lead', {
           url: '/lead' ,
+          cache: false, 
           templateUrl: 'partials/lead_list',
           controller:'LeadController',
           controllerAs:'ctrl',
@@ -149,6 +152,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
       })
       .state('lead.edit', {
           url: '/' ,
+          cache: false, 
           templateUrl: 'partials/lead_list',
           controller:'LeadController',
           controllerAs:'ctrl',
@@ -220,6 +224,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
       })
       .state('role', {
           url: '/role',
+          cache: false, 
           templateUrl: 'partials/role_list',
           controller:'RoleController',
           controllerAs:'ctrl',
@@ -229,6 +234,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
       })
       .state('facilityType', {
           url: '/facilityType',
+          cache: false, 
           templateUrl: 'partials/facilityType_list',
           controller:'FacilityTypeController',
           controllerAs:'ctrl',
@@ -244,6 +250,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
       })
       .state('leadStatus', {
           url: '/leadStatus',
+          cache: false, 
           templateUrl: 'partials/leadStatus_list',
           controller:'LeadStatusController',
           controllerAs:'ctrl',
@@ -260,6 +267,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
       
       .state('event', {
           url: '/event',
+          cache: false, 
           templateUrl: 'partials/event_list',
           controller:'EventController',
           controllerAs:'ctrl',
@@ -279,6 +287,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
       })
        .state('event.edit', {
           url: '/',
+          cache: false, 
           templateUrl: 'partials/event_list',
           controller:'EventController',
           controllerAs:'ctrl',
@@ -301,6 +310,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
       })
        .state('eventAssignment', {
           url: '/eventAssignment' ,
+          cache: false, 
           templateUrl: 'partials/eventAssignment_list',
           controller:'EventAssignmentController',
           controllerAs:'ctrl',
@@ -311,6 +321,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
       })
       .state('eventAssignment.edit', {
           url: '/' ,
+          cache: false, 
           templateUrl: 'partials/eventAssignment_list',
           controller:'EventAssignmentController',
           controllerAs:'ctrl',
@@ -357,6 +368,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
       })
       .state('provider', {
           url: '/provider',
+          cache: false, 
           templateUrl: 'partials/provider_list',
           controller:'ProviderController',
           controllerAs:'ctrl',
@@ -381,6 +393,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
       })
       .state('insurance', {
           url: '/insurance',
+          cache: false, 
           templateUrl: 'partials/insurance_list',
           controller:'InsuranceController',
           controllerAs:'ctrl',
@@ -405,6 +418,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
       })
       .state('language', {
           url: '/language',
+          cache: false, 
           templateUrl: 'partials/language_list',
           controller:'LanguageController',
           controllerAs:'ctrl',
@@ -413,6 +427,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
       })
       .state('logout', {
           url: '/logout',
+          cache: false, 
           templateUrl: 'logout'
       })
        .state('login', {
