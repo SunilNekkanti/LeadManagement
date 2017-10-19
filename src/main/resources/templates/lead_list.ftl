@@ -308,7 +308,7 @@
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
                     <label for="	First Name ">Agent Name</label>
-                    <select ng-model="ctrl.selectedAgentLeadAppointment.user"  name="agentAssignment" ng-disabled="ctrl.loginUserRole === 'AGENT'"  class="form-control" ng-options="agent.name for agent in ctrl.users |filter:{role:{role:'AGENT'}} | orderBy:'name'  track by agent.name"   ng-required="ctrl.lead.status.description=='Agent'">
+                    <select ng-model="ctrl.selectedAgentLeadAppointment.user"  name="agentAssignment" ng-disabled="ctrl.loginUserRole === 'AGENT'"  class="form-control" ng-options="(agent.name + '('+agent.role.role+ ')') for agent in ctrl.users  | orderBy:'name'  track by agent.name"   ng-required="ctrl.lead.status.description=='Agent'">
                       <option></option>
                     </select>
                     	<div class="has-error" ng-show="myForm.$dirty">
@@ -356,7 +356,7 @@
                 	<div class="col-sm-6">
                   		<div class="form-group col-sm-12">
                   			<label class="control-label" for="selectbasic">Status</label>
-              				<select ng-model="ctrl.lead.status" class="form-control" ng-change="ctrl.resetAssignment()"  ng-options="status.description for status in ctrl.statuses | orderBy:'description' track by status.description" ng-required="ctrl.lead.id">
+              				<select ng-model="ctrl.lead.status" class="form-control" ng-change="ctrl.resetAssignment(ctrl.lead.status.description)"  ng-options="status.description for status in ctrl.statuses | orderBy:'description' track by status.description" ng-required="ctrl.lead.id">
               				  <option></option>
               				</select>
                  	 	</div>

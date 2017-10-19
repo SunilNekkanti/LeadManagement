@@ -132,11 +132,13 @@ app
 											.withOption("bPaginate", true)
 											.withOption('bProcessing', true)
 											.withOption('bSaveState', true)
+											.withOption('searchDelay', 1000)
 										    .withOption('createdRow', createdRow)
 									        .withPaginationType('full_numbers')
 									        .withOption('ordering', true)
 											.withOption('order', [[0,'ASC'],[1,'ASC']])
 											.withOption('aLengthMenu', [[15, 20, -1],[ 15, 20, "All"]])
+											.withOption('bDeferRender', true)
 									        .withFnServerData(serverData);
 							if(self.display){
 								 addLead();
@@ -205,6 +207,8 @@ app
 										});
 									
 									self.lead.agentLeadAppointmentList.push(self.selectedAgentLeadAppointment);
+									
+									console.log('Submitting agentLeadAppointmentList'+JSON.stringify(self.lead.agentLeadAppointmentList));
 								}
 								
 								 if(self.notes && self.notes != ''){
@@ -612,9 +616,17 @@ app
 									    });
 							}
 							
-							function resetAssignment(){
+							function resetAssignment(status){
 								if(self.lead.agentLeadAppointmentList === undefined || self.lead.agentLeadAppointmentList.length ===0){
-									self.selectedAgentLeadAppointment= {} ;
+									
+									if(status === 'Converted'){
+										self.lead.agentLeadAppointmentList =[];
+										self.selectedAgentLeadAppointment = {appointmentTime:new Date(), user:{id:$localStorage.loginUser.userId}, prvdr:self.selectedAgentLeadAppointment.prvdr,insurance:self.selectedAgentLeadAppointment.insurance,effectiveFrom:self.selectedAgentLeadAppointment.effectiveFrom};
+										console.log('Converted agent record'+JSON.stringify(self.selectedAgentLeadAppointment) );
+										
+									}else{
+										self.selectedAgentLeadAppointment= {} ;
+									}
 								} 			
 								else{
 									self.selectedAgentLeadAppointments = self.lead.agentLeadAppointmentList;

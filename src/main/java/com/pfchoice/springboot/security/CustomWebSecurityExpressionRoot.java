@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public class CustomWebSecurityExpressionRoot extends WebSecurityExpressionRoot {
-    public static final String LOCALHOST = "128.0.0.1";
+    public static final String LOCALHOST = "127.0.0.1";
 
  //   public static final String COMPANY_DESKTOPS = "-suppressed for example-";
  //   public static final String COMPANY_INTERNET_1 = "-suppressed for example-";
@@ -122,9 +122,9 @@ public class CustomWebSecurityExpressionRoot extends WebSecurityExpressionRoot {
         this.trustedProxyMatcher = new IpAddressMatcher(trustedProxyIpRange);
     }
 
-    private Optional<String> getForwardedIp(String trustedProxyRange) {
+    /*private Optional<String> getForwardedIp(String trustedProxyRange) {
         return getForwardedIp(new IpAddressMatcher(trustedProxyRange));
-    }
+    }*/
 
     private Optional<String> getForwardedIp(IpAddressMatcher trustedProxyMatcher) {
         String proxiedIp = request.getHeader("x-forwarded-for");

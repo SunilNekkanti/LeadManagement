@@ -35,7 +35,6 @@ app.controller('NavbarController',  ['$rootScope', '$scope', '$state', '$statePa
 	  loginUser();
   
   function loginUser() {
-	  console.log("login $localStorage.loginUser"+JSON.stringify($localStorage.loginUser));
 	  if($localStorage.loginUser === undefined  ){
 		     
 			console.log('About to fetch loginUser');
@@ -47,7 +46,6 @@ app.controller('NavbarController',  ['$rootScope', '$scope', '$state', '$statePa
 										.log('fetched loginUser details successfully');
 								$rootScope.displayNavbar =true;
 								$rootScope.loginUser = $localStorage.loginUser;
-								 console.log("  after fetch $localStorage.loginUser"+JSON.stringify($localStorage.loginUser));
 							},
 							function(errResponse) {
 								 callMe('logout')

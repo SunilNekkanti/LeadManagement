@@ -59,7 +59,7 @@ public class EmailServiceImpl implements EmailService {
 		helper.setSubject(mail.getSubject());
 		helper.setText(mail.getBody(), true);
 		helper.setCc(mail.getEmailCc());
-		Thread.sleep(5000);
+		Thread.sleep(3000);
 		mailSender.send(message);
 		LOGGER.info("an email sent from the server");
 	}
@@ -89,6 +89,7 @@ public class EmailServiceImpl implements EmailService {
 
 		Map<String, Object> emailAttributes =  mail.getModel();
 		 String startDateTime = (emailAttributes.get("appointmentStartTime") ==null)? emailAttributes.get("eventStartTime").toString():emailAttributes.get("appointmentStartTime").toString();
+		 
 		 String endDateTime = (emailAttributes.get("appointmentEndTime") ==null)? emailAttributes.get("eventEndTime").toString():emailAttributes.get("appointmentEndTime").toString();
          String location =   (emailAttributes.get("location") ==null)? "":emailAttributes.get("location").toString();
          String currentTime = (emailAttributes.get("currentTime") ==null)? "":emailAttributes.get("currentTime").toString();
@@ -126,8 +127,8 @@ public class EmailServiceImpl implements EmailService {
 		            + "BEGIN:VEVENT\n"
 		            + "ATTENDEE;ROLE=REQ-PARTICIPANT;RSVP=TRUE:MAILTO:skumar@pfchoice.com\n"
 		            + "ORGANIZER:MAILTO:lizfoster@pfchoice.com\n"
-		            + "DTSTART;TZID=America/New_York:"+startDateTime+"\n"
-		            + "DTEND;TZID=America/New_York:"+endDateTime+"\n"
+		            + "DTSTART:"+startDateTime+"\n"
+		            + "DTEND:"+endDateTime+"\n"
 		            + "LOCATION:"+location+"\n"
 		            + "TRANSP:OPAQUE\n"
 		            + "SEQUENCE:0\n"
@@ -191,7 +192,7 @@ public class EmailServiceImpl implements EmailService {
 		    multipart.addBodyPart(messageBodyPart3);
 
 		    message.setContent(multipart);
-		    Thread.sleep(5000);
+		    Thread.sleep(3000);
 		mailSender.send(message);
 		LOGGER.info("an email with calendar sent from the server");
 	}
