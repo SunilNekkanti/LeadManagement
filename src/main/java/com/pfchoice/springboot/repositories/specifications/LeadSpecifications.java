@@ -42,6 +42,10 @@ public class LeadSpecifications implements Specification<LeadMembership> {
 
 			));
 		}
+		
+		if (!"ADMIN".equals(roleName)) {
+			p.getExpressions().add(cb.and(cb.notEqual(cb.upper(root.join("status").get("description")), "HOLD")));
+		}
 
 		if ("EVENT_COORDINATOR".equals(roleName)) {
 			p.getExpressions().add(cb.and(cb.equal(root.get("createdBy").as(String.class), username)));
