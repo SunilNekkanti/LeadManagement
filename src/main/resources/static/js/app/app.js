@@ -11,6 +11,7 @@ app.constant('urls', {
     ROLE_SERVICE_API : '/LeadManagement/api/role/',
     STATE_SERVICE_API : '/LeadManagement/api/state/',
     STATUS_SERVICE_API : '/LeadManagement/api/leadStatus/',
+    STATUS_DETAIL_SERVICE_API : '/LeadManagement/api/leadStatusDetail/',
     LANGUAGE_SERVICE_API : '/LeadManagement/api/language/',
     PLANTYPE_SERVICE_API : '/LeadManagement/api/planType/',
     INSURANCE_SERVICE_API : '/LeadManagement/api/insurance/',
@@ -194,6 +195,13 @@ app.config(['$stateProvider', '$urlRouterProvider',
 			          LeadStatusService.loadAllLeadStatuses().then(deferred.resolve, deferred.resolve);
 			          return deferred.promise;
 		      },
+              leadStatusDetails: function ($q,LeadStatusDetailService) {
+                  console.log('Load all leadStatusDetails');
+                  var deferred = $q.defer();
+                  LeadStatusDetailService.loadLeadStatusDetails(0,20,'',null).then(deferred.resolve, deferred.resolve);
+                  console.log('deferred.promise'+deferred.promise);
+                  return deferred.promise;
+              },
 		      languages: function ( $q,  LanguageService) {
 		    		  console.log('Load all languages');
 			          var deferred = $q.defer();
@@ -262,7 +270,28 @@ app.config(['$stateProvider', '$urlRouterProvider',
               }
           }
       })
-      
+      .state('leadStatusDetail', {
+          url: '/leadStatusDetail',
+          cache: false, 
+          templateUrl: 'partials/leadStatusDetail_list',
+          controller:'LeadStatusDetailController',
+          controllerAs:'ctrl',
+          resolve: {
+		      statuses: function ( $q,  LeadStatusService) {
+		    		  console.log('Load all leadStatuses');
+			          var deferred = $q.defer();
+			          LeadStatusService.loadAllLeadStatuses().then(deferred.resolve, deferred.resolve);
+			          return deferred.promise;
+		      },        	  
+              leadStatusDetails: function ($q,LeadStatusDetailService) {
+                  console.log('Load all leadStatusDetails');
+                  var deferred = $q.defer();
+                  LeadStatusDetailService.loadLeadStatusDetails(0,20,'',null).then(deferred.resolve, deferred.resolve);
+                  console.log('deferred.promise'+deferred.promise);
+                  return deferred.promise;
+              }
+          }
+      })
       .state('event', {
           url: '/event',
           cache: false, 

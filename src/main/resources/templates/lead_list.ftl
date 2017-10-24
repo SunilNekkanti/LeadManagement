@@ -362,6 +362,18 @@
                  	 	</div>
                		</div>  
                		
+               		<div class="col-sm-6">
+                  		<div class="form-group col-sm-12">
+                  			<label class="control-label" for="selectbasic">Status Detail</label>
+              				<select ng-model="ctrl.lead.statusDetail" class="form-control" name="statusDetail"  ng-options="status.description for status in ctrl.statusDetails | filter:{leadStatus:{id:ctrl.lead.status.id}} | orderBy:'description' track by status.description" ng-required="(ctrl.statusDetails | filter:{leadStatus:{id:ctrl.lead.status.id}}).length >0">
+              				  <option></option>
+              				</select>
+              				<div class="has-error" ng-show="myForm.$dirty">
+                               <span ng-show="myForm.statusDetail.$error.required">This is a required field</span>
+                           </div>
+                 	 	</div>
+               		</div>  
+               		
                		<div class="col-sm-6" ng-if="ctrl.showStatusNotes()">
                   		<div class="form-group col-sm-12">
                   			 <label class="control-label" for="statusNotes">Notes</label>	

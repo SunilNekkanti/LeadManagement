@@ -8,6 +8,7 @@ app
 						'GenderService',
 						'StateService',
 						'LeadStatusService',
+						'LeadStatusDetailService',
 						'LanguageService',
 						'InsuranceService',
 						'PlanTypeService',
@@ -29,7 +30,7 @@ app
 						'DTColumnBuilder',
 						'$timeout',
 						function(LeadService, GenderService, StateService,
-								LeadStatusService, LanguageService,
+								LeadStatusService,LeadStatusDetailService, LanguageService,
 								InsuranceService, PlanTypeService, ProviderService, UserService, BestTimeToCallService, EventService, FileUploadService, $sce, $scope,$rootScope, $location, $stateParams, $compile, $state,$filter,
 								$localStorage, DTOptionsBuilder, DTColumnBuilder,$timeout) {
 
@@ -52,6 +53,7 @@ app
 							//$location.url('/');
 							self.languages = [];
 							self.statuses = [];
+							self.statusDetails = [];
 							self.insurances = [];
 							self.providers = [];
 							self.planTypes = [];
@@ -74,6 +76,7 @@ app
 							self.getAllGenders = getAllGenders;
 							self.getAllStates = getAllStates;
 							self.getAllLeadStatuses = getAllLeadStatuses;
+							self.getAllLeadStatusDetails = getAllLeadStatusDetails;
 							self.getAllLanguages = getAllLanguages;
 							self.getAllInsurances = getAllInsurances;
 							self.getAllBestTimeToCalls = getAllBestTimeToCalls;
@@ -122,7 +125,9 @@ app
 									DTColumnBuilder.newColumn(
 											'language.description','LANGUAGE'),
 									DTColumnBuilder.newColumn(
-											'status.description','STATUS')];
+											'status.description','STATUS'),
+									DTColumnBuilder.newColumn(
+													'statusDetail.description','STATUS_DETAIL').withOption('defaultContent', '')];
 
 							self.dtOptions = DTOptionsBuilder.newOptions()
 									 .withDisplayLength(20)
@@ -343,6 +348,7 @@ app
 													self.states = getAllStates();
 													self.languages = getAllLanguages();
 													self.statuses = getAllLeadStatuses();
+													self.statusDetails = getAllLeadStatusDetails();
 													self.insurances = getAllInsurances();
 													self.planTypes = getAllPlanTypes();
 													self.providers = getAllProviders();
@@ -370,6 +376,7 @@ app
 									self.states = getAllStates();
 									self.languages = getAllLanguages();
 									self.statuses = getAllLeadStatuses();
+									self.statusDetails = getAllLeadStatusDetails();
 									self.insurances = getAllInsurances();
 									self.planTypes = getAllPlanTypes();
 									self.display = true;
@@ -384,6 +391,7 @@ app
 											self.states = getAllStates();
 											self.languages = getAllLanguages();
 											self.statuses = getAllLeadStatuses();
+											self.statusDetails = getAllLeadStatusDetails();
 											self.insurances = getAllInsurances();
 											self.planTypes = getAllPlanTypes();
 											self.display = true;
@@ -568,6 +576,10 @@ app
 								return LeadStatusService.getAllLeadStatuses();
 							}
 
+							function getAllLeadStatusDetails() {
+								return LeadStatusDetailService.getAllLeadStatusDetails();
+							}
+							
 							function getAllLanguages() {
 								return LanguageService
 										.getAllLanguages();

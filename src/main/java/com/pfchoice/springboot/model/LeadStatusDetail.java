@@ -10,91 +10,91 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  *
- * @author sarath
+ * @author Mohanasundharam
  */
-@Entity(name = "file")
+@Entity
+@Table(name = "lu_membership_status_detail")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class File extends RecordDetails implements Serializable {
+public class LeadStatusDetail extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
-	@Column(name = "file_id", nullable = false)
-	private Integer id;
+	@Column(name = "code", columnDefinition = "TINYINT", nullable = false)
+	private Short id;
 
-	@Column(name = "file_name")
-	private String fileName;
-
+	@Column(name = "description")
+	private String description;
+	
 	@ManyToOne
-	@JoinColumn(name = "file_type_code", referencedColumnName = "code")
-	private FileType fileType;
+	@JoinColumn(name = "lu_membership_status_id", referencedColumnName = "code")
+	private LeadStatus leadStatus;
+	
 
 	/**
 	 * 
 	 */
-	public File() {
+	public LeadStatusDetail() {
 		super();
 	}
 
 	/**
-	 * 
 	 * @param id
 	 */
-	public File(final Integer id) {
+	public LeadStatusDetail(final Short id) {
 		super();
 		this.id = id;
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
-	public Integer getId() {
+	public Short getId() {
 		return id;
 	}
 
 	/**
-	 * 
 	 * @param id
 	 */
-	public void setId(final Integer id) {
+	public void setId(final Short id) {
 		this.id = id;
 	}
 
 	/**
-	 * @return the fileName
+	 * @return the description
 	 */
-	public String getFileName() {
-		return fileName;
+	public String getDescription() {
+		return description;
 	}
 
 	/**
-	 * @param fileName
-	 *            the fileName to set
+	 * @param description
+	 *            the description to set
 	 */
-	public void setFileName(final String fileName) {
-		this.fileName = fileName;
+	public void setDescription(final String description) {
+		this.description = description;
 	}
 
 	/**
-	 * @return
+	 * @return the leadStatus
 	 */
-	public FileType getFileType() {
-		return fileType;
+	public LeadStatus getLeadStatus() {
+		return leadStatus;
 	}
 
 	/**
-	 * @param fileType
+	 * @param leadStatus the leadStatus to set
 	 */
-	public void setFileType(FileType fileType) {
-		this.fileType = fileType;
+	public void setLeadStatus(LeadStatus leadStatus) {
+		this.leadStatus = leadStatus;
 	}
 
 	@Override
@@ -106,10 +106,10 @@ public class File extends RecordDetails implements Serializable {
 
 	@Override
 	public boolean equals(Object object) {
-		if (!(object instanceof File)) {
+		if (!(object instanceof LeadStatusDetail)) {
 			return false;
 		}
-		File other = (File) object;
+		LeadStatusDetail other = (LeadStatusDetail) object;
 		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
 			return false;
 		}
@@ -118,7 +118,7 @@ public class File extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.Membership[ id=" + id + " ]";
+		return "com.pfchoice.core.entity.LeadStatus[ id=" + id + " ]";
 	}
 
 }

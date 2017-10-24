@@ -40,6 +40,7 @@
   <script src="js/app/UserController.js"></script>
   <script src="js/app/GenderService.js"></script>
   <script src="js/app/StateService.js"></script>
+  <script src="js/app/LeadStatusDetailService.js"></script>
   <script src="js/app/LeadStatusService.js"></script>
   <script src="js/app/LanguageService.js"></script>
   <script src="js/app/InsuranceService.js"></script>
@@ -61,6 +62,7 @@
   <script src="js/app/ProviderService.js"></script>
   <script src="js/app/ProviderController.js"></script>
   <script src="js/app/LeadStatusController.js"></script>
+  <script src="js/app/LeadStatusDetailController.js"></script>
   <script src="js/app/InsuranceController.js"></script>
   <script src="js/app/EventFrequencyController.js"></script>
   <script src="js/app/EventFrequencyService.js"></script>
@@ -105,6 +107,7 @@
             			<ul class="dropdown-menu" role="submenu">
               				<li><a  ng-click="callMe('facilityType','')">Facility Types</a></li>
             				<li><a   ng-click="callMe('leadStatus','')">Lead Statuses</a></li>
+            				<li><a   ng-click="callMe('leadStatusDetail','')">Lead Status Details</a></li>
               				<li><a   ng-click="callMe('role','')">Roles</a> </li>
            				 </ul>
           			</li>

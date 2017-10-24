@@ -91,6 +91,10 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lead_Mbr_Status", referencedColumnName = "code", insertable = false)
 	private LeadStatus status;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "lead_mbr_status_detail_id", referencedColumnName = "code", insertable = false)
+	private LeadStatusDetail statusDetail;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "lead_contacts", joinColumns = {
@@ -108,9 +112,6 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "file_upload_id", referencedColumnName = "file_upload_id", nullable = false)
 	private FileUpload fileUpload;
-
-	@Column(name = "is_homeless")
-	private Character isHomeless = new Character('N');
 
 	@Fetch(FetchMode.SELECT)
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "lead")
@@ -273,6 +274,20 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	/**
+	 * @return the statusDetail
+	 */
+	public LeadStatusDetail getStatusDetail() {
+		return statusDetail;
+	}
+
+	/**
+	 * @param statusDetail the statusDetail to set
+	 */
+	public void setStatusDetail(LeadStatusDetail statusDetail) {
+		this.statusDetail = statusDetail;
+	}
+
+	/**
 	 * @return the language
 	 */
 	public Language getLanguage() {
@@ -395,21 +410,6 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	 */
 	public void setPlanType(PlanType planType) {
 		this.planType = planType;
-	}
-
-	/**
-	 * @return the isHomeless
-	 */
-	public Character getIsHomeless() {
-		return isHomeless;
-	}
-
-	/**
-	 * @param isHomeless
-	 *            the isHomeless to set
-	 */
-	public void setIsHomeless(Character isHomeless) {
-		this.isHomeless = isHomeless;
 	}
 
 	/**

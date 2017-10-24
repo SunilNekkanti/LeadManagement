@@ -38,7 +38,8 @@ public class LeadSpecifications implements Specification<LeadMembership> {
 							cb.like(cb.lower(root.get("lastName")), containsLikePattern),
 							cb.like(root.join("gender").get("description"), containsLikePattern),
 							cb.like(root.join("language").get("description"), containsLikePattern),
-							cb.like(root.join("status").get("description"), containsLikePattern)
+							cb.like(root.join("status").get("description"), containsLikePattern),
+							cb.like(root.join("statusDetail", JoinType.LEFT).get("description"), containsLikePattern)
 
 			));
 		}

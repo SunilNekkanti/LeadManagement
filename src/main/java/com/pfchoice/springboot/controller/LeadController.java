@@ -209,6 +209,7 @@ public class LeadController {
 		currentLeadMembership.setLanguage(lead.getLanguage());
 		currentLeadMembership.setBestTimeToCall(lead.getBestTimeToCall());
 		currentLeadMembership.setStatus(lead.getStatus());
+		currentLeadMembership.setStatusDetail(lead.getStatusDetail());
 		currentLeadMembership.setFileUpload(lead.getFileUpload());
 		currentLeadMembership.setConsentFormSigned(lead.getConsentFormSigned());
 		currentLeadMembership.setContact(lead.getContact());
