@@ -3,31 +3,39 @@ server:
   contextPath: /LeadManagement
 ---
 
+spring:
+    profiles: localemail
 email: 
      host: smtp.office365.com
      port: 587
      username: skumar@pfchoice.com
      cc: skumar@pfchoice.com
-     password: Florida6
+     password: Florida
      properties: 
         mail.smtp.auth: true 
         mail.smtp.starttls.enable: true
         mail.transport.protocol: smtp
         mail.debug: false
 ---
+
 spring:
-    profiles: newyork
-    jpa:
-        properties:
-            hibernate:
-                jdbc:
-                    time_zone: America/Indiana/Indianapolis
-                    
----
+    profiles: serveremail
+email: 
+     host: smtpout.secureserver.net
+     port: 3535
+     username: leadmanagement@infocusonline.net
+     cc: leadmanagement@infocusonline.net
+     password: pfc20!7
+     properties: 
+        mail.smtp.auth: true 
+        mail.smtp.starttls.enable: true
+        mail.transport.protocol: smtp
+        mail.debug: false
+---        
 
 spring:
   profiles:
-    active: "local"
+    active: "server,serveremail"
   main:
     banner-mode: "off"
  
@@ -35,6 +43,11 @@ spring:
                       
 spring:
   profiles: local,default
+  jpa:
+    properties:
+       hibernate:
+          jdbc:
+             time_zone: America/New_York
 datasource:
   leadManagement:
     url: jdbc:mysql://localhost:3306/lead_management?tinyInt1isBit=false&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=false
@@ -53,6 +66,11 @@ datasource:
                       
 spring:
   profiles: server
+  jpa:
+        properties:
+            hibernate:
+                jdbc:
+                    time_zone: America/New_York
 datasource:
   leadManagement:
     url: jdbc:mysql://pras-aws-prod.cp2ok1lxfh49.us-east-1.rds.amazonaws.com:3306/lead_management?tinyInt1isBit=false&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=false
@@ -67,3 +85,9 @@ datasource:
       format_sql: false
       dialect: org.hibernate.dialect.MySQLDialect
  
+---   
+spring:
+ http:
+  multipart:
+   max-file-size: 100MB
+   max-request-size: 100MB

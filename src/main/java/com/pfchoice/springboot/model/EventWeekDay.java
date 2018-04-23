@@ -116,7 +116,7 @@ public class EventWeekDay extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.EventWeekDay[ id=" + id + " ]";
+		return "com.pfchoice.springboot.model.EventWeekDay[ id=" + id + " ]";
 	}
 
 }

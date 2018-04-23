@@ -116,7 +116,7 @@ public class EventMonth extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.EventMonth[ id=" + id + " ]";
+		return "com.pfchoice.springboot.model.EventMonth[ id=" + id + " ]";
 	}
 
 }

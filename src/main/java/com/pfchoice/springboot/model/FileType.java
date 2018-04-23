@@ -158,7 +158,7 @@ public class FileType extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.County[ code=" + code + " ]";
+		return "com.pfchoice.springboot.model.County[ code=" + code + " ]";
 	}
 
 }

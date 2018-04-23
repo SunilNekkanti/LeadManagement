@@ -154,12 +154,12 @@ public class LeadController {
 		 * rep.getEmail()) .collect(Collectors.joining(","));
 		 */
 		Email mail = new Email();
-		mail.setEmailTo("maria.ortiz@pfchoice.com");  
-		mail.setEmailFrom("skumar@pfchoice.com");
-		mail.setEmailCc("lizfoster@pfchoice.com");
+		mail.setEmailTo("dsoto@pfchoice.com");  
+		mail.setEmailFrom("leadmanagement@infocusonline.net");
+		mail.setEmailCc("leadmanagement@infocusonline.net");
 		mail.setSubject("New lead : "+lead.getLastName()+","+lead.getFirstName()+" has been created:");
 
-		String careCoordinator = "Maria Ortiz";
+		String careCoordinator = "Dynahly Soto";
 		
 		Map<String, Object> emailAttributes = new HashMap<>();
 		emailAttributes.put("currentUser", user.getName());
@@ -282,33 +282,49 @@ public class LeadController {
 						.collect(Collectors.joining(";"));
 				AgentLeadAppointment agntLeadAppointment = finalAgentLeadAppointList.stream()
 						.filter(ala -> ala.getActiveInd() == 'Y').findAny().get();
-
-				String agentName = agntLeadAppointment.getUser().getName();
-				String appointmentTime = sdf.format(agntLeadAppointment.getAppointmentTime().getTime());
-				Date calApptTime = agntLeadAppointment.getAppointmentTime();
-				cal.setTime(calApptTime);
-				cal.add(Calendar.MINUTE, 60);
-				String appointmentEndTime = sdf.format(cal.getTime());
-				String careCoordinator = agntLeadAppointment.getCreatedBy();
-				String appointmentLocalTime = sdf1.format(agntLeadAppointment.getAppointmentTime().getTime());
-
-				emailAttributes.put("agent", agentName);
-				emailAttributes.put("careCoordinator", careCoordinator);
-				emailAttributes.put("appointmentStartTime", appointmentTime);
-				emailAttributes.put("appointmentEndTime", appointmentEndTime);
-				emailAttributes.put("currentTime", currentTime);
 				
-				emailAttributes.put("appointmentLocalTime", appointmentLocalTime);
-				String emailTemplateFileName = "agent_lead_assignment_email_template_" + roleName + ".txt";
-				mail.setBody(emailService.geContentFromTemplate(emailAttributes, emailTemplateFileName));
-				mail.setModel(emailAttributes);
-				mail.setSubject("Scheduled an Appointment with lead: "+currentLeadMembership.getLastName()+","+currentLeadMembership.getFirstName());
-				mail.setEmailTo(toEmailIds);
+				if(agntLeadAppointment.getAppointmentTime().compareTo(Calendar.getInstance().getTime()) > 0){
+					String agentName = agntLeadAppointment.getUser().getName();
+					
+					String appointmentTime = sdf.format(agntLeadAppointment.getAppointmentTime().getTime());
+					Date calApptTime = agntLeadAppointment.getAppointmentTime();
+					cal.setTime(calApptTime);
+					cal.add(Calendar.MINUTE, 60);
+					String appointmentEndTime = sdf.format(cal.getTime());
+					String careCoordinator = agntLeadAppointment.getCreatedBy();
+					String appointmentLocalTime = sdf1.format(agntLeadAppointment.getAppointmentTime().getTime());
+
+					emailAttributes.put("agent", agentName);
+					emailAttributes.put("careCoordinator", careCoordinator);
+					emailAttributes.put("appointmentStartTime", appointmentTime);
+					emailAttributes.put("appointmentEndTime", appointmentEndTime);
+					emailAttributes.put("currentTime", currentTime);
+					
+					emailAttributes.put("appointmentLocalTime", appointmentLocalTime);
+					String emailTemplateFileName = "agent_lead_assignment_email_template_" + roleName + ".txt";
+					mail.setBody(emailService.geContentFromTemplate(emailAttributes, emailTemplateFileName));
+					mail.setModel(emailAttributes);
+					mail.setSubject("Scheduled an Appointment with lead: "+currentLeadMembership.getLastName()+","+currentLeadMembership.getFirstName());
+					mail.setEmailTo(toEmailIds);
+					
+					emailService.sendMailWithAttachment(mail);
+				}else {
+					 toEmailIds =  "dosto@pfchoice.com";  
+					String careCoordinator = "Dynahly Soto";
+					String emailTemplateFileName = "lead_update_email_template_" + roleName + ".txt";
+					
+					emailAttributes.put("careCoordinator", careCoordinator);
+					mail.setBody(emailService.geContentFromTemplate(emailAttributes, emailTemplateFileName));
+					mail.setModel(emailAttributes);
+					mail.setSubject("Updated Lead details for "+currentLeadMembership.getLastName()+","+currentLeadMembership.getFirstName());
+					mail.setEmailTo(toEmailIds);
+					
+					emailService.sendMail(mail);
+				}
 				
-				emailService.sendMailWithAttachment(mail);
 		} else {
-			String toEmailIds =  "maria.ortiz@pfchoice.com";  
-			String careCoordinator = "Maria Ortiz";
+			String toEmailIds =  "dosto@pfchoice.com";  
+			String careCoordinator = "Dynahly Soto";
 			String emailTemplateFileName = "lead_update_email_template_" + roleName + ".txt";
 			
 			emailAttributes.put("careCoordinator", careCoordinator);

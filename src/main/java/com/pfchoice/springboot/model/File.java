@@ -118,7 +118,7 @@ public class File extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.Membership[ id=" + id + " ]";
+		return "com.pfchoice.springboot.model.Membership[ id=" + id + " ]";
 	}
 
 }

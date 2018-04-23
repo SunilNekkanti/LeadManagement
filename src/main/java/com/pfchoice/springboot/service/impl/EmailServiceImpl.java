@@ -55,7 +55,7 @@ public class EmailServiceImpl implements EmailService {
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
 		String[] toEmailList = mail.getEmailTo().split(";");
 		helper.setTo(toEmailList);
-		helper.setFrom("skumar@pfchoice.com");
+		helper.setFrom("leadmanagement@infocusonline.net");
 		helper.setSubject(mail.getSubject());
 		helper.setText(mail.getBody(), true);
 		helper.setCc(mail.getEmailCc());
@@ -82,7 +82,7 @@ public class EmailServiceImpl implements EmailService {
 		MimeMessageHelper helper = new MimeMessageHelper(message);
 		 String[] toEmailList = mail.getEmailTo().split(";");
 		helper.setTo(toEmailList);
-		helper.setFrom("skumar@pfchoice.com");
+		helper.setFrom("leadmanagement@infocusonline.net");
 		helper.setSubject(mail.getSubject());
 		helper.setCc(mail.getEmailCc());
 		helper.setText(mail.getBody(), true);
@@ -125,10 +125,10 @@ public class EmailServiceImpl implements EmailService {
 		            + "END:DAYLIGHT\n"
 		            + "END:VTIMEZONE\n"
 		            + "BEGIN:VEVENT\n"
-		            + "ATTENDEE;ROLE=REQ-PARTICIPANT;RSVP=TRUE:MAILTO:skumar@pfchoice.com\n"
-		            + "ORGANIZER:MAILTO:lizfoster@pfchoice.com\n"
-		            + "DTSTART:"+startDateTime+"\n"
-		            + "DTEND:"+endDateTime+"\n"
+		            + "ATTENDEE;ROLE=REQ-PARTICIPANT;RSVP=TRUE:MAILTO:leadmanagement@infocusonline.net\n"
+		            + "ORGANIZER:MAILTO:leadmanagement@infocusonline.net\n"
+		            + "DTSTART;TZID=America/New_York:"+startDateTime+"\n"
+		            + "DTEND;TZID=America/New_York:"+endDateTime+"\n"
 		            + "LOCATION:"+location+"\n"
 		            + "TRANSP:OPAQUE\n"
 		            + "SEQUENCE:0\n"

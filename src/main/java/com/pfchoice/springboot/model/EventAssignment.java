@@ -194,7 +194,7 @@ public class EventAssignment extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.EventAssignment[ id=" + id + " ]";
+		return "com.pfchoice.springboot.model.EventAssignment[ id=" + id + " ]";
 	}
 
 }

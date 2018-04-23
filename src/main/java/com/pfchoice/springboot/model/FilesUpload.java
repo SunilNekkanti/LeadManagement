@@ -131,7 +131,7 @@ public class FilesUpload extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.FilesUpload[ id=" + id + " ]";
+		return "com.pfchoice.springboot.model.FilesUpload[ id=" + id + " ]";
 	}
 
 }

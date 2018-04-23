@@ -57,7 +57,6 @@ app.service('EventService',
                     .then(
                         function (response) {
                             console.log('Fetched successfully  events');
-                            $localStorage.events = response.data.content;
                             deferred.resolve(response);
                          return     response ;
                         },

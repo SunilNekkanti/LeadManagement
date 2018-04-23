@@ -280,7 +280,7 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.AgentLeadAppointment[ id=" + id + " user_id = " + user.getId() + " ]";
+		return "com.pfchoice.springboot.model.AgentLeadAppointment[ id=" + id + " user_id = " + user.getId() + " ]";
 	}
 
 }

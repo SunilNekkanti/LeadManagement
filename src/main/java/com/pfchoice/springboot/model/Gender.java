@@ -116,7 +116,7 @@ public class Gender extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.Gender[ id=" + id + " ]";
+		return "com.pfchoice.springboot.model.Gender[ id=" + id + " ]";
 	}
 
 }

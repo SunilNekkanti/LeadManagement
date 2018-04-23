@@ -18,11 +18,17 @@ public class JsonDateDeserializer extends JsonDeserializer<Date> {
 	public Date deserialize(JsonParser paramJsonParser, DeserializationContext paramDeserializationContext)
 			throws IOException, JsonProcessingException {
 		String str = paramJsonParser.getText().trim();
-		try {
-			return dateFormat.parse(str);
-		} catch (ParseException e) {
+		
+		if("".equals(str)){
+			try {
+				return dateFormat.parse(str);
+			} catch (ParseException e) {
 
+			}
+			return paramDeserializationContext.parseDate(str);
+		}else{
+			return null;
 		}
-		return paramDeserializationContext.parseDate(str);
+		
 	}
 }

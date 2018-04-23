@@ -118,7 +118,7 @@ public class LeadStatusDetail extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.LeadStatus[ id=" + id + " ]";
+		return "com.pfchoice.springboot.model.LeadStatus[ id=" + id + " ]";
 	}
 
 }

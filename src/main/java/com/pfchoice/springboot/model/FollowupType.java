@@ -118,7 +118,7 @@ public class FollowupType extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.FollowupType[ id=" + id + " ]";
+		return "com.pfchoice.springboot.model.FollowupType[ id=" + id + " ]";
 	}
 
 }

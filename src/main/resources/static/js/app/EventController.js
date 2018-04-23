@@ -139,7 +139,7 @@ app
 									.withOption("bLengthChange", false)
 									.withOption("bPaginate", true)
 									.withOption('bProcessing', true)
-									.withOption('bSaveState', true)
+									.withOption('bStateSave', true)
 								    .withOption('createdRow', createdRow)
 							        .withPaginationType('full_numbers')
 							        
@@ -608,17 +608,14 @@ app
 							}
 							
 							 function validEventDate(startDate,endDate) {
-							   
-							  //  var curDate = new Date();
-							    if(new Date(startDate) >= new Date(endDate)){
+							 console.log('startDate', new Date(startDate).getTime() ,new Date(endDate).getTime());
+							    if(new Date(startDate).getTime() >= new Date(endDate).getTime()){
 							      self.errMessage = 'End Date should be greater than start date';
 							      return true;
 							    }
+							    self.errMessage='';
 							    return false;
-							   /* if(new Date(startDate) < curDate){
-							       $scope.errMessage = 'Start date should not be before today.';
-							       return false;
-							    }*/
+							   
 							};
 							
 

@@ -19,6 +19,7 @@ public class JsonDateAndTimeDeserializer extends JsonDeserializer<Date> {
 			throws IOException, JsonProcessingException {
 		String str = paramJsonParser.getText().trim();
 		try {
+			
 			return dateFormat.parse(str);
 		} catch (ParseException e) {
 

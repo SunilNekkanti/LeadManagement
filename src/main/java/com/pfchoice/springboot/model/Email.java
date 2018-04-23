@@ -241,7 +241,7 @@ public class Email extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.Emails[ id=" + id + " ]";
+		return "com.pfchoice.springboot.model.Emails[ id=" + id + " ]";
 	}
 
 }

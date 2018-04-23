@@ -159,7 +159,7 @@ public class State extends RecordDetails implements Serializable, FieldHandled {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.State[ code=" + code + " ]";
+		return "com.pfchoice.springboot.model.State[ code=" + code + " ]";
 	}
 
 }

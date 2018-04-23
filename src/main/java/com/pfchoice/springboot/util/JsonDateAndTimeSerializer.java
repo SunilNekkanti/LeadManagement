@@ -19,12 +19,13 @@ import com.fasterxml.jackson.databind.SerializerProvider;
  */
 @Component
 public class JsonDateAndTimeSerializer extends JsonSerializer<Date> {
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/YYYY hh:mm a");
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
 
 	@Override
 	public void serialize(Date date, JsonGenerator gen, SerializerProvider provider)
 			throws IOException, JsonProcessingException {
 		String formattedDate = dateFormat.format(date);
+	//	System.out.println("JsonDateAndTimeSerializer formattedDate:"+formattedDate);
 		gen.writeString(formattedDate);
 	}
 }

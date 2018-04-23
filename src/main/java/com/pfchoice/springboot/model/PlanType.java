@@ -119,7 +119,7 @@ public class PlanType extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.PlanType[id=" + id + " ]";
+		return "com.pfchoice.springboot.model.PlanType[id=" + id + " ]";
 	}
 
 }

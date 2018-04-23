@@ -127,7 +127,7 @@ public class ZipCode extends RecordDetails implements Serializable, FieldHandled
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.ZipCode[ code=" + code + " ]";
+		return "com.pfchoice.springboot.model.ZipCode[ code=" + code + " ]";
 	}
 
 }

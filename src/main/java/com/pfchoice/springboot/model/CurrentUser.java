@@ -234,7 +234,7 @@ public class CurrentUser extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.User[ id=" + id + "role=" + role.getRole() + "  ]";
+		return "com.pfchoice.springboot.model.User[ id=" + id + "role=" + role.getRole() + "  ]";
 	}
 
 }

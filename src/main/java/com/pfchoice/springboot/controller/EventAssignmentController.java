@@ -140,7 +140,7 @@ public class EventAssignmentController {
 		}
 		Email mail = new Email();
 		mail.setEmailTo(toEmailIds);
-		mail.setEmailFrom("skumar@pfchoice.com");
+		mail.setEmailFrom("leadmanagement@infocusonline.net");
 		mail.setEmailCc(user.getContact().getEmail());
 		mail.setSubject("New Event " + eventAssignment.getEvent().getEventName() + " has been Assigned to you");
 

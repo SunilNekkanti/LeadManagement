@@ -95,7 +95,7 @@ public class Ethinicity extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.Ethinicity[ id=" + id + " ]";
+		return "com.pfchoice.springboot.model.Ethinicity[ id=" + id + " ]";
 	}
 
 }

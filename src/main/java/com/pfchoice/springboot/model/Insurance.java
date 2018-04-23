@@ -146,7 +146,7 @@ public class Insurance extends RecordDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.pfchoice.core.entity.Insurance[ id=" + id + " ]";
+		return "com.pfchoice.springboot.model.Insurance[ id=" + id + " ]";
 	}
 
 }
