@@ -44,7 +44,7 @@ public class LeadSpecifications implements Specification<LeadMembership> {
 			));
 		}
 		
-		if (!"ADMIN".equals(roleName)) {
+		if (!"ADMIN".equals(roleName) && !"MANAGER".equals(roleName)) {
 			p.getExpressions().add(cb.and(cb.notEqual(cb.upper(root.join("status").get("description")), "HOLD")));
 		}
 

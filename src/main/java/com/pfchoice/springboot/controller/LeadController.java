@@ -237,9 +237,11 @@ public class LeadController {
 
 			if (!"New".equalsIgnoreCase(lead.getStatus().getDescription())) {
 				List<AgentLeadAppointment> agntLeadAppointList = lead.getAgentLeadAppointmentList();
-
+				currentLeadMembership.getAgentLeadAppointmentList().clear();
+				currentLeadMembership.getAgentLeadAppointmentList().addAll(agntLeadAppointList);
+				
 				for (AgentLeadAppointment ala : agntLeadAppointList) {
-					if (ala.getAppointmentTime() != null) {
+					if (ala.getAppointmentTime() != null && ala.getId() == null) {
 						ala.setCreatedBy(loginUser.getUsername());
 						ala.setUpdatedBy(loginUser.getUsername());
 						finalAgentLeadAppointList.add(ala);
@@ -309,7 +311,7 @@ public class LeadController {
 					
 					emailService.sendMailWithAttachment(mail);
 				}else {
-					 toEmailIds =  "dosto@pfchoice.com";  
+					 toEmailIds =  "dsoto@pfchoice.com";  
 					String careCoordinator = "Dynahly Soto";
 					String emailTemplateFileName = "lead_update_email_template_" + roleName + ".txt";
 					
@@ -323,7 +325,7 @@ public class LeadController {
 				}
 				
 		} else {
-			String toEmailIds =  "dosto@pfchoice.com";  
+			String toEmailIds =  "dsoto@pfchoice.com";  
 			String careCoordinator = "Dynahly Soto";
 			String emailTemplateFileName = "lead_update_email_template_" + roleName + ".txt";
 			

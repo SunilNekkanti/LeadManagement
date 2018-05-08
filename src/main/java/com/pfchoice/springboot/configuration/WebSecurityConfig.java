@@ -82,7 +82,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		       .authorizeRequests()
 		         .expressionHandler(new CustomWebSecurityExpressionHandler())
 		         //.antMatchers("/api/**").access("hasAnyIpAddress('192.168.1.0/8')").anyRequest()
-		         .antMatchers("/api/**").access("(hasRole('ROLE_CARE_COORDINATOR') and hasAnyIpAddress('108.190.27.18')) or hasAnyRole('ROLE_AGENT', 'ROLE_ADMIN','ROLE_EVENT_COORDINATOR','ROLE_MANAGER') ").anyRequest()
+		         .antMatchers("/api/**").access("(hasRole('ROLE_CARE_COORDINATOR') and hasAnyIpAddress('108.190.27.18') ) or hasAnyRole('ROLE_AGENT', 'ROLE_ADMIN','ROLE_EVENT_COORDINATOR','ROLE_MANAGER') ").anyRequest()
 		        //  .antMatchers("/api/**").access("(hasRole('ROLE_CARE_COORDINATOR') and (hasIpAddress('108.190.27.18') or hasIpAddress('172.31.0.0/16'))) or hasAnyRole('ROLE_AGENT', 'ROLE_ADMIN','ROLE_EVENT_COORDINATOR','ROLE_MANAGER') ").anyRequest()
 				.hasAnyAuthority("ROLE_AGENT", "ROLE_ADMIN", "ROLE_CARE_COORDINATOR", "ROLE_EVENT_COORDINATOR","ROLE_MANAGER")
 				.anyRequest().authenticated().and().formLogin().loginPage("/").usernameParameter("username")

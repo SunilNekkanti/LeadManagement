@@ -19,6 +19,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Fetch;
@@ -51,7 +52,8 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	private String lastName;
 
 	@Fetch(FetchMode.SELECT)
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "lead")
+	@OneToMany(cascade =  CascadeType.ALL , fetch = FetchType.LAZY, mappedBy = "lead")
+	@OrderBy("createdDate desc")
 	private List<AgentLeadAppointment> agentLeadAppointmentList;
 
 	@ManyToOne(fetch = FetchType.LAZY)

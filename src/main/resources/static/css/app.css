@@ -31,7 +31,7 @@ body {
 	font-family: GothamsBody;
 }
 
-
+table.dataTable>tbody thead tr { display: block; }
 
 body, #mainWrapper {
 	height: 100%;

@@ -212,8 +212,7 @@ app
 										});
 									
 									self.lead.agentLeadAppointmentList.push(self.selectedAgentLeadAppointment);
-									
-									console.log('Submitting agentLeadAppointmentList'+JSON.stringify(self.lead.agentLeadAppointmentList));
+                                    console.log('Submitting agentLeadAppointmentList');
 								}
 								
 								 if(self.notes && self.notes != ''){
@@ -273,7 +272,7 @@ app
 							}
 
 							function updateLead(lead, id) {
-								console.log('About to update lead');
+								console.log('About to update lead',lead);								
 								LeadService
 										.updateLead(lead, id)
 										.then(
@@ -336,10 +335,21 @@ app
 															self.selectedAgentLeadAppointment= {} ;
 														} 			
 														else{
-															self.selectedAgentLeadAppointments = self.lead.agentLeadAppointmentList;
-															//self.selectedAgentLeadAppointments = $filter("filter")(self.lead.agentLeadAppointmentList, {activeInd :'Y'});	
-															if(self.selectedAgentLeadAppointments.length>0){
-																self.selectedAgentLeadAppointment = self.selectedAgentLeadAppointments[0];
+															if(self.lead.agentLeadAppointmentList.length>0){
+															self.selectedAgentLeadAppointmentList  = self.lead.agentLeadAppointmentList.filter(function( obj ) {
+																                                    console.log('obj.user.id',obj.user.id );
+										   															console.log('$localStorage.loginUser.userId',$localStorage.loginUser.userId );
+																							
+										   															return obj.user.id == $localStorage.loginUser.userId;
+										   															 });
+																								 
+																if(self.selectedAgentLeadAppointmentList !== undefined && self.selectedAgentLeadAppointmentList.length > 0)	{
+																    self.selectedAgentLeadAppointment =  self.selectedAgentLeadAppointmentList[0];
+																} else {
+																	self.selectedAgentLeadAppointment =  self.lead.agentLeadAppointmentList[0];
+																}
+																
+																console.log('self.selectedAgentLeadAppointment  after filter',self.selectedAgentLeadAppointment );
 															}
 														}
 													self.events = getAllEvents();
@@ -450,7 +460,7 @@ app
 										createLead(self.lead);
 										
 									} else {
-										 
+										 console.log('before upload lead',self.lead.agentLeadAppointmentList);
 										updateLead(self.lead, self.lead.id);
 										console.log('Lead updated with id ',
 												self.lead.id);
@@ -634,7 +644,7 @@ app
 									if(status === 'Converted'){
 										self.lead.agentLeadAppointmentList =[];
 										self.selectedAgentLeadAppointment = {appointmentTime:new Date(), user:{id:$localStorage.loginUser.userId}, prvdr:self.selectedAgentLeadAppointment.prvdr,insurance:self.selectedAgentLeadAppointment.insurance,effectiveFrom:self.selectedAgentLeadAppointment.effectiveFrom};
-										console.log('Converted agent record'+JSON.stringify(self.selectedAgentLeadAppointment) );
+										console.log('Converted agent record',self.selectedAgentLeadAppointment );
 										
 									}else{
 										self.selectedAgentLeadAppointment= {} ;

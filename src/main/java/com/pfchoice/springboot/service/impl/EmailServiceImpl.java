@@ -48,7 +48,7 @@ public class EmailServiceImpl implements EmailService {
 	 * @throws MessagingException
 	 * @throws InterruptedException
 	 */
-	@Async
+	@Async("leadManagementExecutor")
 	public void sendMail(final Email mail) throws MessagingException, InterruptedException {
 		
 		MimeMessage message = mailSender.createMimeMessage();
@@ -71,7 +71,7 @@ public class EmailServiceImpl implements EmailService {
 	 * @throws IOException
 	 */
 	@SuppressWarnings({ "unchecked", "resource" })
-	@Async
+	@Async("leadManagementExecutor")
 	public void sendMailWithAttachment(final Email mail) throws MessagingException, IOException, InterruptedException {
 		Thread.sleep(10000);
 		MimeMessage message = mailSender.createMimeMessage();
