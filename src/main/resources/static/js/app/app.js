@@ -19,7 +19,7 @@ app.constant('urls', {
     FACILITYTYPE_SERVICE_API : '/LeadManagement/api/facilityType/',
     EVENT_SERVICE_API : '/LeadManagement/api/event/',
     EVENT_ASSIGNMENT_SERVICE_API : '/LeadManagement/api/eventAssignment/',
-    LOGIN_USER : '/LeadManagement/getloginInfo',
+    LOGIN_USER : '/LeadManagement/api/getloginInfo',
     FILE_UPLOADER : '/LeadManagement/api/fileUpload/fileProcessing.do' ,
     COUNTY_SERVICE_API : '/LeadManagement/api/county/',
     EVENT_FREQUENCY_SERVICE_API : '/LeadManagement/api/eventFrequency/',
@@ -30,11 +30,27 @@ app.constant('urls', {
     BESTTIMETOCALL_SERVICE_API : '/LeadManagement/api/bestTimeToCall/'
 });
 
-app.controller('NavbarController',  ['$rootScope', '$scope', '$state', '$stateParams', 'LeadService', '$localStorage', '$window' , function( $rootScope, $scope, $state, $stateParams, LeadService, $localStorage, $window){
+app.run(function($rootScope,$state) {
+    var lastDigestRun = new Date();
+    setInterval(function () {
+        var now = Date.now();
+        if (now - lastDigestRun >  15 * 60 * 1000) {
+          $rootScope.displayNavbar =   false;
+          $state.go('logout');
+        }
+    }, 2 * 60 * 1000);
+
+    $rootScope.$watch(function() {
+        lastDigestRun = new Date();
+    });
+});
+
+app.controller('NavbarController',  ['$rootScope', '$scope', '$state', '$stateParams', 'LeadService', '$localStorage', '$window' ,'$timeout', function( $rootScope, $scope, $state, $stateParams, LeadService, $localStorage, $window,$timeout){
+
 
 	$rootScope.displayNavbar =   false;
-	  loginUser();
-  
+	loginUser();
+   
   function loginUser() {
 	  if($localStorage.loginUser === undefined  ){
 		     
@@ -60,6 +76,7 @@ app.controller('NavbarController',  ['$rootScope', '$scope', '$state', '$statePa
 			 $rootScope.displayNavbar =   true;
 		}
 	}
+	
   $scope.callMe = function(url,params){
 	  
 	  if(url === 'logout'){
@@ -461,6 +478,15 @@ app.config(['$stateProvider', '$urlRouterProvider',
           url: '/login',
           templateUrl: 'login'
       })
+      .state('accessDenied', {
+          url: '/accessDenied',
+          templateUrl: 'accessDenied',
+          resolve: {
+        	  insurances: function ($q ) {
+                  console.log('Load all insurances');
+              } 
+          }         
+        })
         $urlRouterProvider.otherwise('login');
     
     function run() {

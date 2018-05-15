@@ -94,7 +94,7 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
 		            return "/home#/event";
 		        } else {
 					logger.info("Access Denied Access Denied");
-					return "/403";
+					return "/accessDenied";
 				}
 		    }
 		 

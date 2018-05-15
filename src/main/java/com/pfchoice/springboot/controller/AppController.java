@@ -91,13 +91,13 @@ public class AppController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/403", method = RequestMethod.GET)
+	@RequestMapping(value = "/accessDenied", method = RequestMethod.GET)
 	public String accesssDenied() {
 		System.out.println("inside /accessDenied section/");
-		return "403";
+		return "accessDenied";
 	}
 
-	@RequestMapping(value = "/getloginInfo", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/getloginInfo", method = RequestMethod.GET)
 	@ResponseBody
 	public LoginForm getUserInfo(HttpSession session) {
 		LoginForm loginUser = (LoginForm) session.getAttribute("loginUser");

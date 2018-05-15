@@ -92,9 +92,6 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.logout().addLogoutHandler(customLogoutHandler())   
                 .logoutRequestMatcher(new AntPathRequestMatcher("/login")).and()
 				.exceptionHandling().accessDeniedHandler(leadAccessDeniedHandler()).and()
-
-				
-
 				.sessionManagement().maximumSessions(1);
 	}
 

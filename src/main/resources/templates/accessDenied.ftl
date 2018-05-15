@@ -7,7 +7,7 @@
 <body>
 	<div class="container">
 	    <div class="jumbotron alert-danger">
-			<h1>Oops. Something went wrong</h1>
+			<h1>Do not have access to this page. Please contact System Administrator</h1>
 			
 	    </div>
 	</div>
