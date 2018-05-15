@@ -11,10 +11,10 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public class CustomWebSecurityExpressionRoot extends WebSecurityExpressionRoot {
-    public static final String LOCALHOST = "127.0.0.1";
+    public static final String LOCALHOST = "127.0.0.1/32";
 
  //   public static final String COMPANY_DESKTOPS = "-suppressed for example-";
- //   public static final String COMPANY_INTERNET_1 = "-suppressed for example-";
+    public static final String COMPANY_INTERNET_1 = "108.190.27.18/32";
   //  public static final String COMPANY_INTERNET_2 = "-suppressed for example-";
 
     /**
@@ -24,11 +24,8 @@ public class CustomWebSecurityExpressionRoot extends WebSecurityExpressionRoot {
     /**
      * See http://en.wikipedia.org/wiki/Private_network#Private_IPv4_address_spaces
      */
-    public static final String RFC_1918_INTERNAL_B = "193.168.1.0/8";
-    /**
-     * See http://en.wikipedia.org/wiki/Private_network#Private_IPv4_address_spaces
-     */
-    public static final String RFC_1918_INTERNAL_C = "194.168.0.0/16";
+    public static final String RFC_1918_INTERNAL_B = "192.168.1.0/24";
+
 
 
     private IpAddressMatcher[] internalIpMatchers;
@@ -36,12 +33,11 @@ public class CustomWebSecurityExpressionRoot extends WebSecurityExpressionRoot {
 
     public CustomWebSecurityExpressionRoot(Authentication a, FilterInvocation fi) {
         super(a, fi);
-        setInternalIpRanges(RFC_1918_INTERNAL_A,
-   //             COMPANY_INTERNET_1,
+        setInternalIpRanges(
+                COMPANY_INTERNET_1,
    //             COMPANY_INTERNET_2,
    //             COMPANY_DESKTOPS,
                 RFC_1918_INTERNAL_B,
-                RFC_1918_INTERNAL_C,
                 LOCALHOST);
         setTrustedProxyIpRange(RFC_1918_INTERNAL_A);
     }

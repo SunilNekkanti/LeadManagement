@@ -210,8 +210,10 @@ app
 									self.lead.agentLeadAppointmentList = self.lead.agentLeadAppointmentList.filter(function( obj ) {
 										  return obj.id != self.selectedAgentLeadAppointment.id;
 										});
+									if(Object.keys(self.selectedAgentLeadAppointment).length > 0){
+										self.lead.agentLeadAppointmentList.push(self.selectedAgentLeadAppointment);
+									}
 									
-									self.lead.agentLeadAppointmentList.push(self.selectedAgentLeadAppointment);
                                     console.log('Submitting agentLeadAppointmentList');
 								}
 								

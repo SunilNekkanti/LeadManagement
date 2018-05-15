@@ -26,6 +26,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import com.pfchoice.springboot.security.CustomAuthenticationSuccessHandler;
 import com.pfchoice.springboot.security.CustomLogoutHandler;
 import com.pfchoice.springboot.security.CustomWebSecurityExpressionHandler;
+import com.pfchoice.springboot.security.LeadAccessDeniedHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -82,7 +83,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		       .authorizeRequests()
 		         .expressionHandler(new CustomWebSecurityExpressionHandler())
 		         //.antMatchers("/api/**").access("hasAnyIpAddress('192.168.1.0/8')").anyRequest()
-		         .antMatchers("/api/**").access("(hasRole('ROLE_CARE_COORDINATOR') and hasAnyIpAddress('108.190.27.18') ) or hasAnyRole('ROLE_AGENT', 'ROLE_ADMIN','ROLE_EVENT_COORDINATOR','ROLE_MANAGER') ").anyRequest()
+		         .antMatchers("/api/**").access("(hasAnyRole('ROLE_CARE_COORDINATOR','ROLE_EVENT_COORDINATOR','ROLE_MANAGER')  and hasAnyIpAddress('108.190.27.18') ) or hasAnyRole('ROLE_AGENT', 'ROLE_ADMIN') ").anyRequest()
 		        //  .antMatchers("/api/**").access("(hasRole('ROLE_CARE_COORDINATOR') and (hasIpAddress('108.190.27.18') or hasIpAddress('172.31.0.0/16'))) or hasAnyRole('ROLE_AGENT', 'ROLE_ADMIN','ROLE_EVENT_COORDINATOR','ROLE_MANAGER') ").anyRequest()
 				.hasAnyAuthority("ROLE_AGENT", "ROLE_ADMIN", "ROLE_CARE_COORDINATOR", "ROLE_EVENT_COORDINATOR","ROLE_MANAGER")
 				.anyRequest().authenticated().and().formLogin().loginPage("/").usernameParameter("username")
@@ -90,7 +91,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.successHandler( customAuthenticationSuccessHandler()).and()
 				.logout().addLogoutHandler(customLogoutHandler())   
                 .logoutRequestMatcher(new AntPathRequestMatcher("/login")).and()
-				.exceptionHandling().accessDeniedPage("/403").and()
+				.exceptionHandling().accessDeniedHandler(leadAccessDeniedHandler()).and()
 
 				
 
@@ -135,6 +136,11 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	    return filterRegistrationBean;
 
+	}
+	
+	@Bean("leadAccessDeniedHandler")
+	public LeadAccessDeniedHandler leadAccessDeniedHandler() {
+		return new LeadAccessDeniedHandler();
 	}
 	
 	

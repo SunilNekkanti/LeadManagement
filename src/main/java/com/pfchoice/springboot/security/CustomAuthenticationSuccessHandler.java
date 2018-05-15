@@ -59,7 +59,7 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
 		    	*/
 		 		User authUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 				session.setAttribute("username", authUser.getUsername());
-				session.setMaxInactiveInterval(30 * 60);
+				session.setMaxInactiveInterval(90 * 60);
 				// set our response to OK status
 				response.setStatus(HttpServletResponse.SC_OK);
 		        if (response.isCommitted()) {
@@ -93,8 +93,9 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
 		        } else if (isEvent) {
 		            return "/home#/event";
 		        } else {
-		            throw new IllegalStateException();
-		        }
+					logger.info("Access Denied Access Denied");
+					return "/403";
+				}
 		    }
 		 
 		    protected void clearAuthenticationAttributess(HttpServletRequest request) {
