@@ -29,7 +29,6 @@ public class FacilityTypeSpecifications implements Specification<FacilityType> {
 					));
 		}
 		
-		p.getExpressions().add(cb.and(cb.equal(root.get("activeInd"), 'Y')));
 		return p;
 
 	}

@@ -30,7 +30,6 @@ public class LeadStatusDetailSpecifications implements Specification<LeadStatusD
 					));
 		}
 		
-		p.getExpressions().add(cb.and(cb.equal(root.get("activeInd"), 'Y')));
 		return p;
 
 	}

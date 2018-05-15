@@ -5,10 +5,12 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import com.pfchoice.springboot.model.LeadStatus;
+import com.pfchoice.springboot.repositories.intf.RecordDetailsAwareRepository;
 
 @Repository
 public interface LeadStatusRepository
-		extends PagingAndSortingRepository<LeadStatus, Short>, JpaSpecificationExecutor<LeadStatus> {
+		extends PagingAndSortingRepository<LeadStatus, Short>, JpaSpecificationExecutor<LeadStatus> 
+, RecordDetailsAwareRepository<LeadStatus, Short>  {
 
 	public LeadStatus findById(Short id);
 

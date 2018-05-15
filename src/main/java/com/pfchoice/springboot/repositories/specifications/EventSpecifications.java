@@ -56,7 +56,6 @@ public class EventSpecifications implements Specification<Event> {
 							cb.function("date_format", Date.class, eventEndTime, cb.literal("%Y-%m-%d")))));*/
 		}
 
-		p.getExpressions().add(cb.and(cb.equal(root.get("activeInd"), 'Y')));
 		return p;
 	}
 

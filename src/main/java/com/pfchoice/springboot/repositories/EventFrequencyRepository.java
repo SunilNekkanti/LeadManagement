@@ -4,9 +4,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.pfchoice.springboot.model.EventFrequency;
+import com.pfchoice.springboot.repositories.intf.RecordDetailsAwareRepository;
 
 @Repository
-public interface EventFrequencyRepository extends JpaRepository<EventFrequency, Integer> {
+public interface EventFrequencyRepository extends JpaRepository<EventFrequency, Integer> 
+, RecordDetailsAwareRepository<EventFrequency, Integer> {
 
 	public EventFrequency findById(Integer id);
 

@@ -30,7 +30,6 @@ public class RoleSpecifications implements Specification<Role> {
 					));
 		}
 		
-		p.getExpressions().add(cb.and(cb.equal(root.get("activeInd"), 'Y')));
 		return p;
 
 	}

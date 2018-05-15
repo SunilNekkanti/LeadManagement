@@ -28,7 +28,6 @@ public class ProviderSpecifications implements Specification<Provider> {
 				cb.like(root.join("languages").get("description"), containsLikePattern)
 
 		));
-		p.getExpressions().add(cb.and(cb.equal(root.get("activeInd"), 'Y')));
 		return p;
 
 	}

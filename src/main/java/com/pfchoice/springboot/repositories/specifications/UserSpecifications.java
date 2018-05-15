@@ -31,7 +31,6 @@ public class UserSpecifications implements Specification<User> {
 						cb.like(root.join("role").get("role"), containsLikePattern)
 
 		));
-		p.getExpressions().add(cb.and(cb.equal(root.get("activeInd"), 'Y')));
 		return p;
 
 	}

@@ -25,7 +25,6 @@ public class LanguageSpecifications implements Specification<Language> {
 		if (!"".equals(searchTerm)) {
 			p.getExpressions().add(cb.or(cb.like(cb.lower(root.get("description")), containsLikePattern)));
 		}
-		p.getExpressions().add(cb.and(cb.equal(root.get("activeInd"), 'Y')));
 		return p;
 	}
 

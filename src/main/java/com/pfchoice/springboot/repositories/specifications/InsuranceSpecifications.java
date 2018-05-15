@@ -28,7 +28,6 @@ public class InsuranceSpecifications implements Specification<Insurance> {
 		p.getExpressions().add(cb.or(cb.like(cb.lower(root.get("name")), containsLikePattern)
 
 		));
-		p.getExpressions().add(cb.and(cb.equal(root.get("activeInd"), 'Y')));
 		return p;
 
 	}
