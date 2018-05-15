@@ -73,7 +73,7 @@ public class EmailServiceImpl implements EmailService {
 	@SuppressWarnings({ "unchecked", "resource" })
 	@Async("leadManagementExecutor")
 	public void sendMailWithAttachment(final Email mail) throws MessagingException, IOException, InterruptedException {
-		Thread.sleep(10000);
+		Thread.sleep(3000);
 		MimeMessage message = mailSender.createMimeMessage();
 		message.addHeaderLine("charset=UTF-8");
 		message.addHeaderLine("component=VEVENT");
@@ -86,10 +86,9 @@ public class EmailServiceImpl implements EmailService {
 		helper.setSubject(mail.getSubject());
 		helper.setCc(mail.getEmailCc());
 		helper.setText(mail.getBody(), true);
-
+		
 		Map<String, Object> emailAttributes =  mail.getModel();
 		 String startDateTime = (emailAttributes.get("appointmentStartTime") ==null)? emailAttributes.get("eventStartTime").toString():emailAttributes.get("appointmentStartTime").toString();
-		 
 		 String endDateTime = (emailAttributes.get("appointmentEndTime") ==null)? emailAttributes.get("eventEndTime").toString():emailAttributes.get("appointmentEndTime").toString();
          String location =   (emailAttributes.get("location") ==null)? "":emailAttributes.get("location").toString();
          String currentTime = (emailAttributes.get("currentTime") ==null)? "":emailAttributes.get("currentTime").toString();
@@ -97,6 +96,10 @@ public class EmailServiceImpl implements EmailService {
          String lastName  = (emailAttributes.get("lastName") ==null)? "":emailAttributes.get("lastName").toString();
          String leadName = lastName+","+firstName;
          String eventName  = ("".equals(leadName))? (emailAttributes.get("eventName") ==null)? "":emailAttributes.get("eventName").toString():leadName;
+         String notes  = (emailAttributes.get("notes") ==null)? "":emailAttributes.get("notes").toString();
+         
+         LOGGER.info("notes"+notes);
+ 		
          
 		String rrule = (emailAttributes.get("rrule") != null)
 				? "RRULE:" + emailAttributes.get("rrule").toString() + "\n" : "";
@@ -112,7 +115,7 @@ public class EmailServiceImpl implements EmailService {
 		            + "TZID:America/New_York\n"
 		            + "X-LIC-LOCATION:America/New_York\n"
 		            + "BEGIN:STANDARD\n"
-		            + "DTSTART:20071104T020000\n"
+		            + "DTSTART:20071104T020000Z\n"
 		            + "TZOFFSETFROM:-0400\n"
 		            + "TZOFFSETTO:-0500\n"
 		            + "TZNAME:EST\n"
@@ -136,7 +139,7 @@ public class EmailServiceImpl implements EmailService {
 		            + rrule
 		            + "DTSTAMP:"+currentTime+"\n"
 		            + "CATEGORIES:Meeting\n"
-		            + "DESCRIPTION:"+eventName+"\n"
+		            + "DESCRIPTION:"+notes +"\n"
 		            + "SUMMARY:"+eventName+"\n"
 		            + "PRIORITY:5\n"
 		            + "CLASS:PUBLIC\n"
@@ -147,15 +150,13 @@ public class EmailServiceImpl implements EmailService {
 		            + "END:VALARM\n"
 		            + "END:VEVENT\n"
 		            + "END:VCALENDAR");
-
-
+		    
+		    LOGGER.info("email buffer:"+buffer);
 			// Create the message part
 			BodyPart messageBodyPart = new MimeBodyPart();
 			 messageBodyPart.setContent(mail.getBody(), "text/html");
-			// Now set the actual message
-			//messageBodyPart.setText);
 
-			// Create a multipar message
+			// Create a multipart message
 			Multipart multipart = new MimeMultipart();
 
 			// Set text message part
@@ -164,35 +165,32 @@ public class EmailServiceImpl implements EmailService {
 			if( attachments != null && attachments.size()> 0) {
 				try {
 					for( FileUploadContent fileUpload: attachments) { 
-						BodyPart messageBodyPart1 = new MimeBodyPart();
-						messageBodyPart1.setContent(mail.getBody(), "text/html");
+						BodyPart attachmentBodyPart = new MimeBodyPart();
+						attachmentBodyPart.setContent(mail.getBody(), "text/html");
 						
 						File outputFile = new File(fileUpload.getFileName());
 						FileOutputStream outputStream = new FileOutputStream(outputFile); 
 						outputStream.write(fileUpload.getData());  
 						// file attachment
 						DataSource source = new FileDataSource(fileUpload.getFileName());
-						messageBodyPart1.setDataHandler(new DataHandler(source));
-						messageBodyPart1.setFileName(fileUpload.getFileName());
-						multipart.addBodyPart(messageBodyPart1);
+						attachmentBodyPart.setDataHandler(new DataHandler(source));
+						attachmentBodyPart.setFileName(fileUpload.getFileName());
+						multipart.addBodyPart(attachmentBodyPart);
 					}
 				}catch(Exception e){
 					e.printStackTrace();
 				}
 		
 			}
-			BodyPart messageBodyPart3 = new MimeBodyPart();
-		    messageBodyPart3.setHeader("Content-Class", "urn:content-classes:calendarmessage");
-		    messageBodyPart3.setHeader("Content-ID", "calendar_message");
-		    messageBodyPart3.setDataHandler(new DataHandler(new ByteArrayDataSource(buffer.toString(), "text/calendar")));
-
-		  //  Multipart multipart = new MimeMultipart();
-
-		   
-		    multipart.addBodyPart(messageBodyPart3);
+			
+			BodyPart calendarBodyPart = new MimeBodyPart();
+			calendarBodyPart.addHeader("Content-Class", "urn:content-classes:calendarmessage");
+            calendarBodyPart.setContent(buffer.toString(), "text/calendar;method=CANCEL");
+		        
+		    multipart.addBodyPart(calendarBodyPart);
 
 		    message.setContent(multipart);
-		    Thread.sleep(3000);
+		    
 		mailSender.send(message);
 		LOGGER.info("an email with calendar sent from the server");
 	}

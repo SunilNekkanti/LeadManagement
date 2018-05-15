@@ -187,7 +187,12 @@ public class LeadController {
 			@ModelAttribute("userId") Integer userId, @ModelAttribute("roleName") String roleName,
 			@ModelAttribute("username") String username) throws MessagingException, InterruptedException, IOException {
 		logger.info("Updating LeadMembership with id {}", id);
-
+		logger.info("userId  {}", userId);
+		
+		List<AgentLeadAppointment> finalAgentLeadAppointList = new ArrayList<>();
+		List<AgentLeadAppointment> agntLeadAppointList = new ArrayList<>();
+		String currentUserLeadNotes = "";
+		
 		LeadMembership currentLeadMembership = leadService.findById(id);
 
 		CurrentUser loginUser = currentUserService.findById(userId);
@@ -218,6 +223,9 @@ public class LeadController {
 		if (lead.getLeadNotes() != null) {
 			for (LeadNotes ln : lead.getLeadNotes()) {
 				if (!"".equals(ln.getNotes().trim())) {
+					 if(ln.getUser().getId().intValue() == userId.intValue()){
+						 currentUserLeadNotes = ln.getNotes();
+					 }
 					ln.setLead(currentLeadMembership);
 					ln.setCreatedBy(loginUser.getUsername());
 					ln.setUpdatedBy(loginUser.getUsername());
@@ -231,17 +239,15 @@ public class LeadController {
 			currentLeadMembership.getLeadNotes().addAll(leadNotes);
 		}
 
-		List<AgentLeadAppointment> finalAgentLeadAppointList = new ArrayList<>();
-
+		
 		if (!"EVENT_COORDINATOR".equals(roleName)) {
 
 			if (!"New".equalsIgnoreCase(lead.getStatus().getDescription())) {
-				List<AgentLeadAppointment> agntLeadAppointList = lead.getAgentLeadAppointmentList();
+				  agntLeadAppointList = lead.getAgentLeadAppointmentList();
 				currentLeadMembership.getAgentLeadAppointmentList().clear();
 				currentLeadMembership.getAgentLeadAppointmentList().addAll(agntLeadAppointList);
-				
 				for (AgentLeadAppointment ala : agntLeadAppointList) {
-					if (ala.getAppointmentTime() != null && ala.getId() == null) {
+					if (ala.getAppointmentTime() != null && ala.getId() == null && ala.getUser().getId() == userId) {
 						ala.setCreatedBy(loginUser.getUsername());
 						ala.setUpdatedBy(loginUser.getUsername());
 						finalAgentLeadAppointList.add(ala);
@@ -251,6 +257,7 @@ public class LeadController {
 					currentLeadMembership.getAgentLeadAppointmentList().clear();
 					currentLeadMembership.getAgentLeadAppointmentList().addAll(finalAgentLeadAppointList);
 				}
+				
 			}
 
 		}
@@ -279,13 +286,16 @@ public class LeadController {
 		emailAttributes.put("lastName", currentLeadMembership.getLastName());
 		emailAttributes.put("location",	currentLeadMembership.getContact().getAddress());
 		
-		if(!"EVENT_COORDINATOR".equals(roleName)  && finalAgentLeadAppointList.size() > 0)  {
-				String toEmailIds = finalAgentLeadAppointList.stream().map(la -> la.getUser().getContact().getEmail())
+		
+		if(!"EVENT_COORDINATOR".equals(roleName)  && agntLeadAppointList.size() > 0)  {
+			
+				String toEmailIds = agntLeadAppointList.stream().map(la -> la.getUser().getContact().getEmail())
 						.collect(Collectors.joining(";"));
-				AgentLeadAppointment agntLeadAppointment = finalAgentLeadAppointList.stream()
+				AgentLeadAppointment agntLeadAppointment = agntLeadAppointList.stream()
 						.filter(ala -> ala.getActiveInd() == 'Y').findAny().get();
 				
 				if(agntLeadAppointment.getAppointmentTime().compareTo(Calendar.getInstance().getTime()) > 0){
+					
 					String agentName = agntLeadAppointment.getUser().getName();
 					
 					String appointmentTime = sdf.format(agntLeadAppointment.getAppointmentTime().getTime());
@@ -301,8 +311,9 @@ public class LeadController {
 					emailAttributes.put("appointmentStartTime", appointmentTime);
 					emailAttributes.put("appointmentEndTime", appointmentEndTime);
 					emailAttributes.put("currentTime", currentTime);
-					
+					emailAttributes.put("notes", currentUserLeadNotes);					
 					emailAttributes.put("appointmentLocalTime", appointmentLocalTime);
+					
 					String emailTemplateFileName = "agent_lead_assignment_email_template_" + roleName + ".txt";
 					mail.setBody(emailService.geContentFromTemplate(emailAttributes, emailTemplateFileName));
 					mail.setModel(emailAttributes);
