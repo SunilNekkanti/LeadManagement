@@ -1,4 +1,6 @@
+(function(){
 'use strict';
+var app = angular.module('my-app');
 
 app.service('EventAssignmentService',
     ['$localStorage', '$http', '$q', 'urls',
@@ -144,3 +146,4 @@ app.service('EventAssignmentService',
 
         }
     ]);
+   })();    

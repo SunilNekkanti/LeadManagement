@@ -1,4 +1,6 @@
+(function(){
 'use strict';
+var app = angular.module('my-app');
 
 app
 		.controller(
@@ -125,6 +127,7 @@ app
 									.withOption("bPaginate", true)
 									.withOption('bProcessing', true)
 									.withOption('stateSave', true)
+									.withOption('searchDelay', 3000)
 								    .withOption('createdRow', createdRow)
 							        .withPaginationType('full_numbers')
 							        
@@ -226,7 +229,7 @@ app
 													self.eventAssignment = {};
 													self.dtInstance.reloadData();
 							                        self.dtInstance.rerender();
-							                        $state.go('eventAssignment');
+							                        $state.go('main.eventAssignment');
 												},
 												function(errResponse) {
 													console
@@ -253,7 +256,7 @@ app
 															.$setPristine();
 													self.dtInstance.reloadData();
 							                        self.dtInstance.rerender();
-							                        $state.go('eventAssignment');
+							                        $state.go('main.eventAssignment');
 												},
 												function(errResponse) {
 													console
@@ -317,7 +320,7 @@ app
 
 							function addEventAssignment() {
 								
-									$state.go('eventAssignment.edit');
+									$state.go('main.eventAssignment.edit');
 									self.successMessage = '';
 									self.errorMessage = '';
 									self.users = getAllAgents();
@@ -351,7 +354,7 @@ app
 								self.errorMessage = '';
 								self.eventAssignment = {};
 					            self.display  = false;
-					            $state.go('eventAssignment', {}, {reload: true}); 
+					            $state.go('main.eventAssignment', {}, {reload: false}); 
 					        }
 							
 							
@@ -550,7 +553,7 @@ app
 							  
 							  function addLead( ){
 									var params = {"eventId":self.eventAssignment.event.id,"leadDisplay":true};
-									$state.go('lead.edit', params );
+									$state.go('main.lead.edit', params );
 									
 								}
 							  
@@ -591,21 +594,20 @@ app
 							  function validEventDate(startDate,endDate) {
 								   
 								  //  var curDate = new Date();
-								    if(new Date(startDate) >= new Date(endDate)){
-								      self.errMessage = 'End Date should be greater than start date';
-								      return true;
+								    if(new Date(startDate).getTime() >= new Date(endDate).getTime()){
+								      self.errMessage = 'End Date should be greater than Start date';
+							         $scope.myForm.eventAssignmentDateEndTime.$setValidity("improper", false);
+							         return true;
 								    }
-								    return false;
-								   /* if(new Date(startDate) < curDate){
-								       $scope.errMessage = 'Start date should not be before today.';
-								       return false;
-								    }*/
+								     self.errMessage='';
+								     $scope.myForm.eventAssignmentDateEndTime.$setValidity("improper", true);
+								     return false;
 								};
 								
 								
 
 						  function eventAssignmentEdit(id){
-							  $state.go('eventAssignment.edit'); 
+							  $state.go('main.eventAssignment.edit'); 
 									editEventAssignment(id);
 										
 						 }		  
@@ -615,4 +617,7 @@ app
 
 								  
 	} 
-]);
+
+ ]);
+})();
+   

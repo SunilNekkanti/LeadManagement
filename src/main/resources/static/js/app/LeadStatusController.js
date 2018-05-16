@@ -1,4 +1,6 @@
+(function(){
 'use strict';
+var app = angular.module('my-app');
 
 app.controller('LeadStatusController',
     ['LeadStatusService','$scope', '$compile','$state','DTOptionsBuilder', 'DTColumnBuilder', function( LeadStatusService,  $scope,$compile, $state, DTOptionsBuilder, DTColumnBuilder) {
@@ -210,7 +212,7 @@ app.controller('LeadStatusController',
             self.errorMessage='';
             self.leadStatus={};
             self.display = false;
-            $state.go('leadStatus', {}, {reload: true});
+            $state.go('main.leadStatus', {}, {reload: false});
         }
         
         function addLeadStatus() {
@@ -218,9 +220,7 @@ app.controller('LeadStatusController',
             self.errorMessage='';
             self.display =true;
         }
-        
-    
     }
+ ]);
+})(); 
     
-
-    ]);

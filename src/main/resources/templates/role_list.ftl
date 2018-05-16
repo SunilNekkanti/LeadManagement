@@ -1,6 +1,6 @@
 
 <div class="generic-container">
-   <div class="panel panel-default" ng-if="!ctrl.display">
+   <div class="panel panel-success" ng-if="!ctrl.display">
         <!-- Default panel contents -->
         <div class="panel-heading"><span class="role">List of Roles </span> 
                <button type="button"  ng-click="ctrl.addRole()" ng-hide="ctrl.displayEditButton" class="btn btn-success btn-xs custom-width floatRight"> Add </button>   
@@ -14,7 +14,7 @@
 		</div>
     </div>
     
-    <div class="panel panel-default" ng-if="ctrl.display">
+    <div class="panel panel-success" ng-if="ctrl.display">
         <!-- Default panel contents -->
         <div class="panel-heading"><span class="role">Role </span></div>
 		<div class="panel-body">
@@ -36,7 +36,7 @@
 	                    <div class="form-actions floatCenter col-md-offset-8">
 	                        <input type="submit"  value="{{!ctrl.role.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-xs" ng-disabled="myForm.$invalid || myForm.$pristine">
 	                        <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-xs" ng-show="!ctrl.role.id" ng-disabled="myForm.$pristine">Reset Form</button>
-	                        <button type="button" ng-click="ctrl.cancelEdit()" class="btn btn-warning btn-xs" ng-show="ctrl.role.id" >Cancel</button>
+	                        <button type="button" ng-click="ctrl.cancelEdit()" class="btn btn-warning btn-xs"  >Cancel</button>
 	                    </div>
 	                </div>
 	            </form>

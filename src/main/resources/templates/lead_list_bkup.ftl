@@ -1,5 +1,5 @@
 <div class="generic-container">
-  <div class="panel panel-default" ng-hide="ctrl.display">
+  <div class="panel panel-success" ng-hide="ctrl.display">
     <!-- Default panel contents -->
     <div class="panel-heading"><span class="user">List of Leads </span>
       <button type="button" ng-click="ctrl.addLead()" ng-hide="ctrl.displayEditButton" ng-show="ctrl.loginUser.roleName != 'AGENT'" class="btn btn-success  btn-xs  custom-width floatRight"> Add </button>
@@ -15,14 +15,14 @@
   </div>
   
   
-  <div class="panel panel-default" ng-show="ctrl.display">
+  <div class="panel panel-success" ng-show="ctrl.display">
     <div class="panel-heading">List Details</div>
     <div class="panel-body">
       <form ng-submit="ctrl.submit()" name="myForm" class="form-horizontal">
         <input type="hidden" ng-model="ctrl.lead.id" />
 
         <div class="col-sm-12 sourceInfo" ng-show="ctrl.showEventSource()">
-          <div class="panel panel-default">
+          <div class="panel panel-success">
             <div class="panel-heading">Source</div>
             <div class="panel-body">
               <div class="row">
@@ -41,7 +41,7 @@
 
 
         <div class="col-sm-6 ptInfo">
-          <div class="panel panel-default">
+          <div class="panel panel-success">
             <div class="panel-heading">Patient Info</div>
             <div class="panel-body">
               <div class="row">
@@ -140,7 +140,7 @@
         </div>
 
         <div class="col-sm-6 cntInfo">
-          <div class="panel panel-default">
+          <div class="panel panel-success">
             <div class="panel-heading">Contact Info</div>
             <div class="panel-body">
 
@@ -221,7 +221,7 @@
         </div>
 
         <div class="col-sm-12 additionalInfo" ng-show="ctrl.showLeadAdditionalDetails()">
-          <div class="panel panel-default">
+          <div class="panel panel-success">
             <div class="panel-heading">Additional Details</div>
             <div class="panel-body">
               <div class="row col-md-6">
@@ -264,7 +264,7 @@
         </div>
 
         <div class="col-sm-12 agentInfo" ng-show="ctrl.showAgentAssignment()">
-          <div class="panel panel-default">
+          <div class="panel panel-success">
             <div class="panel-heading">Agent Assignment</div>
             <div class="panel-body">
               <div class="row col-md-6">
@@ -302,7 +302,7 @@
         </div>
 
         <div class="col-sm-12 statusInfo" ng-show="ctrl.showEventStatus()">
-          <div class="panel panel-default">
+          <div class="panel panel-success">
             <div class="panel-heading">Status</div>
             <div class="panel-body">
             	<div class="row">
@@ -331,7 +331,7 @@
 
 
         <div class="col-sm-12 pcpInfo" ng-show="ctrl.showStatusChangeDetails()">
-          <div class="panel panel-default">
+          <div class="panel panel-success">
             <div class="panel-heading">PCP Details</div>
             <div class="panel-body">
 

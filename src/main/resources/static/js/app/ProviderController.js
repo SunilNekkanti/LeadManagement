@@ -1,4 +1,6 @@
+(function(){
 'use strict';
+var app = angular.module('my-app');
 
 app.controller('ProviderController',
     ['ProviderService', 'LanguageService', 'BrokerageService','$scope', '$compile','DTOptionsBuilder', 'DTColumnBuilder', function( ProviderService,  LanguageService, BrokerageService, $scope,$compile,  DTOptionsBuilder, DTColumnBuilder) {
@@ -243,3 +245,4 @@ app.controller('ProviderController',
     
 
     ]);
+})();    

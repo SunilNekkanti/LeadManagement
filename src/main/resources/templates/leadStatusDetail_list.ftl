@@ -1,6 +1,6 @@
 <div class="generic-container" >
 
-   <div class="panel panel-default" ng-if="!ctrl.display">
+   <div class="panel panel-success" ng-if="!ctrl.display">
         <!-- Default panel contents -->
         <div class="panel-heading"><span class="facilityType">List of Lead Status Details </span> 
                <button type="button"  ng-click="ctrl.addLeadStatusDetail()" ng-hide="ctrl.displayEditButton" class="btn btn-success btn-xs  custom-width floatRight"> Add </button>   
@@ -14,7 +14,7 @@
 		</div>
     </div>
     
-    <div class="panel panel-default" ng-if="ctrl.display">
+    <div class="panel panel-success" ng-if="ctrl.display">
         <!-- Default panel contents -->
         <div class="panel-heading"><span class="leadStatusDetail">Lead Status Detail</span></div>
 		<div class="panel-body">
@@ -59,7 +59,7 @@
 	                    <div class="form-actions floatCenter col-md-offset-8">
 	                        <input type="submit"  value="{{!ctrl.leadStatusDetail.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-xs" ng-disabled="myForm.$invalid || myForm.$pristine">
 	                        <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-xs" ng-show="!ctrl.leadStatusDetail.id" ng-disabled="myForm.$pristine">Reset Form</button>
-	                        <button type="button" ng-click="ctrl.cancelEdit()" class="btn btn-warning btn-xs" ng-show="ctrl.leadStatusDetail.id" >Cancel</button>
+	                        <button type="button" ng-click="ctrl.cancelEdit()" class="btn btn-warning btn-xs"  >Cancel</button>
 	                    </div>
 	                </div>
 	            </form>

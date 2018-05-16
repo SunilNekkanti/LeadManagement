@@ -1,8 +1,8 @@
-'use strict';
+(function(){
+'use strict'; 
 
-var loginapp = angular.module('login-app', ['ui.bootstrap','ui.router','ngStorage','datatables','ngAnimate', 'ngSanitize']);
-
-loginapp.controller('LoginController',
+ var loginapp = angular.module('login-app', ['ui.bootstrap','ui.router','ngStorage','datatables','ngAnimate', 'ngSanitize']);
+ loginapp.controller('LoginController',
     [ '$scope', '$window', function(  $scope, $window) {
 
     	 $window.localStorage.clear();
@@ -40,5 +40,5 @@ loginapp.controller('LoginController',
         }
     }
 
-
     ]);
+})();    

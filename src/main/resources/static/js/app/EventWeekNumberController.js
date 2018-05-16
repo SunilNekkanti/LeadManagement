@@ -1,4 +1,6 @@
+(function(){
 'use strict';
+var app = angular.module('my-app');
 
 app.controller('EventWeekNumberController',
     ['EventWeekNumberService', '$scope',  function( EventWeekNumberService, $scope) {
@@ -125,5 +127,6 @@ app.controller('EventWeekNumberController',
         }
     }
 
-
-    ]);
+   ]);
+    
+  })();    

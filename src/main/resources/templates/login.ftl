@@ -4,16 +4,12 @@
 <head>
   <link data-require="bootstrap-css@3.3.1" data-semver="3.3.1" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
   
-     
-  <script src="js/app/LoginController.js"></script>
 </head>
-
-
 
 <body>
 <div class="container">
 
- <nav class="navbar navbar-default myNavbar"  >
+ <nav class="navbar  myNavbar"  >
     <div class="container-fluid">
     
      </div>

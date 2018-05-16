@@ -1,5 +1,6 @@
+(function(){
 'use strict';
-
+var app = angular.module('my-app');
 app.controller('EventFrequencyController',
     ['EventFrequencyService', '$scope',  function( EventFrequencyService, $scope) {
 
@@ -125,5 +126,6 @@ app.controller('EventFrequencyController',
         }
     }
 
-
-    ]);
+  ]);
+    
+})();    

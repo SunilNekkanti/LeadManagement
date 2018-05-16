@@ -1,6 +1,6 @@
 <div class="generic-container">
 
-  <div class="panel panel-default" ng-hide="ctrl.display">
+  <div class="panel panel-success" ng-hide="ctrl.display">
     <!-- Default panel contents -->
     <div class="panel-heading"><span class="user">List of Events </span>
       <button type="button" ng-if="ctrl.adminOrManager()" ng-click="ctrl.addEvent()" ng-hide="ctrl.displayEditButton" class="btn btn-success btn-xs custom-width floatRight"> Add </button>
@@ -16,7 +16,7 @@
   </div>
 
 
-  <div class="panel panel-default" ng-show="ctrl.display">
+  <div class="panel panel-success" ng-show="ctrl.display">
     <!-- Default panel contents -->
     <div class="panel-heading"><span class="event">Event </span>
     <button type="button"  ng-click="ctrl.addLead()" ng-show="ctrl.event.id"   class="btn btn-success btn-xs  floatRight">Add Lead</button>
@@ -60,8 +60,8 @@
               <div class="form-group col-md-12">
                 <label class="col-md-2  control-label" for="eventDateTime">StartTime</label>
                 <div class="col-md-4">
-                  <div class="input-group date" id="eventDateStartTime" name="eventDateStartTime" ng-model="ctrl.event.eventDateStartTime" date-picker required>
-                    <input type="text" class="form-control netto-input" ng-model="ctrl.event.eventDateStartTime" date-picker-input >
+                  <div class="input-group date" id="eventDateStartTime1"  ng-model="ctrl.event.eventDateStartTime"  ng-change="ctrl.validEventDate(ctrl.event.eventDateStartTime,ctrl.event.eventDateEndTime)" date-picker   >
+                    <input type="text" class="form-control netto-input" name="eventDateStartTime"  ng-model="ctrl.event.eventDateStartTime" date-picker-input  ng-change="ctrl.validEventDate(ctrl.event.eventDateStartTime,ctrl.event.eventDateEndTime)" required>
                     <span class="input-group-addon">
            								<span class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -71,19 +71,18 @@
                          <span ng-show="myForm.eventDateStartTime.$error.required">This is a required field</span>
                    </div>
                 </div>
-
                 <label class="col-md-2  control-label" for="eventDateEndTime">EndTime</label>
                 <div class="col-md-4">
-                  <div class="input-group date" id="eventDateEndTime" name="eventDateEndTime" ng-change="ctrl.validEventDate(ctrl.event.eventDateStartTime,ctrl.event.eventDateEndTime)" ng-model="ctrl.event.eventDateEndTime" date-picker required>
-                    <input type="text" class="form-control netto-input"  ng-model="ctrl.event.eventDateEndTime" date-picker-input required>
+                  <div class="input-group date" id="eventDateEndTime1"    ng-model="ctrl.event.eventDateEndTime" ng-change="ctrl.validEventDate(ctrl.event.eventDateStartTime,ctrl.event.eventDateEndTime)" date-picker >
+                    <input type="text" class="form-control netto-input" name="eventDateEndTime"  ng-model="ctrl.event.eventDateEndTime" date-picker-input  ng-change="ctrl.validEventDate(ctrl.event.eventDateStartTime,ctrl.event.eventDateEndTime)" required>
                     <span class="input-group-addon">
            								<span class="glyphicon glyphicon-calendar"></span>
                     </span>
                   </div>
                    <div class="has-error" ng-show="myForm.$dirty">
                         <span ng-show="myForm.eventDateEndTime.$invalid">This field is invalid </span>
-                        <span ng-show="ctrl.errMessage">{{ctrl.errMessage}} </span>
-                         <span ng-show="myForm.eventDateEndTime.$error.required">This is a required field</span>
+                        <span ng-show="myForm.eventDateEndTime.$error.improper"> {{ctrl.errMessage}} </span>
+                        <span ng-show="myForm.eventDateEndTime.$error.required">This is a required field</span>
                    </div>
                 </div>
               </div>
@@ -140,7 +139,7 @@
             </div>
           </div>
            <div class="form-group col-sm-6 cntInfo">
-            <div class="panel panel-default">
+            <div class="panel panel-success">
               <div class="panel-heading">Contact Info</div>
               <div class="panel-body">
 

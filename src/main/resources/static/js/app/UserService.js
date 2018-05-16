@@ -1,4 +1,6 @@
+(function(){
 'use strict';
+var app = angular.module('my-app');
 
 app.service('UserService',
     ['$localStorage', '$http', '$q', 'urls',
@@ -11,11 +13,36 @@ app.service('UserService',
                 getUser: getUser,
                 createUser: createUser,
                 updateUser: updateUser,
-                removeUser: removeUser
+                removeUser: removeUser,
+                loginUser : loginUser
             };
 
             return factory;
          
+         function loginUser() {
+                console.log('Fetching loginUser');
+                var deferred = $q.defer();
+                
+                $http.get(urls.LOGIN_USER)
+                    .then(
+                        function (response) {
+                            console.log('Fetched successfully loginUser');
+                            if (localStorage.getItem("loginUser") === null) {
+                            	 $localStorage.loginUser = response.data;
+                            }else {
+                            	localStorage.removeItem("loginUser") ;
+                            	$localStorage.loginUser = response.data;
+                            }
+                           
+                            deferred.resolve(response.data);
+                        },
+                        function (errResponse) {
+                            console.error('Error while fetching loginUser');
+                            deferred.reject(errResponse);
+                        }
+                    );
+                return deferred.promise;
+            }
 
             function loadUsers(pageNo, length, search, order) {
                 console.log('Fetching  users');
@@ -147,3 +174,5 @@ app.service('UserService',
 
         }
     ]);
+    
+   })();

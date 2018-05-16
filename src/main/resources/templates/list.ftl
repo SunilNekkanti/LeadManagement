@@ -1,6 +1,6 @@
 
 <div class="generic-container">
-  <div class="panel panel-default" ng-if="!ctrl.display">
+  <div class="panel panel-success" ng-if="!ctrl.display">
     <!-- Default panel contents -->
     <div class="panel-heading"><span class="user">List of Users </span>
       <button type="button" ng-click="ctrl.addUser()" ng-hide="ctrl.displayEditButton" class="btn btn-success custom-width floatRight"> Add </button>
@@ -16,7 +16,7 @@
   </div>
 
 
-  <div class="panel panel-default" ng-if="ctrl.display">
+  <div class="panel panel-success" ng-if="ctrl.display">
     <!-- Default panel contents -->
     <div class="panel-heading"><span class="lead">User </span></div>
     <div class="panel-body">
@@ -27,7 +27,7 @@
           <input type="hidden" ng-model="ctrl.user.id" />
 
           <div class="col-sm-6 ptInfo">
-            <div class="panel panel-default">
+            <div class="panel panel-success">
               <div class="panel-heading">Details</div>
               <div class="panel-body">
 
@@ -121,7 +121,7 @@
 
 
           <div class="col-sm-6 cntInfo">
-            <div class="panel panel-default">
+            <div class="panel panel-success">
               <div class="panel-heading">Contact Info</div>
               <div class="panel-body">
 

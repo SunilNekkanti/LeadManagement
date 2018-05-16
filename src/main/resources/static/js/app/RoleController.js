@@ -1,4 +1,6 @@
+(function(){
 'use strict';
+var app = angular.module('my-app');
 
 app.controller('RoleController',
     ['RoleService', '$scope', '$compile','$state','DTOptionsBuilder', 'DTColumnBuilder',  function( RoleService, $scope, $compile,$state,DTOptionsBuilder, DTColumnBuilder) {
@@ -128,8 +130,6 @@ app.controller('RoleController',
                         self.done = true;
                         self.display =false;
                         self.role={};
-                        $scope.myForm.$setPristine();
-                        self.dtInstance.reloadData();
                         self.dtInstance.rerender();
                     },
                     function (errResponse) {
@@ -151,8 +151,6 @@ app.controller('RoleController',
                         self.errorMessage='';
                         self.done = true;
                         self.display =false;
-                        $scope.myForm.$setPristine();
-                        self.dtInstance.reloadData();
                         self.dtInstance.rerender();
                     },
                     function(errResponse){
@@ -207,7 +205,6 @@ app.controller('RoleController',
             self.successMessage='';
             self.errorMessage='';
             self.role={};
-            $scope.myForm.$setPristine(); //reset Form
         }
         
         function cancelEdit(){
@@ -215,9 +212,10 @@ app.controller('RoleController',
             self.errorMessage='';
             self.role={};
             self.display = false;
-            $state.go('role', {}, {reload: true});
+            $state.go('main.role', {}, {reload: false});
         }
     }
 
 
     ]);
+})();    

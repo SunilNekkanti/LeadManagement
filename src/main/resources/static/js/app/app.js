@@ -1,8 +1,17 @@
-//Code goes here
-'use strict';
-var app = angular.module('my-app', ['ui.bootstrap','ui.router','ngStorage','datatables','ngAnimate', 'ngSanitize']);
-
-
+(function( ) {
+  'use strict';
+  var app = angular.module('my-app', ['datatables', 'ui.bootstrap', 'datatables.bootstrap', 'datatables.colreorder', 'datatables.fixedheader', 'datatables.buttons', 'datatables.fixedcolumns',  'ui.router', 'ngStorage', 'ngAnimate', 'ngSanitize', 'btorfs.multiselect', 'oc.lazyLoad', 'ui.select','chart.js']);
+ app.config(['ChartJsProvider', function (ChartJsProvider) {
+    // Configure all charts
+    ChartJsProvider.setOptions({
+      chartColors: ['#46BFBD', '#00ADF9', '#DCDCDC',  '#FDB45C', '#FF5252','#949FB1', '#4D5360', '#FF8A80' ]  
+    });
+    // Configure all line charts
+    ChartJsProvider.setOptions('line', {
+      showLines: true
+    });
+  }]);
+  
 app.constant('urls', {
     BASE: '/LeadManagement/',
     USER_SERVICE_API : '/LeadManagement/api/user/',
@@ -45,9 +54,7 @@ app.run(function($rootScope,$state) {
     });
 });
 
-app.controller('NavbarController',  ['$rootScope', '$scope', '$state', '$stateParams', 'LeadService', '$localStorage', '$window' ,'$timeout', function( $rootScope, $scope, $state, $stateParams, LeadService, $localStorage, $window,$timeout){
-
-
+app.controller('NavbarController',  ['$rootScope', '$scope', '$state', '$stateParams', 'UserService', '$localStorage', '$window' ,'$timeout', function( $rootScope, $scope, $state, $stateParams, UserService, $localStorage, $window,$timeout){
 	$rootScope.displayNavbar =   false;
 	loginUser();
    
@@ -55,8 +62,7 @@ app.controller('NavbarController',  ['$rootScope', '$scope', '$state', '$statePa
 	  if($localStorage.loginUser === undefined  ){
 		     
 			console.log('About to fetch loginUser');
-			LeadService
-					.loginUser()
+			UserService.loginUser()
 					.then(
 							function(loginUser) {
 								console
@@ -95,27 +101,151 @@ app.controller('NavbarController',  ['$rootScope', '$scope', '$state', '$statePa
 
 
 
-app.config(['$stateProvider', '$urlRouterProvider',
-    function($stateProvider, $urlRouterProvider) {
-	
+  app.config(['$ocLazyLoadProvider', '$stateProvider', '$urlRouterProvider',
+    function($ocLazyLoadProvider, $stateProvider, $urlRouterProvider) {
+      
+    $urlRouterProvider.otherwise('login');
+     
+	$ocLazyLoadProvider.config({
+        'debug': true,
+        'events': true,
+        'modules': [{
+          serie: true,
+          name: 'main',
+          files: [ 'js/app/RoleService.js','js/app/UserService.js','js/app/CountyService.js',  'js/app/GenderService.js', 'js/app/InsuranceService.js','js/app/StateService.js', 'js/app/LanguageService.js', 'js/app/PlanTypeService.js']
+        }, {
+          serie: true,
+          name: 'main.user',
+          files: ['js/app/UserController.js']
+        }, {
+          serie: true,
+          name: 'main.lead',
+          files: ['js/app/LeadService.js','js/app/LeadStatusService.js', 'js/app/LeadStatusDetailService.js', 'js/app/BestTimeToCallService.js', 'js/app/LeadStatusService.js', 'js/app/LeadStatusDetailService.js', 'js/app/ProviderService.js', 'js/app/EventService.js', 'js/app/FileUploadService.js', 'js/app/LeadController.js']
+        }, {
+          serie: true,
+          name: 'main.facilityType',
+          files: ['js/app/FacilityTypeService.js', 'js/app/FacilityTypeController.js']
+        }, {
+          serie: true,
+          name: 'main.leadStatus',
+          files: ['js/app/LeadStatusService.js', 'js/app/LeadStatusController.js']
+        }, {
+          serie: true,
+          name: 'main.leadStatusDetail',
+          files: ['js/app/LeadStatusDetailService.js', 'js/app/LeadStatusService.js', 'js/app/LeadStatusDetailController.js']
+        }, {
+          serie: true,
+          name: 'main.role',
+          files: ['js/app/RoleService.js', 'js/app/RoleController.js']
+        }, {
+          name: 'main.event',
+          serie: true,
+          files: ['js/app/EventService.js', 'js/app/FacilityTypeService.js', 'js/app/FileUploadService.js', 'js/app/EventController.js']
+        }, {
+          name: 'main.eventAssignment',
+          serie: true,
+          files: ['js/app/EventAssignmentService.js', 'js/app/EventService.js', 'js/app/EventFrequencyService.js'
+          , 'js/app/EventMonthService.js', 'js/app/EventWeekDayService.js', 'js/app/EventWeekNumberService.js'
+          , 'js/app/EventWeekNumberService.js', 'js/app/EventAssignmentController.js']
+        }]
+
+      });
 	
     // Now set up the states
     $stateProvider
-      .state('home', {
+     .state('login', {
+          url: '/',
+          templateUrl: 'login'
+        })
+      .state('main', {
+          template: '<ui-view> </ui-view>',
+          // Make this state abstract so it can never be
+          // loaded directly
+          abstract: true,
+
+          // Centralize the config resolution
+          resolve: {
+            loadMyService: ['$ocLazyLoad', function($ocLazyLoad) {
+              return $ocLazyLoad.load('main');
+            }],
+            roles: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+              var RoleService = $injector.get("RoleService");
+              console.log('Load all  roles');
+              var deferred = $q.defer();
+              RoleService.loadAllRoles().then(deferred.resolve, deferred.resolve);
+              return deferred.promise;
+            }],
+            genders: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+              console.log('Load all genders');
+              var GenderService = $injector.get("GenderService");
+              var deferred = $q.defer();
+              GenderService.loadAllGenders().then(deferred.resolve, deferred.resolve);
+              return deferred.promise;
+            }],
+            states: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+              console.log('Load all states');
+              var StateService = $injector.get("StateService");
+              var deferred = $q.defer();
+              StateService.loadAllStates().then(deferred.resolve, deferred.resolve);
+              console.log('deferred.promise' + deferred.promise);
+              return deferred.promise;
+            }],
+            languages: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+              console.log('Load all languages');
+              var LanguageService = $injector.get("LanguageService");
+              var deferred = $q.defer();
+              LanguageService.loadAllLanguages().then(deferred.resolve, deferred.resolve);
+              console.log('deferred.promise' + deferred.promise);
+              return deferred.promise;
+            }],
+            users: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+              console.log('Load all users');
+              var UserService = $injector.get("UserService");
+              var deferred = $q.defer();
+              UserService.loadAllUsers().then(deferred.resolve, deferred.resolve);
+              return deferred.promise;
+            }],
+            planTypes: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+              console.log('Load all users');
+              var PlanTypeService = $injector.get("PlanTypeService");
+              var deferred = $q.defer();
+              PlanTypeService.loadAllPlanTypes().then(deferred.resolve, deferred.resolve);
+              return deferred.promise;
+            }],
+            languages: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+              console.log('Load all languages');
+              var LanguageService = $injector.get("LanguageService");
+              var deferred = $q.defer();
+              LanguageService.loadAllLanguages().then(deferred.resolve, deferred.resolve);
+              return deferred.promise;
+            }] ,
+            insurances: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+              console.log('Load all languages');
+              var InsuranceService = $injector.get("InsuranceService");
+              var deferred = $q.defer();
+              InsuranceService.loadAllInsurances().then(deferred.resolve, deferred.resolve);
+              return deferred.promise;
+            }] 
+          }
+        })
+      .state('main.home', {
         url: '/home',
         cache: false, 
         templateUrl: 'home'
        })
-       .state('user', {
+       .state('main.user', {
           url: '/user',
           cache: false, 
           templateUrl: 'partials/list',
           controller:'UserController',
           controllerAs:'ctrl',
           resolve: {
+             loadMyService: ['$ocLazyLoad', function($ocLazyLoad) {
+              return $ocLazyLoad.load('main.user');
+            }]
           }
       })
-      .state('user.edit', {
+      .state('main.user.edit', {
           url: '/',
           cache: false, 
           templateUrl: 'partials/list',
@@ -126,47 +256,24 @@ app.config(['$stateProvider', '$urlRouterProvider',
       	    'userDisplay': false, 
       	  },
           resolve: {
-        	  roles: function ( $q, RoleService) {
-        			  console.log('Load all users');
-                      var deferred = $q.defer();
-                      RoleService.loadAllRoles().then(deferred.resolve, deferred.resolve);
-                      console.log('deferred.promise'+deferred.promise);
-                      return deferred.promise;
-              },
-		      languages: function ( $q,  LanguageService) {
-		    		  console.log('Load all languages');
-			          var deferred = $q.defer();
-			          LanguageService.loadAllLanguages().then(deferred.resolve, deferred.resolve);
-			          console.log('deferred.promise'+deferred.promise);
-			          return deferred.promise; 
-		      },
-		      insurances: function ($q,  InsuranceService) {
-		    		    console.log('Load all insurances');
-				          var deferred = $q.defer();
-				          InsuranceService.loadAllInsurances().then(deferred.resolve, deferred.resolve);
-				          console.log('deferred.promise'+deferred.promise);
-				          return deferred.promise;	  
-		      },
-		      states: function ($q,  StateService) {
-		    		  console.log('Load all states');
-			          var deferred = $q.defer();
-			          StateService.loadAllStates().then(deferred.resolve, deferred.resolve);
-			          console.log('deferred.promise'+deferred.promise);
-			          return deferred.promise; 
-		      }
+              loadMyService: ['$ocLazyLoad', function($ocLazyLoad) {
+               return $ocLazyLoad.load('main.user');
+              }]
           }
       })
-       .state('lead', {
+       .state('main.lead', {
           url: '/lead' ,
           cache: false, 
           templateUrl: 'partials/lead_list',
           controller:'LeadController',
           controllerAs:'ctrl',
           resolve: {
-		     
+            loadMyService: ['$ocLazyLoad', function($ocLazyLoad) {
+              return $ocLazyLoad.load('main.lead');
+            }] 
           }
       })
-      .state('lead.edit', {
+      .state('main.lead.edit', {
           url: '/' ,
           cache: false, 
           templateUrl: 'partials/lead_list',
@@ -177,139 +284,125 @@ app.config(['$stateProvider', '$urlRouterProvider',
         	    'leadDisplay': true
         	  },
           resolve: {
-		      events: function ($q,  EventService) {
-		    		  console.log('Load all events');
-			          var deferred = $q.defer();
-			          EventService.loadAllEvents().then(deferred.resolve, deferred.resolve);
-			          return deferred.promise;
-		      },
-		      users: function ( $q,  UserService) {
-		    		  console.log('Load all users');
-			          var deferred = $q.defer();
-			          UserService.loadAllUsers().then(deferred.resolve, deferred.resolve);
-			          return deferred.promise;
-		      },
-		      providers: function ( $q,  ProviderService) {
+          		loadMyService: ['$ocLazyLoad', function($ocLazyLoad) {
+              		return $ocLazyLoad.load('main.lead');
+            	}],
+            	events: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+              		var EventService = $injector.get("EventService");
+              		console.log('Load all  events');
+              		var deferred = $q.defer();
+              		EventService.loadAllEvents().then(deferred.resolve, deferred.resolve);
+              		return deferred.promise;
+            	}],
+		      providers: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+              		var ProviderService = $injector.get("ProviderService");
 		    		  console.log('Load all providers');
 			          var deferred = $q.defer();
 			          ProviderService.loadAllProviders().then(deferred.resolve, deferred.resolve);
 			          return deferred.promise;
-		      },
-      		  states: function ( $q,  StateService) {
-      				console.log('Load all states');
-      				var deferred = $q.defer();
-      				StateService.loadAllStates().then(deferred.resolve, deferred.resolve);
-		      },
-              genders: function ( $q,  GenderService) {
-            		  console.log('Load all genders');
-    		          var deferred = $q.defer();
-    		          GenderService.loadAllGenders().then(deferred.resolve, deferred.resolve);
-    		          return deferred.promise;
-		      },
-		      statuses: function ( $q,  LeadStatusService) {
+		      } ],
+		      statuses: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+              		  var LeadStatusService = $injector.get("LeadStatusService");
 		    		  console.log('Load all leadStatuses');
 			          var deferred = $q.defer();
 			          LeadStatusService.loadAllLeadStatuses().then(deferred.resolve, deferred.resolve);
 			          return deferred.promise;
-		      },
-              leadStatusDetails: function ($q,LeadStatusDetailService) {
-                  console.log('Load all leadStatusDetails');
-                  var deferred = $q.defer();
-                  LeadStatusDetailService.loadLeadStatusDetails(0,20,'',null).then(deferred.resolve, deferred.resolve);
-                  console.log('deferred.promise'+deferred.promise);
-                  return deferred.promise;
-              },
-		      languages: function ( $q,  LanguageService) {
-		    		  console.log('Load all languages');
-			          var deferred = $q.defer();
-			          LanguageService.loadAllLanguages().then(deferred.resolve, deferred.resolve);
-			          return deferred.promise;
-		      },
-		      insurances: function ( $q,  InsuranceService) {
-		    		  console.log('Load all leadInsurances');
-			          var deferred = $q.defer();
-			          InsuranceService.loadAllInsurances().then(deferred.resolve, deferred.resolve);
-			          return deferred.promise;
-		      },
-		      planTypes: function ( $q,  PlanTypeService) {
-		    		  console.log('Load all users');
-			          var deferred = $q.defer();
-			          PlanTypeService.loadAllPlanTypes().then(deferred.resolve, deferred.resolve);
-			          return deferred.promise;
-		      },
-		      bestTimeToCalls: function ( $q,  BestTimeToCallService) {
+		      }],
+              leadStatusDetails: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+	              	  var LeadStatusDetailService = $injector.get("LeadStatusDetailService");
+	                  console.log('Load all leadStatusDetails');
+	                  var deferred = $q.defer();
+	                  LeadStatusDetailService.loadAllLeadStatusDetails().then(deferred.resolve, deferred.resolve);
+	                  console.log('deferred.promise'+deferred.promise);
+	                  return deferred.promise;
+              }],  
+		      bestTimeToCalls: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+              		  var BestTimeToCallService = $injector.get("BestTimeToCallService");
 		    		  console.log('Load all bestTimeToCalls');
 			          var deferred = $q.defer();
 			          BestTimeToCallService.loadAllBestTimeToCalls().then(deferred.resolve, deferred.resolve);
 			          return deferred.promise;
-		      }
+		      }]
           }
       })
-      .state('role', {
+      .state('main.role', {
           url: '/role',
           cache: false, 
           templateUrl: 'partials/role_list',
           controller:'RoleController',
           controllerAs:'ctrl',
           resolve: {
-             
+              loadMyService: ['$ocLazyLoad', function($ocLazyLoad) {
+               return $ocLazyLoad.load('main.role');
+              }]
           }
       })
-      .state('facilityType', {
+      .state('main.facilityType', {
           url: '/facilityType',
           cache: false, 
           templateUrl: 'partials/facilityType_list',
           controller:'FacilityTypeController',
           controllerAs:'ctrl',
           resolve: {
-        	  facilityTypes: function ($q,FacilityTypeService) {
-                  console.log('Load all facilityTypes');
-                  var deferred = $q.defer();
-                  FacilityTypeService.loadFacilityTypes(0,20,'',null).then(deferred.resolve, deferred.resolve);
-                  console.log('deferred.promise'+deferred.promise);
-                  return deferred.promise;
-              }
+           		loadMyService: ['$ocLazyLoad', function($ocLazyLoad) {
+              		return $ocLazyLoad.load('main.facilityType');
+            	}],
+            facilityTypes: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+              var FacilityTypeService = $injector.get("FacilityTypeService");
+              console.log('Load all  facilityTypes');
+              var deferred = $q.defer();
+              FacilityTypeService.loadAllFacilityTypes().then(deferred.resolve, deferred.resolve);
+              return deferred.promise;
+            }]
+        	  
           }
       })
-      .state('leadStatus', {
+      .state('main.leadStatus', {
           url: '/leadStatus',
           cache: false, 
           templateUrl: 'partials/leadStatus_list',
           controller:'LeadStatusController',
           controllerAs:'ctrl',
           resolve: {
-              leadStatuses: function ($q,LeadStatusService) {
-                  console.log('Load all leadStatuses');
-                  var deferred = $q.defer();
-                  LeadStatusService.loadLeadStatuses(0,20,'',null).then(deferred.resolve, deferred.resolve);
-                  console.log('deferred.promise'+deferred.promise);
-                  return deferred.promise;
-              }
+               loadMyService: ['$ocLazyLoad', function($ocLazyLoad) {
+              		return $ocLazyLoad.load('main.leadStatus');
+            	}],
+            leadStatuses: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+              var LeadStatusService = $injector.get("LeadStatusService");
+              console.log('Load all  leadStatuses');
+              var deferred = $q.defer();
+              LeadStatusService.loadAllLeadStatuses().then(deferred.resolve, deferred.resolve);
+              return deferred.promise;
+            }] 
           }
       })
-      .state('leadStatusDetail', {
+      .state('main.leadStatusDetail', {
           url: '/leadStatusDetail',
           cache: false, 
           templateUrl: 'partials/leadStatusDetail_list',
           controller:'LeadStatusDetailController',
           controllerAs:'ctrl',
           resolve: {
-		      statuses: function ( $q,  LeadStatusService) {
-		    		  console.log('Load all leadStatuses');
-			          var deferred = $q.defer();
-			          LeadStatusService.loadAllLeadStatuses().then(deferred.resolve, deferred.resolve);
-			          return deferred.promise;
-		      },        	  
-              leadStatusDetails: function ($q,LeadStatusDetailService) {
-                  console.log('Load all leadStatusDetails');
-                  var deferred = $q.defer();
-                  LeadStatusDetailService.loadLeadStatusDetails(0,20,'',null).then(deferred.resolve, deferred.resolve);
-                  console.log('deferred.promise'+deferred.promise);
-                  return deferred.promise;
-              }
+              loadMyService: ['$ocLazyLoad', function($ocLazyLoad) {
+              		return $ocLazyLoad.load('main.leadStatusDetail');
+            	}],
+            	leadStatuses: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+              		var LeadStatusService = $injector.get("LeadStatusService");
+              		console.log('Load all  leadStatuses');
+              		var deferred = $q.defer();
+              		LeadStatusService.loadAllLeadStatuses().then(deferred.resolve, deferred.resolve);
+              		return deferred.promise;
+            	}],
+            	leadStatusDetails: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+              		var LeadStatusDetailService = $injector.get("LeadStatusDetailService");
+              		console.log('Load all  leadStatusDetails');
+              		var deferred = $q.defer();
+              		LeadStatusDetailService.loadAllLeadStatusDetails().then(deferred.resolve, deferred.resolve);
+              		return deferred.promise;
+            	}]  
           }
       })
-      .state('event', {
+      .state('main.event', {
           url: '/event',
           cache: false, 
           templateUrl: 'partials/event_list',
@@ -320,39 +413,29 @@ app.config(['$stateProvider', '$urlRouterProvider',
         	    'eventDisplay': false
         	  },
           resolve: {
-        	  facilityTypes: function ($q,FacilityTypeService) {
+              loadMyService: ['$ocLazyLoad', function($ocLazyLoad) {
+              		return $ocLazyLoad.load('main.event');
+            	}],
+        	  facilityTypes: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+              	  var FacilityTypeService = $injector.get("FacilityTypeService");
                   console.log('Load all facilityTypes');
                   var deferred = $q.defer();
                   FacilityTypeService.loadAllFacilityTypes().then(deferred.resolve, deferred.resolve);
                   console.log('deferred.promise'+deferred.promise);
                   return deferred.promise;
-              }
+              }]
           }
       })
-       .state('event.edit', {
+       .state('main.event.edit', {
           url: '/',
           cache: false, 
           templateUrl: 'partials/event_list',
           controller:'EventController',
           controllerAs:'ctrl',
           resolve: {
-              facilityTypes: function ($q,FacilityTypeService) {
-                  console.log('Load all facilityTypes');
-                  var deferred = $q.defer();
-                  FacilityTypeService.loadAllFacilityTypes().then(deferred.resolve, deferred.resolve);
-                  console.log('deferred.promise'+deferred.promise);
-                  return deferred.promise;
-              },
-		      states: function ($stateParams,$q,  StateService) {
-	    		  console.log('Load all states');
-		          var deferred = $q.defer();
-		          StateService.loadAllStates().then(deferred.resolve, deferred.resolve);
-		          console.log('deferred.promise'+deferred.promise);
-		          return deferred.promise; 
-	      }
           }
       })
-       .state('eventAssignment', {
+       .state('main.eventAssignment', {
           url: '/eventAssignment' ,
           cache: false, 
           templateUrl: 'partials/eventAssignment_list',
@@ -361,9 +444,14 @@ app.config(['$stateProvider', '$urlRouterProvider',
           params: {
         	    'id': '', 
         	    'eventAssignmentDisplay': false
-        	  }
+        	  },
+          resolve: {
+              loadMyService: ['$ocLazyLoad', function($ocLazyLoad) {
+              		return $ocLazyLoad.load('main.eventAssignment');
+            	}]
+          }
       })
-      .state('eventAssignment.edit', {
+      .state('main.eventAssignment.edit', {
           url: '/' ,
           cache: false, 
           templateUrl: 'partials/eventAssignment_list',
@@ -373,6 +461,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
         	    'eventAssignmentDisplay': true, 
         	  },
           resolve: {
+           
         	  events: function ($q,  EventService) {
 		          console.log('Load all events');
 		          var deferred = $q.defer();
@@ -410,7 +499,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
 		      }
           }
       })
-      .state('provider', {
+      .state('main.provider', {
           url: '/provider',
           cache: false, 
           templateUrl: 'partials/provider_list',
@@ -435,7 +524,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
       		  
           }
       })
-      .state('insurance', {
+      .state('main.insurance', {
           url: '/insurance',
           cache: false, 
           templateUrl: 'partials/insurance_list',
@@ -460,7 +549,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
               }
           }
       })
-      .state('language', {
+      .state('main.language', {
           url: '/language',
           cache: false, 
           templateUrl: 'partials/language_list',
@@ -474,10 +563,6 @@ app.config(['$stateProvider', '$urlRouterProvider',
           cache: false, 
           templateUrl: 'logout'
       })
-       .state('login', {
-          url: '/login',
-          templateUrl: 'login'
-      })
       .state('accessDenied', {
           url: '/accessDenied',
           templateUrl: 'accessDenied',
@@ -487,7 +572,6 @@ app.config(['$stateProvider', '$urlRouterProvider',
               } 
           }         
         })
-        $urlRouterProvider.otherwise('login');
     
     function run() {
         FastClick.attach(document.body);
@@ -518,6 +602,7 @@ app.directive('datePicker', function () {
             $(element).on("dp.change", function (e) {
                 ngModel.$viewValue = moment(e.date).format('MM/DD/YYYY hh:mm a')  ;
                 ngModel.$commitViewValue();
+               
             });
         }
     };
@@ -792,3 +877,4 @@ app.filter('tel', function () {
     };
 });
 
+})();

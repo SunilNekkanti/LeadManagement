@@ -1,6 +1,6 @@
 <div class="generic-container" >
 
-   <div class="panel panel-default" ng-if="!ctrl.display">
+   <div class="panel panel-success" ng-if="!ctrl.display">
         <!-- Default panel contents -->
         <div class="panel-heading"><span class="facilityType">List of Lead Statuses </span> 
                <button type="button"  ng-click="ctrl.addLeadStatus()" ng-hide="ctrl.displayEditButton" class="btn btn-success btn-xs  custom-width floatRight"> Add </button>   
@@ -14,7 +14,7 @@
 		</div>
     </div>
     
-    <div class="panel panel-default" ng-if="ctrl.display">
+    <div class="panel panel-success" ng-if="ctrl.display">
         <!-- Default panel contents -->
         <div class="panel-heading"><span class="leadStatus">Lead Status </span></div>
 		<div class="panel-body">

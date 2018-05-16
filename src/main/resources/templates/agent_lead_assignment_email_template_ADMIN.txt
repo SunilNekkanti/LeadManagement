@@ -8,7 +8,7 @@
     
     <p>You have been scheduled for an appointment  on   ${appointmentLocalTime}</p>
   
-    <p> ${notes} </p>
+    <p> Contact Out Reach Coordinator at 813  </p>
      
     <p>Thanks</p>
     <p>${currentUser}</p>

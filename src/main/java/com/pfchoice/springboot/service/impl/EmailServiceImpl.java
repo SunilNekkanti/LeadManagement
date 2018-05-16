@@ -150,7 +150,6 @@ public class EmailServiceImpl implements EmailService {
 		            + "END:VEVENT\n"
 		            + "END:VCALENDAR");
 		    
-		    LOGGER.info("email buffer:"+buffer);
 			// Create the message part
 			BodyPart messageBodyPart = new MimeBodyPart();
 			 messageBodyPart.setContent(mail.getBody(), "text/html");

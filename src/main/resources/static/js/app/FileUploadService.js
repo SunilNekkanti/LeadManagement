@@ -1,4 +1,6 @@
+(function(){
 'use strict';
+var app = angular.module('my-app');
    
     app.service('FileUploadService', ['$http', '$q', 'urls', function ($http, $q, urls) {
     	
@@ -69,3 +71,4 @@
         }
    }
     ]);
+ })();    

@@ -1,7 +1,8 @@
+(function(){
 'use strict';
+var app = angular.module('my-app');
 
-app
-		.controller(
+app.controller(
 				'LeadController',
 				[
 						'LeadService',
@@ -137,7 +138,7 @@ app
 											.withOption("bPaginate", true)
 											.withOption('bProcessing', true)
 											.withOption('stateSave', true)
-											.withOption('searchDelay', 1000)
+											.withOption('searchDelay', 3000)
 										    .withOption('createdRow', createdRow)
 									        .withPaginationType('full_numbers')
 									        .withOption('ordering', true)
@@ -262,7 +263,7 @@ app
 													clearFiles();
 													self.dtInstance.reloadData();
 							                       // self.dtInstance.rerender();
-							                        $state.go('lead');
+							                        $state.go('main.lead');
 												},
 												function(errResponse) {
 													console
@@ -289,7 +290,7 @@ app
 													self.dtInstance.reloadData();
 							                      //  self.dtInstance.rerender();
 													self.selectedAgentLeadAppointment = {};
-							                        $state.go('lead');
+							                        $state.go('main.lead');
 							                        self.display = false;
 												},
 												function(errResponse) {
@@ -393,7 +394,7 @@ app
 									self.planTypes = getAllPlanTypes();
 									self.display = true;
 								}else{
-									var trans =  $state.go('lead.edit').transition;
+									var trans =  $state.go('main.lead.edit').transition;
 									 trans.onSuccess({}, function() {   
 										 self.providers = getAllProviders();
 											self.users = getAllAgents();
@@ -426,7 +427,7 @@ app
 					            self.lead={};
 					            self.selectedAgentLeadAppointment = {};
 					            self.display = false;
-								$state.go('lead', {}, {reload: true});
+								$state.go('main.lead', {}, {reload: false});
 					            
 					        }
 
@@ -627,7 +628,7 @@ app
 							
 							function leadEdit(id){
 								var params = {'leadDisplay':true};
-								var trans =  $state.go('lead.edit',params).transition;
+								var trans =  $state.go('main.lead.edit',params,{reload:'main.lead.edit'}).transition;
 								trans.onSuccess({}, function() { editLead(id); }, { priority: -1 });
 								 
 							}
@@ -664,3 +665,4 @@ app
 
 	} 
 ]);
+})();

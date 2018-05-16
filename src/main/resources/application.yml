@@ -35,7 +35,7 @@ email:
 
 spring:
   profiles:
-    active: "server,serveremail"
+    active: "local,serveremail"
   main:
     banner-mode: "off"
  

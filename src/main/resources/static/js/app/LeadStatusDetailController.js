@@ -1,4 +1,6 @@
+(function(){
 'use strict';
+var app = angular.module('my-app');
 
 app.controller('LeadStatusDetailController',
     ['LeadStatusDetailService', 'LeadStatusService', '$scope', '$compile','$state','DTOptionsBuilder', 'DTColumnBuilder', function( LeadStatusDetailService, LeadStatusService, $scope,$compile, $state, DTOptionsBuilder, DTColumnBuilder) {
@@ -131,8 +133,6 @@ app.controller('LeadStatusDetailController',
                         self.display =false;
                         console.log(self.languages);
                         self.leadStatusDetail={};
-                        $scope.myForm.$setPristine();
-                        self.dtInstance.reloadData();
                         self.dtInstance.rerender();
                     },
                     function (errResponse) {
@@ -154,8 +154,6 @@ app.controller('LeadStatusDetailController',
                         self.errorMessage='';
                         self.done = true;
                         self.display =false;
-                        $scope.myForm.$setPristine();
-                        self.dtInstance.reloadData();
                         self.dtInstance.rerender();
                     },
                     function(errResponse){
@@ -206,7 +204,6 @@ app.controller('LeadStatusDetailController',
             self.successMessage='';
             self.errorMessage='';
             self.leadStatusDetail={};
-            $scope.myForm.$setPristine(); //reset Form
         }
        
         function cancelEdit(){
@@ -214,7 +211,7 @@ app.controller('LeadStatusDetailController',
             self.errorMessage='';
             self.leadStatusDetail={};
             self.display = false;
-            $state.go('leadStatusDetail', {}, {reload: true});
+            $state.go('main.leadStatusDetail', {}, {reload: false});
         }
         
         function addLeadStatusDetail() {
@@ -231,3 +228,5 @@ app.controller('LeadStatusDetailController',
     
 
     ]);
+})();    
+    

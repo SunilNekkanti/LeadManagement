@@ -1,4 +1,6 @@
+(function(){
 'use strict';
+var app = angular.module('my-app');
 
 app.controller('UserController',
     ['UserService', 'RoleService', 'LanguageService', 'StateService', 'InsuranceService', 'CountyService', '$scope', '$compile','$location','$state','$stateParams','DTOptionsBuilder', 'DTColumnBuilder', function( UserService, RoleService, LanguageService, StateService, InsuranceService,CountyService, $scope,$compile,$location,$state, $stateParams, DTOptionsBuilder, DTColumnBuilder) {
@@ -151,7 +153,7 @@ app.controller('UserController',
                         $scope.myForm.$setPristine();
                         self.dtInstance.reloadData();
                         self.dtInstance.rerender();
-                        $state.go('user');
+                        $state.go('main.user');
                     },
                     function (errResponse) {
                         console.error('Error while creating User');
@@ -174,7 +176,7 @@ app.controller('UserController',
                         self.display =false;
                         self.dtInstance.reloadData();
                         self.dtInstance.rerender();
-                        $state.go('user');
+                        $state.go('main.user');
                     },
                     function(errResponse){
                         console.error('Error while updating User');
@@ -260,12 +262,12 @@ app.controller('UserController',
             self.errorMessage='';
             self.user={};
             self.display = false;
-            $state.go('user', {}, {reload: true}); 
+            $state.go('main.user', {}, {reload: false}); 
         }
        
         function addUser() {
         	var params = {'userDisplay':true};
-			var trans =  $state.go('user.edit',params).transition;
+			var trans =  $state.go('main.user.edit',params).transition;
 			trans.onSuccess({}, function() { 
 				   self.successMessage='';
 		            self.errorMessage='';
@@ -283,11 +285,11 @@ app.controller('UserController',
         function userEdit(id){
         	
         	var params = {'userDisplay':true};
-			var trans =  $state.go('user.edit',params).transition;
+			var trans =  $state.go('main.user.edit',params).transition;
 			trans.onSuccess({}, function() { editUser(id); }, { priority: -1 });
 			 
 		}
     }
+  ]);
     
-
-    ]);
+})();

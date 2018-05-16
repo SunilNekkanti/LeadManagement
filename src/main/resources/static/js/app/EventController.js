@@ -1,7 +1,8 @@
+(function(){
 'use strict';
+var app = angular.module('my-app');
 
-app
-		.controller(
+app.controller(
 				'EventController',
 				[
 						'EventService',
@@ -9,10 +10,6 @@ app
 						'UserService',
 						'StateService',
 						'FileUploadService',
-						'EventFrequencyService',
-						'EventMonthService',
-						'EventWeekDayService',
-						'EventWeekNumberService',
 						'$scope',
 						'$localStorage',
 						'$state',
@@ -22,7 +19,7 @@ app
 						'$filter',
 						'DTOptionsBuilder',
 						'DTColumnBuilder',
-						function(EventService,  FacilityTypeService, UserService, StateService,   FileUploadService, EventFrequencyService,EventMonthService, EventWeekDayService,EventWeekNumberService, $scope,$localStorage,$state,$stateParams, $compile, $sce, $filter,
+						function(EventService,  FacilityTypeService, UserService, StateService,   FileUploadService,  $scope,$localStorage,$state,$stateParams, $compile, $sce, $filter,
 								DTOptionsBuilder, DTColumnBuilder) {
 
 							var self = this;
@@ -31,20 +28,6 @@ app
 							self.myFiles = [];
 							self.bool = false;
 							self.facilityTypes = [];
-							self.eventFrequencies = ['DAILY','WEEKLY','MONTHLY','YEARLY'];
-							self.eventIntervals = ['1','2','3','4','5'];
-							self.eventOnDays = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31'];
-							self.eventOnWeeks = [];
-							self.eventEndOptions = ['Never','After','On date'];
-							self.eventEndOption = 'Never';
-							self.event.frequency='DAILY';
-							self.eventOnWeekDays = [];
-							self.onDayorThe = true;
-							self.selectedWeekDays = [];
-							self.eventEndCount = 1;
-							self.eventUntil = new Date();
-							self.eventMonths = [];
-							self.eventMonth = {};
 							self.users = [];
 							self.display = $stateParams.eventDisplay||false;;
 							self.states = [];
@@ -59,32 +42,19 @@ app
 							self.editEvent = editEvent;
 							self.getAllAgents = getAllAgents;
 							self.getAllStates = getAllStates;
-							self.getAllBrokerages = getAllBrokerages;
 							self.getAllFacilityTypes = getAllFacilityTypes;
 							self.getAllActivityTypes = getAllActivityTypes;
-							self.getAllEventWeekNumbers = getAllEventWeekNumbers;
-							self.getAllEventMonths = getAllEventMonths;
-							self.getAllEventWeekDays = getAllEventWeekDays;
 							self.getEventRepEmails = getEventRepEmails;
-							self.parseEventRule = parseEventRule;
-							self.findWeekDaysByShortNames = findWeekDaysByShortNames;
-							self.findWeekDayByShortNames = findWeekDayByShortNames;
 							self.readUploadedFile = readUploadedFile;
 							self.cancelEdit = cancelEdit;
 							self.adminOrManager = adminOrManager;
 							self.uploadFile = uploadFile;
-							self.eventrrule = eventrrule;
 							self.convertToInt =convertToInt;
 							//Lead from event
 							self.addLead = addLead;
-							self.isOnDayorThe = isOnDayorThe;
-							self.sync =sync;
-							self.isChecked = isChecked;
 							self.dtInstance = {};
 							self.eventId = null;
 							self.reset = reset;
-							self.repeatDisplay = false;
-							self.repeat = repeat;
 							self.eventEdit = eventEdit;
 							self.successMessage = '';
 							self.errorMessage = '';
@@ -140,13 +110,12 @@ app
 									.withOption("bPaginate", true)
 									.withOption('bProcessing', true)
 									.withOption('bStateSave', true)
+									.withOption('searchDelay', 3000)
 								    .withOption('createdRow', createdRow)
 							        .withPaginationType('full_numbers')
 							        
 							        .withFnServerData(serverData);
 
-
-							self.reloadData = reloadData;
 
 							function createdRow(row, data, dataIndex) {
 								// Recompiling so we can bind Angular directive
@@ -199,19 +168,9 @@ app
 												});
 							}
 
-							function reloadData() {
-								var resetPaging = false;
-								self.dtInstance.reloadData(callback,
-										resetPaging);
-							}
-
-							function callback(json) {
-								console.log(json);
-							}
 
 							function submit() {
 								console.log('Submitting');
-								self.event.repeatRule = eventrrule();
 								uploadFile();
 								
 								self.displayEditButton = false;
@@ -253,9 +212,8 @@ app
 													clearFiles();
 													$scope.myForm
 															.$setPristine();
-													self.dtInstance.reloadData();
 							                        self.dtInstance.rerender();
-							                        $state.go('event');
+							                        $state.go('main.event');
 												},
 												function(errResponse) {
 													console
@@ -280,11 +238,8 @@ app
 													self.display = false;
 													self.event = {};
 													clearFiles();
-													$scope.myForm
-															.$setPristine();
-													self.dtInstance.reloadData();
 							                        self.dtInstance.rerender();
-							                        $state.go('event');
+							                        $state.go('main.event');
 												},
 												function(errResponse) {
 													console
@@ -306,7 +261,6 @@ app
 															.log('Event '
 																	+ id
 																	+ ' removed successfully');
-													self.dtInstance.reloadData();
 							                        self.dtInstance.rerender();
 												},
 												function(errResponse) {
@@ -324,10 +278,6 @@ app
 								self.users = getAllAgents();
 								self.states = getAllStates();
 								self.facilityTypes = getAllFacilityTypes();
-								//self.eventFrequencies = getAllEventFrequencies();
-								//self.eventMonths =getAllEventMonths();
-								//self.eventOnWeekDays =getAllEventWeekDays();
-								//self.eventOnWeeks =getAllEventWeekNumbers();
 									EventService
 										.getEvent(id)
 										.then(
@@ -350,17 +300,11 @@ app
 							function addEvent() {
 								self.successMessage = '';
 								self.errorMessage = '';
-								var trans =  $state.go('event.edit').transition;
+								var trans =  $state.go('main.event.edit').transition;
 								trans.onSuccess({}, function() {
 									self.users = getAllAgents();
 									self.states = getAllStates();
 									self.facilityTypes = getAllFacilityTypes();
-									/*self.eventMonths =getAllEventMonths();
-									self.eventMonth = self.eventMonths[0];
-									self.eventOnWeekDays =getAllEventWeekDays();
-									// self.eventOnWeekDaysss = self.eventOnWeekDays[0]; //not required
-									self.eventOnWeeks =getAllEventWeekNumbers();
-									self.eventOnWeek = self.eventOnWeeks[0];*/
 									self.display = true;
 								});
 							}
@@ -378,7 +322,7 @@ app
 					            self.event={};
 					            $scope.myForm.$setPristine(); //reset Form
 					            self.display = false;
-					            $state.go('event', {}, {reload: true});
+					            $state.go('main.event', {}, {reload: false});
 					        }
 							
                             function convertToInt(id){
@@ -411,88 +355,6 @@ app
 						            })
 						        };
 						        
-						    function eventrrule(){
-						    	var rrule = [];
-						    	
-						    	var freq = 'FREQ='+self.event.frequency;
-						    	 rrule.push(freq);
-						    	var byDay ;
-
-						    	if (self.event.frequency== 'WEEKLY' && self.selectedWeekDays.length >0) {
-						    		self.selectedWeekDays = $filter('orderBy')(self.selectedWeekDays, 'id')
-						    			byDay = ';BYDAY='+ self.selectedWeekDays.map(o => o.shortName).join();
-						    		if(byDay)rrule.push(byDay);
-						    	}
-						    	
-						    	if(self.event.frequency== 'MONTHLY' ){
-						    		if(self.onDayorThe && self.onDayorThe==true){
-						    			var byMonthDay =';BYMONTHDAY='+self.event.onDay;
-							    		rrule.push(byMonthDay);
-						    		}else{
-						    		//	self.eventOnWeek = self.eventOnWeek||{};
-						    		//	self.eventOnWeekDayss = self.eventOnWeekDayss||{};
-						    			var byMonthWeekAndDay = ';BYSETPOS='+self.eventOnWeek.id+';BYDAY='+self.eventOnWeekDay.shortName;
-						    			rrule.push(byMonthWeekAndDay);
-						    		}
-						    		
-						    	}
-						    	
-						    	if(self.event.frequency== 'YEARLY' ){
-						    		if(self.onDayorThe && self.onDayorThe==true){
-						    			var byMonthAndDay = ';BYMONTH='+self.eventMonthOnDay.id+';BYMONTHDAY='+self.event.onDay;
-						    			rrule.push(byMonthAndDay);
-						    			
-						    		}else{
-						    			var byDayWeekNoAndMonth =';BYDAY='+self.eventOnWeekDay.shortName+';BYSETPOS='+self.eventOnWeek.id+';BYMONTH='+self.eventMonthOnThe.id;
-							    		rrule.push(byDayWeekNoAndMonth);
-							    	
-						    		}
-						    		
-						    	}
-						    	
-						    	var interval = ';INTERVAL='+self.event.interval
-						    	if(self.event.interval) rrule.push(interval);
-						    	
-						    	if(self.eventEndOption  =='After'){
-						    		var count = ';COUNT='+self.eventEndCount;
-						    		 rrule.push(count);
-						    	} else if(self.eventEndOption =='On date'){
-						    		var count = ';UNTIL='+self.eventUntil;
-						    		 rrule.push(count);
-						    	}
-						    		
-						    	return rrule.join('');
-						    	
-						    }
-						    
-						    function parseEventRule(){
-						    	
-						    	var res = self.event.repeatRule.split(";");
-						    	if(res.length>1){
-						    		self.repeatDisplay =true;
-						    		for(var i=0;i<res.length;i++){
-						    			var ruleType = res[i].split("=");
-						    			  if(ruleType.length > 1){
-						    				  switch(ruleType[0])
-							    				{
-							    				   case "COUNT": self.eventEndCount = ruleType[1]; self.eventEndOption  ='After' ;break;
-							    				   case "UNTIL": self.eventUntil = ruleType[1];  self.eventEndOption  =='On date'; break;
-							    				   case 'INTERVAL': self.eventInterval =  ruleType[1]; self.event.interval = ruleType[1]; break;
-							    				   case 'BYDAY': findWeekDayByShortNames(ruleType[1]); findWeekDaysByShortNames(ruleType[1]);   break;
-							    				   case 'BYSETPOS':   self.eventOnWeek = $filter('filter')(self.eventOnWeeks, { id: parseInt(ruleType[1]) }, true)[0];   self.onDayorThe =false; break;
-							    				   case 'BYMONTH': self.eventMonthOnDay= $filter('filter')(self.eventMonths, { id: parseInt(ruleType[1]) }, true)[0];  self.onDayorThe=false;  break;
-							    				   case 'BYMONTHDAY':   self.event.onDay = ruleType[1]; self.onDayorThe =true;   break;
-							    				   case 'FREQ': self.event.frequency = ruleType[1];  break;
-
-							    				   default: 
-							    					   self.eventEndOption  =='Never';
-							    				}
-						    			  }
-						    				
-
-						    		}
-						    	}
-							  }
 						    
 							function getEventRepEmails(){
 								
@@ -514,47 +376,11 @@ app
 						    	}
 						    }
 
-							function repeat() {
-								self.repeatDisplay = !self.repeatDisplay;
-								if(self.repeatDisplay == true){
-									self.event.interval = 1;
-									self.event.frequency = 'DAILY';
-									self.event.onWeekDay ={"id":1} ;
-									self.event.onWeek='First';
-									self.event.onDay=1;
-									self.event.month = {"id":1};
-									self.onDayorThe =true;
-								}else{
-									self.event.interval = 0;
-									self.event.onWeekDay ={} ;
-									self.event.onWeek='';
-									self.event.onDay=0;
-									//self.event.frequency = {};
-									self.event.month = {};
-									self.event.repeatRule = '';
-								}
-							}
 							
 							function addAgentEventAppointment() {
 								self.event.agentEventAppointments.push(self.selectedAgentEventAppointment);
 							}
 							
-							function getAllEventWeekDays(){
-								return EventWeekDayService.getAllEventWeekDays();
-							}
-							
-							function getAllEventMonths(){
-								return EventMonthService.getAllEventMonths();
-							}
-							
-							function getAllEventWeekNumbers(){
-								return EventWeekNumberService.getAllEventWeekNumbers();
-							}
-
-							
-							/*function getAllEventFrequencies(){
-								return EventFrequencyService.getAllEventFrequencies();
-							}*/
 
 							function getAllEvents() {
 								return EventService.getAllEvents();
@@ -569,10 +395,6 @@ app
 								return StateService.getAllStates();
 							}
 							
-							function getAllBrokerages() {
-								return BrokerageService
-										.getAllBrokerages();
-							}
 
 							function getAllFacilityTypes() {
 								return FacilityTypeService
@@ -587,7 +409,7 @@ app
 							
 							function eventEdit(id){
 							//	var params = {"id":id,"eventDisplay":true};
-								var trans =  $state.go('event.edit').transition;
+								var trans =  $state.go('main.event.edit').transition;
 								trans.onSuccess({}, function() {
 								
 								editEvent(id);
@@ -596,7 +418,7 @@ app
 							
 							function addLead( ){
 								var params = {"eventId":self.event.id,"leadDisplay":true};
-								$state.go('lead.edit', params );
+								$state.go('main.lead.edit', params );
 							}
 
 							function clearFiles(){
@@ -608,69 +430,20 @@ app
 							}
 							
 							 function validEventDate(startDate,endDate) {
-							 console.log('startDate', new Date(startDate).getTime() ,new Date(endDate).getTime());
-							    if(new Date(startDate).getTime() >= new Date(endDate).getTime()){
+							    if( new Date(startDate).getTime()  >=  new Date(endDate).getTime() ){
 							      self.errMessage = 'End Date should be greater than start date';
-							      return true;
-							    }
+							      $scope.myForm.eventDateEndTime.$setValidity("improper", false);
+							    }else{
 							    self.errMessage='';
-							    return false;
-							   
-							};
-							
+							    $scope.myForm.eventDateEndTime.$setValidity("improper", true);
+							    }
+							}
 
 							function clear() {
 								self.event.eventDateTime  = null;
 							}
-
-							function isOnDayorThe(){
-								if(self.onDayorThe){
-									self.event.month = self.event.month||{};
-									self.event.month.id = self.event.month.id || 1;
-								}else{
-									self.event.month = self.event.month||{};
-									self.event.month.id = self.event.month.id || 1;
-									self.eventOnWeek = self.eventOnWeek|| {};
-									self.eventOnWeek.id = self.eventOnWeek.id||1;
-								}
-							}
-							function isChecked(id){
-							      var match = false;
-							      for(var i=0 ; i < self.selectedWeekDays.length; i++) 
-							        if(self.selectedWeekDays[i].id == id){
-							           match = true;
-							          break;
-							        }
-							      return match;
-							  };
-							  
-							  
-							 function sync(bool, item){
-								 
-								    if(bool){
-								      // add item
-								    	self.selectedWeekDays.push(item);
-								    } else {
-								      // remove item
-								      for(var i=0 ; i < self.selectedWeekDays.length; i++) {
-								        if(self.selectedWeekDays[i].id == item.id){
-								        	self.selectedWeekDays.splice(i,1);
-								        }
-								      }      
-								    }
-								  };
-								  
-							  function findWeekDaysByShortNames(shortNames){
-								    self.selectedWeekDays = self.eventOnWeekDays.filter(function(weekday){
-									    return shortNames.indexOf(weekday.shortName)> -1 ;
-									});
-							  }
-							  function findWeekDayByShortNames(shortName){
-								    self.eventOnWeekDay = self.eventOnWeekDays.filter(function(weekday){
-									    return shortName.indexOf(weekday.shortName)> -1 ;
-									})[0];
-							  }
-							  
 								  
 	} 
-]);
+ ]);
+
+})();

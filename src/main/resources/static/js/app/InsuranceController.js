@@ -1,4 +1,6 @@
+(function(){
 'use strict';
+var app = angular.module('my-app');
 
 app.controller('InsuranceController',
     ['InsuranceService','PlanTypeService', '$scope', '$compile','DTOptionsBuilder', 'DTColumnBuilder', function( InsuranceService,  PlanTypeService,  $scope,$compile,  DTOptionsBuilder, DTColumnBuilder) {
@@ -233,6 +235,6 @@ app.controller('InsuranceController',
         
     
     }
-    
 
     ]);
+ })();    
