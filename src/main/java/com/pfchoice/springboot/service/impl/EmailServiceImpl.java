@@ -1,7 +1,6 @@
 package com.pfchoice.springboot.service.impl;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
@@ -9,13 +8,13 @@ import java.util.logging.Logger;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
-import javax.activation.FileDataSource;
 import javax.mail.BodyPart;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.util.ByteArrayDataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -24,6 +23,12 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfStamper;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.pfchoice.springboot.model.Email;
 import com.pfchoice.springboot.model.FileUploadContent;
 import com.pfchoice.springboot.service.EmailService;
@@ -41,6 +46,9 @@ public class EmailServiceImpl implements EmailService {
 	@Autowired
 	Configuration fmConfiguration;
 
+	public static byte[] USER = "password 1234".getBytes();
+	public static byte[] OWNER = "password 1234".getBytes();
+	
 	/**
 	 * This method will send compose and send the message
 	 * 
@@ -69,7 +77,7 @@ public class EmailServiceImpl implements EmailService {
 	 * @throws MessagingException
 	 * @throws IOException
 	 */
-	@SuppressWarnings({ "unchecked", "resource" })
+	@SuppressWarnings({ "unchecked" })
 	@Async("leadManagementExecutor")
 	public void sendMailWithAttachment(final Email mail) throws MessagingException, IOException, InterruptedException {
 		Thread.sleep(3000);
@@ -96,9 +104,6 @@ public class EmailServiceImpl implements EmailService {
          String leadName = lastName+","+firstName;
          String eventName  = ("".equals(leadName))? (emailAttributes.get("eventName") ==null)? "":emailAttributes.get("eventName").toString():leadName;
          String notes  = (emailAttributes.get("notes") ==null)? "":emailAttributes.get("notes").toString();
-         
-         LOGGER.info("notes"+notes);
- 		
          
 		String rrule = (emailAttributes.get("rrule") != null)
 				? "RRULE:" + emailAttributes.get("rrule").toString() + "\n" : "";
@@ -166,13 +171,40 @@ public class EmailServiceImpl implements EmailService {
 						BodyPart attachmentBodyPart = new MimeBodyPart();
 						attachmentBodyPart.setContent(mail.getBody(), "text/html");
 						
-						File outputFile = new File(fileUpload.getFileName());
-						FileOutputStream outputStream = new FileOutputStream(outputFile); 
-						outputStream.write(fileUpload.getData());  
-						// file attachment
-						DataSource source = new FileDataSource(fileUpload.getFileName());
+						Document document = new Document(PageSize.A4);
+						ByteArrayOutputStream baos = new ByteArrayOutputStream();
+						ByteArrayOutputStream singedbaos = new ByteArrayOutputStream();
+						PdfReader reader;
+					    try {
+					    	PdfWriter.getInstance(document, baos);
+					    	document.open();
+					    	if(fileUpload.getFileName().contains(".jpg") || fileUpload.getFileName().contains(".jpeg") || fileUpload.getFileName().contains(".png")){
+					    		 Image img =   Image.getInstance(fileUpload.getData());
+					    		 img.setAlignment(Image.ALIGN_LEFT);
+					    		 img.setAbsolutePosition(0f, 0f);
+					    		 img.scalePercent(40, 40);
+
+							     document.add(img);
+					    	}
+					       
+					    } catch (Exception e) {
+					    	LOGGER.warning(e.getMessage());
+					    }
+					    document.close();
+					    if(baos.size() > 1){
+					    	reader = new PdfReader(baos.toByteArray());
+					    }else{
+					    	reader = new PdfReader(fileUpload.getData());
+					    }
+					     
+				        PdfStamper stamper = new PdfStamper(reader, singedbaos);
+				        stamper.setEncryption(USER, OWNER,
+				            PdfWriter.ALLOW_PRINTING, PdfWriter.ENCRYPTION_AES_128 | PdfWriter.DO_NOT_ENCRYPT_METADATA);
+				        stamper.close();
+					    
+					    DataSource source = new ByteArrayDataSource(singedbaos.toByteArray(),"application/pdf");
 						attachmentBodyPart.setDataHandler(new DataHandler(source));
-						attachmentBodyPart.setFileName(fileUpload.getFileName());
+						attachmentBodyPart.setFileName("LeadConsentForm.pdf");
 						multipart.addBodyPart(attachmentBodyPart);
 					}
 				}catch(Exception e){
@@ -181,6 +213,7 @@ public class EmailServiceImpl implements EmailService {
 		
 			}
 			
+			// file attachment
 			BodyPart calendarBodyPart = new MimeBodyPart();
 			calendarBodyPart.addHeader("Content-Class", "urn:content-classes:calendarmessage");
             calendarBodyPart.setContent(buffer.toString(), "text/calendar;method=CANCEL");

@@ -33,7 +33,7 @@ app.service('LeadStatusService',
                     .then(
                         function (response) {
                             console.log('Fetched successfully  LeadStatuss');
-                            $localStorage.LeadStatus = response.data.content;
+                            $localStorage.leadStatuses = response.data.content;
                             deferred.resolve(response);
                          return     response ;
                         },
@@ -51,7 +51,7 @@ app.service('LeadStatusService',
                     .then(
                         function (response) {
                             console.log('Fetched successfully all LeadStatuss');
-                            $localStorage.LeadStatus = response.data.content;
+                            $localStorage.leadStatuses = response.data.content;
                             deferred.resolve(response);
                         },
                         function (errResponse) {
@@ -64,7 +64,7 @@ app.service('LeadStatusService',
 
             function getAllLeadStatuses(){
             	console.log('$localStorage.LeadStatuss');
-                return $localStorage.LeadStatus;
+                return $localStorage.leadStatuses;
             }
 
             function getLeadStatus(id) {

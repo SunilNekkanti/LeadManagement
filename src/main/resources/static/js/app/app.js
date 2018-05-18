@@ -1,6 +1,6 @@
 (function( ) {
   'use strict';
-  var app = angular.module('my-app', ['datatables', 'ui.bootstrap', 'datatables.bootstrap', 'datatables.colreorder', 'datatables.fixedheader', 'datatables.buttons', 'datatables.fixedcolumns',  'ui.router', 'ngStorage', 'ngAnimate', 'ngSanitize', 'btorfs.multiselect', 'oc.lazyLoad', 'ui.select','chart.js']);
+  var app = angular.module('my-app', ['datatables','datatables.light-columnfilter', 'datatables.fixedheader', 'ui.bootstrap', 'datatables.bootstrap', 'datatables.colreorder', 'datatables.fixedheader', 'datatables.buttons', 'datatables.fixedcolumns',  'ui.router', 'ngStorage', 'ngAnimate', 'ngSanitize', 'btorfs.multiselect', 'oc.lazyLoad', 'ui.select','chart.js']);
  app.config(['ChartJsProvider', function (ChartJsProvider) {
     // Configure all charts
     ChartJsProvider.setOptions({
@@ -270,7 +270,22 @@ app.controller('NavbarController',  ['$rootScope', '$scope', '$state', '$statePa
           resolve: {
             loadMyService: ['$ocLazyLoad', function($ocLazyLoad) {
               return $ocLazyLoad.load('main.lead');
-            }] 
+            }],
+             statuses: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+              		  var LeadStatusService = $injector.get("LeadStatusService");
+		    		  console.log('Load all leadStatuses');
+			          var deferred = $q.defer();
+			          LeadStatusService.loadAllLeadStatuses().then(deferred.resolve, deferred.resolve);
+			          return deferred.promise;
+		      }],
+              leadStatusDetails: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+	              	  var LeadStatusDetailService = $injector.get("LeadStatusDetailService");
+	                  console.log('Load all leadStatusDetails');
+	                  var deferred = $q.defer();
+	                  LeadStatusDetailService.loadAllLeadStatusDetails().then(deferred.resolve, deferred.resolve);
+	                  console.log('deferred.promise'+deferred.promise);
+	                  return deferred.promise;
+              }],  
           }
       })
       .state('main.lead.edit', {
@@ -294,28 +309,13 @@ app.controller('NavbarController',  ['$rootScope', '$scope', '$state', '$statePa
               		EventService.loadAllEvents().then(deferred.resolve, deferred.resolve);
               		return deferred.promise;
             	}],
-		      providers: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+		        providers: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
               		var ProviderService = $injector.get("ProviderService");
 		    		  console.log('Load all providers');
 			          var deferred = $q.defer();
 			          ProviderService.loadAllProviders().then(deferred.resolve, deferred.resolve);
 			          return deferred.promise;
 		      } ],
-		      statuses: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
-              		  var LeadStatusService = $injector.get("LeadStatusService");
-		    		  console.log('Load all leadStatuses');
-			          var deferred = $q.defer();
-			          LeadStatusService.loadAllLeadStatuses().then(deferred.resolve, deferred.resolve);
-			          return deferred.promise;
-		      }],
-              leadStatusDetails: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
-	              	  var LeadStatusDetailService = $injector.get("LeadStatusDetailService");
-	                  console.log('Load all leadStatusDetails');
-	                  var deferred = $q.defer();
-	                  LeadStatusDetailService.loadAllLeadStatusDetails().then(deferred.resolve, deferred.resolve);
-	                  console.log('deferred.promise'+deferred.promise);
-	                  return deferred.promise;
-              }],  
 		      bestTimeToCalls: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
               		  var BestTimeToCallService = $injector.get("BestTimeToCallService");
 		    		  console.log('Load all bestTimeToCalls');

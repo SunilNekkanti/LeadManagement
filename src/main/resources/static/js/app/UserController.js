@@ -47,7 +47,12 @@ app.controller('UserController',
 						 return '<a href="javascript:void(0)" class="'+full.id+'" ng-click="ctrl.userEdit('+full.id+')">'+data+'</a>';
 					}).withClass("text-left"),
             DTColumnBuilder.newColumn('role.role').withTitle('ROLE').withOption('defaultContent', ''),
-            DTColumnBuilder.newColumn('contact.mobilePhone').withTitle('MOBILE').withOption('defaultContent', ''),
+            DTColumnBuilder.newColumn('contact.mobilePhone').withTitle('MOBILE').renderWith( 
+											               function(data, type, full, meta) {
+											                 var s2 = (""+data).replace(/\D/g, '');
+  															 var m = s2.match(/^(\d{3})(\d{3})(\d{4})$/);
+  															return (!m) ? null : "(" + m[1] + ") " + m[2] + "-" + m[3];
+												          }).withClass("text-left").withOption('defaultContent', ''),
             DTColumnBuilder.newColumn('contact.email').withTitle('EMAIL').withOption('defaultContent', '')
           ];
      

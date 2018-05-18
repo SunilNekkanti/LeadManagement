@@ -4,7 +4,7 @@
 
 	<groupId>com.pfchoice.springboot</groupId>
 	<artifactId>LeadManagement</artifactId>
-	<version>1.0.93</version>
+	<version>1.0.98</version>
 	<packaging>jar</packaging>
 
 	<name>LeadManagement</name>
@@ -96,6 +96,14 @@
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
+		
+	<!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
+		<dependency>
+		    <groupId>com.itextpdf</groupId>
+		    <artifactId>itextpdf</artifactId>
+		    <version>5.0.6</version>
+		</dependency>
+
 
 	</dependencies>
 	<build>

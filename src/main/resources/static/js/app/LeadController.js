@@ -113,7 +113,37 @@ app.controller(
 						    function dtInstanceCallback(dtInstance) {
 						        self.dtInstance = dtInstance;
 						    }
-						    
+						    self.genders = getAllGenders();
+						    self.filterGenderList =[];
+							    self.genders.forEach(function(gender){ 
+							       self.filterGenderList.push( {value:gender.id, label:gender.description});
+							    } );
+							 
+							 
+                              console.log('self.filterGenderList',self.filterGenderList);
+                                 
+							self.languages = getAllLanguages();
+							self.filterLanguageList =[];
+							    self.languages.forEach(function(language){ 
+							       self.filterLanguageList.push( {value:language.id, label:language.description});
+							    } );
+							   console.log('self.filterLanguageList',self.filterLanguageList); 
+							self.statuses = getAllLeadStatuses();
+							self.filterStatusList =[];
+							    self.statuses.forEach(function(status){ 
+							       self.filterStatusList.push( {value:status.id, label:status.description});
+							    } );
+							   
+							   console.log('self.filterStatusList',self.filterStatusList);
+							    
+							self.statusDetails = getAllLeadStatusDetails();
+							self.filterStatusDetailList =[];
+							    self.statusDetails.forEach(function(statusDetail){ 
+							       self.filterStatusDetailList.push( {value:statusDetail.id, label:statusDetail.description});
+							    } ); 
+							
+							 console.log('self.filterStatusDetailList',self.filterStatusDetailList);
+							     
 							self.dtColumns = [
 									DTColumnBuilder.newColumn('firstName','FIRSTNAME').renderWith(
 													function(data, type, full,
@@ -123,6 +153,13 @@ app.controller(
 									DTColumnBuilder.newColumn('lastName','LASTNAME').withOption(),
 									DTColumnBuilder.newColumn(
 											'gender.description','GENDER'),
+									DTColumnBuilder.newColumn(
+											'contact.homePhone','Phone').renderWith( 
+											               function(data, type, full, meta) {
+											                 var s2 = (""+data).replace(/\D/g, '');
+  															 var m = s2.match(/^(\d{3})(\d{3})(\d{4})$/);
+  															return (!m) ? null : "(" + m[1] + ") " + m[2] + "-" + m[3];
+												          }).withClass("text-left").withOption('defaultContent', ''),
 									DTColumnBuilder.newColumn(
 											'language.description','LANGUAGE'),
 									DTColumnBuilder.newColumn(
@@ -138,14 +175,63 @@ app.controller(
 											.withOption("bPaginate", true)
 											.withOption('bProcessing', true)
 											.withOption('stateSave', true)
-											.withOption('searchDelay', 3000)
+											.withOption('searchDelay', 2000)
 										    .withOption('createdRow', createdRow)
 									        .withPaginationType('full_numbers')
 									        .withOption('ordering', true)
 											.withOption('order', [[0,'ASC'],[1,'ASC']])
-											.withOption('aLengthMenu', [[15, 20, -1],[ 15, 20, "All"]])
 											.withOption('bDeferRender', true)
-									        .withFnServerData(serverData);
+										    .withOption('scrollX', '716')
+										    .withColReorder()
+										    .withFixedHeader({
+										        bottom: true
+										      })
+										      .withLightColumnFilter({
+										        '0': {
+										          html: 'input',
+										          type: 'text',
+										          time:500
+										          },
+										        '1': {
+										          html: 'input',
+										          type: 'text',
+										          time: 500
+										        },
+										        '2': {
+										          html: 'input',
+										          type: 'select',
+										          values: self.filterGenderList,
+										          time: 500
+										        },
+										        '3': {
+										          html: 'input',
+										          type: 'text',
+										          time: 500
+										        },
+										        '4': {
+										          html: 'input',
+										          type: 'select',
+										          values: self.filterLanguageList,
+										          time: 500
+										        },
+										        '5': {
+										          html: 'input',
+										          type: 'select',
+										          values: self.filterStatusList,
+										          time: 500
+										        },
+										        '6': {
+										          html: 'input',
+										          type: 'select',
+										          values: self.filterStatusDetailList,
+										        }
+										      })
+										      .withOption('language', {
+										          'processing': '<div class="table-logo-wrapper"><div class="vloader"></div></div>'
+										         // 'url': $cookies.get('JSESSION')
+										        })
+									        .withFnServerData(serverData)
+									        .withOption('bDestroy', true);
 							if(self.display){
 								 addLead();
 						    }
@@ -186,10 +272,18 @@ app.controller(
 									  sortDir = paramMap['order'][0]['dir'];
 								 }
 								 
-								// Then just call your service to get the
-								// records from server side
+								 var firstName      	= aoData[1].value[0]['search'].value || '';
+      							 var lastName       	= aoData[1].value[1]['search'].value || '';
+      							 var selectedGender 	= aoData[1].value[2]['search'].value || '';
+      							 var phoneNo        	= aoData[1].value[3]['search'].value || '';
+							     var selectedLang   	= aoData[1].value[4]['search'].value || '';
+							     var selectedStatus   	= aoData[1].value[5]['search'].value || '';
+							     var selectedStDetails  = aoData[1].value[6]['search'].value || '';
+							      
+								// Then just call your service to get the  records from server side
 								LeadService
-										.loadLeads(page, length, search.value, sortCol+','+sortDir )
+										.loadLeads(page, length, search.value, sortCol+','+sortDir 
+										 ,firstName,lastName,selectedGender, phoneNo,selectedLang,selectedStatus, selectedStDetails)
 										.then(
 												function(result) {
 													var records = {
@@ -453,6 +547,7 @@ app.controller(
 														self.lead.id);
 											}
 											self.displayEditButton = false;
+											self.consentFormSigned = false;
 						                
 						            }, function () {
 						                self.serverResponse = 'An error has occurred';

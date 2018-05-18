@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
 
@@ -37,12 +39,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.pfchoice.springboot.model.AgentLeadAppointment;
 import com.pfchoice.springboot.model.CurrentUser;
 import com.pfchoice.springboot.model.Email;
+import com.pfchoice.springboot.model.FileUploadContent;
 import com.pfchoice.springboot.model.LeadMembership;
 import com.pfchoice.springboot.model.LeadNotes;
 import com.pfchoice.springboot.model.User;
 import com.pfchoice.springboot.repositories.specifications.LeadSpecifications;
 import com.pfchoice.springboot.service.CurrentUserService;
 import com.pfchoice.springboot.service.EmailService;
+import com.pfchoice.springboot.service.FileUploadContentService;
 import com.pfchoice.springboot.service.LeadMembershipService;
 import com.pfchoice.springboot.service.UserService;
 import com.pfchoice.springboot.util.CustomErrorType;
@@ -68,6 +72,9 @@ public class LeadController {
 
 	@Autowired
 	EmailService emailService;
+	
+	@Autowired
+	FileUploadContentService fileUploadContentService;
 
 	// -------------------Retrieve All
 	// LeadMemberships---------------------------------------------
@@ -75,11 +82,20 @@ public class LeadController {
 	@RequestMapping(value = "/lead/", method = RequestMethod.GET)
 	public ResponseEntity<Page<LeadMembership>> listAllLeadMemberships(
 			@PageableDefault(page=0 ,size=100) Pageable pageRequest,
-			@RequestParam(value = "search", required = false) String search, @ModelAttribute("userId") Integer userId,
+			@RequestParam(value = "search", required = false) String search,
+			@RequestParam(value = "firstName", required = false) String firstName,
+			@RequestParam(value = "lastName", required = false) String lastName,
+			@RequestParam(value = "selectedGender", required = false) Integer selectedGender,
+			@RequestParam(value = "phoneNo", required = false) String phoneNo,
+			@RequestParam(value = "selectedLang", required = false) Integer selectedLang,
+			@RequestParam(value = "selectedStatus", required = false) Integer selectedStatus,
+			@RequestParam(value = "selectedStDetails", required = false) Integer selectedStDetails,
+			@ModelAttribute("userId") Integer userId,
 			@ModelAttribute("roleName") String roleName, @ModelAttribute("username") String username)
 			throws MessagingException, IOException {
 
-		Specification<LeadMembership> spec = new LeadSpecifications(userId, username, roleName, search);
+		Specification<LeadMembership> spec = new LeadSpecifications(userId, username, roleName, firstName, lastName,
+			 selectedGender, phoneNo, selectedLang, selectedStatus, selectedStDetails, search);
 		Page<LeadMembership> leads = leadService.findAllLeadMembershipsByPage(spec, pageRequest);
 		if (leads.getTotalElements() == 0) {
 			logger.info("no leads");
@@ -187,7 +203,6 @@ public class LeadController {
 			@ModelAttribute("userId") Integer userId, @ModelAttribute("roleName") String roleName,
 			@ModelAttribute("username") String username) throws MessagingException, InterruptedException, IOException {
 		logger.info("Updating LeadMembership with id {}", id);
-		logger.info("userId  {}", userId);
 		
 		List<AgentLeadAppointment> finalAgentLeadAppointList = new ArrayList<>();
 		List<AgentLeadAppointment> agntLeadAppointList = new ArrayList<>();
@@ -313,6 +328,17 @@ public class LeadController {
 					emailAttributes.put("currentTime", currentTime);
 					emailAttributes.put("notes", currentUserLeadNotes);					
 					emailAttributes.put("appointmentLocalTime", appointmentLocalTime);
+					
+					Set<FileUploadContent> leadConsentForms = new HashSet<>();
+					Integer consentFormId = currentLeadMembership.getFileUpload().getId();
+					FileUploadContent leadConsentForm = fileUploadContentService.findById(consentFormId);
+					if (leadConsentForm == null) {
+						logger.error("leadConsentForm with id {} not found.", id);
+					}else{
+						leadConsentForms.add(leadConsentForm);
+						emailAttributes.put("attachments",leadConsentForms);
+					}
+					
 					
 					String emailTemplateFileName = "agent_lead_assignment_email_template_" + roleName + ".txt";
 					mail.setBody(emailService.geContentFromTemplate(emailAttributes, emailTemplateFileName));

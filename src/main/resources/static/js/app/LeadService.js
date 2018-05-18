@@ -65,11 +65,14 @@ app.service('LeadService',
                 return deferred.promise;
             }
             
-            function loadLeads(pageNo, length, search, order) {
+            function loadLeads(pageNo, length, search, order
+                                      ,firstName,lastName,selectedGender, phoneNo,selectedLang,selectedStatus, selectedStDetails) {
                 var deferred = $q.defer();
                 
                 var pageable = {
-                  		 page:pageNo, size:length,sort: order,search: search||''
+                  		 page:pageNo, size:length,sort: order,search: search||'',
+                  		 firstName:firstName ,lastName:lastName,selectedGender:selectedGender, phoneNo:phoneNo
+                  		 ,selectedLang:selectedLang,selectedStatus:selectedStatus, selectedStDetails:selectedStDetails
                   		};
 
                   		var config = {
