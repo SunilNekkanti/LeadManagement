@@ -43,7 +43,6 @@ app.controller(
 							self.lead = {};
 							self.user = {};
 							self.loggedUserInsId = $localStorage.loginUser.insuranceId||'0';
-							console.log('leadcontroller.js$localStorage.loginUser.roleName'+$localStorage.loginUser.roleName);
 							self.loginUserRole = $localStorage.loginUser.roleName;
 							self.notes ='';
 							self.leads = [];
@@ -120,41 +119,35 @@ app.controller(
 							    } );
 							 
 							 
-                              console.log('self.filterGenderList',self.filterGenderList);
-                                 
 							self.languages = getAllLanguages();
 							self.filterLanguageList =[];
 							    self.languages.forEach(function(language){ 
 							       self.filterLanguageList.push( {value:language.id, label:language.description});
 							    } );
-							   console.log('self.filterLanguageList',self.filterLanguageList); 
+
 							self.statuses = getAllLeadStatuses();
 							self.filterStatusList =[];
 							    self.statuses.forEach(function(status){ 
 							       self.filterStatusList.push( {value:status.id, label:status.description});
 							    } );
 							   
-							   console.log('self.filterStatusList',self.filterStatusList);
-							    
 							self.statusDetails = getAllLeadStatusDetails();
 							self.filterStatusDetailList =[];
 							    self.statusDetails.forEach(function(statusDetail){ 
 							       self.filterStatusDetailList.push( {value:statusDetail.id, label:statusDetail.description});
 							    } ); 
 							
-							 console.log('self.filterStatusDetailList',self.filterStatusDetailList);
-							     
 							self.dtColumns = [
 									DTColumnBuilder.newColumn('firstName','FIRSTNAME').renderWith(
 													function(data, type, full,
 															meta) {
-														 return '<a href="javascript:void(0)" class="'+full.id+'" ng-click="ctrl.leadEdit(' +full.id+')">'+data+'</a>';
+														 return '<a href="javascript:void(0)" class="'+full.id+'" ng-click="ctrl.leadEdit('+full.id+')">'+data+'</a>';
 													}).withClass("text-left"),
 									DTColumnBuilder.newColumn('lastName','LASTNAME').withOption(),
 									DTColumnBuilder.newColumn(
 											'gender.description','GENDER'),
 									DTColumnBuilder.newColumn(
-											'contact.homePhone','Phone').renderWith( 
+											'contact.homePhone','PHONE').renderWith( 
 											               function(data, type, full, meta) {
 											                 var s2 = (""+data).replace(/\D/g, '');
   															 var m = s2.match(/^(\d{3})(\d{3})(\d{4})$/);
@@ -167,7 +160,7 @@ app.controller(
 									DTColumnBuilder.newColumn(
 													'statusDetail.description','STATUS_DETAIL').withOption('defaultContent', '')];
 
-							self.dtOptions = DTOptionsBuilder.newOptions()
+							self.dtOptions = DTOptionsBuilder.newOptions().withBootstrap()
 									 .withDisplayLength(20)
 									.withOption('bServerSide', true)
 											.withOption('responsive', true)
@@ -182,11 +175,7 @@ app.controller(
 											.withOption('order', [[0,'ASC'],[1,'ASC']])
 											.withOption('bDeferRender', true)
 										    .withOption('scrollX', '716')
-										    .withColReorder()
-										    .withFixedHeader({
-										        bottom: true
-										      })
-										      .withLightColumnFilter({
+										    .withLightColumnFilter({
 										        '0': {
 										          html: 'input',
 										          type: 'text',
@@ -224,14 +213,14 @@ app.controller(
 										          html: 'input',
 										          type: 'select',
 										          values: self.filterStatusDetailList,
+										          time:500
 										        }
 										      })
 										      .withOption('language', {
 										          'processing': '<div class="table-logo-wrapper"><div class="vloader"></div></div>'
 										         // 'url': $cookies.get('JSESSION')
 										        })
-									        .withFnServerData(serverData)
-									        .withOption('bDestroy', true);
+									        .withFnServerData(serverData);
 							if(self.display){
 								 addLead();
 						    }
@@ -350,7 +339,6 @@ app.controller(
 													self.successMessage = 'Lead created successfully';
 													self.errorMessage = '';
 													self.done = true;
-													self.display = false;
 													self.lead = {};
 													self.selectedAgentLeadAppointment = {};
 													self.notes ='';
@@ -358,6 +346,7 @@ app.controller(
 													self.dtInstance.reloadData();
 							                       // self.dtInstance.rerender();
 							                        $state.go('main.lead');
+							                        self.display = false; 
 												},
 												function(errResponse) {
 													console
@@ -369,7 +358,7 @@ app.controller(
 							}
 
 							function updateLead(lead, id) {
-								console.log('About to update lead',lead);								
+								console.log('About to update lead',lead.id);								
 								LeadService
 										.updateLead(lead, id)
 										.then(
@@ -378,7 +367,7 @@ app.controller(
 															.log('Lead updated successfully');
 													self.successMessage = 'Lead updated successfully';
 													self.errorMessage = '';
-													self.done = true;
+													self.done = true; 
 													self.notes ='';
 													clearFiles();
 													self.dtInstance.reloadData();
@@ -446,7 +435,7 @@ app.controller(
 																	self.selectedAgentLeadAppointment =  self.lead.agentLeadAppointmentList[0];
 																}
 																
-																console.log('self.selectedAgentLeadAppointment  after filter',self.selectedAgentLeadAppointment );
+																console.log('self.selectedAgentLeadAppointment  after filter' );
 															}
 														}
 													self.events = getAllEvents();
@@ -522,7 +511,6 @@ app.controller(
 					            self.selectedAgentLeadAppointment = {};
 					            self.display = false;
 								$state.go('main.lead', {}, {reload: false});
-					            
 					        }
 
 							function uploadFile() {
@@ -547,7 +535,7 @@ app.controller(
 														self.lead.id);
 											}
 											self.displayEditButton = false;
-											self.consentFormSigned = false;
+											
 						                
 						            }, function () {
 						                self.serverResponse = 'An error has occurred';
@@ -723,9 +711,8 @@ app.controller(
 							
 							function leadEdit(id){
 								var params = {'leadDisplay':true};
-								var trans =  $state.go('main.lead.edit',params,{reload:'main.lead.edit'}).transition;
-								trans.onSuccess({}, function() { editLead(id); }, { priority: -1 });
-								 
+								var trans =  $state.go('main.lead.edit').transition;
+								trans.onSuccess({}, function() { editLead(id); });
 							}
 							
 							function clearFiles(){

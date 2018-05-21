@@ -8,18 +8,18 @@
     
     <p>You have been scheduled for an appointment  on   ${appointmentLocalTime}</p>
   
-    <p> For more details about Lead information please check attachment which is a password protected.</p>
+    <p> For more details about Lead please open attachment which is a password protected.</p>
    
    
     <p> The Password for the attachment is </p>
-         <i> <p> 1. First three(3) characters of your last name    </p>
-             <p> 2. Last four(4) digits of your work phone number with no dashes or spaces   </p>
-             <p> 3. First three(3) characters of your first name  </p>
-           For example  if last name is "Paul" , first name is "John"  and work phone number is (123)-456-7890   then password  is  pau7890joh </p></i>
+         <i> <p> 1. First character of your first name    </p>
+             <p> 2. Your last name  </p>
+             <p> 3. Last four(4) digits of your work phone number with no dashes or spaces   </p>
+           
+    <p> For example  if last name is "Paul" , first name is "John"  and work phone number is (123)-456-7890   then password  is  jpaul7890 </p></i>
           
           
-      <p> Please contact OutReach Coordinator at 813-491-3062 for any further information </p>
-     
+      <p> Please contact our Outreach Coordinator at 813-491-3062 for further information </p>
      
      
     <p>Thanks</p>

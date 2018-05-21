@@ -35,7 +35,7 @@ email:
 
 spring:
   profiles:
-    active: "local,serveremail"
+    active: "server,serveremail"
   main:
     banner-mode: "off"
  
@@ -48,6 +48,8 @@ spring:
        hibernate:
           jdbc:
              time_zone: America/New_York
+envProperties:
+      coordinatorEmail: skumar@pfchoice.com             
 datasource:
   leadManagement:
     url: jdbc:mysql://localhost:3306/lead_management?tinyInt1isBit=false&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=false
@@ -71,6 +73,8 @@ spring:
             hibernate:
                 jdbc:
                     time_zone: America/New_York
+envProperties:
+      coordinatorEmail: dsoto@pfchoice.com                      
 datasource:
   leadManagement:
     url: jdbc:mysql://pras-aws-prod.cp2ok1lxfh49.us-east-1.rds.amazonaws.com:3306/lead_management?tinyInt1isBit=false&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=false

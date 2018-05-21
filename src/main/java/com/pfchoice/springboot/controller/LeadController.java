@@ -312,6 +312,11 @@ public class LeadController {
 				if(agntLeadAppointment.getAppointmentTime().compareTo(Calendar.getInstance().getTime()) > 0){
 					
 					String agentName = agntLeadAppointment.getUser().getName();
+					String agentUsername =  agntLeadAppointment.getUser().getUsername();
+					String agentPhone = (agntLeadAppointment.getUser().getContact().getHomePhone() == null)?
+							agntLeadAppointment.getUser().getContact().getMobilePhone(): agntLeadAppointment.getUser().getContact().getHomePhone();
+					
+					String attachmentKey = agentUsername+ agentPhone.substring(6);
 					
 					String appointmentTime = sdf.format(agntLeadAppointment.getAppointmentTime().getTime());
 					Date calApptTime = agntLeadAppointment.getAppointmentTime();
@@ -328,16 +333,20 @@ public class LeadController {
 					emailAttributes.put("currentTime", currentTime);
 					emailAttributes.put("notes", currentUserLeadNotes);					
 					emailAttributes.put("appointmentLocalTime", appointmentLocalTime);
+					emailAttributes.put("attachmentKey", attachmentKey);
 					
 					Set<FileUploadContent> leadConsentForms = new HashSet<>();
 					Integer consentFormId = currentLeadMembership.getFileUpload().getId();
-					FileUploadContent leadConsentForm = fileUploadContentService.findById(consentFormId);
-					if (leadConsentForm == null) {
-						logger.error("leadConsentForm with id {} not found.", id);
-					}else{
-						leadConsentForms.add(leadConsentForm);
-						emailAttributes.put("attachments",leadConsentForms);
+					if(consentFormId != null){
+						FileUploadContent leadConsentForm = fileUploadContentService.findById(consentFormId);
+						if (leadConsentForm == null) {
+							logger.error("leadConsentForm with id {} not found.", id);
+						}else{
+							leadConsentForms.add(leadConsentForm);
+							emailAttributes.put("attachments",leadConsentForms);
+						}
 					}
+					
 					
 					
 					String emailTemplateFileName = "agent_lead_assignment_email_template_" + roleName + ".txt";

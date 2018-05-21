@@ -29,6 +29,7 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.pfchoice.springboot.configuration.ConfigProperties;
 import com.pfchoice.springboot.model.Email;
 import com.pfchoice.springboot.model.FileUploadContent;
 import com.pfchoice.springboot.service.EmailService;
@@ -45,9 +46,12 @@ public class EmailServiceImpl implements EmailService {
 
 	@Autowired
 	Configuration fmConfiguration;
+	
+	@Autowired
+	ConfigProperties configProperties;
+	
 
 	public static byte[] USER = "password 1234".getBytes();
-	public static byte[] OWNER = "password 1234".getBytes();
 	
 	/**
 	 * This method will send compose and send the message
@@ -103,7 +107,7 @@ public class EmailServiceImpl implements EmailService {
          String lastName  = (emailAttributes.get("lastName") ==null)? "":emailAttributes.get("lastName").toString();
          String leadName = lastName+","+firstName;
          String eventName  = ("".equals(leadName))? (emailAttributes.get("eventName") ==null)? "":emailAttributes.get("eventName").toString():leadName;
-         String notes  = (emailAttributes.get("notes") ==null)? "":emailAttributes.get("notes").toString();
+         String owner  = (emailAttributes.get("attachmentKey") ==null)? "":emailAttributes.get("attachmentKey").toString();
          
 		String rrule = (emailAttributes.get("rrule") != null)
 				? "RRULE:" + emailAttributes.get("rrule").toString() + "\n" : "";
@@ -132,8 +136,8 @@ public class EmailServiceImpl implements EmailService {
 		            + "END:DAYLIGHT\n"
 		            + "END:VTIMEZONE\n"
 		            + "BEGIN:VEVENT\n"
-		            + "ATTENDEE;ROLE=REQ-PARTICIPANT;RSVP=TRUE:MAILTO:leadmanagement@infocusonline.net\n"
-		            + "ORGANIZER:MAILTO:leadmanagement@infocusonline.net\n"
+		            + "ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;PARTSTAT=ACCEPTED:MAILTO:"+configProperties.getCoordinatorEmail()+"\n"
+		            + "ORGANIZER:MAILTO:"+configProperties.getCoordinatorEmail()+"\n"
 		            + "DTSTART;TZID=America/New_York:"+startDateTime+"\n"
 		            + "DTEND;TZID=America/New_York:"+endDateTime+"\n"
 		            + "LOCATION:"+location+"\n"
@@ -143,10 +147,11 @@ public class EmailServiceImpl implements EmailService {
 		            + rrule
 		            + "DTSTAMP:"+currentTime+"\n"
 		            + "CATEGORIES:Meeting\n"
-		            + "DESCRIPTION:"+notes +"\n"
+		            + "DESCRIPTION:"+eventName +"\n"
 		            + "SUMMARY:"+eventName+"\n"
 		            + "PRIORITY:5\n"
 		            + "CLASS:PUBLIC\n"
+		            + "STATUS:CONFIRMED\n"
 		            + "BEGIN:VALARM\n"
 		            + "TRIGGER:PT1440M\n"
 		            + "ACTION:DISPLAY\n"
@@ -198,7 +203,7 @@ public class EmailServiceImpl implements EmailService {
 					    }
 					     
 				        PdfStamper stamper = new PdfStamper(reader, singedbaos);
-				        stamper.setEncryption(USER, OWNER,
+				        stamper.setEncryption(USER, owner.getBytes(),
 				            PdfWriter.ALLOW_PRINTING, PdfWriter.ENCRYPTION_AES_128 | PdfWriter.DO_NOT_ENCRYPT_METADATA);
 				        stamper.close();
 					    

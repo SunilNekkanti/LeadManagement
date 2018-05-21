@@ -37,7 +37,7 @@
   <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.0.js"></script>
   <script src="js/lib/angular-datatables.min.js"></script>
   <script data-require="ngStorage@0.3.0" data-semver="0.3.0" src="http://rawgit.com/gsklee/ngStorage/0.3.0/ngStorage.min.js"></script>
-  <script src="//unpkg.com/@uirouter/angularjs/release/angular-ui-router.min.js"></script>
+  <script src="js/lib/angular-ui-router.min.js"></script>
   <script src="js/lib/angular-bootstrap-multiselect.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.20.0/select.min.js"></script>
   <script src="js/lib/Chart.min.js"></script>
