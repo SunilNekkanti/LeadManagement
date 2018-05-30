@@ -1,0 +1,54 @@
+{
+  "name": "leadmamangement",
+  "version": "1.0.0",
+  "description": "lead_management_boot",
+  "main": "app.js",
+  "dependencies": {
+    "bower": "^1.3.12",
+    "browser-sync": "^1.9.2",
+    "del": "^3.0.0",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^5.0.0",
+    "gulp-cache": "^1.0.2",
+    "gulp-clone": "^1.0.0",
+    "gulp-concat-vendor": "^0.0.4",
+    "gulp-concat": "^2.6.1",
+    "gulp-connect": "^1.1.1",
+    "gulp-cssnano": "^2.1.3",
+    "gulp-directory-sync": "^1.2.3",
+    "gulp-freemarker": "^0.1.5",
+    "gulp-gzip": "^1.2.0",
+    "gulp-imagemin": "^4.1.0",
+    "gulp-jshint": "^2.1.0",
+    "gulp-livereload": "^1.5.0",
+    "gulp-inject": "^1.5.0",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-notify": "^2.2.0",
+    "gulp-rename": "^1.2.3",
+    "gulp-ruby-sass": "^3.0.0",
+    "gulp-run-sequence": "^0.3.2",
+    "gulp-uglify": "^1.5.4",
+    "jshint": "^2.9.5",
+    "main-bower-files": "^2.13.1",
+    "stream-series": "^0.1.1"
+  },
+  "devDependencies": {
+    "bower": "^1.3.12",
+    "browser-sync": "^1.9.2",
+    "gulp": "^3.9.1",
+    "gulp-freemarker": "^0.1.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gandlurisk/LeadManagement.git"
+  },
+  "author": "sarath",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gandlurisk/LeadManagement/issues"
+  },
+  "homepage": "https://github.com/gandlurisk/LeadManagement#readme"
+}

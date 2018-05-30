@@ -36,7 +36,8 @@
     EVENT_WEEKDAY_SERVICE_API: '/LeadManagement/api/eventWeekDay/',
     FILE_UPLOADED_SERVICE_API: '/LeadManagement/api/fileUploaded/',
     EVENT_WEEKNUMBER_SERVICE_API: '/LeadManagement/api/eventWeekNumber/',
-    BESTTIMETOCALL_SERVICE_API: '/LeadManagement/api/bestTimeToCall/'
+    BESTTIMETOCALL_SERVICE_API: '/LeadManagement/api/bestTimeToCall/',
+    STATUS_REPORT_SERVICE_API: '/LeadManagement/api/statusReport/'
   });
 
   app.run(function($rootScope, $state) {
@@ -149,6 +150,10 @@
           name: 'main.eventAssignment',
           serie: true,
           files: ['js/app/EventAssignmentService.js', 'js/app/EventService.js', 'js/app/EventFrequencyService.js', 'js/app/EventMonthService.js', 'js/app/EventWeekDayService.js', 'js/app/EventWeekNumberService.js', 'js/app/EventWeekNumberService.js', 'js/app/EventAssignmentController.js']
+        }, {
+          name: 'main.statusReport',
+          serie: true,
+          files: ['js/app/EventService.js', 'js/app/StatusReportService.js', 'js/app/LeadStatusService.js', 'js/app/StatusReportController.js']
         }]
 
       });
@@ -552,6 +557,25 @@
               console.log('deferred.promise' + deferred.promise);
               return deferred.promise;
             }
+          }
+        })
+        .state('main.statusReport', {
+          url: '/statusReport',
+          cache: false,
+          templateUrl: 'partials/statusReport_list',
+          controller: 'StatusReportController',
+          controllerAs: 'ctrl',
+          resolve: {
+            loadMyService: ['$ocLazyLoad', function($ocLazyLoad) {
+              return $ocLazyLoad.load('main.statusReport');
+            }],
+            events: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+              var EventService = $injector.get("EventService");
+              console.log('Load all  events');
+              var deferred = $q.defer();
+              EventService.loadAllEvents().then(deferred.resolve, deferred.resolve);
+              return deferred.promise;
+            }]
           }
         })
         .state('main.language', {

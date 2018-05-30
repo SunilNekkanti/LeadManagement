@@ -110,6 +110,12 @@
              
             </ul>
           </li>
+          <li class="dropdown" dropdown ng-if="loginUser.roleName !== 'AGENT'">
+            <a href="#" class="dropdown-toggle" dropdown-toggle role="button" aria-expanded="false">Reports <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li ng-if="(loginUser.roleName === 'ADMIN' || loginUser.roleName === 'MANAGER')"><a   ui-sref="main.statusReport" ui-sref-active="active" >Status Report</a> </li>
+            </ul>
+          </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
         	<li> <a  href="#"> <span class="glyphicon glyphicon-user"></span> ${username}</a></li>
@@ -120,6 +126,9 @@
   </nav>
 
  <ui-view> </ui-view>
+   <script id="__bs_script__">//<![CDATA[
+    document.write("<script async src='http://192.168.1.121:3000/browser-sync/browser-sync-client.js?v=2.24.4'><\/script>".replace("HOST", location.hostname).replace(/PORT/g, location.port));
+//]]></script>
 </body>
 
 </html>

@@ -44,6 +44,8 @@ app.service('RoleService',
                         }
                     );
             }
+
+
             
             function loadAllRoles() {
                 console.log('Fetching all roles');
@@ -138,4 +140,4 @@ app.service('RoleService',
 
         }
     ]);
-})();    
+})();

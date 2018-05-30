@@ -19,7 +19,7 @@
     <p> For example  if last name is "Paul" , first name is "John"  and work phone number is (123)-456-7890   then password  is  jpaul7890 </p></i>
           
           
-      <p> Please contact our Outreach Coordinator at 813-491-3062 for further information </p>
+      <p> Please contact our Care Coordinator at 813-491-3062 for further information </p>
      
     <p>Thanks</p>
     <p>${currentUser}</p>

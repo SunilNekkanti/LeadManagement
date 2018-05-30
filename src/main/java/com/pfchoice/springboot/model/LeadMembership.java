@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -17,9 +19,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedStoredProcedureQueries;
+import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
+import javax.persistence.SqlResultSetMapping;
+import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Fetch;
@@ -37,6 +43,37 @@ import com.pfchoice.springboot.util.JsonDateSerializer;
  */
 @Entity
 @Table(name = "lead_membership")
+
+@SqlResultSetMapping(
+	    name="statusReportDTOMapping",
+	    classes={
+	        @ConstructorResult(
+	            targetClass=StatusReportDTO.class, 
+	            columns = { 
+	            		 @ColumnResult(name = "lastName",type = String.class),
+	            		 @ColumnResult(name = "firstName",type = String.class),
+	            		 @ColumnResult(name = "initialInsurance",type = String.class),
+	            		 @ColumnResult(name = "planType",type = String.class),
+	            	     @ColumnResult(name = "status",type = String.class),
+	            		 @ColumnResult(name = "event",type = String.class),
+	            		 @ColumnResult(name = "count",type = Integer.class),
+	            		 @ColumnResult(name = "userName",type = String.class) 
+	             }	            
+	        )
+	    }
+	)
+@NamedStoredProcedureQueries({
+		@NamedStoredProcedureQuery(name = "leadStatusReport",  procedureName = "LEAD_STATUS_REPORT", 
+				 resultSetMappings="statusReportDTOMapping",parameters = {
+				@StoredProcedureParameter(name = "usrName", type = String.class),
+				@StoredProcedureParameter(name = "roleIds", type = String.class),
+				@StoredProcedureParameter(name = "statusIds", type = String.class),
+				@StoredProcedureParameter(name = "eventIds", type = String.class),
+				@StoredProcedureParameter(name = "starttDate", type = String.class),
+				@StoredProcedureParameter(name = "enddDate", type = String.class),
+				@StoredProcedureParameter(name = "reportType", type = String.class) 
+				})
+		})
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class LeadMembership extends RecordDetails implements Serializable {
 
@@ -98,7 +135,7 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	@JoinColumn(name = "lead_mbr_status_detail_id", referencedColumnName = "code", insertable = false)
 	private LeadStatusDetail statusDetail;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "lead_contacts", joinColumns = {
 			@JoinColumn(name = "lead_mbr_id", referencedColumnName = "lead_mbr_id", nullable = false ) }, inverseJoinColumns = {
 					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id", nullable = false, unique = true) })

@@ -4,6 +4,9 @@ import com.pfchoice.springboot.model.LeadMembership;
 import com.pfchoice.springboot.repositories.LeadMembershipRepository;
 import com.pfchoice.springboot.service.LeadMembershipService;
 
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,6 +48,10 @@ public class LeadMembershipServiceImpl implements LeadMembershipService {
 	public boolean isLeadMembershipExists(String leadFirstName, String leadLastName, String address, String phoneNumber) {
 		return !leadMembershipRepository.findLeadMembershipByLastNameFirstNameDob(leadFirstName, leadLastName, address, phoneNumber)
 				.isEmpty();
+	}
+	
+	public List<LeadMembership> leadStatusReport(String usrName,String roleIds, String statusIds, String  eventIds, String startDate, String endDate,String  reportType ){
+		return leadMembershipRepository.leadStatusReport(usrName,roleIds, statusIds, eventIds,startDate,endDate, reportType );
 	}
 
 }
