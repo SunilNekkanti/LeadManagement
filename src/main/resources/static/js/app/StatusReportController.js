@@ -7,10 +7,6 @@
       var self = this;
       self.display = false;
       self.displayEditButton = false;
-      self.selectedStatuses = [];
-      self.selectedRoles = [];
-      self.selectedUsers = [];
-      self.selectedEvents = [];
       self.getAllLeadStatuses = getAllLeadStatuses;
       self.getAllRoles = getAllRoles;
       self.getAllUsers = getAllUsers;
@@ -19,6 +15,13 @@
       self.roles = getAllRoles() || [];
       self.users = getAllUsers() || [];
       self.events = getAllEvents() || [];
+      self.selectedStatuses = self.leadStatuses || [];
+      self.selectedRoles = self.roles || [];
+      self.selectedUsers = self.users || [];
+      self.selectedEvents = self.events || [];
+      var date = new Date();
+      self.startDate = moment(date).format('MM/DD/YYYY') ;
+      self.endDate = moment(date.setDate(date.getDate() + 1)).format('MM/DD/YYYY') ;
       self.dtInstance = {};
       self.generate = generate;
       self.reset = reset;
@@ -33,20 +36,25 @@
       self.checkBoxChange = checkBoxChange;
       self.dtColumns = [
 
-        DTColumnBuilder.newColumn('lastName').withTitle('LAST_NAME'),
-        DTColumnBuilder.newColumn('firstName').withTitle('FIRST_NAME')
+        DTColumnBuilder.newColumn('userName').withTitle('USER'),
+        DTColumnBuilder.newColumn('status').withTitle('LEAD_STATUS'),
+        DTColumnBuilder.newColumn('event').withTitle('EVENT'),
+        DTColumnBuilder.newColumn('count').withTitle('COUNT')
       ];
 
 
       self.dtOptions = DTOptionsBuilder.newOptions()
         .withDisplayLength(500)
+        .withDOM('ft')
         .withOption('bServerSide', true)
         .withOption("bLengthChange", false)
         .withOption("bPaginate", true)
         .withOption('bProcessing', true)
-        .withOption('stateSave', true)
+        .withOption('bDeferRender', true)
+        .withOption('bDestroy', true)
         .withOption('createdRow', createdRow)
-        .withPaginationType('full_numbers')
+        .withOption('scrollY', 450)
+        .withOption('scrollX', '100%')
         .withFnServerData(serverData);
 
       function serverData(sSource, aoData, fnCallback) {
@@ -81,7 +89,7 @@
         StatusReportService
           .loadStatusReport(page, length, search.value, sortCol + ',' + sortDir, statuses, roles, userNames, events, self.startDate, self.endDate)
           .then(
-            function(result) { 
+            function(result) {
               var records = {
                 'recordsTotal': result.data.totalElements || 0,
                 'recordsFiltered': result.data.totalElements || 0,
@@ -111,6 +119,8 @@
 
       function generate() {
         self.displayTable = true;
+        if( !angular.equals(self.dtInstance, {}) ) {self.dtInstance.rerender();}
+
       }
 
 
