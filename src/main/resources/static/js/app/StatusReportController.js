@@ -11,6 +11,7 @@
       self.getAllRoles = getAllRoles;
       self.getAllUsers = getAllUsers;
       self.getAllEvents = getAllEvents;
+      self.setReportType = setReportType;
       self.leadStatuses = getAllLeadStatuses() || [];
       self.roles = getAllRoles() || [];
       self.users = getAllUsers() || [];
@@ -19,20 +20,20 @@
       self.selectedRoles = self.roles || [];
       self.selectedUsers = self.users || [];
       self.selectedEvents = self.events || [];
+      self.reportType = 'Summary';
       var date = new Date();
       self.startDate = moment(date).format('MM/DD/YYYY') ;
       self.endDate = moment(date.setDate(date.getDate() + 1)).format('MM/DD/YYYY') ;
       self.dtInstance = {};
+      self.dt1Instance = {};
       self.generate = generate;
       self.reset = reset;
       self.cancelEdit = cancelEdit;
-      self.dtInstance = {};
       self.successMessage = '';
       self.errorMessage = '';
       self.done = false;
       self.onlyIntegers = /^\d+$/;
       self.onlyNumbers = /^\d+([,.]\d+)?$/;
-      self.dtInstance = {};
       self.checkBoxChange = checkBoxChange;
       self.dtColumns = [
 
@@ -40,6 +41,14 @@
         DTColumnBuilder.newColumn('status').withTitle('LEAD_STATUS'),
         DTColumnBuilder.newColumn('event').withTitle('EVENT'),
         DTColumnBuilder.newColumn('count').withTitle('COUNT')
+      ];
+
+      self.dt1Columns = [
+        DTColumnBuilder.newColumn('userName').withTitle('USER'),
+        DTColumnBuilder.newColumn('lastName').withTitle('LASTNAME'),
+        DTColumnBuilder.newColumn('firstName').withTitle('FIRSTNAME'),
+        DTColumnBuilder.newColumn('event').withTitle('EVENT'),
+        DTColumnBuilder.newColumn('status').withTitle('LEAD_STATUS')
       ];
 
 
@@ -87,7 +96,7 @@
         // Then just call your service to get the
         // records from server side
         StatusReportService
-          .loadStatusReport(page, length, search.value, sortCol + ',' + sortDir, statuses, roles, userNames, events, self.startDate, self.endDate)
+          .loadStatusReport(page, length, search.value, sortCol + ',' + sortDir, statuses, roles, userNames, events, self.startDate, self.endDate, self.reportType)
           .then(
             function(result) {
               var records = {
@@ -99,11 +108,6 @@
             });
       }
 
-      function reloadData() {
-        var resetPaging = false;
-        self.dtInstance.reloadData(callback,
-          resetPaging);
-      }
 
       function createdRow(row, data, dataIndex) {
         // Recompiling so we can bind Angular directive to the DT
@@ -120,6 +124,7 @@
       function generate() {
         self.displayTable = true;
         if( !angular.equals(self.dtInstance, {}) ) {self.dtInstance.rerender();}
+        if( !angular.equals(self.dt1Instance, {}) ) {self.dt1Instance.rerender();}
 
       }
 
@@ -155,6 +160,11 @@
 
       function getAllEvents() {
         return EventService.getAllEvents();
+      }
+
+      function setReportType(reportType){ 
+        self.reportType = reportType;
+        self.generate();
       }
 
     }

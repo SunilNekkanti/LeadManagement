@@ -12,11 +12,11 @@ app.service('StatusReportService',
 
             return factory;
 
-            function loadStatusReport(page, length, search , order, statuses, roles, userName, events, startDate, endDate) {
+            function loadStatusReport(page, length, search , order, statuses, roles, userName, events, startDate, endDate, reportType) {
                 console.log('Fetching all StatusReports');
                 var deferred = $q.defer();
                 var pageable = {
-                     page:page,length:length, search:search, order:order, statusIds:statuses, roleIds:roles, userName:userName,eventIds:events, startDate:startDate,endDate:endDate,reportType:'Summary'
+                     page:page,length:length, search:search, order:order, statusIds:statuses, roleIds:roles, userName:userName,eventIds:events, startDate:startDate,endDate:endDate,reportType:reportType
                       };
 
                       var config = {

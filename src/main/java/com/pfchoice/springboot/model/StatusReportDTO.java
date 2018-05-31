@@ -65,7 +65,7 @@ public class StatusReportDTO  implements Serializable {
 	}
 
 	
-	public StatusReportDTO(String lastName, String planType, String initialInsurance, String firstName, String status,
+	public StatusReportDTO(String lastName, String firstName, String initialInsurance, String planType, String status,
 			String event, Integer count, String userName) {
 		super();
 		this.lastName = lastName;
