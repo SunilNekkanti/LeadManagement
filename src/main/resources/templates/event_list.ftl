@@ -3,9 +3,9 @@
   <div class="panel panel-success" ng-hide="ctrl.display">
     <!-- Default panel contents -->
     <div class="panel-heading"><span class="user">List of Events </span>
-      <button type="button" ng-if="ctrl.adminOrManager()" ng-click="ctrl.addEvent()" ng-hide="ctrl.displayEditButton" class="btn btn-success btn-xs custom-width floatRight"> Add </button>
-      <button type="button" ng-if="ctrl.adminOrManager()" ng-click="ctrl.editEvent(ctrl.eventId)" ng-show="ctrl.displayEditButton" class="btn btn-primary btn-xs custom-width floatRight">Edit</button>
-      <button type="button" ng-if="ctrl.adminOrManager()" ng-click="ctrl.removeEvent(ctrl.eventId)" ng-show="ctrl.displayEditButton" class="btn btn-danger btn-xs custom-width floatRight">Remove</button>
+      <button type="button" ng-if="ctrl.adminOrManager()" ng-click="ctrl.addEvent();$event.preventDefault();" ng-hide="ctrl.displayEditButton" class="btn btn-success btn-xs custom-width floatRight"> Add </button>
+      <button type="button" ng-if="ctrl.adminOrManager()" ng-click="ctrl.editEvent(ctrl.eventId);$event.preventDefault();" ng-show="ctrl.displayEditButton" class="btn btn-primary btn-xs custom-width floatRight">Edit</button>
+      <button type="button" ng-if="ctrl.adminOrManager()" ng-click="ctrl.removeEvent(ctrl.eventId);$event.preventDefault();" ng-show="ctrl.displayEditButton" class="btn btn-danger btn-xs custom-width floatRight">Remove</button>
     </div>
     <div class="panel-body">
       <div class="table-responsive">
@@ -19,10 +19,10 @@
   <div class="panel panel-success" ng-show="ctrl.display">
     <!-- Default panel contents -->
     <div class="panel-heading"><span class="event">Event </span>
-    <button type="button"  ng-click="ctrl.addLead()" ng-show="ctrl.event.id"   class="btn btn-success btn-xs  floatRight">Add Lead</button>
-    <button type="button" ng-click="ctrl.cancelEdit()" class="btn btn-warning btn-xs floatRight"   >Cancel</button>
-    <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-xs floatRight" ng-disabled="myForm.$pristine" ng-if="ctrl.adminOrManager() && !ctrl.event.id" >Reset Form</button>
-    <input type="button" value="{{!ctrl.event.id ? 'Add' : 'Update'}}" ng-click="ctrl.submit()" class="btn btn-primary btn-xs floatRight" ng-disabled="myForm.$invalid || myForm.$pristine || ctrl.validEventDate(ctrl.event.eventDateStartTime,ctrl.event.eventDateEndTime)" ng-show="ctrl.adminOrManager()">{{!ctrl.event.id ? 'Add' : 'Update'}}</button>
+    <button type="button"  ng-click="ctrl.addLead();$event.preventDefault();" ng-show="ctrl.event.id"   class="btn btn-success btn-xs  floatRight">Add Lead</button>
+    <button type="button" ng-click="ctrl.cancelEdit();$event.preventDefault();" class="btn btn-warning btn-xs floatRight"   >Cancel</button>
+    <button type="button" ng-click="ctrl.reset();$event.preventDefault();" class="btn btn-warning btn-xs floatRight" ng-disabled="myForm.$pristine" ng-if="ctrl.adminOrManager() && !ctrl.event.id" >Reset Form</button>
+    <input type="button" value="{{!ctrl.event.id ? 'Add' : 'Update'}}" ng-click="ctrl.submit();$event.preventDefault();" class="btn btn-primary btn-xs floatRight" ng-disabled="myForm.$invalid || myForm.$pristine || ctrl.validEventDate(ctrl.event.eventDateStartTime,ctrl.event.eventDateEndTime)" ng-show="ctrl.adminOrManager()">{{!ctrl.event.id ? 'Add' : 'Update'}}</button>
             
    </div>
     <div class="panel-body">

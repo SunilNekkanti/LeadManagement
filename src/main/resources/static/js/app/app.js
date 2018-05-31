@@ -42,6 +42,17 @@
 
   app.run(function($rootScope, $state) {
     var lastDigestRun = new Date();
+
+    $rootScope.$on('$stateChangeSuccess',
+    function(event, toState, toParams, fromState, fromParams){
+       $rootScope.previousState = {state: fromState, params: fromParams};
+       console.log('$rootScope.previousState',$rootScope.previousState);
+     });
+
+     $rootScope.backState = function(state, params) {
+        $state.go(state.name, params);
+      };
+
     setInterval(function() {
       var now = Date.now();
       if (now - lastDigestRun > 15 * 60 * 1000) {
@@ -93,12 +104,12 @@
       }
       if (params !== '') {
         $state.go(url, params, {
-          reload: true
+          reload: true, inherit: false,notify: true
         });
 
       } else {
         $state.go(url, {}, {
-          reload: true
+          reload: true, inherit: false,notify: true
         });
       }
     }
@@ -307,7 +318,7 @@
           }
         })
         .state('main.lead.edit', {
-          url: '/', 
+          url: '/',
           cache: false,
           templateUrl: 'partials/lead_list',
           controller: 'LeadController',

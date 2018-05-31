@@ -24,8 +24,8 @@
       var date = new Date();
       self.startDate = moment(date).format('MM/DD/YYYY') ;
       self.endDate = moment(date.setDate(date.getDate() + 1)).format('MM/DD/YYYY') ;
-      self.dtInstance = {};
-      self.dt1Instance = {};
+      self.dtSummaryByUserInstance = {};
+      self.dtDetailedInstance = {};
       self.generate = generate;
       self.reset = reset;
       self.cancelEdit = cancelEdit;
@@ -35,7 +35,7 @@
       self.onlyIntegers = /^\d+$/;
       self.onlyNumbers = /^\d+([,.]\d+)?$/;
       self.checkBoxChange = checkBoxChange;
-      self.dtColumns = [
+      self.dtSummaryByUserColumns = [
 
         DTColumnBuilder.newColumn('userName').withTitle('USER'),
         DTColumnBuilder.newColumn('status').withTitle('LEAD_STATUS'),
@@ -43,7 +43,7 @@
         DTColumnBuilder.newColumn('count').withTitle('COUNT')
       ];
 
-      self.dt1Columns = [
+      self.dtDetailedColumns = [
         DTColumnBuilder.newColumn('userName').withTitle('USER'),
         DTColumnBuilder.newColumn('lastName').withTitle('LASTNAME'),
         DTColumnBuilder.newColumn('firstName').withTitle('FIRSTNAME'),
@@ -123,8 +123,8 @@
 
       function generate() {
         self.displayTable = true;
-        if( !angular.equals(self.dtInstance, {}) ) {self.dtInstance.rerender();}
-        if( !angular.equals(self.dt1Instance, {}) ) {self.dt1Instance.rerender();}
+        if( !angular.equals(self.dtSummaryByUserInstance, {}) ) {self.dtSummaryByUserInstance.rerender();}
+        if( !angular.equals(self.dtDetailedInstance, {}) ) {self.dtDetailedInstance.rerender();}
 
       }
 
@@ -162,7 +162,7 @@
         return EventService.getAllEvents();
       }
 
-      function setReportType(reportType){ 
+      function setReportType(reportType){
         self.reportType = reportType;
         self.generate();
       }

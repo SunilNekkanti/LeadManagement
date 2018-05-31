@@ -114,29 +114,29 @@ app.controller(
 						    }
 						    self.genders = getAllGenders();
 						    self.filterGenderList =[];
-							    self.genders.forEach(function(gender){ 
+							    self.genders.forEach(function(gender){
 							       self.filterGenderList.push( {value:gender.id, label:gender.description});
 							    } );
-							 
-							 
+
+
 							self.languages = getAllLanguages();
 							self.filterLanguageList =[];
-							    self.languages.forEach(function(language){ 
+							    self.languages.forEach(function(language){
 							       self.filterLanguageList.push( {value:language.id, label:language.description});
 							    } );
 
 							self.statuses = getAllLeadStatuses();
 							self.filterStatusList =[];
-							    self.statuses.forEach(function(status){ 
+							    self.statuses.forEach(function(status){
 							       self.filterStatusList.push( {value:status.id, label:status.description});
 							    } );
-							   
+
 							self.statusDetails = getAllLeadStatusDetails();
 							self.filterStatusDetailList =[];
-							    self.statusDetails.forEach(function(statusDetail){ 
+							    self.statusDetails.forEach(function(statusDetail){
 							       self.filterStatusDetailList.push( {value:statusDetail.id, label:statusDetail.description});
-							    } ); 
-							
+							    } );
+
 							self.dtColumns = [
 									DTColumnBuilder.newColumn('firstName','FIRSTNAME').renderWith(
 													function(data, type, full,
@@ -147,7 +147,7 @@ app.controller(
 									DTColumnBuilder.newColumn(
 											'gender.description','GENDER'),
 									DTColumnBuilder.newColumn(
-											'contact.homePhone','PHONE').renderWith( 
+											'contact.homePhone','PHONE').renderWith(
 											               function(data, type, full, meta) {
 											                 var s2 = (""+data).replace(/\D/g, '');
   															 var m = s2.match(/^(\d{3})(\d{3})(\d{4})$/);
@@ -224,7 +224,7 @@ app.controller(
 							if(self.display){
 								 addLead();
 						    }
-							
+
 							function createdRow(row, data, dataIndex) {
 								// Recompiling so we can bind Angular directive
 								// to the DT
@@ -239,8 +239,8 @@ app.controller(
 							}
 
 							function serverData(sSource, aoData, fnCallback) {
-								
-								
+
+
 								// All the parameters you need is in the aoData
 								// variable
 								var order = aoData[2].value;
@@ -252,7 +252,7 @@ app.controller(
 								for ( var i = 0; i < aoData.length; i++) {
 								  paramMap[aoData[i].name] = aoData[i].value;
 								}
-								
+
 								var sortCol ='';
 								var sortDir ='';
 								// extract sort information
@@ -260,7 +260,7 @@ app.controller(
 									 sortCol = paramMap['columns'][paramMap['order'][0]['column']].data;
 									  sortDir = paramMap['order'][0]['dir'];
 								 }
-								 
+
 								 var firstName      	= aoData[1].value[0]['search'].value || '';
       							 var lastName       	= aoData[1].value[1]['search'].value || '';
       							 var selectedGender 	= aoData[1].value[2]['search'].value || '';
@@ -268,10 +268,10 @@ app.controller(
 							     var selectedLang   	= aoData[1].value[4]['search'].value || '';
 							     var selectedStatus   	= aoData[1].value[5]['search'].value || '';
 							     var selectedStDetails  = aoData[1].value[6]['search'].value || '';
-							      
+
 								// Then just call your service to get the  records from server side
 								LeadService
-										.loadLeads(page, length, search.value, sortCol+','+sortDir 
+										.loadLeads(page, length, search.value, sortCol+','+sortDir
 										 ,firstName,lastName,selectedGender, phoneNo,selectedLang,selectedStatus, selectedStDetails)
 										.then(
 												function(result) {
@@ -283,7 +283,7 @@ app.controller(
 													fnCallback(records);
 												});
 							}
-							
+
 							function callback(json) {
 								console.log(json);
 							}
@@ -297,19 +297,19 @@ app.controller(
 									if(Object.keys(self.selectedAgentLeadAppointment).length > 0){
 										self.lead.agentLeadAppointmentList.push(self.selectedAgentLeadAppointment);
 									}
-									
+
                                     console.log('Submitting agentLeadAppointmentList');
 								}
-								
+
 								 if(self.notes && self.notes != ''){
 				            		 self.lead.leadNotes = [];
 				            		 self.lead.leadNotes.push({notes:self.notes, user:{id:$localStorage.loginUser.userId}});
 				            	 }
 								 uploadFile();
-							
+
 							}
-							
-							
+
+
 							function readUploadedFile(){
 								console.log('About to read consignment form');
 								FileUploadService.getFileUpload(self.lead.fileUpload.id).then(
@@ -317,8 +317,8 @@ app.controller(
 											self.errorMessage = '';
 											var file = new Blob([response], {type: self.lead.fileUpload.contentType});
 											 var fileURL = URL.createObjectURL(file);
-										    self.content = $sce.trustAsResourceUrl(fileURL); 
-										    
+										    self.content = $sce.trustAsResourceUrl(fileURL);
+
 										},
 										function(errResponse) {
 											console
@@ -326,7 +326,7 @@ app.controller(
 											self.errorMessage = 'Error while reading consignment form: '
 													+ errResponse.data.errorMessage;
 											self.successMessage = '';
-										}); 
+										});
 							}
 							function createLead(lead) {
 								console.log('About to create lead');
@@ -346,7 +346,7 @@ app.controller(
 													self.dtInstance.reloadData();
 							                       // self.dtInstance.rerender();
 							                        $state.go('main.lead');
-							                        self.display = false; 
+							                        self.display = false;
 												},
 												function(errResponse) {
 													console
@@ -358,7 +358,7 @@ app.controller(
 							}
 
 							function updateLead(lead, id) {
-								console.log('About to update lead',lead.id);								
+								console.log('About to update lead',lead.id);
 								LeadService
 										.updateLead(lead, id)
 										.then(
@@ -367,7 +367,7 @@ app.controller(
 															.log('Lead updated successfully');
 													self.successMessage = 'Lead updated successfully';
 													self.errorMessage = '';
-													self.done = true; 
+													self.done = true;
 													self.notes ='';
 													clearFiles();
 													self.dtInstance.reloadData();
@@ -408,7 +408,7 @@ app.controller(
 												});
 							}
 							function editLead(id) {
-								
+
 								self.successMessage = '';
 								self.errorMessage = '';
 									LeadService
@@ -416,25 +416,25 @@ app.controller(
 										.then(
 												function(lead) {
 													self.lead = lead;
-													
+
 														if(self.lead.agentLeadAppointmentList === undefined){
 															self.selectedAgentLeadAppointment= {} ;
-														} 			
+														}
 														else{
 															if(self.lead.agentLeadAppointmentList.length>0){
 															self.selectedAgentLeadAppointmentList  = self.lead.agentLeadAppointmentList.filter(function( obj ) {
 																                                    console.log('obj.user.id',obj.user.id );
 										   															console.log('$localStorage.loginUser.userId',$localStorage.loginUser.userId );
-																							
+
 										   															return obj.user.id == $localStorage.loginUser.userId;
 										   															 });
-																								 
+
 																if(self.selectedAgentLeadAppointmentList !== undefined && self.selectedAgentLeadAppointmentList.length > 0)	{
 																    self.selectedAgentLeadAppointment =  self.selectedAgentLeadAppointmentList[0];
 																} else {
 																	self.selectedAgentLeadAppointment =  self.lead.agentLeadAppointmentList[0];
 																}
-																
+
 																console.log('self.selectedAgentLeadAppointment  after filter' );
 															}
 														}
@@ -468,7 +468,7 @@ app.controller(
 									self.users = getAllAgents();
 									self.events = getAllEvents();
 									self.genders = getAllGenders();
-									self.bestTimeToCalls = getAllBestTimeToCalls(); 
+									self.bestTimeToCalls = getAllBestTimeToCalls();
 									self.states = getAllStates();
 									self.languages = getAllLanguages();
 									self.statuses = getAllLeadStatuses();
@@ -478,12 +478,12 @@ app.controller(
 									self.display = true;
 								}else{
 									var trans =  $state.go('main.lead.edit').transition;
-									 trans.onSuccess({}, function() {   
+									 trans.onSuccess({}, function() {
 										 self.providers = getAllProviders();
 											self.users = getAllAgents();
 											self.events = getAllEvents();
 											self.genders = getAllGenders();
-											self.bestTimeToCalls = getAllBestTimeToCalls(); 
+											self.bestTimeToCalls = getAllBestTimeToCalls();
 											self.states = getAllStates();
 											self.languages = getAllLanguages();
 											self.statuses = getAllLeadStatuses();
@@ -493,7 +493,7 @@ app.controller(
 											self.display = true;
 									 }, { priority: -1 });
 								}
-									
+
 							}
 
 							function reset() {
@@ -503,14 +503,14 @@ app.controller(
 								self.selectedAgentLeadAppointment = {};
 								$scope.myForm.$setPristine(); // reset Form
 							}
-							
+
 							function cancelEdit(){
 					            self.successMessage='';
 					            self.errorMessage='';
 					            self.lead={};
 					            self.selectedAgentLeadAppointment = {};
 					            self.display = false;
-								$state.go('main.lead', {}, {reload: false});
+							      	$state.go('main.lead', {}, {reload: false, inherit: true,notify: false});
 					        }
 
 							function uploadFile() {
@@ -527,16 +527,16 @@ app.controller(
 						            	 if (self.lead.id === undefined || self.lead.id === null) {
 												console.log('Saving New Lead');
 												createLead(self.lead);
-												
+
 											} else {
-												 
+
 												updateLead(self.lead, self.lead.id);
 												console.log('Lead updated with id ',
 														self.lead.id);
 											}
 											self.displayEditButton = false;
-											
-						                
+
+
 						            }, function () {
 						                self.serverResponse = 'An error has occurred';
 						            });
@@ -544,7 +544,7 @@ app.controller(
 									if (self.lead.id === undefined || self.lead.id === null) {
 										console.log('Saving New Lead');
 										createLead(self.lead);
-										
+
 									} else {
 										 console.log('before upload lead',self.lead.agentLeadAppointmentList);
 										updateLead(self.lead, self.lead.id);
@@ -553,14 +553,14 @@ app.controller(
 									}
 									self.displayEditButton = false;
 								}
-						           
-						            
+
+
 						        }
-							
+
 						        function configLeadEvent(){
 						        	self.successMessage = '';
 									self.errorMessage = '';
-									
+
 									if(self.leadEventId){
 										EventService
 										.getEvent(self.leadEventId).then(
@@ -577,7 +577,7 @@ app.controller(
 												});;
 									}
 						        }
-						    
+
 						    function showAgentAssignment(){
 						    	if(   $localStorage.loginUser.roleName != 'EVENT_COORDINATOR'){
 						    		return true;
@@ -588,8 +588,8 @@ app.controller(
 						    function showAddorUpdateButton(){
 						    			return (self.consentFormSigned === 'Y' && !self.myFile) || self.invalid  || self.pristine ;
 						    }
-						    
-						    
+
+
 						    function showCurrentPlan(){
 						    	if($localStorage.loginUser.roleName == 'EVENT_COORDINATOR'){
 						    		return true;
@@ -597,7 +597,7 @@ app.controller(
 						    		return  false;
 						    	}
 						    }
-						    
+
 						    function showEventStatus(){
 						    	if($localStorage.loginUser.roleName != 'EVENT_COORDINATOR'){
 						    		return true;
@@ -605,7 +605,7 @@ app.controller(
 						    		return false;
 						    	}
 						    }
-						    
+
 						    function showStatusNotes(){
 						    	if($localStorage.loginUser.roleName == 'AGENT'){
 						    		return true;
@@ -613,7 +613,7 @@ app.controller(
 						    		return false;
 						    	}
 						    }
-						    
+
 						    function showEventSource(){
 						    	if($localStorage.loginUser.roleName != 'AGENT'){
 						    		return true;
@@ -621,7 +621,7 @@ app.controller(
 						    		return false;
 						    	}
 						    }
-						    
+
 						    function showEventStatus(){
 						    	if($localStorage.loginUser.roleName != 'EVENT_COORDINATOR'){
 						    		return true;
@@ -629,7 +629,7 @@ app.controller(
 						    		return false;
 						    	}
 						    }
- 
+
 						    function showStatusChangeDetails(){
 						    	if($localStorage.loginUser.roleName != 'EVENT_COORDINATOR' && self.lead.status && self.lead.status.description == 'Converted'){
 						    		return true;
@@ -637,7 +637,7 @@ app.controller(
 						    		return false;
 						    	}
 						    }
-						    
+
 						    function showLeadAdditionalDetails(){
 						    	if($localStorage.loginUser.roleName == 'MANAGER'  || $localStorage.loginUser.roleName == 'CARE_COORDINATOR' || $localStorage.loginUser.roleName == 'EVENT_COORDINATOR' || $localStorage.loginUser.roleName == 'ADMIN'){
 						    		return true;
@@ -645,10 +645,10 @@ app.controller(
 						    		return false;
 						    	}
 						    }
-						    
-						    
-						    
-						    
+
+
+
+
 							function addAgentLeadAppointment() {
 								self.lead.agentLeadAppointments.push(self.selectedAgentLeadAppointment);
 							}
@@ -659,11 +659,11 @@ app.controller(
 							function getAllGenders() {
 								return GenderService.getAllGenders();
 							}
-							
+
 							function getAllBestTimeToCalls() {
 								return BestTimeToCallService.getAllBestTimeToCalls();
 							}
-							
+
 							function getAllStates() {
 								return StateService.getAllStates();
 							}
@@ -675,12 +675,12 @@ app.controller(
 							function getAllLeadStatusDetails() {
 								return LeadStatusDetailService.getAllLeadStatusDetails();
 							}
-							
+
 							function getAllLanguages() {
 								return LanguageService
 										.getAllLanguages();
 							}
-							
+
 							function getAllInsurances() {
 								return InsuranceService
 										.getAllInsurances();
@@ -689,7 +689,7 @@ app.controller(
 								return InsuranceTypeService
 										.getAllInsuranceTypes();
 							}
-							
+
 							function getAllAgents() {
 								return UserService
 										.getAllUsers();
@@ -699,7 +699,7 @@ app.controller(
 								return PlanTypeService
 										.getAllPlanTypes();
 							}
-							
+
 							function getAllProviders() {
 								return ProviderService
 										.getAllProviders();
@@ -708,13 +708,13 @@ app.controller(
 								return EventService
 										.getAllEvents();
 							}
-							
+
 							function leadEdit(id){
 								var params = {'leadDisplay':true};
 								var trans =  $state.go('main.lead.edit').transition;
 								trans.onSuccess({}, function() { editLead(id); });
 							}
-							
+
 							function clearFiles(){
 								angular.forEach(
 									    angular.element("input[type='file']"),
@@ -722,29 +722,29 @@ app.controller(
 									      angular.element(inputElem).val(null);
 									    });
 							}
-							
+
 							function resetAssignment(status){
 								if(self.lead.agentLeadAppointmentList === undefined || self.lead.agentLeadAppointmentList.length ===0){
-									
+
 									if(status === 'Converted'){
 										self.lead.agentLeadAppointmentList =[];
 										self.selectedAgentLeadAppointment = {appointmentTime:new Date(), user:{id:$localStorage.loginUser.userId}, prvdr:self.selectedAgentLeadAppointment.prvdr,insurance:self.selectedAgentLeadAppointment.insurance,effectiveFrom:self.selectedAgentLeadAppointment.effectiveFrom};
 										console.log('Converted agent record',self.selectedAgentLeadAppointment );
-										
+
 									}else{
 										self.selectedAgentLeadAppointment= {} ;
 									}
-								} 			
+								}
 								else{
 									self.selectedAgentLeadAppointments = self.lead.agentLeadAppointmentList;
-									//self.selectedAgentLeadAppointments = $filter("filter")(self.lead.agentLeadAppointmentList, {activeInd :'Y'});	
+									//self.selectedAgentLeadAppointments = $filter("filter")(self.lead.agentLeadAppointmentList, {activeInd :'Y'});
 									if(self.selectedAgentLeadAppointments.length>0){
-										
+
 										self.selectedAgentLeadAppointment = self.selectedAgentLeadAppointments[0];
 									}
 							   }
 							}
 
-	} 
+	}
 ]);
 })();

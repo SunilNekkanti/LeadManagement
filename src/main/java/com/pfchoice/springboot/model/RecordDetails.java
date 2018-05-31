@@ -42,7 +42,7 @@ public class RecordDetails {
 	private Date updatedDate = new Date();
 
 	@JsonIgnore
-	@Column(name = "created_by")
+	@Column(name = "created_by", updatable = false)
 	private String createdBy = "sarath";
 
 	@JsonIgnore

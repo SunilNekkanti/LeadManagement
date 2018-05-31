@@ -4,9 +4,9 @@
    <div class="panel panel-success" ng-if="!ctrl.display">
         <!-- Default panel contents -->
         <div class="panel-heading"><span class="prvdr">List of Providers </span> 
-               <button type="button"   ng-click="ctrl.addProvider()" ng-hide="ctrl.displayEditButton" class="btn btn-success custom-width floatRight"> Add </button>   
-               <button type="button" ng-click="ctrl.editProvider(ctrl.prvdrId)" ng-show="ctrl.displayEditButton" class="btn btn-primary custom-width floatRight">Edit</button>  
-              <button type="button" ng-click="ctrl.removeProvider(ctrl.prvdrId)"  ng-show="ctrl.displayEditButton" class="btn btn-danger custom-width floatRight">Remove</button>  
+               <button type="button"   ng-click="ctrl.addProvider();$event.preventDefault();" ng-hide="ctrl.displayEditButton" class="btn btn-success custom-width floatRight"> Add </button>   
+               <button type="button" ng-click="ctrl.editProvider(ctrl.prvdrId);$event.preventDefault();" ng-show="ctrl.displayEditButton" class="btn btn-primary custom-width floatRight">Edit</button>  
+              <button type="button" ng-click="ctrl.removeProvider(ctrl.prvdrId);$event.preventDefault();"  ng-show="ctrl.displayEditButton" class="btn btn-danger custom-width floatRight">Remove</button>  
         </div>
         <div class="table-responsive">
 			<div class="panel-body">
@@ -116,8 +116,8 @@
 	               
 	                <div class="row">
 	                    <div class="form-actions floatRight">
-	                        <input type="submit"  value="{{!ctrl.prvdr.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-xs" ng-disabled="myForm.$invalid || myForm.$pristine">
-	                        <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-xs" ng-disabled="myForm.$pristine">Reset Form</button>
+	                        <input type="submit"  value="{{!ctrl.prvdr.id ? 'Add' : 'Update'}}" ng-mousedown="$event.preventDefault();" class="btn btn-primary btn-xs" ng-disabled="myForm.$invalid || myForm.$pristine">
+	                        <button type="button" ng-click="ctrl.reset();$event.preventDefault();" class="btn btn-warning btn-xs" ng-disabled="myForm.$pristine">Reset Form</button>
 	                    </div>
 	                </div>
 	            </form>

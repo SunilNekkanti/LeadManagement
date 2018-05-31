@@ -39,6 +39,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.pfchoice.springboot.model.AgentLeadAppointment;
 import com.pfchoice.springboot.model.CurrentUser;
 import com.pfchoice.springboot.model.Email;
+import com.pfchoice.springboot.model.FileUpload;
 import com.pfchoice.springboot.model.FileUploadContent;
 import com.pfchoice.springboot.model.LeadMembership;
 import com.pfchoice.springboot.model.LeadNotes;
@@ -148,8 +149,8 @@ public class LeadController {
 			leadNotes.forEach(ln -> {
 				ln.setUser(user);
 				ln.setLead(lead);
-				ln.setUpdatedBy(username);
-				ln.setCreatedBy(username);
+				if(ln.getUpdatedBy() == null) ln.setUpdatedBy(username);
+				if(ln.getCreatedBy() == null) ln.setCreatedBy(username);
 				emailBody.append(ln.getNotes());
 			});
 		} else {
@@ -233,6 +234,7 @@ public class LeadController {
 		currentLeadMembership.setFileUpload(lead.getFileUpload());
 		currentLeadMembership.setConsentFormSigned(lead.getConsentFormSigned());
 		currentLeadMembership.setContact(lead.getContact());
+		currentLeadMembership.setEvent(lead.getEvent());
 
 		List<LeadNotes> leadNotes = new ArrayList<>();
 		if (lead.getLeadNotes() != null) {
@@ -336,8 +338,9 @@ public class LeadController {
 					emailAttributes.put("attachmentKey", attachmentKey);
 					
 					Set<FileUploadContent> leadConsentForms = new HashSet<>();
-					Integer consentFormId = currentLeadMembership.getFileUpload().getId();
-					if(consentFormId != null){
+					FileUpload  fileupload = currentLeadMembership.getFileUpload();
+					if(fileupload != null){
+						Integer consentFormId = fileupload.getId();
 						FileUploadContent leadConsentForm = fileUploadContentService.findById(consentFormId);
 						if (leadConsentForm == null) {
 							logger.error("leadConsentForm with id {} not found.", id);

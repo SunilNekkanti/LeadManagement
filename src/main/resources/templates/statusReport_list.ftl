@@ -65,7 +65,7 @@
 
             <div class="col-sm-1 container">
                 <div class="btn-holder">
-                <button type="button"   ng-click="ctrl.generate()" class="btn btn-warning btn-xs " ng-disabled="((ctrl.selectedStatuses.length ===0) || (ctrl.selectedRoles.length ===0)|| (ctrl.selectedUsers.length ===0) || (ctrl.selectedEvents.length ===0) || !ctrl.startDate || !ctrl.endDate )">Generate</button>
+                <button type="button"   ng-click="ctrl.generate();$event.preventDefault();" class="btn btn-warning btn-xs " ng-disabled="((ctrl.selectedStatuses.length ===0) || (ctrl.selectedRoles.length ===0)|| (ctrl.selectedUsers.length ===0) || (ctrl.selectedEvents.length ===0) || !ctrl.startDate || !ctrl.endDate )">Generate</button>
                 </div>
             </div>
           </div>
@@ -75,12 +75,12 @@
 
          <div style="height:600px" ng-if="ctrl.displayTable">
          <tabset>
-                 <tab  heading="Summary"  ng-if="ctrl.displayTable" ng-click="ctrl.setReportType('Summary')"  >
-	                    <table datatable="" id="content" dt-options="ctrl.dtOptions" dt-columns="ctrl.dtColumns"  dt-instance="ctrl.dtInstance" dt-disable-deep-watchers="true" class="table table-hover table-responsive  bordered table-striped table-condensed datatable dt-responsive nowrap dataTable row-border hover"
+                 <tab  heading="SummaryByUser"  ng-if="ctrl.displayTable" ng-click="ctrl.setReportType('Summary')"  >
+	                    <table datatable="" id="content" dt-options="ctrl.dtOptions" dt-columns="ctrl.dtSummaryByUserColumns"  dt-instance="ctrl.dtSummaryByUserInstance" dt-disable-deep-watchers="true" class="table table-hover table-responsive  bordered table-striped table-condensed datatable dt-responsive nowrap dataTable row-border hover"
 	                    cellspacing="0" width="100%"></table>
 	 			</tab>
 	 			<tab  heading="Detailed"  ng-if="ctrl.displayTable" ng-click="ctrl.setReportType('Detailed')" >
-	                    <table datatable="" id="content1" dt-options="ctrl.dtOptions" dt-columns="ctrl.dt1Columns"  dt-instance="ctrl.dt1Instance" dt-disable-deep-watchers="true" class="table table-hover table-responsive  bordered table-striped table-condensed datatable dt-responsive nowrap dataTable row-border hover"
+	                    <table datatable="" id="content1" dt-options="ctrl.dtOptions" dt-columns="ctrl.dtDetailedColumns"  dt-instance="ctrl.dtDetailedInstance" dt-disable-deep-watchers="true" class="table table-hover table-responsive  bordered table-striped table-condensed datatable dt-responsive nowrap dataTable row-border hover"
 	                    cellspacing="0" width="100%"></table>
 	 			</tab>
          </tabset>
