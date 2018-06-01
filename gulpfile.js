@@ -1,3 +1,4 @@
+
 var gulp        = require('gulp');
 var browserSync  = require('browser-sync') ;
 var freemarker = require("gulp-freemarker");
@@ -8,7 +9,13 @@ gulp.task('serve', ['css', 'js', 'ftl'], function() {
         reloadDelay: 1000,
         proxy: {
         target: "localhost:8080/LeadMangement/", // can be [virtual host, sub-directory, localhost with port]
-        ws: true // enables websockets
+        ws: true ,// enables websockets
+        proxyReq: [
+          function(proxyReq) {
+            proxyReq.setHeader('X-Special-Proxy-Header', 'foobar');
+            console.log('proxy request');
+          }
+        ]
         }
     });
 
@@ -19,7 +26,9 @@ gulp.task('serve', ['css', 'js', 'ftl'], function() {
 
 gulp.task('ftl', function() {
     return gulp.src("src/main/resources/static/templates/*.ftl")
-        .pipe(gulp.dest("target/classes/static/templates"))  ;
+        .pipe(gulp.dest("target/classes/static/templates")).pipe(browserSync.reload({
+							      stream: true
+							    })) ;  ;
 });
 
 // Compile sass into CSS & auto-inject into browsers

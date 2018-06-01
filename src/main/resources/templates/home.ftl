@@ -43,6 +43,8 @@
   <script src="js/lib/Chart.min.js"></script>
   <script src="js/lib/angular-chart.min.js"></script>
   <script src="js/lib/ocLazyLoad.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.1/angular-cookies.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.1/angular-cookies.min.js.map"></script>
   
   <script src="https://cdn.datatables.net/fixedcolumns/3.2.4/js/dataTables.fixedColumns.min.js"></script>
   <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
@@ -124,11 +126,11 @@
       </div>
     </div>
   </nav>
-
- <ui-view> </ui-view>
    <script id="__bs_script__">//<![CDATA[
-    document.write("<script async src='http://192.168.1.121:3000/browser-sync/browser-sync-client.js?v=2.24.4'><\/script>".replace("HOST", location.hostname).replace(/PORT/g, location.port));
+    document.write("<script async src='http://HOST:PORT/browser-sync/browser-sync-client.js?v=2.24.4'><\/script>".replace(/HOST/g, location.hostname).replace(/PORT/g, 3000));
 //]]></script>
+ <ui-view> </ui-view>
+
 </body>
 
 </html>

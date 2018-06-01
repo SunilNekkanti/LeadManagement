@@ -1,6 +1,6 @@
 (function() {
   'use strict';
-  var app = angular.module('my-app', ['datatables', 'datatables.light-columnfilter', 'datatables.fixedheader', 'ui.bootstrap', 'datatables.bootstrap', 'datatables.colreorder', 'datatables.fixedheader', 'datatables.buttons', 'datatables.fixedcolumns', 'ui.router', 'ngStorage', 'ngAnimate', 'ngSanitize', 'btorfs.multiselect', 'oc.lazyLoad', 'ui.select', 'chart.js']);
+  var app = angular.module('my-app', ['ngCookies','datatables', 'datatables.light-columnfilter', 'datatables.fixedheader', 'ui.bootstrap', 'datatables.bootstrap', 'datatables.colreorder', 'datatables.fixedheader', 'datatables.buttons', 'datatables.fixedcolumns', 'ui.router', 'ngStorage', 'ngAnimate', 'ngSanitize', 'btorfs.multiselect', 'oc.lazyLoad', 'ui.select', 'chart.js']);
   app.config(['ChartJsProvider', function(ChartJsProvider) {
     // Configure all charts
     ChartJsProvider.setOptions({
@@ -41,23 +41,19 @@
   });
 
   app.run(function($rootScope, $state) {
+    $rootScope.$state = $state;
     var lastDigestRun = new Date();
-
-    $rootScope.$on('$stateChangeSuccess',
-    function(event, toState, toParams, fromState, fromParams){
-       $rootScope.previousState = {state: fromState, params: fromParams};
-       console.log('$rootScope.previousState',$rootScope.previousState);
-     });
-
-     $rootScope.backState = function(state, params) {
-        $state.go(state.name, params);
-      };
 
     setInterval(function() {
       var now = Date.now();
       if (now - lastDigestRun > 15 * 60 * 1000) {
-        $rootScope.displayNavbar = false;
         $state.go('logout');
+        $rootScope.displayNavbar = false;
+        $rootScope.loginUser = undefined;
+        $localStorage.loginUser
+        if (localStorage.getItem("loginUser")  === undefined || localStorage.getItem("loginUser") != null) {
+          localStorage.removeItem("loginUser") ;
+        }
       }
     }, 2 * 60 * 1000);
 
@@ -66,7 +62,7 @@
     });
   });
 
-  app.controller('NavbarController', ['$rootScope', '$scope', '$state', '$stateParams', 'UserService', '$localStorage', '$window', '$timeout', function($rootScope, $scope, $state, $stateParams, UserService, $localStorage, $window, $timeout) {
+  app.controller('NavbarController', ['$rootScope', '$scope', '$state', '$stateParams', 'UserService', '$localStorage', '$window', '$timeout', '$cookies', function($rootScope, $scope, $state, $stateParams, UserService, $localStorage, $window, $timeout,$cookies) {
     $rootScope.displayNavbar = false;
     loginUser();
 
@@ -81,6 +77,7 @@
                 .log('fetched loginUser details successfully');
               $rootScope.displayNavbar = true;
               $rootScope.loginUser = $localStorage.loginUser;
+              $cookies.put('myFavorite', 'oatmeal');
             },
             function(errResponse) {
               callMe('logout')
@@ -123,7 +120,7 @@
       $urlRouterProvider.otherwise('login');
 
       $ocLazyLoadProvider.config({
-        'debug': true,
+        'debug': false,
         'events': true,
         'modules': [{
           serie: true,
@@ -205,7 +202,6 @@
               var StateService = $injector.get("StateService");
               var deferred = $q.defer();
               StateService.loadAllStates().then(deferred.resolve, deferred.resolve);
-              console.log('deferred.promise' + deferred.promise);
               return deferred.promise;
             }],
             languages: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
@@ -213,7 +209,6 @@
               var LanguageService = $injector.get("LanguageService");
               var deferred = $q.defer();
               LanguageService.loadAllLanguages().then(deferred.resolve, deferred.resolve);
-              console.log('deferred.promise' + deferred.promise);
               return deferred.promise;
             }],
             users: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
@@ -281,9 +276,6 @@
             'userDisplay': false,
           },
           resolve: {
-            loadMyService: ['$ocLazyLoad', function($ocLazyLoad) {
-              return $ocLazyLoad.load('main.user');
-            }]
           }
         })
         .state('main.lead', {
@@ -328,10 +320,7 @@
             'leadDisplay': true
           },
           resolve: {
-            loadMyService: ['$ocLazyLoad', function($ocLazyLoad) {
-              return $ocLazyLoad.load('main.lead');
-            }],
-            events: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+              events: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
               var EventService = $injector.get("EventService");
               console.log('Load all  events');
               var deferred = $q.defer();

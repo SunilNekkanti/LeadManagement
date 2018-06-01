@@ -18,22 +18,23 @@ app.service('UserService',
             };
 
             return factory;
-         
+
          function loginUser() {
                 console.log('Fetching loginUser');
                 var deferred = $q.defer();
-                
+
                 $http.get(urls.LOGIN_USER)
                     .then(
                         function (response) {
-                            console.log('Fetched successfully loginUser');
+                            console.log('Fetched successfully loginUser',response);
                             if (localStorage.getItem("loginUser") === null) {
                             	 $localStorage.loginUser = response.data;
                             }else {
                             	localStorage.removeItem("loginUser") ;
+
                             	$localStorage.loginUser = response.data;
                             }
-                           
+
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
@@ -75,7 +76,7 @@ app.service('UserService',
                         }
                     );
             }
-            
+
             function loadAllUsers() {
                 console.log('Fetching all users');
                 var deferred = $q.defer();
@@ -174,5 +175,5 @@ app.service('UserService',
 
         }
     ]);
-    
+
    })();

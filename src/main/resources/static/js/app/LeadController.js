@@ -280,7 +280,7 @@ app.controller(
 														'recordsFiltered' : result.data.totalElements||0,
 														'data' : result.data.content||{}
 													};
-													fnCallback(records);
+													fnCallback(records); 
 												});
 							}
 
@@ -343,6 +343,7 @@ app.controller(
 													self.selectedAgentLeadAppointment = {};
 													self.notes ='';
 													clearFiles();
+
 													self.dtInstance.reloadData();
 							                       // self.dtInstance.rerender();
 							                        $state.go('main.lead');
