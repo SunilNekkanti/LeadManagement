@@ -38,8 +38,8 @@
       self.dtSummaryByUserColumns = [
 
         DTColumnBuilder.newColumn('userName').withTitle('USER'),
-        DTColumnBuilder.newColumn('status').withTitle('LEAD_STATUS'),
         DTColumnBuilder.newColumn('event').withTitle('EVENT'),
+        DTColumnBuilder.newColumn('status').withTitle('LEAD_STATUS'),        
         DTColumnBuilder.newColumn('count').withTitle('COUNT')
       ];
 

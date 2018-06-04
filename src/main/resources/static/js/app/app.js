@@ -211,13 +211,6 @@
               LanguageService.loadAllLanguages().then(deferred.resolve, deferred.resolve);
               return deferred.promise;
             }],
-            users: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
-              console.log('Load all users');
-              var UserService = $injector.get("UserService");
-              var deferred = $q.defer();
-              UserService.loadAllUsers().then(deferred.resolve, deferred.resolve);
-              return deferred.promise;
-            }],
             planTypes: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
               console.log('Load all users');
               var PlanTypeService = $injector.get("PlanTypeService");

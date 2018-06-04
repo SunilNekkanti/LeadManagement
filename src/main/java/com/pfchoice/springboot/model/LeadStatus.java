@@ -42,7 +42,7 @@ public class LeadStatus extends RecordDetails implements Serializable {
 	/**
 	 * @param id
 	 */
-	public LeadStatus(final Short id) {
+	public LeadStatus( Short id) {
 		super();
 		this.id = id;
 	}

@@ -24,6 +24,7 @@ import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
+import javax.persistence.PrePersist;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
@@ -43,6 +44,7 @@ import com.pfchoice.springboot.util.JsonDateSerializer;
  */
 @Entity
 @Table(name = "lead_membership")
+
 @SqlResultSetMapping(
 	    name="statusReportDTOMapping",
 	    classes={
@@ -173,6 +175,13 @@ public class LeadMembership extends RecordDetails implements Serializable {
 		this.id = id;
 	}
 
+	@PrePersist
+    public void prePersist() {
+       if (status == null) {
+    	   status = new LeadStatus(new Short((short) 1));
+       }
+    }
+	
 	@Override
 	public boolean equals(Object object) {
 		if (!(object instanceof LeadMembership)) {
