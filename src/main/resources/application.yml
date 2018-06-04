@@ -35,7 +35,7 @@ email:
 
 spring:
   profiles:
-    active: "local,serveremail"
+    active: "server,serveremail"
   main:
     banner-mode: "off"
  
@@ -60,9 +60,9 @@ datasource:
     maxPoolSize: 10
     hibernate:
       hbm2ddl.method: none
-      show_sql: false
+      show_sql: true
       format_sql: false
-      dialect: org.hibernate.dialect.MySQLDialect
+      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
 
 ---
                       
@@ -87,7 +87,7 @@ datasource:
       hbm2ddl.method: none
       show_sql: false
       format_sql: false
-      dialect: org.hibernate.dialect.MySQLDialect
+      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
  
 ---   
 spring:

@@ -280,7 +280,7 @@ app.controller(
 														'recordsFiltered' : result.data.totalElements||0,
 														'data' : result.data.content||{}
 													};
-													fnCallback(records); 
+													fnCallback(records);
 												});
 							}
 
@@ -346,7 +346,7 @@ app.controller(
 
 													self.dtInstance.reloadData();
 							                       // self.dtInstance.rerender();
-							                        $state.go('main.lead');
+							                        $state.go('main.lead',{},{reload:'main.lead'});
 							                        self.display = false;
 												},
 												function(errResponse) {
@@ -374,7 +374,7 @@ app.controller(
 													self.dtInstance.reloadData();
 							                      //  self.dtInstance.rerender();
 													self.selectedAgentLeadAppointment = {};
-							                        $state.go('main.lead');
+							                        $state.go('main.lead',{},{reload:'main.lead'});
 							                        self.display = false;
 												},
 												function(errResponse) {
@@ -478,7 +478,7 @@ app.controller(
 									self.planTypes = getAllPlanTypes();
 									self.display = true;
 								}else{
-									var trans =  $state.go('main.lead.edit').transition;
+									var trans =  $state.go('main.lead.edit',{},{reload:'main.lead.edit'}).transition;
 									 trans.onSuccess({}, function() {
 										 self.providers = getAllProviders();
 											self.users = getAllAgents();
@@ -712,7 +712,7 @@ app.controller(
 
 							function leadEdit(id){
 								var params = {'leadDisplay':true};
-								var trans =  $state.go('main.lead.edit').transition;
+								var trans =  $state.go('main.lead.edit',{},{reload:'main.lead.edit'}).transition;
 								trans.onSuccess({}, function() { editLead(id); });
 							}
 

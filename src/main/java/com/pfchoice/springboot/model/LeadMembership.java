@@ -43,7 +43,6 @@ import com.pfchoice.springboot.util.JsonDateSerializer;
  */
 @Entity
 @Table(name = "lead_membership")
-
 @SqlResultSetMapping(
 	    name="statusReportDTOMapping",
 	    classes={
@@ -128,11 +127,11 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	private BestTimeToCall bestTimeToCall;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "lead_Mbr_Status", referencedColumnName = "code", insertable = false)
+	@JoinColumn(name = "lead_Mbr_Status", referencedColumnName = "code")
 	private LeadStatus status;
 	
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "lead_mbr_status_detail_id", referencedColumnName = "code", insertable = false)
+	@JoinColumn(name = "lead_mbr_status_detail_id", referencedColumnName = "code")
 	private LeadStatusDetail statusDetail;
 
 	@OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
