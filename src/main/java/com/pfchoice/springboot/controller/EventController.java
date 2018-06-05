@@ -100,6 +100,8 @@ public class EventController {
 							"Unable to create. A Event with name " + event.getEventName() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
+		event.getContact().setCreatedBy(username);
+		event.getContact().setUpdatedBy(username);
 		event.setCreatedBy(username);
 		event.setUpdatedBy(username);
 		eventService.saveEvent(event);
@@ -124,7 +126,7 @@ public class EventController {
 			return new ResponseEntity(new CustomErrorType("Unable to upate. Event with id " + id + " not found."),
 					HttpStatus.NOT_FOUND);
 		}
-
+		event.getContact().setUpdatedBy(username);
 		currentEvent.setEventName(event.getEventName());
 		currentEvent.setEventDateStartTime(event.getEventDateStartTime());
 		currentEvent.setEventDateEndTime(event.getEventDateEndTime());
@@ -133,6 +135,7 @@ public class EventController {
 		currentEvent.setNotes(event.getNotes());
 		currentEvent.setUpdatedBy(username);
 		currentEvent.getAttachments().clear();
+		event.getAttachments().forEach(att -> att.setUpdatedBy(username));
 		currentEvent.getAttachments().addAll(event.getAttachments());
 		eventService.updateEvent(currentEvent);
 

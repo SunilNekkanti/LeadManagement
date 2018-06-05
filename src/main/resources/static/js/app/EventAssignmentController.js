@@ -140,7 +140,6 @@ app
 								// to the DT
 								$compile(angular.element(row).contents())(
 										$scope);
-								console.log("test");
 							}
 
 							function checkBoxChange(checkStatus, eventAssignmentId) {
@@ -498,12 +497,6 @@ app
 							}
 
 							
-							/*
-							 * function getAllEventAssignmentFrequencies(){
-							 * return
-							 * EventAssignmentFrequencyService.getAllEventAssignmentFrequencies(); }
-							 */
-
 							function getAllEventAssignments() {
 								return EventAssignmentService.getAllEventAssignments();
 							}
@@ -591,20 +584,6 @@ app
 							    	}
 							    }
 							  
-							  function validEventDate(startDate,endDate) {
-								   
-								  //  var curDate = new Date();
-								    if(new Date(startDate).getTime() >= new Date(endDate).getTime()){
-								      self.errMessage = 'End Date should be greater than Start date';
-							         $scope.myForm.eventAssignmentDateEndTime.$setValidity("improper", false);
-							         return true;
-								    }
-								     self.errMessage='';
-								     $scope.myForm.eventAssignmentDateEndTime.$setValidity("improper", true);
-								     return false;
-								};
-								
-								
 
 						  function eventAssignmentEdit(id){
 							  $state.go('main.eventAssignment.edit'); 
@@ -615,7 +594,18 @@ app
 							  self.eventAssignment.eventAssignmentDateTime = new Date(year, month, day);
 								  };
 
-								  
+						 function validEventDate(startDate,endDate) {
+						
+						 var startdateTime = new Date(startDate).getTime();
+						  var enddateTime = new Date(endDate).getTime();
+							    if(startdateTime >= enddateTime){
+							      self.errMessage = 'End Date should be greater than start date';
+							      $scope.myForm.eventDateEndTime.$setValidity("improper", false);
+							    }else{
+							    self.errMessage='';
+							    $scope.myForm.eventDateEndTime.$setValidity("improper", true);
+							    }
+							}	  
 	} 
 
  ]);

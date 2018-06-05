@@ -9,11 +9,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.pfchoice.springboot.model.County;
@@ -23,6 +25,7 @@ import com.pfchoice.springboot.util.CustomErrorType;
 @RestController
 @RequestMapping("/api")
 @SuppressWarnings({ "unchecked", "rawtypes" })
+@SessionAttributes({ "username", "roleId", "userId", "roleName" })
 public class CountyController {
 
 	public static final Logger logger = LoggerFactory.getLogger(CountyController.class);
@@ -63,7 +66,8 @@ public class CountyController {
 	// County-------------------------------------------
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/county/", method = RequestMethod.POST)
-	public ResponseEntity<?> createCounty(@RequestBody County county, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<?> createCounty(@RequestBody County county, UriComponentsBuilder ucBuilder
+			, @ModelAttribute("username") String username) {
 		logger.info("Creating County : {}", county);
 
 		if (countyService.isCountyExist(county)) {
@@ -72,8 +76,8 @@ public class CountyController {
 					new CustomErrorType("Unable to create. A County with name " + county.getCode() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		county.setCreatedBy("sarath");
-		county.setUpdatedBy("sarath");
+		county.setCreatedBy(username);
+		county.setUpdatedBy(username);
 		countyService.saveCounty(county);
 
 		HttpHeaders headers = new HttpHeaders();

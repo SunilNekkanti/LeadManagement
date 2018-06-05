@@ -9,11 +9,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.pfchoice.springboot.model.EventFrequency;
@@ -23,6 +25,7 @@ import com.pfchoice.springboot.util.CustomErrorType;
 @RestController
 @RequestMapping("/api")
 @SuppressWarnings({ "unchecked", "rawtypes" })
+@SessionAttributes({ "username", "roleId", "userId", "roleName" })
 public class EventFrequencyController {
 
 	public static final Logger logger = LoggerFactory.getLogger(EventFrequencyController.class);
@@ -67,7 +70,7 @@ public class EventFrequencyController {
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/eventFrequency/", method = RequestMethod.POST)
 	public ResponseEntity<?> createEventFrequency(@RequestBody EventFrequency eventFrequency,
-			UriComponentsBuilder ucBuilder) {
+			UriComponentsBuilder ucBuilder, @ModelAttribute("username") String username) {
 		logger.info("Creating EventFrequency : {}", eventFrequency);
 
 		if (eventFrequencyService.isEventFrequencyExist(eventFrequency)) {
@@ -76,8 +79,8 @@ public class EventFrequencyController {
 					"Unable to create. A EventFrequency with name " + eventFrequency.getId() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		eventFrequency.setCreatedBy("sarath");
-		eventFrequency.setUpdatedBy("sarath");
+		eventFrequency.setCreatedBy(username);
+		eventFrequency.setUpdatedBy(username);
 		eventFrequencyService.saveEventFrequency(eventFrequency);
 
 		HttpHeaders headers = new HttpHeaders();

@@ -135,6 +135,8 @@ public class LeadController {
 		final String lastName = lead.getLastName();
 		final String address1 = lead.getContact().getAddress1();
 		final String phoneNumber = lead.getContact().getHomePhone();
+		lead.getContact().setCreatedBy(username);
+		lead.getContact().setUpdatedBy(username);
 
 		if (leadService.isLeadMembershipExists(firstName, lastName, address1, phoneNumber)) {
 			logger.error("Unable to create. A LeadMembership with name {} already exist",
@@ -218,7 +220,7 @@ public class LeadController {
 					new CustomErrorType("Unable to upate. LeadMembership with id " + id + " not found."),
 					HttpStatus.NOT_FOUND);
 		}
-
+		lead.getContact().setUpdatedBy(username);
 		currentLeadMembership.setFirstName(lead.getFirstName());
 		currentLeadMembership.setLastName(lead.getLastName());
 		currentLeadMembership.setDob(lead.getDob());

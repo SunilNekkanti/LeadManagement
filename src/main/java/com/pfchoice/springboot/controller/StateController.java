@@ -9,11 +9,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.pfchoice.springboot.model.State;
@@ -23,6 +25,7 @@ import com.pfchoice.springboot.util.CustomErrorType;
 @RestController
 @RequestMapping("/api")
 @SuppressWarnings({ "unchecked", "rawtypes" })
+@SessionAttributes({ "username", "roleId", "userId", "roleName" })
 public class StateController {
 
 	public static final Logger logger = LoggerFactory.getLogger(StateController.class);
@@ -63,7 +66,8 @@ public class StateController {
 	// State-------------------------------------------
 	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/state/", method = RequestMethod.POST)
-	public ResponseEntity<?> createState(@RequestBody State state, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<?> createState(@RequestBody State state, 
+			UriComponentsBuilder ucBuilder,@ModelAttribute("username") String username) {
 		logger.info("Creating State : {}", state);
 
 		if (stateService.isStateExist(state)) {
@@ -72,8 +76,8 @@ public class StateController {
 					new CustomErrorType("Unable to create. A State with name " + state.getCode() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		state.setCreatedBy("sarath");
-		state.setUpdatedBy("sarath");
+		state.setCreatedBy(username);
+		state.setUpdatedBy(username);
 		stateService.saveState(state);
 
 		HttpHeaders headers = new HttpHeaders();

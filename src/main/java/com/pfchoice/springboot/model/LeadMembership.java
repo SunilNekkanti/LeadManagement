@@ -180,6 +180,7 @@ public class LeadMembership extends RecordDetails implements Serializable {
        if (status == null) {
     	   status = new LeadStatus(new Short((short) 1));
        }
+       
     }
 	
 	@Override

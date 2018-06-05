@@ -10,12 +10,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.pfchoice.springboot.model.Insurance;
@@ -26,6 +28,7 @@ import com.pfchoice.springboot.util.CustomErrorType;
 @RestController
 @RequestMapping("/api")
 @SuppressWarnings({ "unchecked", "rawtypes" })
+@SessionAttributes({ "username", "roleId", "userId", "roleName" })
 public class InsurnaceController {
 
 	public static final Logger logger = LoggerFactory.getLogger(InsurnaceController.class);
@@ -78,7 +81,8 @@ public class InsurnaceController {
 	// Insurance-------------------------------------------
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/insurance/", method = RequestMethod.POST)
-	public ResponseEntity<?> createInsurance(@RequestBody Insurance insurance, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<?> createInsurance(@RequestBody Insurance insurance, 
+			UriComponentsBuilder ucBuilder,@ModelAttribute("username") String username) {
 		logger.info("Creating Insurance : {}", insurance);
 
 		if (insuranceService.isInsuranceExist(insurance)) {
@@ -88,8 +92,8 @@ public class InsurnaceController {
 							"Unable to create. A Insurance with name " + insurance.getId() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		insurance.setCreatedBy("sarath");
-		insurance.setUpdatedBy("sarath");
+		insurance.setCreatedBy(username);
+		insurance.setUpdatedBy(username);
 		insuranceService.saveInsurance(insurance);
 
 		HttpHeaders headers = new HttpHeaders();

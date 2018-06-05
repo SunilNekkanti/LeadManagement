@@ -9,11 +9,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.pfchoice.springboot.model.FileUpload;
@@ -23,6 +25,7 @@ import com.pfchoice.springboot.util.CustomErrorType;
 @RestController
 @RequestMapping("/api")
 @SuppressWarnings({ "unchecked", "rawtypes" })
+@SessionAttributes({ "username", "roleId", "userId", "roleName" })
 public class FileUploadController {
 
 	public static final Logger logger = LoggerFactory.getLogger(FileUploadController.class);
@@ -67,7 +70,8 @@ public class FileUploadController {
 	// FileUpload-------------------------------------------
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/fileUpload/", method = RequestMethod.POST)
-	public ResponseEntity<?> createFileUpload(@RequestBody FileUpload fileUpload, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<?> createFileUpload(@RequestBody FileUpload fileUpload, 
+			UriComponentsBuilder ucBuilder,@ModelAttribute("username") String username) {
 		logger.info("Creating FileUpload : {}", fileUpload);
 
 		if (fileUploadService.isFileUploadExists(fileUpload)) {
@@ -77,8 +81,8 @@ public class FileUploadController {
 							"Unable to create. A FileUpload with name " + fileUpload.getFileName() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		fileUpload.setCreatedBy("sarath");
-		fileUpload.setUpdatedBy("sarath");
+		fileUpload.setCreatedBy(username);
+		fileUpload.setUpdatedBy(username);
 		fileUploadService.saveFileUpload(fileUpload);
 
 		HttpHeaders headers = new HttpHeaders();

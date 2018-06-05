@@ -22,7 +22,7 @@
     <button type="button"  ng-click="ctrl.addLead();$event.preventDefault();" ng-show="ctrl.event.id"   class="btn btn-success btn-xs  floatRight">Add Lead</button>
     <button type="button" ng-click="ctrl.cancelEdit();$event.preventDefault();" class="btn btn-warning btn-xs floatRight"   >Cancel</button>
     <button type="button" ng-click="ctrl.reset();$event.preventDefault();" class="btn btn-warning btn-xs floatRight" ng-disabled="myForm.$pristine" ng-if="ctrl.adminOrManager() && !ctrl.event.id" >Reset Form</button>
-    <input type="button" value="{{!ctrl.event.id ? 'Add' : 'Update'}}" ng-click="ctrl.submit();$event.preventDefault();" class="btn btn-primary btn-xs floatRight" ng-disabled="myForm.$invalid || myForm.$pristine || ctrl.validEventDate(ctrl.event.eventDateStartTime,ctrl.event.eventDateEndTime)" ng-show="ctrl.adminOrManager()">{{!ctrl.event.id ? 'Add' : 'Update'}}</button>
+    <input type="button" value="{{!ctrl.event.id ? 'Add' : 'Update'}}" ng-click="ctrl.submit();$event.preventDefault();" class="btn btn-primary btn-xs floatRight" ng-disabled="myForm.$invalid || myForm.$pristine || ctrl.validEventDate(ctrl.event.eventDateStartTime,ctrl.event.eventDateEndTime)" ng-show="ctrl.adminOrManager()"/>{{!ctrl.event.id ? 'Add' : 'Update'}} 
             
    </div>
     <div class="panel-body">
@@ -61,7 +61,7 @@
                 <label class="col-md-2  control-label" for="eventDateTime">StartTime</label>
                 <div class="col-md-4">
                   <div class="input-group date" id="eventDateStartTime1"  ng-model="ctrl.event.eventDateStartTime"  ng-change="ctrl.validEventDate(ctrl.event.eventDateStartTime,ctrl.event.eventDateEndTime)" date-picker   >
-                    <input type="text" class="form-control netto-input" name="eventDateStartTime"  ng-model="ctrl.event.eventDateStartTime" date-picker-input  ng-change="ctrl.validEventDate(ctrl.event.eventDateStartTime,ctrl.event.eventDateEndTime)" required>
+                    <input type="text" class="form-control netto-input" name="eventDateStartTime"  ng-model="ctrl.event.eventDateStartTime" date-picker-input  ng-blur="ctrl.validEventDate(ctrl.event.eventDateStartTime,ctrl.event.eventDateEndTime)" required>
                     <span class="input-group-addon">
            								<span class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -74,7 +74,7 @@
                 <label class="col-md-2  control-label" for="eventDateEndTime">EndTime</label>
                 <div class="col-md-4">
                   <div class="input-group date" id="eventDateEndTime1"    ng-model="ctrl.event.eventDateEndTime" ng-change="ctrl.validEventDate(ctrl.event.eventDateStartTime,ctrl.event.eventDateEndTime)" date-picker >
-                    <input type="text" class="form-control netto-input" name="eventDateEndTime"  ng-model="ctrl.event.eventDateEndTime" date-picker-input  ng-change="ctrl.validEventDate(ctrl.event.eventDateStartTime,ctrl.event.eventDateEndTime)" required>
+                    <input type="text" class="form-control netto-input" name="eventDateEndTime"  ng-model="ctrl.event.eventDateEndTime" date-picker-input  ng-blur="ctrl.validEventDate(ctrl.event.eventDateStartTime,ctrl.event.eventDateEndTime)" required>
                     <span class="input-group-addon">
            								<span class="glyphicon glyphicon-calendar"></span>
                     </span>

@@ -23,14 +23,14 @@
       <div class="formcontainer">
         <div class="alert alert-success" role="alert" ng-if="ctrl.successMessage">{{ctrl.successMessage}}</div>
         <div class="alert alert-danger" role="alert" ng-if="ctrl.errorMessage">{{ctrl.errorMessage}}</div>
-        <form ng-submit="ctrl.submit()" name="myForm" class="form-horizontal">
+        <form ng-submit="ctrl.submit()" novalidate  name="myForm" class="form-horizontal">
 
 
           <div class="panel-heading">
             <div class="form-actions floatCenter col-md-offset-4">
-              <input type="button" value="{{!ctrl.eventAssignment.id ? 'Add' : 'Update'}}" ng-click="ctrl.submit();$event.preventDefault();" class="btn btn-primary btn-xs " ng-disabled="myForm.$invalid || myForm.$pristine || ctrl.validEventDate(ctrl.event.eventDateStartTime,ctrl.event.eventDateEndTime)" ng-if="ctrl.adminOrManager()"/>
+              <input type="button" value="{{!ctrl.eventAssignment.id ? 'Add' : 'Update'}}" ng-click="ctrl.submit();$event.preventDefault();" class="btn btn-primary btn-xs " ng-disabled="myForm.$invalid || myForm.$pristine || ctrl.validEventDate(ctrl.eventAssignment.eventDateStartTime,ctrl.eventAssignment.eventDateEndTime) " ng-if="ctrl.adminOrManager()">
               <button type="button" ng-click="ctrl.reset();$event.preventDefault();" class="btn btn-warning btn-xs" ng-disabled="myForm.$pristine"  ng-if="ctrl.adminOrManager() && !ctrl.eventAssignment.id"  >Reset Form</button>
-              <button type="button" ng-click="ctrl.cancelEdit();$event.preventDefault();" class="btn btn-warning btn-xs"   ng-if="ctrl.eventAssignment.id"  >Cancel</button>
+              <button type="button" ng-click="ctrl.cancelEdit();$event.preventDefault();" class="btn btn-warning btn-xs"   >Cancel</button>
               <button type="button" ng-click="ctrl.repeat();$event.preventDefault();" class="btn  btn-primary btn-xs">Repeat</button>
               <button type="button"  ng-click="ctrl.addLead();$event.preventDefault();" ng-show="ctrl.eventAssignment.id"   class="btn btn-success  btn-xs">Add Lead</button>
               
@@ -46,47 +46,51 @@
 	          <div class="form-group col-sm-12">
 	                    <label class="col-md-2  control-label" for="eventAssignmentName" require>Name </label>
 	                        <div class="col-sm-10">
-	                        	<select  class="form-control" ng-model="ctrl.eventAssignment.event"  name="eventName" ng-options="event as event.eventName for event in ctrl.events track by event.eventName" ng-change="ctrl.updateEventTimes()" required></select>
+	                        	<select  class="form-control" ng-model="ctrl.eventAssignment.event"  name="eventName" ng-options="event as event.eventName for event in ctrl.events track by event.eventName" ng-change="ctrl.updateEventTimes();" ng-blur="ctrl.updateEventTimes();" required></select>
 	                        	<div class="has-error" ng-show="myForm.$dirty">
                    					 <span ng-show="myForm.eventName.$error.required">This is a required field</span>
 			                    </div>
 	                        </div>
 	                    </div>
 	                </div>
-	                
-            <div class="row" >
-              <div class="form-group col-md-12" >
-                <label class="col-md-2  control-label" for="eventAssignmentDateTime">StartTime</label>
+	         
+	         <div class="row">
+              <div class="form-group col-md-12">
+                <label class="col-md-2  control-label" for="eventDateTime">StartTime</label>
                 <div class="col-md-4">
-                  <div class="input-group date" id="eventAssignmenDateStartTime"  ng-model="ctrl.eventAssignment.eventDateStartTime" ng-change="ctrl.validEventDate(ctrl.eventAssignment.eventDateStartTime,ctrl.eventAssignment.eventDateEndTime)" date-picker >
-                    <input type="text" class="form-control netto-input" name="eventAssignmenDateStartTime" ng-model="ctrl.eventAssignment.eventDateStartTime" ng-change="ctrl.validEventDate(ctrl.eventAssignment.eventDateStartTime,ctrl.eventAssignment.eventDateEndTime)" date-picker-input required/>
+                  <div class="input-group date" id="eventDateStartTime1"  ng-model="ctrl.eventAssignment.eventDateStartTime"  ng-change="ctrl.validEventDate(ctrl.eventAssignment.eventDateStartTime,ctrl.eventAssignment.eventDateEndTime)" date-picker   >
+                    <input type="text" class="form-control netto-input" name="eventDateStartTime"  ng-model="ctrl.eventAssignment.eventDateStartTime" date-picker-input  ng-blur="ctrl.validEventDate(ctrl.eventAssignment.eventDateStartTime,ctrl.eventAssignment.eventDateEndTime)" required />
                     <span class="input-group-addon">
            								<span class="glyphicon glyphicon-calendar"></span>
                     </span>
                   </div>
-                       <div class="has-error" ng-show="myForm.$dirty">
-                        <span ng-show="myForm.eventAssignmenDateStartTime.$invalid">This field is invalid </span>
-                         <span ng-show="myForm.eventAssignmenDateStartTime.$error.required">This is a required field</span>
+                   <div class="has-error" ng-show="myForm.$dirty">
+                        <span ng-show="myForm.eventDateStartTime.$invalid">This field is invalid </span>
+                         <span ng-show="myForm.eventDateStartTime.$error.required">This is a required field</span>
                    </div>
                 </div>
                 
-                <label class="col-md-2  control-label" for="eventAssignmentDateEndTime">EndTime</label>
+                error  *****{{ myForm.eventDateEndTime.$error }} *********
+                improper  *****{{ myForm.eventDateEndTime.$error.improper}} *********
+              
+                <label class="col-md-2  control-label" for="eventDateEndTime">EndTime</label>
                 <div class="col-md-4">
-                  <div class="input-group date" id="eventAssignmentDateEndTime"   ng-change="ctrl.validEventDate(ctrl.eventAssignment.eventDateStartTime,ctrl.eventAssignment.eventDateEndTime)" ng-model="ctrl.eventAssignment.eventDateEndTime" date-picker >
-                    <input type="text" class="form-control netto-input" name="eventAssignmentDateEndTime"  ng-model="ctrl.eventAssignment.eventDateEndTime" ng-change="ctrl.validEventDate(ctrl.eventAssignment.eventDateStartTime,ctrl.eventAssignment.eventDateEndTime)" date-picker-input required>
+                  <div class="input-group date" id="eventDateEndTime1"    ng-model="ctrl.eventAssignment.eventDateEndTime" ng-change="ctrl.validEventDate(ctrl.eventAssignment.eventDateStartTime,ctrl.eventAssignment.eventDateEndTime)" date-picker >
+                    <input type="text" class="form-control netto-input" name="eventDateEndTime"  ng-model="ctrl.eventAssignment.eventDateEndTime" date-picker-input  ng-blur="ctrl.validEventDate(ctrl.eventAssignment.eventDateStartTime,ctrl.eventAssignment.eventDateEndTime)" required />
                     <span class="input-group-addon">
            								<span class="glyphicon glyphicon-calendar"></span>
                     </span>
                   </div>
-                  <div class="has-error" ng-show="myForm.$dirty">
-                        <span ng-show="myForm.eventAssignmentDateEndTime.$invalid">This field is invalid </span>
-                        <span ng-show="myForm.eventAssignmentDateEndTime.$error.improper"> {{ctrl.errMessage}} </span>
-                         <span ng-show="myForm.eventAssignmentDateEndTime.$error.required">This is a required field</span>
+                   <div class="has-error" ng-show="myForm.$dirty">
+                        <span ng-show="myForm.eventDateEndTime.$invalid">This field is invalid </span>
+                        <span ng-show="myForm.eventDateEndTime.$error.improper"> {{ctrl.errMessage}} </span>
+                        <span ng-show="myForm.eventDateEndTime.$error.required">This is a required field</span>
                    </div>
-                   
                 </div>
               </div>
             </div>
+	         
+	  
 
             <div class="row">
               <div class="form-group col-md-12">
@@ -143,7 +147,7 @@
 
                   <div class="col-md-2">
                     <label class="col-md-12 control-label text-center">
-                      <input type="radio" ng-model="ctrl.onDayorThe" ng-value="true">&nbsp;on<span ng-show="ctrl.eventAssignment.frequency=='MONTHLY'">&nbsp;day</span> <span ng-show="ctrl.eventAssignment.frequency=='YEARLY'">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                      <input type="radio" ng-model="ctrl.onDayorThe" ng-value="true">&nbsp;on<span ng-show="ctrl.eventAssignment.frequency=='MONTHLY'" />&nbsp;day</span> <span ng-show="ctrl.eventAssignment.frequency=='YEARLY'">&nbsp;&nbsp;&nbsp;&nbsp;</span> 
                     </label>
                   </div>
                   <div class="col-md-3" ng-show="ctrl.eventAssignment.frequency=='YEARLY'">
@@ -161,7 +165,7 @@
 
                   <div class="col-md-2">
                     <label class="col-md-12 control-label text-center">
-                      <input type="radio" ng-model="ctrl.onDayorThe" ng-value="false">&nbsp;on the
+                      <input type="radio" ng-model="ctrl.onDayorThe" ng-value="false" />&nbsp;on the 
                     </label>
                   </div>
                   <div class="col-md-3">
@@ -195,9 +199,9 @@
                 </div>
                 <div ng-show="ctrl.eventAssignmentEndOption=='On date'" class="col-md-4">
                   <div class="col-md-9 input-group date" id="appointment" ng-model="ctrl.eventAssignmentUntil" date1-picker>
-                    <input type="text" class="form-control netto-input col-md-12" ng-model="ctrl.eventAssignmentUntil" date-picker-input>
+                    <input type="text" class="form-control netto-input col-md-12" ng-model="ctrl.eventAssignmentUntil" date-picker-input />
                     <span class="input-group-addon">
-           													<span class="glyphicon glyphicon-calendar"></span>
+           					<span class="glyphicon glyphicon-calendar"></span>
                     </span>
                   </div>
                 </div>

@@ -9,11 +9,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.pfchoice.springboot.model.EventMonth;
@@ -23,6 +25,7 @@ import com.pfchoice.springboot.util.CustomErrorType;
 @RestController
 @RequestMapping("/api")
 @SuppressWarnings({ "unchecked", "rawtypes" })
+@SessionAttributes({ "username", "roleId", "userId", "roleName" })
 public class EventMonthController {
 
 	public static final Logger logger = LoggerFactory.getLogger(EventMonthController.class);
@@ -64,7 +67,8 @@ public class EventMonthController {
 	// EventMonth-------------------------------------------
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/eventMonth/", method = RequestMethod.POST)
-	public ResponseEntity<?> createEventMonth(@RequestBody EventMonth eventMonth, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<?> createEventMonth(@RequestBody EventMonth eventMonth, UriComponentsBuilder ucBuilder,
+			 @ModelAttribute("username") String username) {
 		logger.info("Creating EventMonth : {}", eventMonth);
 
 		if (eventMonthService.isEventMonthExist(eventMonth)) {
@@ -74,8 +78,8 @@ public class EventMonthController {
 							"Unable to create. A EventMonth with name " + eventMonth.getId() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		eventMonth.setCreatedBy("sarath");
-		eventMonth.setUpdatedBy("sarath");
+		eventMonth.setCreatedBy(username);
+		eventMonth.setUpdatedBy(username);
 		eventMonthService.saveEventMonth(eventMonth);
 
 		HttpHeaders headers = new HttpHeaders();

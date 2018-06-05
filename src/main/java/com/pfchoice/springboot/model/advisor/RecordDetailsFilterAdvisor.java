@@ -42,7 +42,7 @@ public class RecordDetailsFilterAdvisor {
             Filter filter = session.enableFilter("activeIndFilter");
 
             // Set the parameter from the session
-            filter.setParameter("activeInd", 'Y');
+            filter.setParameter("activeInd", getSessionActiveIndRef());
 
         } catch (Exception ex) {
 
@@ -68,7 +68,7 @@ public class RecordDetailsFilterAdvisor {
     }
 
 
-    private Character getSessionActiveIndRef() {
+	private Character getSessionActiveIndRef() {
 		return new Character('Y');
     }
 }

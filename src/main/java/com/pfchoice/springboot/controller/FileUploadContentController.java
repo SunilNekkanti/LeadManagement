@@ -13,12 +13,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -30,6 +32,7 @@ import com.pfchoice.springboot.util.CustomErrorType;
 @RestController
 @RequestMapping("/api")
 @SuppressWarnings({ "unchecked", "rawtypes" })
+@SessionAttributes({ "username", "roleId", "userId", "roleName" })
 public class FileUploadContentController {
 
 	public static final Logger logger = LoggerFactory.getLogger(FileUploadContentController.class);
@@ -74,7 +77,8 @@ public class FileUploadContentController {
 	// FileUploadContent-------------------------------------------
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/fileUploadContent/", method = RequestMethod.POST)
-	public ResponseEntity<?> createFileUploadContent(@RequestBody FileUploadContent fileUploadContent, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<?> createFileUploadContent(@RequestBody FileUploadContent fileUploadContent, 
+			UriComponentsBuilder ucBuilder,@ModelAttribute("username") String username) {
 		logger.info("Creating FileUploadContent : {}", fileUploadContent);
 
 		if (fileUploadContentService.isFileUploadContentExists(fileUploadContent)) {
@@ -84,8 +88,9 @@ public class FileUploadContentController {
 							"Unable to create. A FileUploadContent with name " + fileUploadContent.getFileName() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		fileUploadContent.setCreatedBy("sarath");
-		fileUploadContent.setUpdatedBy("sarath");
+		System.out.println("FileUploadContent username"+username);
+		fileUploadContent.setCreatedBy(username);
+		fileUploadContent.setUpdatedBy(username);
 		fileUploadContentService.saveFileUploadContent(fileUploadContent);
 
 		HttpHeaders headers = new HttpHeaders();
@@ -95,13 +100,15 @@ public class FileUploadContentController {
 
 	// ------------------- Update a FileUploadContent
 	// ------------------------------------------------
+	@SuppressWarnings("unused")
 	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_MANAGER" })
 	@RequestMapping(value = "/fileUploadContent/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<?> updateFileUploadContent(@PathVariable("id") int id, @RequestBody FileUploadContent fileUploadContent) {
+	public ResponseEntity<?> updateFileUploadContent(@PathVariable("id") int id, @RequestBody FileUploadContent fileUploadContent
+			,@ModelAttribute("username") String username) {
 		logger.info("Updating FileUploadContent with id {}", id);
 
 		FileUploadContent currentFileUploadContent = fileUploadContentService.findById(id);
-
+		currentFileUploadContent.setUpdatedBy(username);
 		if (currentFileUploadContent == null) {
 			logger.error("Unable to update. FileUploadContent with id {} not found.", id);
 			return new ResponseEntity(new CustomErrorType("Unable to upate. FileUploadContent with id " + id + " not found."),
@@ -141,7 +148,8 @@ public class FileUploadContentController {
 
 	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_MANAGER", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR" })
 	@RequestMapping(value = { "/fileUpload/fileProcessing.do" }, method = RequestMethod.POST)
-	public List<FileUpload> uploadFileProcessing(Model model, @RequestParam MultipartFile[] files) throws IOException {
+	public List<FileUpload> uploadFileProcessing(Model model, @RequestParam MultipartFile[] files
+			,@ModelAttribute("username") String username) throws IOException {
 		logger.info("started file processsing" + files.toString());
 		logger.info("fileUploadContent.length:" + files.length);
 		List<FileUploadContent> fileUploadContenters = new ArrayList<>();
@@ -160,6 +168,8 @@ public class FileUploadContentController {
 					fileUploadContenter.setFileName(fileName);
 					fileUploadContenter.setContentType(fileUploadContent.getContentType());
 					fileUploadContenter.setData(fileUploadContent.getBytes());
+					fileUploadContenter.setCreatedBy(username);
+					fileUploadContenter.setUpdatedBy(username);
 					fileUploadContentService.saveFileUploadContent(fileUploadContenter);
 					
 					FileUpload fileupload = new FileUpload();

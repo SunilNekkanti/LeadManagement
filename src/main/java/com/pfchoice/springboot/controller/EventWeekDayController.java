@@ -9,11 +9,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.pfchoice.springboot.model.EventWeekDay;
@@ -23,6 +25,7 @@ import com.pfchoice.springboot.util.CustomErrorType;
 @RestController
 @RequestMapping("/api")
 @SuppressWarnings({ "unchecked", "rawtypes" })
+@SessionAttributes({ "username", "roleId", "userId", "roleName" })
 public class EventWeekDayController {
 
 	public static final Logger logger = LoggerFactory.getLogger(EventWeekDayController.class);
@@ -65,7 +68,7 @@ public class EventWeekDayController {
 	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/eventWeekDay/", method = RequestMethod.POST)
 	public ResponseEntity<?> createEventWeekDay(@RequestBody EventWeekDay eventWeekDay,
-			UriComponentsBuilder ucBuilder) {
+			UriComponentsBuilder ucBuilder,@ModelAttribute("username") String username) {
 		logger.info("Creating EventWeekDay : {}", eventWeekDay);
 
 		if (eventWeekDayService.isEventWeekDayExist(eventWeekDay)) {
@@ -75,8 +78,8 @@ public class EventWeekDayController {
 							"Unable to create. A EventWeekDay with name " + eventWeekDay.getId() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		eventWeekDay.setCreatedBy("sarath");
-		eventWeekDay.setUpdatedBy("sarath");
+		eventWeekDay.setCreatedBy(username);
+		eventWeekDay.setUpdatedBy(username);
 		eventWeekDayService.saveEventWeekDay(eventWeekDay);
 
 		HttpHeaders headers = new HttpHeaders();

@@ -9,11 +9,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.pfchoice.springboot.model.Gender;
@@ -23,6 +25,7 @@ import com.pfchoice.springboot.util.CustomErrorType;
 @RestController
 @RequestMapping("/api")
 @SuppressWarnings({ "unchecked", "rawtypes" })
+@SessionAttributes({ "username", "roleId", "userId", "roleName" })
 public class GenderController {
 
 	public static final Logger logger = LoggerFactory.getLogger(GenderController.class);
@@ -64,7 +67,8 @@ public class GenderController {
 	// Gender-------------------------------------------
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/gender/", method = RequestMethod.POST)
-	public ResponseEntity<?> createGender(@RequestBody Gender gender, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<?> createGender(@RequestBody Gender gender, 
+			UriComponentsBuilder ucBuilder,@ModelAttribute("username") String username) {
 		logger.info("Creating Gender : {}", gender);
 
 		if (genderService.isGenderExist(gender)) {
@@ -73,8 +77,8 @@ public class GenderController {
 					new CustomErrorType("Unable to create. A Gender with name " + gender.getCode() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		gender.setCreatedBy("sarath");
-		gender.setUpdatedBy("sarath");
+		gender.setCreatedBy(username);
+		gender.setUpdatedBy(username);
 		genderService.saveGender(gender);
 
 		HttpHeaders headers = new HttpHeaders();

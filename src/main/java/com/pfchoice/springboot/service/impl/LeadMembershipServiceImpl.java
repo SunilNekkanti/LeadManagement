@@ -4,7 +4,6 @@ import com.pfchoice.springboot.model.LeadMembership;
 import com.pfchoice.springboot.repositories.LeadMembershipRepository;
 import com.pfchoice.springboot.service.LeadMembershipService;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;

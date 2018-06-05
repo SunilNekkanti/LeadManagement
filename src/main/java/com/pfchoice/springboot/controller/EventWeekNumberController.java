@@ -9,11 +9,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.pfchoice.springboot.model.EventWeekNumber;
@@ -23,6 +25,7 @@ import com.pfchoice.springboot.util.CustomErrorType;
 @RestController
 @RequestMapping("/api")
 @SuppressWarnings({ "unchecked", "rawtypes" })
+@SessionAttributes({ "username", "roleId", "userId", "roleName" })
 public class EventWeekNumberController {
 
 	public static final Logger logger = LoggerFactory.getLogger(EventWeekNumberController.class);
@@ -67,7 +70,7 @@ public class EventWeekNumberController {
 	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/eventWeekNumber/", method = RequestMethod.POST)
 	public ResponseEntity<?> createEventWeekNumber(@RequestBody EventWeekNumber eventWeekNumber,
-			UriComponentsBuilder ucBuilder) {
+			UriComponentsBuilder ucBuilder,@ModelAttribute("username") String username) {
 		logger.info("Creating EventWeekNumber : {}", eventWeekNumber);
 
 		if (eventWeekNumberService.isEventWeekNumberExist(eventWeekNumber)) {
@@ -76,8 +79,8 @@ public class EventWeekNumberController {
 					"Unable to create. A EventWeekNumber with name " + eventWeekNumber.getId() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		eventWeekNumber.setCreatedBy("sarath");
-		eventWeekNumber.setUpdatedBy("sarath");
+		eventWeekNumber.setCreatedBy(username);
+		eventWeekNumber.setUpdatedBy(username);
 		eventWeekNumberService.saveEventWeekNumber(eventWeekNumber);
 
 		HttpHeaders headers = new HttpHeaders();

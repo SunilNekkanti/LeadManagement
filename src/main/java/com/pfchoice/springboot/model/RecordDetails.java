@@ -43,11 +43,11 @@ public class RecordDetails {
 
 	@JsonIgnore
 	@Column(name = "created_by", updatable = false)
-	private String createdBy = "sarath";
+	private String createdBy ;
 
 	@JsonIgnore
 	@Column(name = "updated_by")
-	private String updatedBy = "sarath";
+	private String updatedBy ;
 
 	@JsonIgnore
 	@Column(name = "active_ind", insertable = false)

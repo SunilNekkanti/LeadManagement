@@ -9,11 +9,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.pfchoice.springboot.model.PlanType;
@@ -23,6 +25,7 @@ import com.pfchoice.springboot.util.CustomErrorType;
 @RestController
 @RequestMapping("/api")
 @SuppressWarnings({ "unchecked", "rawtypes" })
+@SessionAttributes({ "username", "roleId", "userId", "roleName" })
 public class PlanTypeController {
 
 	public static final Logger logger = LoggerFactory.getLogger(PlanTypeController.class);
@@ -64,7 +67,8 @@ public class PlanTypeController {
 	// PlanType-------------------------------------------
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
 	@RequestMapping(value = "/planType/", method = RequestMethod.POST)
-	public ResponseEntity<?> createPlanType(@RequestBody PlanType planType, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<?> createPlanType(@RequestBody PlanType planType, 
+			UriComponentsBuilder ucBuilder,@ModelAttribute("username") String username) {
 		logger.info("Creating PlanType : {}", planType);
 
 		if (planTypeService.isPlanTypeExist(planType)) {
@@ -74,8 +78,8 @@ public class PlanTypeController {
 							"Unable to create. A PlanType with name " + planType.getCode() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		planType.setCreatedBy("sarath");
-		planType.setUpdatedBy("sarath");
+		planType.setCreatedBy(username);
+		planType.setUpdatedBy(username);
 		planTypeService.savePlanType(planType);
 
 		HttpHeaders headers = new HttpHeaders();
