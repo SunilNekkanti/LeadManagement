@@ -44,7 +44,7 @@ public class FileUploadController {
 
 		List<FileUpload> fileUploads = fileUploadService.findAllFileUploads();
 		if (fileUploads.isEmpty()) {
-			System.out.println("no fileUploads");
+			logger.info("no fileUploads");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}

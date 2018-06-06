@@ -50,13 +50,6 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
 		        String targetUrl = determineTargetUrl(authentication);
 		    	HttpSession session = request.getSession();
 		    	
-		    /*	String ipAddress = request.getHeader("X-FORWARDED-FOR");  
-		    	System.out.println("X-FORWARDED-FOR ipAddress"+ipAddress);
-		    	if (ipAddress == null) {  
-		    	   ipAddress = request.getRemoteAddr();  
-		    	}
-		    	System.out.println("getRemoteAddr ipAddress"+ipAddress);
-		    	*/
 		 		User authUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 				session.setAttribute("username", authUser.getUsername());
 				session.setMaxInactiveInterval(90 * 60);

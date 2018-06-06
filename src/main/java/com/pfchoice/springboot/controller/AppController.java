@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +29,8 @@ import com.pfchoice.springboot.service.CurrentUserService;
 @Controller
 @SessionAttributes({ "username", "roleId", "userId", "roleName" })
 public class AppController {
+
+	public static final Logger logger = LoggerFactory.getLogger(AppController.class);
 
 	@Autowired
 	CurrentUserService currentUserService;
@@ -93,7 +97,7 @@ public class AppController {
 	 */
 	@RequestMapping(value = "/accessDenied", method = RequestMethod.GET)
 	public String accesssDenied() {
-		System.out.println("inside /accessDenied section/");
+		logger.info("inside /accessDenied section/");
 		return "accessDenied";
 	}
 

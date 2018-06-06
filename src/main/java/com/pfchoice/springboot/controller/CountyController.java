@@ -41,7 +41,7 @@ public class CountyController {
 	public ResponseEntity<List<County>> listAllCountys() {
 		List<County> countys = countyService.findAllCountys();
 		if (countys.isEmpty()) {
-			System.out.println("no county");
+			logger.info("no county");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}

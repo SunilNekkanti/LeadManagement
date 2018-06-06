@@ -43,7 +43,7 @@ public class EventFrequencyController {
 	public ResponseEntity<List<EventFrequency>> listAllEventFrequencys() {
 		List<EventFrequency> eventFrequencys = eventFrequencyService.findAllEventFrequencies();
 		if (eventFrequencys.isEmpty()) {
-			System.out.println("no eventFrequencys");
+			logger.info("no eventFrequencys");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}

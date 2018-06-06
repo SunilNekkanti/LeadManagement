@@ -41,7 +41,7 @@ public class StateController {
 	public ResponseEntity<List<State>> listAllStates() {
 		List<State> states = stateService.findAllStates();
 		if (states.isEmpty()) {
-			System.out.println("no states");
+			logger.info("no states");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}

@@ -48,7 +48,7 @@ public class LeadStatusController {
 
 		Page<LeadStatus> leadStatuss = leadStatusService.findAllLeadStatusesByPage(spec, pageRequest);
 		if (leadStatuss.getTotalElements() == 0) {
-			System.out.println("no leadStatuss");
+			logger.info("no leadStatuss");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}

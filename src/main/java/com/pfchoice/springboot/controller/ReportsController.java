@@ -71,7 +71,7 @@ public class ReportsController {
 		List<LeadMembership> reportData = leadMbrService.leadStatusReport(usrName,roleIds,statusIds, eventIds,starttDate,enddDate, reportType );
 
 		if (reportData.size() == 0) {
-			System.out.println("no data");
+			logger.info("no data");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}

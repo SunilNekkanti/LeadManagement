@@ -41,7 +41,7 @@ public class EventWeekDayController {
 	public ResponseEntity<List<EventWeekDay>> listAllEventWeekDays() {
 		List<EventWeekDay> eventWeekDays = eventWeekDayService.findAllEventWeekDays();
 		if (eventWeekDays.isEmpty()) {
-			System.out.println("no eventWeekDays");
+			logger.info("no eventWeekDays");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}

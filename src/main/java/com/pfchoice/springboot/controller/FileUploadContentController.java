@@ -51,7 +51,7 @@ public class FileUploadContentController {
 
 		List<FileUploadContent> fileUploadContents = fileUploadContentService.findAllFileUploadContents();
 		if (fileUploadContents.isEmpty()) {
-			System.out.println("no fileUploadContents");
+			logger.info("no fileUploadContents");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
@@ -88,7 +88,7 @@ public class FileUploadContentController {
 							"Unable to create. A FileUploadContent with name " + fileUploadContent.getFileName() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		System.out.println("FileUploadContent username"+username);
+		logger.info("FileUploadContent username"+username);
 		fileUploadContent.setCreatedBy(username);
 		fileUploadContent.setUpdatedBy(username);
 		fileUploadContentService.saveFileUploadContent(fileUploadContent);

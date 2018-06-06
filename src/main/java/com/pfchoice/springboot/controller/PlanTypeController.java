@@ -41,7 +41,7 @@ public class PlanTypeController {
 	public ResponseEntity<List<PlanType>> listAllPlanTypes() {
 		List<PlanType> planTypes = planTypeService.findAllPlanTypes();
 		if (planTypes.isEmpty()) {
-			System.out.println("no planTypes");
+			logger.info("no planTypes");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}

@@ -63,7 +63,7 @@ public class EventController {
 		Page<Event> events = eventService.findAllEventsByPage(spec, pageRequest);
 
 		if (events.getTotalElements() == 0) {
-			System.out.println("no events");
+			logger.info("no events");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}

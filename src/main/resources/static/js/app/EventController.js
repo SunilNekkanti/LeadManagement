@@ -437,6 +437,7 @@ app.controller(
 							    if( new Date(startDate).getTime()  >=  new Date(endDate).getTime() ){
 							      self.errMessage = 'End Date should be greater than start date';
 							      $scope.myForm.eventDateEndTime.$setValidity("improper", false);
+							      
 							    }else{
 							    self.errMessage='';
 							    $scope.myForm.eventDateEndTime.$setValidity("improper", true);

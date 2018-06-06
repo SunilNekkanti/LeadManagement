@@ -83,7 +83,7 @@ public class EventAssignmentController {
 				pageRequest);
 
 		if (eventAssignments.getTotalElements() == 0) {
-			System.out.println("no eventAssignments");
+			logger.info("no eventAssignments");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
@@ -188,7 +188,7 @@ public class EventAssignmentController {
 
 		currentEventAssignment.setRepeatRule(eventAssignment.getRepeatRule());
 		currentEventAssignment.getRepresentatives().clear();
-		System.out.println("eventAssignment.getRepresentatives()" + eventAssignment.getRepresentatives());
+		logger.info("eventAssignment.getRepresentatives()" + eventAssignment.getRepresentatives());
 		currentEventAssignment.getRepresentatives().addAll(eventAssignment.getRepresentatives());
 		currentEventAssignment.setUpdatedBy(username);
 		eventAssignmentService.updateEventAssignment(currentEventAssignment);

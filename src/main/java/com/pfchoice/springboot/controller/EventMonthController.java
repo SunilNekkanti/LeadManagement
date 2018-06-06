@@ -41,7 +41,7 @@ public class EventMonthController {
 	public ResponseEntity<List<EventMonth>> listAllEventMonths() {
 		List<EventMonth> eventMonths = eventMonthService.findAllEventMonths();
 		if (eventMonths.isEmpty()) {
-			System.out.println("no eventMonths");
+			logger.info("no eventMonths");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}

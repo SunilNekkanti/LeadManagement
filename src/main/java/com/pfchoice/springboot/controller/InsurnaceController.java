@@ -55,7 +55,7 @@ public class InsurnaceController {
 			spec = new InsuranceSpecifications(search);
 		Page<Insurance> insurances = insuranceService.findAllInsurancesByPage(spec, pageRequest);
 		if (insurances.getTotalElements() == 0) {
-			System.out.println("no insurances");
+			logger.info("no insurances");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}

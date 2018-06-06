@@ -52,7 +52,7 @@ public class ProviderController {
 			spec = new ProviderSpecifications(search);
 		Page<Provider> providers = providerService.findAllProvidersByPage(spec, pageRequest);
 		if (providers.getTotalElements() == 0) {
-			System.out.println("no providers");
+			logger.info("no providers");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}

@@ -51,7 +51,7 @@ public class LanguageController {
 		spec = new LanguageSpecifications(search);
 		Page<Language> languages = languageService.findAllLanguagesByPage(spec, pageRequest);
 		if (languages.getTotalElements() == 0) {
-			System.out.println("no Languages");
+			logger.info("no Languages");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}

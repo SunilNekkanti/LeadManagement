@@ -38,7 +38,7 @@ public class BestTimeToCallController {
 	public ResponseEntity<List<BestTimeToCall>> listAllBestTimeToCalls() {
 		List<BestTimeToCall> bestTimeToCalls = bestTimeToCallService.findAllBestTimeToCalls();
 		if (bestTimeToCalls.isEmpty()) {
-			System.out.println("no bestTimeToCalls");
+			logger.info("no bestTimeToCalls");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}

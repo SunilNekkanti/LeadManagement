@@ -42,7 +42,7 @@ public class GenderController {
 	public ResponseEntity<List<Gender>> listAllGenders() {
 		List<Gender> genders = genderService.findAllGenders();
 		if (genders.isEmpty()) {
-			System.out.println("no genders");
+			logger.info("no genders");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
