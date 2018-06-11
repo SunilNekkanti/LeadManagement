@@ -1,6 +1,15 @@
 server:
   port: 8080
   contextPath: /LeadManagement
+  display-name: LeadManagement
+  error.include-stacktrace: never
+  error.path: /error
+  error.whitelabel.enabled: true
+  server-header: 'No reponse from server probably an Error occurred on server'
+  compression:
+     enabled: true
+     mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
+  
 ---
 
 spring:
@@ -31,7 +40,15 @@ email:
         mail.smtp.starttls.enable: true
         mail.transport.protocol: smtp
         mail.debug: false
----        
+--- 
+ logging:
+    level:
+        ROOT: INFO
+        org.ehcache.sample: INFO
+        io.github.jhipster: INFO  
+    file: C:/softwares/mavenproject/LeadManagement/logger.log
+ 
+---       
 
 spring:
   profiles:
@@ -60,7 +77,7 @@ datasource:
     maxPoolSize: 10
     hibernate:
       hbm2ddl.method: none
-      show_sql: false
+      show_sql: true
       format_sql: false
       dialect: org.hibernate.dialect.MySQL5InnoDBDialect
 

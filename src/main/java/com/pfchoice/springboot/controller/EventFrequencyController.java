@@ -79,8 +79,6 @@ public class EventFrequencyController {
 					"Unable to create. A EventFrequency with name " + eventFrequency.getId() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		eventFrequency.setCreatedBy(username);
-		eventFrequency.setUpdatedBy(username);
 		eventFrequencyService.saveEventFrequency(eventFrequency);
 
 		HttpHeaders headers = new HttpHeaders();

@@ -1,14 +1,22 @@
 package com.pfchoice.springboot.model;
 
+import java.io.Serializable;
+
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
 
 /**
  * @author sarath
  *
  */
 @Component
-public class LoginForm {
+@Scope(value="session")
+public class LoginForm  implements Serializable{
 
+	private static final long serialVersionUID = 1L;
+	
+	
 	private String username;
 	private String password;
 	private String roleName;
@@ -105,5 +113,4 @@ public class LoginForm {
 	public void setInsuranceId(Integer insuranceId) {
 		this.insuranceId = insuranceId;
 	}
-
 }

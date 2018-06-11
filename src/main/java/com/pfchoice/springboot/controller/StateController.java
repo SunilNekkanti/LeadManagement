@@ -76,8 +76,6 @@ public class StateController {
 					new CustomErrorType("Unable to create. A State with name " + state.getCode() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		state.setCreatedBy(username);
-		state.setUpdatedBy(username);
 		stateService.saveState(state);
 
 		HttpHeaders headers = new HttpHeaders();

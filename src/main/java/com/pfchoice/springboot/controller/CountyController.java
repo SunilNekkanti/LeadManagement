@@ -76,8 +76,6 @@ public class CountyController {
 					new CustomErrorType("Unable to create. A County with name " + county.getCode() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		county.setCreatedBy(username);
-		county.setUpdatedBy(username);
 		countyService.saveCounty(county);
 
 		HttpHeaders headers = new HttpHeaders();

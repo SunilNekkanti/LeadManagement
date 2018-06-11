@@ -85,8 +85,6 @@ public class LeadStatusController {
 							"Unable to create. A LeadStatus with name " + leadStatus.getId() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		leadStatus.setCreatedBy(username);
-		leadStatus.setUpdatedBy(username);
 		leadStatusService.saveLeadStatus(leadStatus);
 
 		HttpHeaders headers = new HttpHeaders();
@@ -111,7 +109,6 @@ public class LeadStatusController {
 		}
 
 		currentLeadStatus.setDescription(leadStatus.getDescription());
-		currentLeadStatus.setUpdatedBy(username);
 		leadStatusService.updateLeadStatus(currentLeadStatus);
 		return new ResponseEntity<LeadStatus>(currentLeadStatus, HttpStatus.OK);
 	}

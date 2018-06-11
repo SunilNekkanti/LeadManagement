@@ -83,8 +83,6 @@ public class RoleController {
 					new CustomErrorType("Unable to create. A Role with name " + role.getRole() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		role.setCreatedBy(username);
-		role.setUpdatedBy(username);
 		roleService.saveRole(role);
 
 		HttpHeaders headers = new HttpHeaders();

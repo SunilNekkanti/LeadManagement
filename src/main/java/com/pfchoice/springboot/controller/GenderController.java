@@ -77,8 +77,6 @@ public class GenderController {
 					new CustomErrorType("Unable to create. A Gender with name " + gender.getCode() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		gender.setCreatedBy(username);
-		gender.setUpdatedBy(username);
 		genderService.saveGender(gender);
 
 		HttpHeaders headers = new HttpHeaders();

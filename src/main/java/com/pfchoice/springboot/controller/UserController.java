@@ -88,8 +88,6 @@ public class UserController {
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String encodedPassword = passwordEncoder.encode(user.getPassword());
 		user.setPassword(encodedPassword);
-		user.setCreatedBy(username);
-		user.setUpdatedBy(username);
 		userService.saveUser(user);
 
 		HttpHeaders headers = new HttpHeaders();
@@ -121,7 +119,6 @@ public class UserController {
 		currentUser.setInsurance(user.getInsurance());
 		currentUser.setContact(user.getContact());
 		currentUser.setLanguage(user.getLanguage());
-		currentUser.setUpdatedBy(username);
 		userService.updateUser(currentUser);
 		return new ResponseEntity<User>(currentUser, HttpStatus.OK);
 	}

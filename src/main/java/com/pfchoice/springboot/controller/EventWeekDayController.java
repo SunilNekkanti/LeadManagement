@@ -78,8 +78,6 @@ public class EventWeekDayController {
 							"Unable to create. A EventWeekDay with name " + eventWeekDay.getId() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		eventWeekDay.setCreatedBy(username);
-		eventWeekDay.setUpdatedBy(username);
 		eventWeekDayService.saveEventWeekDay(eventWeekDay);
 
 		HttpHeaders headers = new HttpHeaders();

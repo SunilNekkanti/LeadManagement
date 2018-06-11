@@ -92,8 +92,6 @@ public class InsurnaceController {
 							"Unable to create. A Insurance with name " + insurance.getId() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		insurance.setCreatedBy(username);
-		insurance.setUpdatedBy(username);
 		insuranceService.saveInsurance(insurance);
 
 		HttpHeaders headers = new HttpHeaders();

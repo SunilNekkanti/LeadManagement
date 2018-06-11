@@ -130,13 +130,10 @@ public class LeadController {
 			@ModelAttribute("roleName") String roleName,@ModelAttribute("username") String username) throws Exception {
 		logger.info("Creating LeadMembership : {}", lead);
 
-		
 		final String firstName = lead.getFirstName();
 		final String lastName = lead.getLastName();
 		final String address1 = lead.getContact().getAddress1();
 		final String phoneNumber = lead.getContact().getHomePhone();
-		lead.getContact().setCreatedBy(username);
-		lead.getContact().setUpdatedBy(username);
 
 		if (leadService.isLeadMembershipExists(firstName, lastName, address1, phoneNumber)) {
 			logger.error("Unable to create. A LeadMembership with name {} already exist",
@@ -144,6 +141,9 @@ public class LeadController {
 			return new ResponseEntity(new CustomErrorType("Unable to create. A LeadMembership with name "
 					+ lead.getFirstName() + " " + lead.getLastName() + " already exist."), HttpStatus.CONFLICT);
 		}
+		 if(lead.getAgentLeadAppointmentList() != null && lead.getAgentLeadAppointmentList().size()>0) {
+			 lead.getAgentLeadAppointmentList().forEach( ala -> ala.setLead(lead));
+		 }
 		StringBuffer emailBody = new StringBuffer();
 		User user = userService.findById(userId);
 		List<LeadNotes> leadNotes = lead.getLeadNotes();
@@ -151,17 +151,13 @@ public class LeadController {
 			leadNotes.forEach(ln -> {
 				ln.setUser(user);
 				ln.setLead(lead);
-				if(ln.getUpdatedBy() == null) ln.setUpdatedBy(username);
-				if(ln.getCreatedBy() == null) ln.setCreatedBy(username);
 				emailBody.append(ln.getNotes());
 			});
 		} else {
 			emailBody.append("");
 		}
-
+        
 		lead.setLeadNotes(leadNotes);
-		lead.setCreatedBy(username);
-		lead.setUpdatedBy(username);
 		leadService.saveLeadMembership(lead);
 
 		SimpleDateFormat sdf1 = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
@@ -220,7 +216,6 @@ public class LeadController {
 					new CustomErrorType("Unable to upate. LeadMembership with id " + id + " not found."),
 					HttpStatus.NOT_FOUND);
 		}
-		lead.getContact().setUpdatedBy(username);
 		currentLeadMembership.setFirstName(lead.getFirstName());
 		currentLeadMembership.setLastName(lead.getLastName());
 		currentLeadMembership.setDob(lead.getDob());
@@ -246,8 +241,6 @@ public class LeadController {
 						 currentUserLeadNotes = ln.getNotes();
 					 }
 					ln.setLead(currentLeadMembership);
-					ln.setCreatedBy(loginUser.getUsername());
-					ln.setUpdatedBy(loginUser.getUsername());
 					leadNotes.add(ln);
 				}
 			}
@@ -264,13 +257,11 @@ public class LeadController {
 			if (!"New".equalsIgnoreCase(lead.getStatus().getDescription())) {
 				  agntLeadAppointList = lead.getAgentLeadAppointmentList();
 				currentLeadMembership.getAgentLeadAppointmentList().clear();
-				currentLeadMembership.getAgentLeadAppointmentList().addAll(agntLeadAppointList);
+				//currentLeadMembership.getAgentLeadAppointmentList().addAll(agntLeadAppointList);
 				for (AgentLeadAppointment ala : agntLeadAppointList) {
-					if (ala.getAppointmentTime() != null && ala.getId() == null && ala.getUser().getId() == userId) {
-						ala.setCreatedBy(loginUser.getUsername());
-						ala.setUpdatedBy(loginUser.getUsername());
+				
+						ala.setLead(currentLeadMembership);
 						finalAgentLeadAppointList.add(ala);
-					}
 				}
 				if (finalAgentLeadAppointList.size() > 0) {
 					currentLeadMembership.getAgentLeadAppointmentList().clear();
@@ -281,7 +272,6 @@ public class LeadController {
 
 		}
 
-		currentLeadMembership.setUpdatedBy(username);
 		leadService.updateLeadMembership(currentLeadMembership);
 
 		Calendar cal = Calendar.getInstance();

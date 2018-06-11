@@ -2,11 +2,9 @@ package com.pfchoice.springboot.configuration;
 
 import java.util.Properties;
 
-import org.apache.catalina.filters.RemoteAddrFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -120,20 +118,6 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	    return new CustomAuthenticationSuccessHandler();
 	}
 	
-	@Bean
-	public FilterRegistrationBean remoteAddressFilter() {
-
-	    FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
-	    RemoteAddrFilter filter = new RemoteAddrFilter();
-	    filter.setAllow("192.168.1.151");
-	  //  filter.setDenyStatus(404);
-
-	    filterRegistrationBean.setFilter(filter);
-	    filterRegistrationBean.addUrlPatterns("/api/**");
-
-	    return filterRegistrationBean;
-
-	}
 	
 	@Bean("leadAccessDeniedHandler")
 	public LeadAccessDeniedHandler leadAccessDeniedHandler() {

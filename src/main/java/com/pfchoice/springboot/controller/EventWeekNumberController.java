@@ -79,8 +79,6 @@ public class EventWeekNumberController {
 					"Unable to create. A EventWeekNumber with name " + eventWeekNumber.getId() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		eventWeekNumber.setCreatedBy(username);
-		eventWeekNumber.setUpdatedBy(username);
 		eventWeekNumberService.saveEventWeekNumber(eventWeekNumber);
 
 		HttpHeaders headers = new HttpHeaders();

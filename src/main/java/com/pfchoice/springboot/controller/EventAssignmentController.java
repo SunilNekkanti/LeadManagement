@@ -114,8 +114,6 @@ public class EventAssignmentController {
 			@ModelAttribute("username") String username) throws MessagingException, IOException, InterruptedException {
 		logger.info("Creating EventAssignment : {}", eventAssignment);
 
-		eventAssignment.setCreatedBy(username);
-		eventAssignment.setUpdatedBy(username);
 		eventAssignmentService.saveEventAssignment(eventAssignment);
 
 		User user = userService.findById(userId);
@@ -190,7 +188,6 @@ public class EventAssignmentController {
 		currentEventAssignment.getRepresentatives().clear();
 		logger.info("eventAssignment.getRepresentatives()" + eventAssignment.getRepresentatives());
 		currentEventAssignment.getRepresentatives().addAll(eventAssignment.getRepresentatives());
-		currentEventAssignment.setUpdatedBy(username);
 		eventAssignmentService.updateEventAssignment(currentEventAssignment);
 
 		return new ResponseEntity<EventAssignment>(currentEventAssignment, HttpStatus.OK);

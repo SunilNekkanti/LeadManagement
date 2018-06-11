@@ -44,7 +44,6 @@ import com.pfchoice.springboot.util.JsonDateSerializer;
  */
 @Entity
 @Table(name = "lead_membership")
-
 @SqlResultSetMapping(
 	    name="statusReportDTOMapping",
 	    classes={
@@ -76,7 +75,7 @@ import com.pfchoice.springboot.util.JsonDateSerializer;
 				})
 		})
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class LeadMembership extends RecordDetails implements Serializable {
+public class LeadMembership extends  RecordDetails  implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -176,7 +175,7 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	}
 
 	@PrePersist
-    public void prePersist() {
+    public void onPrePersist() {
        if (status == null) {
     	   status = new LeadStatus(new Short((short) 1));
        }
@@ -377,11 +376,6 @@ public class LeadMembership extends RecordDetails implements Serializable {
 	 *            the agentLeadAppointmentList to set
 	 */
 	public void setAgentLeadAppointmentList(List<AgentLeadAppointment> agentLeadAppointmentList) {
-		for (AgentLeadAppointment agentLeadAppointment : agentLeadAppointmentList) {
-			agentLeadAppointment.setLead(this);
-			agentLeadAppointment.setCreatedBy("Sarath");
-			agentLeadAppointment.setUpdatedBy("Sarath");
-		}
 		this.agentLeadAppointmentList = agentLeadAppointmentList;
 	}
 

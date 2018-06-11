@@ -78,8 +78,6 @@ public class PlanTypeController {
 							"Unable to create. A PlanType with name " + planType.getCode() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		planType.setCreatedBy(username);
-		planType.setUpdatedBy(username);
 		planTypeService.savePlanType(planType);
 
 		HttpHeaders headers = new HttpHeaders();

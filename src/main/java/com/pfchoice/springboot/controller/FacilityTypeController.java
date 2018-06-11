@@ -82,8 +82,6 @@ public class FacilityTypeController {
 							"Unable to create. A FacilityType with name " + facilityType.getId() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		facilityType.setCreatedBy(username);
-		facilityType.setUpdatedBy(username);
 		facilityTypeService.saveFacilityType(facilityType);
 
 		HttpHeaders headers = new HttpHeaders();
@@ -110,7 +108,6 @@ public class FacilityTypeController {
 
 		currentFacilityType.setId(facilityType.getId());
 		currentFacilityType.setDescription(facilityType.getDescription());
-		currentFacilityType.setUpdatedBy(username);
 		facilityTypeService.updateFacilityType(currentFacilityType);
 		return new ResponseEntity<FacilityType>(currentFacilityType, HttpStatus.OK);
 	}

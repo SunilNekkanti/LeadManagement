@@ -4,7 +4,7 @@
 
 	<groupId>com.pfchoice.springboot</groupId>
 	<artifactId>LeadManagement</artifactId>
-	<version>1.0.105</version>
+	<version>1.0.110</version>
 	<packaging>jar</packaging>
 
 	<name>LeadManagement</name>
@@ -22,10 +22,22 @@
 
 	<dependencies>
 		<!-- Add typical dependencies for a web application -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
+
+        <dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-web</artifactId>
+		    <exclusions>
+		        <exclusion>
+		            <groupId>org.springframework.boot</groupId>
+		            <artifactId>spring-boot-starter-tomcat</artifactId>
+		        </exclusion>
+		    </exclusions>
 		</dependency>
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-undertow</artifactId>
+		</dependency>
+
 
 		<!-- Add spring security -->
 		<dependency>
@@ -69,6 +81,19 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<version>1.3.0.RELEASE</version>
 		</dependency>
+
+		<dependency>
+		   <groupId>org.springframework.boot</groupId>
+		   <artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+		<dependency>
+		  <groupId>org.projectlombok</groupId>
+		  <artifactId>lombok</artifactId>
+		  <version>1.16.12</version>
+		  <optional>true</optional>
+		</dependency>
+
 
 		<!-- Add Hikari Connection Pooling support -->
 		<dependency>

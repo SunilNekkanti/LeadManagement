@@ -78,8 +78,6 @@ public class EventMonthController {
 							"Unable to create. A EventMonth with name " + eventMonth.getId() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		eventMonth.setCreatedBy(username);
-		eventMonth.setUpdatedBy(username);
 		eventMonthService.saveEventMonth(eventMonth);
 
 		HttpHeaders headers = new HttpHeaders();

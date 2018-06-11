@@ -81,8 +81,6 @@ public class FileUploadController {
 							"Unable to create. A FileUpload with name " + fileUpload.getFileName() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		fileUpload.setCreatedBy(username);
-		fileUpload.setUpdatedBy(username);
 		fileUploadService.saveFileUpload(fileUpload);
 
 		HttpHeaders headers = new HttpHeaders();

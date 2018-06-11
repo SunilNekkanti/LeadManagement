@@ -511,7 +511,7 @@ app.controller(
 					            self.lead={};
 					            self.selectedAgentLeadAppointment = {};
 					            self.display = false;
-							      	$state.go('main.lead', {}, {reload: false, inherit: true,notify: false});
+							      	$state.go('main.lead', {}, {reload: 'main.lead'});
 					        }
 
 							function uploadFile() {

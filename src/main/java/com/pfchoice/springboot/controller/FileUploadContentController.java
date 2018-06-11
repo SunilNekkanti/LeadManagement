@@ -89,8 +89,6 @@ public class FileUploadContentController {
 					HttpStatus.CONFLICT);
 		}
 		logger.info("FileUploadContent username"+username);
-		fileUploadContent.setCreatedBy(username);
-		fileUploadContent.setUpdatedBy(username);
 		fileUploadContentService.saveFileUploadContent(fileUploadContent);
 
 		HttpHeaders headers = new HttpHeaders();
@@ -108,7 +106,6 @@ public class FileUploadContentController {
 		logger.info("Updating FileUploadContent with id {}", id);
 
 		FileUploadContent currentFileUploadContent = fileUploadContentService.findById(id);
-		currentFileUploadContent.setUpdatedBy(username);
 		if (currentFileUploadContent == null) {
 			logger.error("Unable to update. FileUploadContent with id {} not found.", id);
 			return new ResponseEntity(new CustomErrorType("Unable to upate. FileUploadContent with id " + id + " not found."),
@@ -168,8 +165,6 @@ public class FileUploadContentController {
 					fileUploadContenter.setFileName(fileName);
 					fileUploadContenter.setContentType(fileUploadContent.getContentType());
 					fileUploadContenter.setData(fileUploadContent.getBytes());
-					fileUploadContenter.setCreatedBy(username);
-					fileUploadContenter.setUpdatedBy(username);
 					fileUploadContentService.saveFileUploadContent(fileUploadContenter);
 					
 					FileUpload fileupload = new FileUpload();
