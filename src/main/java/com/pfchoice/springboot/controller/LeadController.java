@@ -141,7 +141,9 @@ public class LeadController {
 			return new ResponseEntity(new CustomErrorType("Unable to create. A LeadMembership with name "
 					+ lead.getFirstName() + " " + lead.getLastName() + " already exist."), HttpStatus.CONFLICT);
 		}
+		 System.out.println("***********inside lead agent details"+lead.getAgentLeadAppointmentList());
 		 if(lead.getAgentLeadAppointmentList() != null && lead.getAgentLeadAppointmentList().size()>0) {
+			 System.out.println("***********inside lead agent details");
 			 lead.getAgentLeadAppointmentList().forEach( ala -> ala.setLead(lead));
 		 }
 		StringBuffer emailBody = new StringBuffer();

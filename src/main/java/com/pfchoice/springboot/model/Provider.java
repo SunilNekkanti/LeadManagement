@@ -24,13 +24,24 @@ import org.hibernate.annotations.NotFoundAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 /**
  *
- * @author Mohanasundharam
+ * @author Sarath Gandluri
  */
 @Entity
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Table(name = "provider")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString( exclude = { "languages" })
+@EqualsAndHashCode(callSuper =false,exclude = {"id","languages"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Provider extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -60,119 +71,5 @@ public class Provider extends RecordDetails implements Serializable {
 			@JoinColumn(name = "prvdr_id", referencedColumnName = "prvdr_id", nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id", nullable = false, updatable = false, unique = true) })
 	private Contact contact;
-
-	/**
-	 * 
-	 */
-	public Provider() {
-		super();
-
-	}
-
-	/**
-	 * @param id
-	 */
-	public Provider(final Integer id) {
-		super();
-		this.id = id;
-	}
-
-	/**
-	 * @return
-	 */
-	public Integer getId() {
-		return id;
-	}
-
-	/**
-	 * @param id
-	 */
-	public void setId(final Integer id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return the code
-	 */
-	public String getCode() {
-		return code;
-	}
-
-	/**
-	 * @param code
-	 *            the code to set
-	 */
-	public void setCode(final String code) {
-		this.code = code;
-	}
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(final String name) {
-		this.name = name;
-	}
-
-	/**
-	 * @return the languages
-	 */
-	public Set<Language> getLanguages() {
-		return languages;
-	}
-
-	/**
-	 * @param languages
-	 *            the languages to set
-	 */
-	public void setLanguages(Set<Language> languages) {
-		this.languages = languages;
-	}
-
-	/**
-	 * @return the contact
-	 */
-	public Contact getContact() {
-		return contact;
-	}
-
-	/**
-	 * @param contact
-	 *            the contact to set
-	 */
-	public void setContact(Contact contact) {
-		this.contact = contact;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		hash += (id != null ? id.hashCode() : 0);
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		if (!(object instanceof Provider)) {
-			return false;
-		}
-		Provider other = (Provider) object;
-		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "com.pfchoice.springboot.model.provider[ id=" + id + " ]";
-	}
 
 }

@@ -21,12 +21,23 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 /**
  *
- * @author Mohanasundharam
+ * @author Sarath Gandluri
  */
 @Entity
 @Table(name = "emails")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString(exclude={"filesUpload"})
+@EqualsAndHashCode(callSuper =false,of = {"emailTo", "subject"})
 public class Email extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -64,184 +75,5 @@ public class Email extends RecordDetails implements Serializable {
 
 	@Transient
 	private Map<String, Object> model;
-
-	/**
-	 * 
-	 */
-	public Email() {
-		super();
-	}
-
-	public Email(String templateFile) {
-		super();
-		this.templateFile = templateFile;
-	}
-
-	/**
-	 * @param id
-	 */
-	public Email(final Integer id, String templateFile) {
-		super();
-		this.id = id;
-		this.templateFile = templateFile;
-	}
-
-	/**
-	 * @return
-	 */
-	public Integer getId() {
-		return id;
-	}
-
-	/**
-	 * @param id
-	 */
-	public void setId(final Integer id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return the emailTo
-	 */
-	public String getEmailTo() {
-		return emailTo;
-	}
-
-	/**
-	 * @param emailTo
-	 *            the emailTo to set
-	 */
-	public void setEmailTo(String emailTo) {
-		this.emailTo = emailTo;
-	}
-
-	/**
-	 * @return the emailFrom
-	 */
-	public String getEmailFrom() {
-		return emailFrom;
-	}
-
-	/**
-	 * @param emailFrom
-	 *            the emailFrom to set
-	 */
-	public void setEmailFrom(String emailFrom) {
-		this.emailFrom = emailFrom;
-	}
-
-	/**
-	 * @return the emailCc
-	 */
-	public String getEmailCc() {
-		return emailCc;
-	}
-
-	/**
-	 * @param emailCc
-	 *            the emailCc to set
-	 */
-	public void setEmailCc(String emailCc) {
-		this.emailCc = emailCc;
-	}
-
-	/**
-	 * @return the subject
-	 */
-	public String getSubject() {
-		return subject;
-	}
-
-	/**
-	 * @param subject
-	 *            the subject to set
-	 */
-	public void setSubject(String subject) {
-		this.subject = subject;
-	}
-
-	/**
-	 * @return the body
-	 */
-	public String getBody() {
-		return body;
-	}
-
-	/**
-	 * @param body
-	 *            the body to set
-	 */
-	public void setBody(String body) {
-		this.body = body;
-	}
-
-	/**
-	 * @return the filesUpload
-	 */
-	public Set<FileUpload> getFilesUpload() {
-		return filesUpload;
-	}
-
-	/**
-	 * @param filesUpload
-	 *            the filesUpload to set
-	 */
-	public void setFilesUpload(Set<FileUpload> filesUpload) {
-		this.filesUpload = filesUpload;
-	}
-
-	/**
-	 * @return the emailTemplateFile
-	 */
-	public String getTemplateFilename() {
-		return templateFile;
-	}
-
-	/**
-	 * @param emailTemplateFile
-	 *            the emailTemplateFile to set
-	 */
-	public void setTemplateFile(String templateFile) {
-		this.templateFile = templateFile;
-	}
-
-	/**
-	 * @return the model
-	 */
-	public Map<String, Object> getModel() {
-		return model;
-	}
-
-	/**
-	 * @param model
-	 *            the model to set
-	 */
-	public void setModel(Map<String, Object> model) {
-		this.model = model;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		hash += (id != null ? id.hashCode() : 0);
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		if (!(object instanceof Email)) {
-			return false;
-		}
-		Email other = (Email) object;
-		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "com.pfchoice.springboot.model.Emails[ id=" + id + " ]";
-	}
 
 }

@@ -13,12 +13,23 @@ import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 /**
  *
  * @author sarath
  */
 @Entity(name = "file")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
+@EqualsAndHashCode(callSuper =false,of = {"fileName"})
 public class File extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -35,90 +46,5 @@ public class File extends RecordDetails implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "file_type_code", referencedColumnName = "code")
 	private FileType fileType;
-
-	/**
-	 * 
-	 */
-	public File() {
-		super();
-	}
-
-	/**
-	 * 
-	 * @param id
-	 */
-	public File(final Integer id) {
-		super();
-		this.id = id;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public Integer getId() {
-		return id;
-	}
-
-	/**
-	 * 
-	 * @param id
-	 */
-	public void setId(final Integer id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return the fileName
-	 */
-	public String getFileName() {
-		return fileName;
-	}
-
-	/**
-	 * @param fileName
-	 *            the fileName to set
-	 */
-	public void setFileName(final String fileName) {
-		this.fileName = fileName;
-	}
-
-	/**
-	 * @return
-	 */
-	public FileType getFileType() {
-		return fileType;
-	}
-
-	/**
-	 * @param fileType
-	 */
-	public void setFileType(FileType fileType) {
-		this.fileType = fileType;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		hash += (id != null ? id.hashCode() : 0);
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		if (!(object instanceof File)) {
-			return false;
-		}
-		File other = (File) object;
-		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "com.pfchoice.springboot.model.Membership[ id=" + id + " ]";
-	}
 
 }

@@ -16,11 +16,22 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pfchoice.springboot.model.Insurance;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 /**
  *
- * @author Mohanasundharam
+ * @author Sarath Gandluri
  */
 @Entity(name = "reference_contract")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
+@EqualsAndHashCode(callSuper =false,of = {"ins","prvdr","contract"})
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class ReferenceContract extends RecordDetails implements Serializable {
 
@@ -45,103 +56,5 @@ public class ReferenceContract extends RecordDetails implements Serializable {
 	@JsonIgnore
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "referenceContract")
 	private Contract contract;
-
-	/**
-	 * 
-	 */
-	public ReferenceContract() {
-		super();
-	}
-
-	/**
-	 * @param id
-	 */
-	public ReferenceContract(final Integer id) {
-		super();
-		this.id = id;
-	}
-
-	/**
-	 * @return
-	 */
-	public Integer getId() {
-		return id;
-	}
-
-	/**
-	 * @param id
-	 */
-	public void setId(final Integer id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return the ins
-	 */
-	public Insurance getIns() {
-		return ins;
-	}
-
-	/**
-	 * @param ins
-	 *            the ins to set
-	 */
-	public void setIns(final Insurance ins) {
-		this.ins = ins;
-	}
-
-	/**
-	 * @return the prvdr
-	 */
-	public Provider getPrvdr() {
-		return prvdr;
-	}
-
-	/**
-	 * @param prvdr
-	 *            the prvdr to set
-	 */
-	public void setPrvdr(Provider prvdr) {
-		this.prvdr = prvdr;
-	}
-
-	/**
-	 * @return the contract
-	 */
-	public Contract getContract() {
-		return contract;
-	}
-
-	/**
-	 * @param contract
-	 *            the contract to set
-	 */
-	public void setContract(Contract contract) {
-		this.contract = contract;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		hash += (id != null ? id.hashCode() : 0);
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		if (!(object instanceof ReferenceContract)) {
-			return false;
-		}
-		ReferenceContract other = (ReferenceContract) object;
-		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "com.pfchoice.springboot.model.Contract[ id=" + id + " ]";
-	}
 
 }

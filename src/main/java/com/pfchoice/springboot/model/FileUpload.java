@@ -12,12 +12,23 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 /**
  *
  * @author sarath
  */
 @Entity
 @Table(name = "file_upload")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
+@EqualsAndHashCode(callSuper =false,of = {"fileName"})
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class FileUpload extends RecordDetails implements Serializable {
 
@@ -34,91 +45,5 @@ public class FileUpload extends RecordDetails implements Serializable {
 
 	@Column(name = "content_type")
 	private String contentType;
-
-	/**
-	 * 
-	 */
-	public FileUpload() {
-		super();
-	}
-
-	/**
-	 * 
-	 * @param id
-	 */
-	public FileUpload(final Integer id) {
-		super();
-		this.id = id;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public Integer getId() {
-		return id;
-	}
-
-	/**
-	 * 
-	 * @param id
-	 */
-	public void setId(final Integer id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return the fileName
-	 */
-	public String getFileName() {
-		return fileName;
-	}
-
-	/**
-	 * @return the contentType
-	 */
-	public String getContentType() {
-		return contentType;
-	}
-
-	/**
-	 * @param contentType
-	 *            the contentType to set
-	 */
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
-	}
-
-	/**
-	 * @param fileName
-	 *            the fileName to set
-	 */
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		hash += (id != null ? id.hashCode() : 0);
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		if (!(object instanceof FileUpload)) {
-			return false;
-		}
-		FileUpload other = (FileUpload) object;
-		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "com.pfchoice.springboot.model.FilesUpload[ id=" + id + " ]";
-	}
 
 }

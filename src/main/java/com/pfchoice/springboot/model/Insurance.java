@@ -20,12 +20,23 @@ import org.hibernate.annotations.NotFoundAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 /**
  *
- * @author Mohanasundharam
+ * @author Sarath Gandluri
  */
 @Entity
 @Table(name = "insurance")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
+@EqualsAndHashCode(callSuper =false,of = {"name","planType"})
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Insurance extends RecordDetails implements Serializable {
 
@@ -51,102 +62,5 @@ public class Insurance extends RecordDetails implements Serializable {
 					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id", nullable = false, updatable = false, unique = true) })
 	private Contact contact;
 
-	/**
-	 * 
-	 */
-	public Insurance() {
-		super();
-	}
-
-	/**
-	 * @param id
-	 */
-	public Insurance(final Integer id) {
-		super();
-		this.id = id;
-	}
-
-	/**
-	 * @return
-	 */
-	public Integer getId() {
-		return id;
-	}
-
-	/**
-	 * @param id
-	 */
-	public void setId(final Integer id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(final String name) {
-		this.name = name;
-	}
-
-	/**
-	 * @return the planTypeId
-	 */
-	public PlanType getPlanType() {
-		return planType;
-	}
-
-	/**
-	 * @param planTypeId
-	 *            the planTypeId to set
-	 */
-	public void setPlanType(PlanType planType) {
-		this.planType = planType;
-	}
-
-	/**
-	 * @return the contact
-	 */
-	public Contact getContact() {
-		return contact;
-	}
-
-	/**
-	 * @param contact
-	 *            the contact to set
-	 */
-	public void setContact(Contact contact) {
-		this.contact = contact;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		hash += (id != null ? id.hashCode() : 0);
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		if (!(object instanceof Insurance)) {
-			return false;
-		}
-		Insurance other = (Insurance) object;
-		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "com.pfchoice.springboot.model.Insurance[ id=" + id + " ]";
-	}
 
 }

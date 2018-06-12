@@ -26,7 +26,7 @@ app.service('UserService',
                 $http.get(urls.LOGIN_USER)
                     .then(
                         function (response) {
-                            console.log('Fetched successfully loginUser',response);
+                            console.log('Fetched successfully loginUser');
                             if (localStorage.getItem("loginUser") === null) {
                             	 $localStorage.loginUser = response.data;
                             }else {

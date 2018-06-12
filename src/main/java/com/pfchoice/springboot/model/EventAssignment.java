@@ -26,12 +26,23 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pfchoice.springboot.util.JsonDateAndTimeDeserializer;
 import com.pfchoice.springboot.util.JsonDateAndTimeSerializer;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 /**
  * @author sarath
  *
  */
 @Entity
 @Table(name = "event_assignment")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString(exclude={"representatives"})
+@EqualsAndHashCode(callSuper =false,of = {"event","repeatRule","eventDateStartTime","eventDateEndTime"})
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class EventAssignment extends RecordDetails implements Serializable {
 
@@ -67,134 +78,5 @@ public class EventAssignment extends RecordDetails implements Serializable {
 			@JoinColumn(name = "event_assignment_id", referencedColumnName = "event_assignment_id", nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false) })
 	private Set<User> representatives;
-
-	/**
-	 * 
-	 */
-	public EventAssignment() {
-		super();
-	}
-
-	/**
-	 * @param id
-	 */
-	public EventAssignment(final Integer id) {
-		super();
-		this.id = id;
-	}
-
-	/**
-	 * @return the id
-	 */
-	public Integer getId() {
-		return id;
-	}
-
-	/**
-	 * @param id
-	 *            the id to set
-	 */
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return the repeatRule
-	 */
-	public String getRepeatRule() {
-		return repeatRule;
-	}
-
-	/**
-	 * @param repeatRule
-	 *            the repeatRule to set
-	 */
-	public void setRepeatRule(String repeatRule) {
-		this.repeatRule = repeatRule;
-	}
-
-	/**
-	 * @return the representatives
-	 */
-	public Set<User> getRepresentatives() {
-		return representatives;
-	}
-
-	/**
-	 * @param representatives
-	 *            the representatives to set
-	 */
-	public void setRepresentatives(Set<User> representatives) {
-		this.representatives = representatives;
-	}
-
-	/**
-	 * @return the event
-	 */
-	public Event getEvent() {
-		return event;
-	}
-
-	/**
-	 * @param event
-	 *            the event to set
-	 */
-	public void setEvent(Event event) {
-		this.event = event;
-	}
-
-	/**
-	 * @return the eventDateStartTime
-	 */
-	public Date getEventDateStartTime() {
-		return eventDateStartTime;
-	}
-
-	/**
-	 * @param eventDateStartTime
-	 *            the eventDateStartTime to set
-	 */
-	public void setEventDateStartTime(Date eventDateStartTime) {
-		this.eventDateStartTime = eventDateStartTime;
-	}
-
-	/**
-	 * @return the eventDateEndTime
-	 */
-	public Date getEventDateEndTime() {
-		return eventDateEndTime;
-	}
-
-	/**
-	 * @param eventDateEndTime
-	 *            the eventDateEndTime to set
-	 */
-	public void setEventDateEndTime(Date eventDateEndTime) {
-		this.eventDateEndTime = eventDateEndTime;
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		if (!(object instanceof EventAssignment)) {
-			return false;
-		}
-		EventAssignment other = (EventAssignment) object;
-		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		hash += (id != null ? id.hashCode() : 0);
-		return hash;
-	}
-
-	@Override
-	public String toString() {
-		return "com.pfchoice.springboot.model.EventAssignment[ id=" + id + " ]";
-	}
 
 }

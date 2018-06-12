@@ -90,10 +90,9 @@
 		<dependency>
 		  <groupId>org.projectlombok</groupId>
 		  <artifactId>lombok</artifactId>
-		  <version>1.16.12</version>
+		  <version>1.16.16</version>
 		  <optional>true</optional>
 		</dependency>
-
 
 		<!-- Add Hikari Connection Pooling support -->
 		<dependency>

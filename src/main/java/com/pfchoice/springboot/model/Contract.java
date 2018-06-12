@@ -17,11 +17,22 @@ import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 /**
  *
- * @author Mohanasundharam
+ * @author Sarath Gandluri
  */
 @Entity(name = "contract")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString(exclude={"referenceContract","filesUpload"})
+@EqualsAndHashCode(callSuper =false,of = {"contractNBR","pcpPrvdrNBR"})
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Contract extends RecordDetails implements Serializable {
 
@@ -57,197 +68,9 @@ public class Contract extends RecordDetails implements Serializable {
 
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "file_upload_id", referencedColumnName = "file_upload_id")
-	private FilesUpload filesUpload;
+	private FileUpload filesUpload;
 
 	@Transient
 	private Integer insId;
-
-	/**
-	 * 
-	 */
-	public Contract() {
-		super();
-	}
-
-	/**
-	 * @param id
-	 */
-	public Contract(final Integer id) {
-		super();
-		this.id = id;
-	}
-
-	/**
-	 * @return
-	 */
-	public Integer getId() {
-		return id;
-	}
-
-	/**
-	 * @param id
-	 */
-	public void setId(final Integer id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return the contractNBR
-	 */
-	public String getContractNBR() {
-		return contractNBR;
-	}
-
-	/**
-	 * @return the pcpPrvdrNBR
-	 */
-	public String getPcpPrvdrNBR() {
-		return pcpPrvdrNBR;
-	}
-
-	/**
-	 * @param pcpPrvdrNBR
-	 *            the pcpPrvdrNBR to set
-	 */
-	public void setPcpPrvdrNBR(String pcpPrvdrNBR) {
-		this.pcpPrvdrNBR = pcpPrvdrNBR;
-	}
-
-	/**
-	 * @param contractNBR
-	 *            the contractNBR to set
-	 */
-	public void setContractNBR(final String contractNBR) {
-		this.contractNBR = contractNBR;
-	}
-
-	/**
-	 * @return the pmpm
-	 */
-	public Double getPmpm() {
-		return pmpm;
-	}
-
-	/**
-	 * @param pmpm
-	 *            the pmpm to set
-	 */
-	public void setPmpm(Double pmpm) {
-		this.pmpm = pmpm;
-	}
-
-	/**
-	 * @return the avgServiceFund
-	 */
-	public Double getAvgServiceFund() {
-		return avgServiceFund;
-	}
-
-	/**
-	 * @param avgServiceFund
-	 *            the avgServiceFund to set
-	 */
-	public void setAvgServiceFund(Double avgServiceFund) {
-		this.avgServiceFund = avgServiceFund;
-	}
-
-	/**
-	 * @return the startDate
-	 */
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	/**
-	 * @param startDate
-	 *            the startDate to set
-	 */
-	public void setStartDate(final Date startDate) {
-		this.startDate = startDate;
-	}
-
-	/**
-	 * @return the endDate
-	 */
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	/**
-	 * @param endDate
-	 *            the endDate to set
-	 */
-	public void setEndDate(final Date endDate) {
-		this.endDate = endDate;
-	}
-
-	/**
-	 * @return the referenceContract
-	 */
-	public ReferenceContract getReferenceContract() {
-		return referenceContract;
-	}
-
-	/**
-	 * @param referenceContract
-	 *            the referenceContract to set
-	 */
-	public void setReferenceContract(final ReferenceContract referenceContract) {
-		this.referenceContract = referenceContract;
-	}
-
-	/**
-	 * @return the filesUpload
-	 */
-	public FilesUpload getFilesUpload() {
-		return filesUpload;
-	}
-
-	/**
-	 * @param filesUpload
-	 *            the filesUpload to set
-	 */
-	public void setFilesUpload(FilesUpload filesUpload) {
-		this.filesUpload = filesUpload;
-	}
-
-	/**
-	 * @return the insId
-	 */
-	public Integer getInsId() {
-		return insId;
-	}
-
-	/**
-	 * @param insId
-	 *            the insId to set
-	 */
-	public void setInsId(Integer insId) {
-		this.insId = insId;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		hash += (id != null ? id.hashCode() : 0);
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		if (!(object instanceof Contract)) {
-			return false;
-		}
-		Contract other = (Contract) object;
-		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "com.pfchoice.springboot.model.Contract[ id=" + id + " ]";
-	}
 
 }

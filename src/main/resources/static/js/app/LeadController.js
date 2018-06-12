@@ -290,6 +290,7 @@ app.controller(
 
 							function submit() {
 								console.log('Submitting');
+								  
 								if(self.lead.agentLeadAppointmentList){
 									self.lead.agentLeadAppointmentList = self.lead.agentLeadAppointmentList.filter(function( obj ) {
 										  return obj.id != self.selectedAgentLeadAppointment.id;
@@ -299,6 +300,9 @@ app.controller(
 									}
 
                                     console.log('Submitting agentLeadAppointmentList');
+								}
+								if(self.lead.agentLeadAppointmentList === undefined && self.selectedAgentLeadAppointment != null && Object.keys(self.selectedAgentLeadAppointment).length > 0 ){
+								self.lead.agentLeadAppointmentList.push(self.selectedAgentLeadAppointment);
 								}
 
 								 if(self.notes && self.notes != ''){
@@ -340,6 +344,7 @@ app.controller(
 													self.errorMessage = '';
 													self.done = true;
 													self.lead = {};
+													self.lead.agentLeadAppointmentList = [];
 													self.selectedAgentLeadAppointment = {};
 													self.notes ='';
 													clearFiles();
@@ -464,6 +469,7 @@ app.controller(
 							function addLead() {
 								self.errorMessage = '';
 								self.successMessage = '';
+								self.lead.agentLeadAppointmentList = [];
 								if(self.display){
 									self.providers = getAllProviders();
 									self.users = getAllAgents();

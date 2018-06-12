@@ -38,12 +38,23 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pfchoice.springboot.util.JsonDateDeserializer;
 import com.pfchoice.springboot.util.JsonDateSerializer;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 /**
  * @author sarath
  *
  */
 @Entity
 @Table(name = "lead_membership")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString( exclude = { "leadNotes","agentLeadAppointmentList", "notesHistory"})
+@EqualsAndHashCode(callSuper =false,exclude = {"id","leadNotes","agentLeadAppointmentList","notesHistory"})
 @SqlResultSetMapping(
 	    name="statusReportDTOMapping",
 	    classes={
@@ -134,7 +145,7 @@ public class LeadMembership extends  RecordDetails  implements Serializable {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lead_mbr_status_detail_id", referencedColumnName = "code")
 	private LeadStatusDetail statusDetail;
-
+	
 	@OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "lead_contacts", joinColumns = {
 			@JoinColumn(name = "lead_mbr_id", referencedColumnName = "lead_mbr_id", nullable = false ) }, inverseJoinColumns = {
@@ -144,35 +155,21 @@ public class LeadMembership extends  RecordDetails  implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "event_id", referencedColumnName = "event_id")
 	private Event event;
-
+	
 	@Column(name = "consent_form_signed")
 	private Character consentFormSigned = new Character('N');
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "file_upload_id", referencedColumnName = "file_upload_id", nullable = false)
 	private FileUpload fileUpload;
-
+	
 	@Fetch(FetchMode.SELECT)
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "lead")
+	@OrderBy("createdDate desc")
 	private List<LeadNotes> leadNotes;
 
 	@javax.persistence.Transient
 	private String notesHistory;
-
-	/**
-	 * 
-	 */
-	public LeadMembership() {
-		super();
-	}
-
-	/**
-	 * @param id
-	 */
-	public LeadMembership(final Integer id) {
-		super();
-		this.id = id;
-	}
 
 	@PrePersist
     public void onPrePersist() {
@@ -181,308 +178,6 @@ public class LeadMembership extends  RecordDetails  implements Serializable {
        }
        
     }
-	
-	@Override
-	public boolean equals(Object object) {
-		if (!(object instanceof LeadMembership)) {
-			return false;
-		}
-		LeadMembership other = (LeadMembership) object;
-		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * @return the dob
-	 */
-	public Date getDob() {
-		return dob;
-	}
-
-	/**
-	 * @return the ethinicCode
-	 */
-	public Ethinicity getEthinicCode() {
-		return ethinicCode;
-	}
-
-	/**
-	 * @return the fileId
-	 */
-	public Integer getFileId() {
-		return fileId;
-	}
-
-	/**
-	 * @return the firstName
-	 */
-	public String getFirstName() {
-		return firstName;
-	}
-
-	/**
-	 * @return the genderId
-	 */
-	public Gender getGender() {
-		return gender;
-	}
-
-	/**
-	 * @return
-	 */
-	public Integer getId() {
-		return id;
-	}
-
-	/**
-	 * @return the lastName
-	 */
-	public String getLastName() {
-		return lastName;
-	}
-
-	/**
-	 * @return the status
-	 */
-	public LeadStatus getStatus() {
-		return status;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		hash += (id != null ? id.hashCode() : 0);
-		return hash;
-	}
-
-	/**
-	 * @param dob
-	 *            the dob to set
-	 */
-	public void setDob(Date dob) {
-		this.dob = dob;
-	}
-
-	/**
-	 * @param ethinicCode
-	 *            the ethinicCode to set
-	 */
-	public void setEthinicCode(final Ethinicity ethinicCode) {
-		this.ethinicCode = ethinicCode;
-	}
-
-	/**
-	 * @param fileId
-	 *            the fileId to set
-	 */
-	public void setFileId(final Integer fileId) {
-		this.fileId = fileId;
-	}
-
-	/**
-	 * @param firstName
-	 *            the firstName to set
-	 */
-	public void setFirstName(final String firstName) {
-		this.firstName = firstName;
-	}
-
-	/**
-	 * @param genderId
-	 *            the genderId to set
-	 */
-	public void setGender(final Gender gender) {
-		this.gender = gender;
-	}
-
-	/**
-	 * @param id
-	 */
-	public void setId(final Integer id) {
-		this.id = id;
-	}
-
-	/**
-	 * @param lastName
-	 *            the lastName to set
-	 */
-	public void setLastName(final String lastName) {
-		this.lastName = lastName;
-	}
-
-	/**
-	 * @param status
-	 *            the status to set
-	 */
-	public void setStatus(final LeadStatus status) {
-		this.status = status;
-	}
-
-	/**
-	 * @return the statusDetail
-	 */
-	public LeadStatusDetail getStatusDetail() {
-		return statusDetail;
-	}
-
-	/**
-	 * @param statusDetail the statusDetail to set
-	 */
-	public void setStatusDetail(LeadStatusDetail statusDetail) {
-		this.statusDetail = statusDetail;
-	}
-
-	/**
-	 * @return the language
-	 */
-	public Language getLanguage() {
-		return language;
-	}
-
-	/**
-	 * @param language
-	 *            the language to set
-	 */
-	public void setLanguage(Language language) {
-		this.language = language;
-	}
-
-	/**
-	 * @return the bestTimeToCall
-	 */
-	public BestTimeToCall getBestTimeToCall() {
-		return bestTimeToCall;
-	}
-
-	/**
-	 * @param bestTimeToCall
-	 *            the bestTimeToCall to set
-	 */
-	public void setBestTimeToCall(BestTimeToCall bestTimeToCall) {
-		this.bestTimeToCall = bestTimeToCall;
-	}
-
-	/**
-	 * @return the agentLeadAppointmentList
-	 */
-	public List<AgentLeadAppointment> getAgentLeadAppointmentList() {
-		return agentLeadAppointmentList;
-	}
-
-	/**
-	 * @param agentLeadAppointmentList
-	 *            the agentLeadAppointmentList to set
-	 */
-	public void setAgentLeadAppointmentList(List<AgentLeadAppointment> agentLeadAppointmentList) {
-		this.agentLeadAppointmentList = agentLeadAppointmentList;
-	}
-
-	/**
-	 * @return the contact
-	 */
-	public Contact getContact() {
-		return this.contact;
-	}
-
-	/**
-	 * @param contact
-	 *            the contact to set
-	 */
-	public void setContact(Contact contact) {
-		this.contact = contact;
-	}
-
-	/**
-	 * @return the event
-	 */
-	public Event getEvent() {
-		return event;
-	}
-
-	/**
-	 * @param event
-	 *            the event to set
-	 */
-	public void setEvent(Event event) {
-		this.event = event;
-	}
-
-	/**
-	 * @return the consentFormSigned
-	 */
-	public Character getConsentFormSigned() {
-		return consentFormSigned;
-	}
-
-	/**
-	 * @param consentFormSigned
-	 *            the consentFormSigned to set
-	 */
-	public void setConsentFormSigned(Character consentFormSigned) {
-		this.consentFormSigned = consentFormSigned;
-	}
-
-	/**
-	 * @return the fileUpload
-	 */
-	public FileUpload getFileUpload() {
-		return fileUpload;
-	}
-
-	/**
-	 * @param fileUpload
-	 *            the fileUpload to set
-	 */
-	public void setFileUpload(FileUpload fileUpload) {
-		this.fileUpload = fileUpload;
-	}
-
-	/**
-	 * @return the planType
-	 */
-	public PlanType getPlanType() {
-		return planType;
-	}
-
-	/**
-	 * @param planType
-	 *            the planType to set
-	 */
-	public void setPlanType(PlanType planType) {
-		this.planType = planType;
-	}
-
-	/**
-	 * @return the presentInsurance
-	 */
-	public String getInitialInsurance() {
-		return initialInsurance;
-	}
-
-	/**
-	 * @param presentInsurance
-	 *            the presentInsurance to set
-	 */
-	public void setInitialInsurance(String initialInsurance) {
-		this.initialInsurance = initialInsurance;
-	}
-
-	/**
-	 * @return the leadNotes
-	 */
-	public List<LeadNotes> getLeadNotes() {
-		return leadNotes;
-	}
-
-	/**
-	 * @param leadNotes
-	 *            the leadNotes to set
-	 */
-	public void setLeadNotes(List<LeadNotes> leadNotes) {
-		this.leadNotes = leadNotes;
-	}
 
 	/**
 	 * @return the notesHistory
@@ -493,19 +188,4 @@ public class LeadMembership extends  RecordDetails  implements Serializable {
 				.map(LeadNotes::toString).collect(Collectors.joining(" "));
 
 	}
-
-	/**
-	 * @param notesHistory
-	 *            the notesHistory to set
-	 */
-	public void setNotesHistory(String notesHistory) {
-		this.notesHistory = leadNotes.stream().map(ln -> ln.getNotes()).reduce("", String::concat);
-
-	}
-
-	@Override
-	public String toString() {
-		return "com.pfchoice.springboot.model.LeadMembership[ id=" + id + " ]";
-	}
-
 }

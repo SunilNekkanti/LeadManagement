@@ -126,7 +126,7 @@ public class CountyController {
 	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(value = "/county/", method = RequestMethod.DELETE)
 	public ResponseEntity<County> deleteAllCountys() {
-		logger.info("Deleting All Countys");
+		logger.info("Deleting All Counties");
 
 		countyService.deleteAllCountys();
 		return new ResponseEntity<County>(HttpStatus.NO_CONTENT);

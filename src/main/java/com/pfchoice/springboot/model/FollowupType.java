@@ -12,12 +12,23 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 /**
  *
  * @author sarath
  */
 @Entity
 @Table(name = "lu_followup_type")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
+@EqualsAndHashCode(callSuper =false,of = {"code","description"})
 public class FollowupType extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -37,88 +48,5 @@ public class FollowupType extends RecordDetails implements Serializable {
 	@Size(min = 2, max = 50, message = "The description must be between {min} and {max} characters long")
 	@Column(name = "description")
 	private String description;
-
-	/**
-	 * 
-	 */
-	public FollowupType() {
-		super();
-	}
-
-	/**
-	 * @param id
-	 */
-	public FollowupType(final Integer id) {
-		super();
-		this.id = id;
-	}
-
-	/**
-	 * @return the id
-	 */
-	public Integer getId() {
-		return id;
-	}
-
-	/**
-	 * @param id
-	 *            the id to set
-	 */
-	public void setId(final Integer id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getCode() {
-		return code;
-	}
-
-	/**
-	 * @param code
-	 */
-	public void setCode(final String code) {
-		this.code = code;
-	}
-
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * @param description
-	 *            the description to set
-	 */
-	public void setDescription(final String description) {
-		this.description = description;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		hash += (id != null ? id.hashCode() : 0);
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		if (!(object instanceof FollowupType)) {
-			return false;
-		}
-		FollowupType other = (FollowupType) object;
-		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "com.pfchoice.springboot.model.FollowupType[ id=" + id + " ]";
-	}
 
 }

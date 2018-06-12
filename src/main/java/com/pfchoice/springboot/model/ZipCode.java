@@ -19,12 +19,23 @@ import org.hibernate.bytecode.internal.javassist.FieldHandler;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 /**
  *
  * @author sarath
  */
 @Entity
 @Table(name = "lu_state_zip")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString(exclude={"fieldHandler"})
+@EqualsAndHashCode(callSuper =false,of = {"code"})
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class ZipCode extends RecordDetails implements Serializable, FieldHandled {
 
@@ -45,34 +56,6 @@ public class ZipCode extends RecordDetails implements Serializable, FieldHandled
 	@JsonIgnore
 	private FieldHandler fieldHandler;
 
-	/**
-	 * 
-	 */
-	public ZipCode() {
-		super();
-	}
-
-	/**
-	 * @param code
-	 */
-	public ZipCode(final Integer code) {
-		super();
-		this.code = code;
-	}
-
-	/**
-	 * @return
-	 */
-	public Integer getCode() {
-		return code;
-	}
-
-	/**
-	 * @param code
-	 */
-	public void setCode(final Integer code) {
-		this.code = code;
-	}
 
 	/**
 	 * @return the stateCode
@@ -104,30 +87,6 @@ public class ZipCode extends RecordDetails implements Serializable, FieldHandled
 	@Override
 	public FieldHandler getFieldHandler() {
 		return fieldHandler;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		hash += (code != null ? code.hashCode() : 0);
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		if (!(object instanceof ZipCode)) {
-			return false;
-		}
-		ZipCode other = (ZipCode) object;
-		if ((this.code == null && other.code != null) || (this.code != null && !this.code.equals(other.code))) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "com.pfchoice.springboot.model.ZipCode[ code=" + code + " ]";
 	}
 
 }

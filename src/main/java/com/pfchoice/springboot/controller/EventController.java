@@ -129,7 +129,6 @@ public class EventController {
 		currentEvent.setContact(event.getContact());
 		currentEvent.setNotes(event.getNotes());
 		currentEvent.getAttachments().clear();
-		//event.getAttachments().forEach(att -> att.setUpdatedBy(username));
 		currentEvent.getAttachments().addAll(event.getAttachments());
 		eventService.updateEvent(currentEvent);
 

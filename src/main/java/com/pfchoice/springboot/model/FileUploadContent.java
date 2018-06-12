@@ -16,14 +16,25 @@ import org.hibernate.bytecode.internal.javassist.FieldHandler;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 /**
  *
  * @author sarath
  */
 @Entity
 @Table(name = "file_upload")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
+@EqualsAndHashCode(callSuper =false,of = {"fileName"})
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class FileUploadContent extends RecordDetails implements Serializable, FieldHandled {
+public class FileUploadContent extends RecordDetails implements Serializable  {
 
 	private static final long serialVersionUID = 1L;
 
@@ -41,119 +52,5 @@ public class FileUploadContent extends RecordDetails implements Serializable, Fi
 
 	@Column(name = "file_data", nullable = false, columnDefinition = "mediumblob")
 	private byte[] data;
-
-	@JsonIgnore
-	private FieldHandler fieldHandler;
-
-	/**
-	 * 
-	 */
-	public FileUploadContent() {
-		super();
-	}
-
-	/**
-	 * 
-	 * @param id
-	 */
-	public FileUploadContent(final Integer id) {
-		super();
-		this.id = id;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public Integer getId() {
-		return id;
-	}
-
-	/**
-	 * 
-	 * @param id
-	 */
-	public void setId(final Integer id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return the fileName
-	 */
-	public String getFileName() {
-		return fileName;
-	}
-
-	/**
-	 * @return the contentType
-	 */
-	public String getContentType() {
-		return contentType;
-	}
-
-	/**
-	 * @param contentType
-	 *            the contentType to set
-	 */
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
-	}
-
-	/**
-	 * @param fileName
-	 *            the fileName to set
-	 */
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-
-	/**
-	 * @return the data
-	 */
-	public byte[] getData() {
-		return data;
-	}
-
-	/**
-	 * @param data
-	 *            the data to set
-	 */
-	public void setData(byte[] data) {
-		this.data = data;
-	}
-
-	@Override
-	public void setFieldHandler(FieldHandler fieldHandler) {
-		this.fieldHandler = fieldHandler;
-	}
-
-	@Override
-	public FieldHandler getFieldHandler() {
-		return fieldHandler;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		hash += (id != null ? id.hashCode() : 0);
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		if (!(object instanceof FileUploadContent)) {
-			return false;
-		}
-		FileUploadContent other = (FileUploadContent) object;
-		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "com.pfchoice.springboot.model.FilesUpload[ id=" + id + " ]";
-	}
 
 }

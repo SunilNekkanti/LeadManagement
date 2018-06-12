@@ -126,7 +126,6 @@ app.controller(
 								// to the DT
 								$compile(angular.element(row).contents())(
 										$scope);
-								console.log("test");
 							}
 
 							function checkBoxChange(checkStatus, eventId) {

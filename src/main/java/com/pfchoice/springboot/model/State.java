@@ -21,12 +21,22 @@ import org.hibernate.bytecode.internal.javassist.FieldHandler;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 /**
  *
  * @author sarath
  */
 @Entity
 @Table(name = "lu_state")
+
+@NoArgsConstructor
+@ToString(exclude={"fieldHandler","zipCodes"})
+@EqualsAndHashCode(callSuper =false,exclude = {"fieldHandler","zipCodes"})
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class State extends RecordDetails implements Serializable, FieldHandled {
 
@@ -36,12 +46,18 @@ public class State extends RecordDetails implements Serializable, FieldHandled {
 	// @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
 	@Column(name = "code", nullable = false)
+	@Getter
+	@Setter
 	private Integer code;
 
 	@Column(name = "description")
+	@Getter
+	@Setter
 	private String description;
 
 	@Column(name = "shot_name")
+	@Getter
+	@Setter
 	private String shortName;
 
 	@Fetch(FetchMode.SELECT)
@@ -52,64 +68,7 @@ public class State extends RecordDetails implements Serializable, FieldHandled {
 	@JsonIgnore
 	private FieldHandler fieldHandler;
 
-	/**
-	 * 
-	 */
-	public State() {
-		super();
-	}
-
-	/**
-	 * @param code
-	 */
-	public State(final Integer code) {
-		super();
-		this.code = code;
-	}
-
-	/**
-	 * @return
-	 */
-	public Integer getCode() {
-		return code;
-	}
-
-	/**
-	 * @param code
-	 */
-	public void setCode(final Integer code) {
-		this.code = code;
-	}
-
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * @param description
-	 *            the description to set
-	 */
-	public void setDescription(final String description) {
-		this.description = description;
-	}
-
-	/**
-	 * @return the shortName
-	 */
-	public String getShortName() {
-		return shortName;
-	}
-
-	/**
-	 * @param shortName
-	 *            the shortName to set
-	 */
-	public void setShortName(final String shortName) {
-		this.shortName = shortName;
-	}
+ 
 
 	/**
 	 * @return the zipCode
@@ -143,23 +102,6 @@ public class State extends RecordDetails implements Serializable, FieldHandled {
 
 	public FieldHandler getFieldHandler() {
 		return fieldHandler;
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		if (!(object instanceof State)) {
-			return false;
-		}
-		State other = (State) object;
-		if ((this.code == null && other.code != null) || (this.code != null && !this.code.equals(other.code))) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "com.pfchoice.springboot.model.State[ code=" + code + " ]";
 	}
 
 }

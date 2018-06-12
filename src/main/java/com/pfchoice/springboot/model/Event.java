@@ -29,12 +29,23 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pfchoice.springboot.util.JsonDateAndTimeDeserializer;
 import com.pfchoice.springboot.util.JsonDateAndTimeSerializer;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 /**
  * @author sarath
  *
  */
 @Entity
 @Table(name = "event")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString(exclude={"facilityType","contact","attachments","eventAssignments"})
+@EqualsAndHashCode(callSuper =false,of = {"eventName","eventDateStartTime","eventDateEndTime"})
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Event extends RecordDetails implements Serializable {
 
@@ -83,179 +94,5 @@ public class Event extends RecordDetails implements Serializable {
 	@Fetch(FetchMode.SELECT)
 	@OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
 	private Set<EventAssignment> eventAssignments;
-
-	/**
-	 * 
-	 */
-	public Event() {
-		super();
-	}
-
-	/**
-	 * @param id
-	 */
-	public Event(final Integer id) {
-		super();
-		this.id = id;
-	}
-
-	/**
-	 * @return the id
-	 */
-	public Integer getId() {
-		return id;
-	}
-
-	/**
-	 * @param id
-	 *            the id to set
-	 */
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return the lastName
-	 */
-	public String getEventName() {
-		return eventName;
-	}
-
-	/**
-	 * @param lastName
-	 *            the lastName to set
-	 */
-	public void setEventName(String eventName) {
-		this.eventName = eventName;
-	}
-
-	/**
-	 * @return the contact
-	 */
-	public Contact getContact() {
-		return contact;
-	}
-
-	/**
-	 * @param contact
-	 *            the contact to set
-	 */
-	public void setContact(Contact contact) {
-		this.contact = contact;
-	}
-
-	/**
-	 * @return the facilityType
-	 */
-	public FacilityType getFacilityType() {
-		return facilityType;
-	}
-
-	/**
-	 * @param facilityType
-	 *            the facilityType to set
-	 */
-	public void setFacilityType(FacilityType facilityType) {
-		this.facilityType = facilityType;
-	}
-
-	/**
-	 * @return the notes
-	 */
-	public String getNotes() {
-		return notes;
-	}
-
-	/**
-	 * @param notes
-	 *            the notes to set
-	 */
-	public void setNotes(String notes) {
-		this.notes = notes;
-	}
-
-	/**
-	 * @return the eventDateStartTime
-	 */
-	public Date getEventDateStartTime() {
-		return eventDateStartTime;
-	}
-
-	/**
-	 * @param eventDateStartTime
-	 *            the eventDateStartTime to set
-	 */
-	public void setEventDateStartTime(Date eventDateStartTime) {
-		this.eventDateStartTime = eventDateStartTime;
-	}
-
-	/**
-	 * @return the eventDateEndTime
-	 */
-	public Date getEventDateEndTime() {
-		return eventDateEndTime;
-	}
-
-	/**
-	 * @param eventDateEndTime
-	 *            the eventDateEndTime to set
-	 */
-	public void setEventDateEndTime(Date eventDateEndTime) {
-		this.eventDateEndTime = eventDateEndTime;
-	}
-
-	/**
-	 * @return the attachments
-	 */
-	public Set<FileUpload> getAttachments() {
-		return attachments;
-	}
-
-	/**
-	 * @param attachments
-	 *            the attachments to set
-	 */
-	public void setAttachments(Set<FileUpload> attachments) {
-		this.attachments = attachments;
-	}
-
-	/**
-	 * @return the eventAssignments
-	 */
-	public Set<EventAssignment> getEventAssignments() {
-		return eventAssignments;
-	}
-
-	/**
-	 * @param eventAssignments
-	 *            the eventAssignments to set
-	 */
-	public void setEventAssignments(Set<EventAssignment> eventAssignments) {
-		this.eventAssignments = eventAssignments;
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		if (!(object instanceof Event)) {
-			return false;
-		}
-		Event other = (Event) object;
-		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		hash += (id != null ? id.hashCode() : 0);
-		return hash;
-	}
-
-	@Override
-	public String toString() {
-		return "com.pfchoice.springboot.model.Event[ id=" + id + " ]";
-	}
 
 }

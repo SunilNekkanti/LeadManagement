@@ -20,11 +20,22 @@ import org.springframework.context.annotation.ScopedProxyMode;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 /**
  *
  * @author sarath
  */
 @Entity(name = "user")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
+@EqualsAndHashCode(callSuper =false,exclude = {"id"})
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class User extends RecordDetails implements Serializable {
@@ -68,177 +79,5 @@ public class User extends RecordDetails implements Serializable {
 
 	@Column(name = "license_no")
 	private String licenseNo;
-
-	/**
-	 * 
-	 */
-	public User() {
-		super();
-	}
-
-	/**
-	 * @param id
-	 */
-	public User(final Integer id) {
-		super();
-		this.id = id;
-	}
-
-	/**
-	 * @return
-	 */
-	public Integer getId() {
-		return id;
-	}
-
-	/**
-	 * @param id
-	 */
-	public void setId(final Integer id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * @return the username
-	 */
-	public String getUsername() {
-		return username;
-	}
-
-	/**
-	 * @param username
-	 *            the username to set
-	 */
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	/**
-	 * @return the password
-	 */
-	public String getPassword() {
-		return password;
-	}
-
-	/**
-	 * @param password
-	 *            the password to set
-	 */
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	/**
-	 * @return the licenseNo
-	 */
-	public String getLicenseNo() {
-		return licenseNo;
-	}
-
-	/**
-	 * @param licenseNo
-	 *            the licenseNo to set
-	 */
-	public void setLicenseNo(String licenseNo) {
-		this.licenseNo = licenseNo;
-	}
-
-	/**
-	 * @return the language
-	 */
-	public Language getLanguage() {
-		return language;
-	}
-
-	/**
-	 * @param language
-	 *            the language to set
-	 */
-	public void setLanguage(Language language) {
-		this.language = language;
-	}
-
-	/**
-	 * @return the role
-	 */
-	public Role getRole() {
-		return role;
-	}
-
-	/**
-	 * @param role
-	 *            the role to set
-	 */
-	public void setRole(Role role) {
-		this.role = role;
-	}
-
-	/**
-	 * @return the insurance
-	 */
-	public Insurance getInsurance() {
-		return insurance;
-	}
-
-	/**
-	 * @param insurance the insurance to set
-	 */
-	public void setInsurance(Insurance insurance) {
-		this.insurance = insurance;
-	}
-
-	/**
-	 * @return the contact
-	 */
-	public Contact getContact() {
-		return contact;
-	}
-
-	/**
-	 * @param contact
-	 *            the contact to set
-	 */
-	public void setContact(Contact contact) {
-		this.contact = contact;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		hash += (id != null ? id.hashCode() : 0);
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		if (!(object instanceof User)) {
-			return false;
-		}
-		User other = (User) object;
-		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "com.pfchoice.springboot.model.User[ id=" + id + "role=" + role.getRole() + "  ]";
-	}
 
 }
