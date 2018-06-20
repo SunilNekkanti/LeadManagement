@@ -39,7 +39,7 @@ public class EventAssignmentSpecifications implements Specification<EventAssignm
 		}
 		
 
-		if ("AGENT".equals(roleName) || "EVENT_COORDINATOR".equals(roleName)) {
+		if ("AGENT".equals(roleName) ) { // removed for accessing all events|| "EVENT_COORDINATOR".equals(roleName)
 			p.getExpressions().add(cb.and(cb.equal(root.join("representatives").get("id").as(Integer.class), userId)));
 			
 			/*Expression<Date> eventStartTime = root.get("eventDateStartTime");

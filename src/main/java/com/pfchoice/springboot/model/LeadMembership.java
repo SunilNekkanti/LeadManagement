@@ -53,8 +53,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString( exclude = { "leadNotes","agentLeadAppointmentList", "notesHistory"})
-@EqualsAndHashCode(callSuper =false,exclude = {"id","leadNotes","agentLeadAppointmentList","notesHistory"})
+@ToString( exclude = { "leadNotes","agentLeadAppointmentList", "notesHistory","contact"})
+@EqualsAndHashCode(callSuper =false,exclude = {"id","leadNotes","agentLeadAppointmentList","notesHistory","contact"})
 @SqlResultSetMapping(
 	    name="statusReportDTOMapping",
 	    classes={
@@ -142,9 +142,10 @@ public class LeadMembership extends  RecordDetails  implements Serializable {
 	@JoinColumn(name = "lead_Mbr_Status", referencedColumnName = "code")
 	private LeadStatus status;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(optional = true,fetch = FetchType.LAZY)
 	@JoinColumn(name = "lead_mbr_status_detail_id", referencedColumnName = "code")
 	private LeadStatusDetail statusDetail;
+	
 	
 	@OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "lead_contacts", joinColumns = {
@@ -152,6 +153,7 @@ public class LeadMembership extends  RecordDetails  implements Serializable {
 					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id", nullable = false, unique = true) })
 	private Contact contact;
 
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "event_id", referencedColumnName = "event_id")
 	private Event event;
@@ -159,7 +161,7 @@ public class LeadMembership extends  RecordDetails  implements Serializable {
 	@Column(name = "consent_form_signed")
 	private Character consentFormSigned = new Character('N');
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(optional = true,fetch = FetchType.LAZY)
 	@JoinColumn(name = "file_upload_id", referencedColumnName = "file_upload_id", nullable = false)
 	private FileUpload fileUpload;
 	

@@ -45,7 +45,7 @@ public class FileUploadContentController {
 
 	// -------------------Retrieve All
 	// FileUploadContents---------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/fileUploadContent/", method = RequestMethod.GET)
 	public ResponseEntity<List<FileUploadContent>> listAllFileUploadContents() {
 
@@ -60,7 +60,7 @@ public class FileUploadContentController {
 
 	// -------------------Retrieve Single
 	// FileUploadContent------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/fileUploadContent/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getFileUploadContent(@PathVariable("id") int id) {
 		logger.info("Fetching FileUploadContent with id {}", id);
@@ -75,7 +75,7 @@ public class FileUploadContentController {
 
 	// -------------------Create a
 	// FileUploadContent-------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_EVENT_COORDINATOR" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR", "ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/fileUploadContent/", method = RequestMethod.POST)
 	public ResponseEntity<?> createFileUploadContent(@RequestBody FileUploadContent fileUploadContent, 
 			UriComponentsBuilder ucBuilder,@ModelAttribute("username") String username) {
@@ -99,7 +99,7 @@ public class FileUploadContentController {
 	// ------------------- Update a FileUploadContent
 	// ------------------------------------------------
 	@SuppressWarnings("unused")
-	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/fileUploadContent/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateFileUploadContent(@PathVariable("id") int id, @RequestBody FileUploadContent fileUploadContent
 			,@ModelAttribute("username") String username) {
@@ -143,7 +143,7 @@ public class FileUploadContentController {
 		return new ResponseEntity<FileUploadContent>(HttpStatus.NO_CONTENT);
 	}
 
-	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_MANAGER", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR" })
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR" })
 	@RequestMapping(value = { "/fileUpload/fileProcessing.do" }, method = RequestMethod.POST)
 	public List<FileUpload> uploadFileProcessing(Model model, @RequestParam MultipartFile[] files
 			,@ModelAttribute("username") String username) throws IOException {
@@ -186,7 +186,7 @@ public class FileUploadContentController {
 
 	// -------------------Retrieve FileUploadContented data
 	// ------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_MANAGER", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR" })
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR" })
 	@RequestMapping(value = "/fileUploaded/{id}", method = RequestMethod.GET)
 	public ResponseEntity<byte[]> getFileUploadContentContents(@PathVariable("id") int id) {
 		FileUploadContent fileUploadContent = fileUploadContentService.findById(id);

@@ -42,7 +42,7 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString(exclude={"representatives"})
-@EqualsAndHashCode(callSuper =false,of = {"event","repeatRule","eventDateStartTime","eventDateEndTime"})
+@EqualsAndHashCode(callSuper =false,exclude = {"id","representatives"})
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class EventAssignment extends RecordDetails implements Serializable {
 

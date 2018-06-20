@@ -42,7 +42,7 @@ public class EventSpecifications implements Specification<Event> {
 			));
 		}
 
-		if ("AGENT".equals(roleName) || "EVENT_COORDINATOR".equals(roleName)) {
+		if ("AGENT".equals(roleName) ) { //|| "EVENT_COORDINATOR".equals(roleName)
 			p.getExpressions().add(cb.and(cb
 					.equal(root.join("eventAssignments").join("representatives").get("id").as(Integer.class), userId)));
 

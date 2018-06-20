@@ -36,7 +36,7 @@ public class EventMonthController {
 
 	// -------------------Retrieve All
 	// EventMonths---------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/eventMonth/", method = RequestMethod.GET)
 	public ResponseEntity<List<EventMonth>> listAllEventMonths() {
 		List<EventMonth> eventMonths = eventMonthService.findAllEventMonths();
@@ -50,7 +50,7 @@ public class EventMonthController {
 
 	// -------------------Retrieve Single
 	// EventMonth------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/eventMonth/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getEventMonth(@PathVariable("id") int id) {
 		logger.info("Fetching EventMonth with id {}", id);
@@ -65,7 +65,7 @@ public class EventMonthController {
 
 	// -------------------Create a
 	// EventMonth-------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/eventMonth/", method = RequestMethod.POST)
 	public ResponseEntity<?> createEventMonth(@RequestBody EventMonth eventMonth, UriComponentsBuilder ucBuilder,
 			 @ModelAttribute("username") String username) {
@@ -87,7 +87,7 @@ public class EventMonthController {
 
 	// ------------------- Update a EventMonth
 	// ------------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/eventMonth/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateEventMonth(@PathVariable("id") int id, @RequestBody EventMonth eventMonth) {
 		logger.info("Updating EventMonth with id {}", id);

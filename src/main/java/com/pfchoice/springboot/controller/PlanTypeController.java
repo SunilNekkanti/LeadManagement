@@ -36,7 +36,7 @@ public class PlanTypeController {
 
 	// -------------------Retrieve All
 	// PlanTypes---------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/planType/", method = RequestMethod.GET)
 	public ResponseEntity<List<PlanType>> listAllPlanTypes() {
 		List<PlanType> planTypes = planTypeService.findAllPlanTypes();
@@ -50,7 +50,7 @@ public class PlanTypeController {
 
 	// -------------------Retrieve Single
 	// PlanType------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/planType/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getPlanType(@PathVariable("id") int id) {
 		logger.info("Fetching PlanType with id {}", id);
@@ -65,7 +65,7 @@ public class PlanTypeController {
 
 	// -------------------Create a
 	// PlanType-------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/planType/", method = RequestMethod.POST)
 	public ResponseEntity<?> createPlanType(@RequestBody PlanType planType, 
 			UriComponentsBuilder ucBuilder,@ModelAttribute("username") String username) {
@@ -87,7 +87,7 @@ public class PlanTypeController {
 
 	// ------------------- Update a PlanType
 	// ------------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/planType/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updatePlanType(@PathVariable("id") int id, @RequestBody PlanType planType) {
 		logger.info("Updating PlanType with id {}", id);

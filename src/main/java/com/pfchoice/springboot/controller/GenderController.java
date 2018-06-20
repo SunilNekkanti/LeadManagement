@@ -37,7 +37,7 @@ public class GenderController {
 	// -------------------Retrieve All
 	// Genders---------------------------------------------
 
-	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/gender/", method = RequestMethod.GET)
 	public ResponseEntity<List<Gender>> listAllGenders() {
 		List<Gender> genders = genderService.findAllGenders();
@@ -51,7 +51,7 @@ public class GenderController {
 
 	// -------------------Retrieve Single
 	// Gender------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/gender/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getGender(@PathVariable("id") byte id) {
 		logger.info("Fetching Gender with id {}", id);
@@ -65,7 +65,7 @@ public class GenderController {
 
 	// -------------------Create a
 	// Gender-------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/gender/", method = RequestMethod.POST)
 	public ResponseEntity<?> createGender(@RequestBody Gender gender, 
 			UriComponentsBuilder ucBuilder,@ModelAttribute("username") String username) {

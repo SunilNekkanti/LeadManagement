@@ -36,7 +36,7 @@ public class LanguageController {
 
 	// -------------------Retrieve All
 	// Languages---------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/language/", method = RequestMethod.GET)
 	public ResponseEntity<Page<Language>> listAllLanguages(
 			@RequestParam(value = "page", required = false) Integer pageNo,
@@ -60,7 +60,7 @@ public class LanguageController {
 
 	// -------------------Retrieve Single
 	// Language------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/language/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getLanguage(@PathVariable("id") short id) {
 		logger.info("Fetching Language with id {}", id);
@@ -75,7 +75,7 @@ public class LanguageController {
 
 	// -------------------Create a
 	// Language-------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/language/", method = RequestMethod.POST)
 	public ResponseEntity<?> createLanguage(@RequestBody Language language, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating Language : {}", language);
@@ -96,7 +96,7 @@ public class LanguageController {
 
 	// ------------------- Update a Language
 	// ------------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/language/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateLanguage(@PathVariable("id") short id, @RequestBody Language language) {
 		logger.info("Updating Language with id {}", id);

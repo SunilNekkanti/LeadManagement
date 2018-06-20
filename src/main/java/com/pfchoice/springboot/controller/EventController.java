@@ -53,7 +53,7 @@ public class EventController {
 	// -------------------Retrieve All
 	// Events---------------------------------------------
 
-	@Secured({ "ROLE_ADMIN", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/event/", method = RequestMethod.GET)
 	public ResponseEntity<Page<Event>> listAllEvents(@PageableDefault(page=0 ,size=100) Pageable pageRequest,
 			@RequestParam(value = "search", required = false) String search, @ModelAttribute("userId") Integer userId,
@@ -72,7 +72,7 @@ public class EventController {
 
 	// -------------------Retrieve Single
 	// Event------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/event/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getEvent(@PathVariable("id") int id) {
 		logger.info("Fetching Event with id {}", id);
@@ -86,7 +86,7 @@ public class EventController {
 
 	// -------------------Create a
 	// Event-------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_EVENT_COORDINATOR" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR", "ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/event/", method = RequestMethod.POST)
 	public ResponseEntity<?> createEvent(@RequestBody Event event, UriComponentsBuilder ucBuilder,
 			@ModelAttribute("userId") Integer userId, @ModelAttribute("username") String username)
@@ -109,7 +109,7 @@ public class EventController {
 
 	// ------------------- Update a Event
 	// ------------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/event/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateEvent(@PathVariable("id") int id, @RequestBody Event event,
 			@ModelAttribute("username") String username) {
@@ -137,7 +137,7 @@ public class EventController {
 
 	// ------------------- Delete a
 	// Event-----------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/event/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteEvent(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting Event with id {}", id);

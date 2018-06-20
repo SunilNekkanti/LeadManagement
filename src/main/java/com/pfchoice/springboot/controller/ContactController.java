@@ -34,7 +34,7 @@ public class ContactController {
 	// -------------------Retrieve All
 	// Contacts---------------------------------------------
 
-	@Secured({ "ROLE_ADMIN", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR" })
+	@Secured({ "ROLE_ADMIN", "ROLE_CARE_COORDINATOR" })
 	@RequestMapping(value = "/contact/", method = RequestMethod.GET)
 	public ResponseEntity<List<Contact>> listAllContacts() {
 		List<Contact> contacts = contactService.findAllContacts();

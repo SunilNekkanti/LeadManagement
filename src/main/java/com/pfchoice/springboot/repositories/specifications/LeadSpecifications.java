@@ -54,7 +54,7 @@ public class LeadSpecifications implements Specification<LeadMembership> {
 							cb.like(cb.lower(root.get("lastName")), containsLikePattern),
 							cb.like(root.join("gender").get("description"), containsLikePattern),
 							cb.like(root.join("language").get("description"), containsLikePattern),
-							cb.like(root.join("contact").get("homePhone").as(String.class), containsLikePattern),
+							cb.like(root.join("contact").get("homePhone"), containsLikePattern),
 							cb.like(root.join("status").get("description"), containsLikePattern),
 							cb.like(root.join("statusDetail", JoinType.LEFT).get("description"), containsLikePattern)
 
@@ -65,9 +65,9 @@ public class LeadSpecifications implements Specification<LeadMembership> {
 			p.getExpressions().add(cb.and(cb.notEqual(cb.upper(root.join("status").get("description")), "HOLD")));
 		}
 
-		if ("EVENT_COORDINATOR".equals(roleName)) {
-			p.getExpressions().add(cb.and(cb.equal(root.get("createdBy").as(String.class), username)));
-		}
+		//if ("EVENT_COORDINATOR".equals(roleName)) {
+			//p.getExpressions().add(cb.and(cb.equal(root.get("createdBy").as(String.class), username)));
+		//}
 		if ("AGENT".equals(roleName)) {
 			p.getExpressions().add(cb.and(cb
 					.equal((root.join("agentLeadAppointmentList").join("user").get("id").as(Integer.class)), userId)));

@@ -38,7 +38,7 @@ public class FacilityTypeController {
 
 	// -------------------Retrieve All
 	// FacilityTypes---------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/facilityType/", method = RequestMethod.GET)
 	public ResponseEntity<Page<FacilityType>> listAllFacilityTypes(@PageableDefault(page=0 ,size=100) Pageable pageRequest,
 			@RequestParam(value = "search", required = false) String search) {
@@ -54,7 +54,7 @@ public class FacilityTypeController {
 
 	// -------------------Retrieve Single
 	// FacilityType------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/facilityType/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getFacilityType(@PathVariable("id") int id) {
 		logger.info("Fetching FacilityType with id {}", id);
@@ -69,7 +69,7 @@ public class FacilityTypeController {
 
 	// -------------------Create a
 	// FacilityType-------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/facilityType/", method = RequestMethod.POST)
 	public ResponseEntity<?> createFacilityType(@RequestBody FacilityType facilityType, UriComponentsBuilder ucBuilder,
 			@ModelAttribute("username") String username) {
@@ -91,7 +91,7 @@ public class FacilityTypeController {
 
 	// ------------------- Update a FacilityType
 	// ------------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/facilityType/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateFacilityType(@PathVariable("id") int id, @RequestBody FacilityType facilityType,
 			@ModelAttribute("username") String username) {
@@ -114,7 +114,7 @@ public class FacilityTypeController {
 
 	// ------------------- Delete a
 	// FacilityType-----------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/facilityType/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteFacilityType(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting FacilityType with id {}", id);

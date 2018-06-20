@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.mail.MessagingException;
 
@@ -36,7 +37,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.pfchoice.springboot.configuration.ConfigProperties;
 import com.pfchoice.springboot.model.AgentLeadAppointment;
+import com.pfchoice.springboot.model.Contact;
 import com.pfchoice.springboot.model.CurrentUser;
 import com.pfchoice.springboot.model.Email;
 import com.pfchoice.springboot.model.FileUpload;
@@ -76,10 +79,13 @@ public class LeadController {
 	
 	@Autowired
 	FileUploadContentService fileUploadContentService;
+	
+	@Autowired
+	ConfigProperties configProp;
 
 	// -------------------Retrieve All
 	// LeadMemberships---------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/lead/", method = RequestMethod.GET)
 	public ResponseEntity<Page<LeadMembership>> listAllLeadMemberships(
 			@PageableDefault(page=0 ,size=100) Pageable pageRequest,
@@ -108,7 +114,7 @@ public class LeadController {
 
 	// -------------------Retrieve Single
 	// LeadMembership------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/lead/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getLeadMembership(@PathVariable("id") int id) {
 		logger.info("Fetching LeadMembership with id {}", id);
@@ -123,7 +129,7 @@ public class LeadController {
 
 	// -------------------Create a
 	// LeadMembership-------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/lead/", method = RequestMethod.POST)
 	public ResponseEntity<?> createLeadMembership(@RequestBody LeadMembership lead, UriComponentsBuilder ucBuilder,
 			@ModelAttribute("userId") Integer userId, 
@@ -141,9 +147,7 @@ public class LeadController {
 			return new ResponseEntity(new CustomErrorType("Unable to create. A LeadMembership with name "
 					+ lead.getFirstName() + " " + lead.getLastName() + " already exist."), HttpStatus.CONFLICT);
 		}
-		 System.out.println("***********inside lead agent details"+lead.getAgentLeadAppointmentList());
 		 if(lead.getAgentLeadAppointmentList() != null && lead.getAgentLeadAppointmentList().size()>0) {
-			 System.out.println("***********inside lead agent details");
 			 lead.getAgentLeadAppointmentList().forEach( ala -> ala.setLead(lead));
 		 }
 		StringBuffer emailBody = new StringBuffer();
@@ -171,12 +175,12 @@ public class LeadController {
 		 * rep.getEmail()) .collect(Collectors.joining(","));
 		 */
 		Email mail = new Email();
-		mail.setEmailTo("dsoto@pfchoice.com");  
+		mail.setEmailTo(configProp.getCoordinatorEmail());  
 		mail.setEmailFrom("leadmanagement@infocusonline.net");
 		mail.setEmailCc("leadmanagement@infocusonline.net");
 		mail.setSubject("New lead : "+lead.getLastName()+","+lead.getFirstName()+" has been created:");
 
-		String careCoordinator = "Dynahly Soto";
+		String careCoordinator = configProp.getCoordinatorName();
 		
 		Map<String, Object> emailAttributes = new HashMap<>();
 		emailAttributes.put("currentUser", user.getName());
@@ -198,7 +202,7 @@ public class LeadController {
 
 	// ------------------- Update a LeadMembership
 	// ------------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/lead/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateLeadMembership(@PathVariable("id") int id, @RequestBody LeadMembership lead,
 			@ModelAttribute("userId") Integer userId, @ModelAttribute("roleName") String roleName,
@@ -254,25 +258,23 @@ public class LeadController {
 		}
 
 		
-		if (!"EVENT_COORDINATOR".equals(roleName)) {
 
-			if (!"New".equalsIgnoreCase(lead.getStatus().getDescription())) {
-				  agntLeadAppointList = lead.getAgentLeadAppointmentList();
-				currentLeadMembership.getAgentLeadAppointmentList().clear();
-				//currentLeadMembership.getAgentLeadAppointmentList().addAll(agntLeadAppointList);
-				for (AgentLeadAppointment ala : agntLeadAppointList) {
-				
-						ala.setLead(currentLeadMembership);
-						finalAgentLeadAppointList.add(ala);
-				}
-				if (finalAgentLeadAppointList.size() > 0) {
-					currentLeadMembership.getAgentLeadAppointmentList().clear();
-					currentLeadMembership.getAgentLeadAppointmentList().addAll(finalAgentLeadAppointList);
-				}
-				
+		if (!"New".equalsIgnoreCase(lead.getStatus().getDescription())) {
+			  agntLeadAppointList = lead.getAgentLeadAppointmentList();
+			currentLeadMembership.getAgentLeadAppointmentList().clear();
+			//currentLeadMembership.getAgentLeadAppointmentList().addAll(agntLeadAppointList);
+			for (AgentLeadAppointment ala : agntLeadAppointList) {
+			
+					ala.setLead(currentLeadMembership);
+					finalAgentLeadAppointList.add(ala);
 			}
-
+			if (finalAgentLeadAppointList.size() > 0) {
+				currentLeadMembership.getAgentLeadAppointmentList().clear();
+				currentLeadMembership.getAgentLeadAppointmentList().addAll(finalAgentLeadAppointList);
+			}
+			
 		}
+
 
 		leadService.updateLeadMembership(currentLeadMembership);
 
@@ -284,7 +286,11 @@ public class LeadController {
 
 		SimpleDateFormat sdf1 = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
 		String currentLocalTime = sdf1.format((new Date()).getTime());
-
+        Contact cnt = currentLeadMembership.getContact();
+		String address=  Stream.of(cnt.getAddress1(), cnt.getAddress2(), cnt.getCity(), cnt.getStateCode().getShortName(), cnt.getZipCode().toString())
+				          .filter(s -> s != null && !s.isEmpty())
+				          .collect(Collectors.joining(","));
+		
 		final Email mail = new Email();
 		mail.setEmailFrom(loginUser.getContact().getEmail());
 		mail.setEmailCc(loginUser.getContact().getEmail());
@@ -295,10 +301,10 @@ public class LeadController {
 		emailAttributes.put("currentLocalTime", currentLocalTime);
 		emailAttributes.put("firstName", currentLeadMembership.getFirstName());
 		emailAttributes.put("lastName", currentLeadMembership.getLastName());
-		emailAttributes.put("location",	currentLeadMembership.getContact().getAddress());
+		emailAttributes.put("location",	address);
 		
 		
-		if(!"EVENT_COORDINATOR".equals(roleName)  && agntLeadAppointList.size() > 0)  {
+		if( agntLeadAppointList.size() > 0)  {
 			
 				String toEmailIds = agntLeadAppointList.stream().map(la -> la.getUser().getContact().getEmail())
 						.collect(Collectors.joining(";"));
@@ -354,8 +360,8 @@ public class LeadController {
 					
 					emailService.sendMailWithAttachment(mail);
 				}else {
-					 toEmailIds =  "dsoto@pfchoice.com";  
-					String careCoordinator = "Dynahly Soto";
+					 toEmailIds =  configProp.getCoordinatorEmail();  
+					String careCoordinator = configProp.getCoordinatorName();
 					String emailTemplateFileName = "lead_update_email_template_" + roleName + ".txt";
 					
 					emailAttributes.put("careCoordinator", careCoordinator);
@@ -368,8 +374,8 @@ public class LeadController {
 				}
 				
 		} else {
-			String toEmailIds =  "dsoto@pfchoice.com";  
-			String careCoordinator = "Dynahly Soto";
+			String toEmailIds =  configProp.getCoordinatorEmail();  
+			String careCoordinator = configProp.getCoordinatorName();
 			String emailTemplateFileName = "lead_update_email_template_" + roleName + ".txt";
 			
 			emailAttributes.put("careCoordinator", careCoordinator);

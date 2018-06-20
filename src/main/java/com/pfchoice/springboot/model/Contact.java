@@ -11,7 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import javax.persistence.Transient;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -30,8 +29,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(exclude={"address"})
-@EqualsAndHashCode(callSuper =false,exclude = {"id"})
+@ToString(exclude={"stateCode" })
+@EqualsAndHashCode(callSuper =false,exclude = {"id" })
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Contact extends RecordDetails implements Serializable  {
 
@@ -74,13 +73,11 @@ public class Contact extends RecordDetails implements Serializable  {
 	@JoinColumn(name = "statecode", referencedColumnName = "code")
 	private State stateCode;
 
-	@JoinColumn(name = "zipcode", referencedColumnName = "zipcode")
+	@Column(name = "zipcode")
 	private Integer zipCode;
 
+	
 	@Column(name = "file_id")
 	private Integer fileId;
-
-	@Transient
-	private String address;
-
+	
 }

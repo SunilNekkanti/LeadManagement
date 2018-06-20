@@ -1,30 +1,23 @@
 package com.pfchoice.springboot.configuration;
 
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
 @Component
+@Data
+@RequiredArgsConstructor
+@NoArgsConstructor
 @ConfigurationProperties("envProperties")
 public class ConfigProperties {
 
-	@NotBlank
-	private String coordinatorEmail;
+	@NonNull private  String coordinatorEmail;
+	
+	@NonNull private  String coordinatorName;
 
-	/**
-	 * @return the coordinatorEmail
-	 */
-	public String getCoordinatorEmail() {
-		return coordinatorEmail;
-	}
-
-	/**
-	 * @param coordinatorEmail the coordinatorEmail to set
-	 */
-	public void setCoordinatorEmail(String coordinatorEmail) {
-		this.coordinatorEmail = coordinatorEmail;
-	}
- 
- 
 
 }

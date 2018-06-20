@@ -109,7 +109,7 @@ public class EmailServiceImpl implements EmailService {
          String eventName  = ("".equals(leadName))? (emailAttributes.get("eventName") ==null)? "":emailAttributes.get("eventName").toString():leadName;
          String owner  = (emailAttributes.get("attachmentKey") ==null)? "":emailAttributes.get("attachmentKey").toString();
          
-		String rrule = (emailAttributes.get("rrule") != null)
+		String rrule = (emailAttributes.get("rrule") != null && !"".equals(emailAttributes.get("rrule")))
 				? "RRULE:" + emailAttributes.get("rrule").toString() + "\n" : "";
 		Set<FileUploadContent> attachments =  (Set<FileUploadContent>) emailAttributes.get("attachments");
 		 StringBuffer sb = new StringBuffer();

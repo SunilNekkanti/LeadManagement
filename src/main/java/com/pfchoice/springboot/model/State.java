@@ -37,7 +37,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString(exclude={"fieldHandler","zipCodes"})
 @EqualsAndHashCode(callSuper =false,exclude = {"fieldHandler","zipCodes"})
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler"})
 public class State extends RecordDetails implements Serializable, FieldHandled {
 
 	private static final long serialVersionUID = 1L;

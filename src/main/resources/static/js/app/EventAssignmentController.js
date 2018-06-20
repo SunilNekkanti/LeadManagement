@@ -189,7 +189,6 @@
 
             var startdateTime = new Date(startDate).getTime();
             var enddateTime = new Date(endDate).getTime();
-            console.log('$scope.myForm', $scope.myForm);
             if (startdateTime >= enddateTime) {
               self.errMessage = 'End Date should be greater than start date';
               $scope.myForm.eventDateEndTime.$setValidity("improper", false);
@@ -618,7 +617,7 @@
           }
 
           function adminOrManager() {
-            if ($localStorage.loginUser.roleName === 'ADMIN' || $localStorage.loginUser.roleName === 'MANAGER') {
+            if ($localStorage.loginUser.roleName === 'ADMIN' || $localStorage.loginUser.roleName === 'MANAGER'  ||  $localStorage.loginUser.roleName === 'EVENT_COORDINATOR') {
               return true;
             } else {
               return false;

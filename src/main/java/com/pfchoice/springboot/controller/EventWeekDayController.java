@@ -36,7 +36,7 @@ public class EventWeekDayController {
 
 	// -------------------Retrieve All
 	// EventWeekDays---------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/eventWeekDay/", method = RequestMethod.GET)
 	public ResponseEntity<List<EventWeekDay>> listAllEventWeekDays() {
 		List<EventWeekDay> eventWeekDays = eventWeekDayService.findAllEventWeekDays();
@@ -50,7 +50,7 @@ public class EventWeekDayController {
 
 	// -------------------Retrieve Single
 	// EventWeekDay------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/eventWeekDay/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getEventWeekDay(@PathVariable("id") int id) {
 		logger.info("Fetching EventWeekDay with id {}", id);

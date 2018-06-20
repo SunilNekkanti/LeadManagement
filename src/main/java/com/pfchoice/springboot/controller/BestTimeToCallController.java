@@ -33,7 +33,7 @@ public class BestTimeToCallController {
 	// -------------------Retrieve All
 	// BestTimeToCalls---------------------------------------------
 
-	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT",  "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/bestTimeToCall/", method = RequestMethod.GET)
 	public ResponseEntity<List<BestTimeToCall>> listAllBestTimeToCalls() {
 		List<BestTimeToCall> bestTimeToCalls = bestTimeToCallService.findAllBestTimeToCalls();
@@ -47,7 +47,7 @@ public class BestTimeToCallController {
 
 	// -------------------Retrieve Single
 	// BestTimeToCall------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/bestTimeToCall/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getBestTimeToCall(@PathVariable("id") short id) {
 		logger.info("Fetching BestTimeToCall with id {}", id);

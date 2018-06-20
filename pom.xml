@@ -4,7 +4,7 @@
 
 	<groupId>com.pfchoice.springboot</groupId>
 	<artifactId>LeadManagement</artifactId>
-	<version>1.0.110</version>
+	<version>1.0.115</version>
 	<packaging>jar</packaging>
 
 	<name>LeadManagement</name>
@@ -12,7 +12,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.10.RELEASE</version>
+		<version>1.5.13.RELEASE</version>
 	</parent>
 
 	<properties>
@@ -38,6 +38,13 @@
 		    <artifactId>spring-boot-starter-undertow</artifactId>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator -->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-actuator</artifactId>
+		    <version>1.5.3.RELEASE</version>
+		</dependency>
+
 
 		<!-- Add spring security -->
 		<dependency>
@@ -57,11 +64,6 @@
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 
-		<!-- Add Groovy support -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-groovy-templates</artifactId>
-		</dependency>
 
 		<!-- Add JPA support -->
 		<dependency>

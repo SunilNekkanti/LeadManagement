@@ -28,7 +28,7 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString
-@EqualsAndHashCode(callSuper =false,of = {"fileName"})
+@EqualsAndHashCode(callSuper =false,exclude = {"id"})
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class FileUpload extends RecordDetails implements Serializable {
 

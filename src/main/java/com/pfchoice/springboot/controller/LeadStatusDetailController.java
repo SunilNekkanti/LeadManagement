@@ -38,7 +38,7 @@ public class LeadStatusDetailController {
 
 	// -------------------Retrieve All
 	// LeadStatusDetailes---------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/leadStatusDetail/", method = RequestMethod.GET)
 	public ResponseEntity<Page<LeadStatusDetail>> listAllLeadStatusDetailes(@PageableDefault(page=0 ,size=100) Pageable pageRequest,
 			@RequestParam(value = "search", required = false) String search) {
@@ -57,7 +57,7 @@ public class LeadStatusDetailController {
 
 	// -------------------Retrieve Single
 	// LeadStatusDetail------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/leadStatusDetail/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getLeadStatusDetail(@PathVariable("id") short id) {
 		logger.info("Fetching LeadStatusDetail with id {}", id);
@@ -72,7 +72,7 @@ public class LeadStatusDetailController {
 
 	// -------------------Create a
 	// LeadStatusDetail-------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/leadStatusDetail/", method = RequestMethod.POST)
 	public ResponseEntity<?> createLeadStatusDetail(@RequestBody LeadStatusDetail leadStatusDetail, UriComponentsBuilder ucBuilder,
 			@ModelAttribute("username") String username) {
@@ -94,7 +94,7 @@ public class LeadStatusDetailController {
 
 	// ------------------- Update a LeadStatusDetail
 	// ------------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/leadStatusDetail/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateLeadStatusDetail(@PathVariable("id") short id, @RequestBody LeadStatusDetail leadStatusDetail,
 			@ModelAttribute("username") String username) {
@@ -115,7 +115,7 @@ public class LeadStatusDetailController {
 
 	// ------------------- Delete a
 	// LeadStatusDetail-----------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/leadStatusDetail/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteLeadStatusDetail(@PathVariable("id") short id) {
 		logger.info("Fetching & Deleting LeadStatusDetail with id {}", id);

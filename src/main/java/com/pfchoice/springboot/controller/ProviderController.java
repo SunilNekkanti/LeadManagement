@@ -36,7 +36,7 @@ public class ProviderController {
 
 	// -------------------Retrieve All
 	// Providers---------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/provider/", method = RequestMethod.GET)
 	public ResponseEntity<Page<Provider>> listAllProviders(
 			@RequestParam(value = "page", required = false) Integer pageNo,
@@ -61,7 +61,7 @@ public class ProviderController {
 
 	// -------------------Retrieve Single
 	// Provider------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/provider/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getProvider(@PathVariable("id") int id) {
 		logger.info("Fetching Provider with id {}", id);
@@ -76,7 +76,7 @@ public class ProviderController {
 
 	// -------------------Create a
 	// Provider-------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/provider/", method = RequestMethod.POST)
 	public ResponseEntity<?> createProvider(@RequestBody Provider provider, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating Provider : {}", provider);
@@ -100,7 +100,7 @@ public class ProviderController {
 
 	// ------------------- Update a Provider
 	// ------------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/provider/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateProvider(@PathVariable("id") int id, @RequestBody Provider provider) {
 		logger.info("Updating Provider with id {}", id);

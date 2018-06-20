@@ -300,7 +300,7 @@
           </div>
         </div>
         
-    <div class="col-sm-12 agentInfo" ng-if="ctrl.showAgentAssignment()" ng-show="(ctrl.lead.status && ctrl.lead.status.description == 'Agent')||ctrl.lead.agentLeadAppointmentList.length > 0 ">
+    <div class="col-sm-12 agentInfo"  ng-show="(ctrl.lead.status && (ctrl.lead.status.description == 'Agent' || ctrl.lead.status.description == 'Converted'))||ctrl.lead.agentLeadAppointmentList.length > 0 ">
           <div class="panel panel-success">
             <div class="panel-heading">Agent Assignment</div>
             <div class="panel-body">
@@ -348,7 +348,7 @@
           </div>
         </div>
 
-        <div class="col-sm-12 statusInfo" ng-if="ctrl.showEventStatus()">
+        <div class="col-sm-12 statusInfo" >
           <div class="panel panel-success">
             <div class="panel-heading">Status</div>
             <div class="panel-body">

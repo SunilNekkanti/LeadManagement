@@ -38,7 +38,7 @@ public class FileUploadController {
 
 	// -------------------Retrieve All
 	// FileUploads---------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/fileUpload/", method = RequestMethod.GET)
 	public ResponseEntity<List<FileUpload>> listAllFileUploads() {
 
@@ -53,7 +53,7 @@ public class FileUploadController {
 
 	// -------------------Retrieve Single
 	// FileUpload------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/fileUpload/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getFileUpload(@PathVariable("id") int id) {
 		logger.info("Fetching FileUpload with id {}", id);
@@ -68,7 +68,7 @@ public class FileUploadController {
 
 	// -------------------Create a
 	// FileUpload-------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_EVENT_COORDINATOR" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR", "ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/fileUpload/", method = RequestMethod.POST)
 	public ResponseEntity<?> createFileUpload(@RequestBody FileUpload fileUpload, 
 			UriComponentsBuilder ucBuilder,@ModelAttribute("username") String username) {
@@ -90,7 +90,7 @@ public class FileUploadController {
 
 	// ------------------- Update a FileUpload
 	// ------------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/fileUpload/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateFileUpload(@PathVariable("id") int id, @RequestBody FileUpload fileUpload) {
 		logger.info("Updating FileUpload with id {}", id);

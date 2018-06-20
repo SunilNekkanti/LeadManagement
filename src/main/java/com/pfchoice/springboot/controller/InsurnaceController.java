@@ -40,7 +40,7 @@ public class InsurnaceController {
 	// -------------------Retrieve All
 	// Insurances---------------------------------------------
 
-	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/insurance/", method = RequestMethod.GET)
 	public ResponseEntity<?> listAllInsurances(@RequestParam(value = "page", required = false) Integer pageNo,
 			@RequestParam(value = "size", required = false) Integer pageSize,
@@ -64,7 +64,7 @@ public class InsurnaceController {
 
 	// -------------------Retrieve Single
 	// Insurance------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/insurance/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getInsurance(@PathVariable("id") int id) {
 		logger.info("Fetching Insurance with id {}", id);
@@ -79,7 +79,7 @@ public class InsurnaceController {
 
 	// -------------------Create a
 	// Insurance-------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/insurance/", method = RequestMethod.POST)
 	public ResponseEntity<?> createInsurance(@RequestBody Insurance insurance, 
 			UriComponentsBuilder ucBuilder,@ModelAttribute("username") String username) {
@@ -101,7 +101,7 @@ public class InsurnaceController {
 
 	// ------------------- Update a Insurance
 	// ------------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/insurance/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateInsurance(@PathVariable("id") int id, @RequestBody Insurance insurance) {
 		logger.info("Updating Insurance with id {}", id);
@@ -122,7 +122,7 @@ public class InsurnaceController {
 
 	// ------------------- Delete a
 	// Insurance-----------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/insurance/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteInsurance(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting Insurance with id {}", id);

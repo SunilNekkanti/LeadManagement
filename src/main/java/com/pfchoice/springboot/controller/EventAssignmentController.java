@@ -2,12 +2,14 @@ package com.pfchoice.springboot.controller;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.mail.MessagingException;
 
@@ -32,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.pfchoice.springboot.model.Contact;
 import com.pfchoice.springboot.model.Email;
 import com.pfchoice.springboot.model.Event;
 import com.pfchoice.springboot.model.EventAssignment;
@@ -72,7 +75,7 @@ public class EventAssignmentController {
 	// -------------------Retrieve All
 	// EventAssignments---------------------------------------------
 
-	@Secured({ "ROLE_ADMIN", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/eventAssignment/", method = RequestMethod.GET)
 	public ResponseEntity<Page<EventAssignment>> listAllEventAssignments(@PageableDefault(page=0 ,size=100) Pageable pageRequest,
 			@RequestParam(value = "search", required = false) String search, @ModelAttribute("userId") Integer userId,
@@ -92,7 +95,7 @@ public class EventAssignmentController {
 
 	// -------------------Retrieve Single
 	// EventAssignment------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/eventAssignment/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getEventAssignment(@PathVariable("id") int id) {
 		logger.info("Fetching EventAssignment with id {}", id);
@@ -107,7 +110,7 @@ public class EventAssignmentController {
 
 	// -------------------Create a
 	// EventAssignment-------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_EVENT_COORDINATOR" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR", "ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/eventAssignment/", method = RequestMethod.POST)
 	public ResponseEntity<?> createEventAssignment(@RequestBody EventAssignment eventAssignment,
 			UriComponentsBuilder ucBuilder, @ModelAttribute("userId") Integer userId,
@@ -119,7 +122,9 @@ public class EventAssignmentController {
 		User user = userService.findById(userId);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
 		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-
+		SimpleDateFormat sdf1 = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+		SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm a");
+		
 		Event event = eventAssignment.getEvent();
 		String eventNotes = (event.getNotes() != null) ? event.getNotes() : "";
 
@@ -127,7 +132,11 @@ public class EventAssignmentController {
 				.collect(Collectors.joining(";"));
 		String toNamesList = eventAssignment.getRepresentatives().stream().map(rep -> rep.getUsername())
 				.collect(Collectors.joining(","));
-		String address = eventAssignment.getEvent().getContact().getAddress();
+		Contact cnt = eventAssignment.getEvent().getContact();
+		String address=  Stream.of(cnt.getAddress1(), cnt.getAddress2(), cnt.getCity(), cnt.getStateCode().getShortName(), cnt.getZipCode().toString())
+				          .filter(s -> s != null && !s.isEmpty())
+				          .collect(Collectors.joining(","));
+		
 		Set<FileUpload> attachments = eventAssignment.getEvent().getAttachments();
 		Set<FileUploadContent> attachmentContents = new HashSet<>();
 		if (attachments != null && !attachments.isEmpty()) {
@@ -151,6 +160,9 @@ public class EventAssignmentController {
 		emailAttributes.put("eventStartTime", sdf.format(eventAssignment.getEventDateStartTime().getTime()));
 		emailAttributes.put("eventEndTime", sdf.format(eventAssignment.getEventDateEndTime().getTime()));
 		emailAttributes.put("currentTime", sdf.format(eventAssignment.getCreatedDate()));
+		emailAttributes.put("eventStartLocalTime", sdf2.format(eventAssignment.getEventDateStartTime().getTime()));
+		emailAttributes.put("eventEndLocalTime", sdf2.format(eventAssignment.getEventDateEndTime().getTime()));
+		emailAttributes.put("currentLocalTime",sdf1.format((new Date()).getTime())); 
 		emailAttributes.put("rrule", eventAssignment.getRepeatRule());
 		emailAttributes.put("location", address);
 		emailAttributes.put("attachments", attachmentContents);
@@ -169,10 +181,11 @@ public class EventAssignmentController {
 
 	// ------------------- Update a EventAssignment
 	// ------------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/eventAssignment/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateEventAssignment(@PathVariable("id") int id,
-			@RequestBody EventAssignment eventAssignment, @ModelAttribute("username") String username) {
+			@RequestBody EventAssignment eventAssignment,  @ModelAttribute("userId") Integer userId,
+			@ModelAttribute("username") String username) throws MessagingException, IOException, InterruptedException {
 		logger.info("Updating EventAssignment with id {}", id);
 
 		EventAssignment currentEventAssignment = eventAssignmentService.findById(id);
@@ -190,12 +203,68 @@ public class EventAssignmentController {
 		currentEventAssignment.getRepresentatives().addAll(eventAssignment.getRepresentatives());
 		eventAssignmentService.updateEventAssignment(currentEventAssignment);
 
+		eventAssignmentService.saveEventAssignment(eventAssignment);
+
+		User user = userService.findById(userId);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+		SimpleDateFormat sdf1 = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+		SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm a");
+		
+		Event event = eventAssignment.getEvent();
+		String eventNotes = (event.getNotes() != null) ? event.getNotes() : "";
+
+		String toEmailIds = eventAssignment.getRepresentatives().stream().map(rep -> rep.getContact().getEmail())
+				.collect(Collectors.joining(";"));
+		String toNamesList = eventAssignment.getRepresentatives().stream().map(rep -> rep.getUsername())
+				.collect(Collectors.joining(","));
+		Contact cnt = eventAssignment.getEvent().getContact();
+		String address=  Stream.of(cnt.getAddress1(), cnt.getAddress2(), cnt.getCity(), cnt.getStateCode().getShortName(), cnt.getZipCode().toString())
+				          .filter(s -> s != null && !s.isEmpty())
+				          .collect(Collectors.joining(","));
+		Set<FileUpload> attachments = eventAssignment.getEvent().getAttachments();
+		Set<FileUploadContent> attachmentContents = new HashSet<>();
+		if (attachments != null && !attachments.isEmpty()) {
+			for (FileUpload fileupload : attachments) {
+				FileUploadContent fileUploadContent = fileUploadContentService.findById(fileupload.getId());
+				attachmentContents.add(fileUploadContent);
+			}
+		}
+		Email mail = new Email();
+		mail.setEmailTo(toEmailIds);
+		mail.setEmailFrom("leadmanagement@infocusonline.net");
+		mail.setEmailCc(user.getContact().getEmail());
+		mail.setSubject("Event: " + eventAssignment.getEvent().getEventName() + " has been Assigned to you");
+
+		Map<String, Object> emailAttributes = new HashMap<>();
+		emailAttributes.put("toNamesList", toNamesList);
+		emailAttributes.put("eventName", eventAssignment.getEvent().getEventName());
+		emailAttributes.put("currentUser", user.getName());
+		emailAttributes.put("manager", user.getName());
+		emailAttributes.put("notes", eventNotes);
+		emailAttributes.put("eventStartTime", sdf.format(eventAssignment.getEventDateStartTime().getTime()));
+		emailAttributes.put("eventEndTime", sdf.format(eventAssignment.getEventDateEndTime().getTime()));
+		emailAttributes.put("eventStartLocalTime", sdf2.format(eventAssignment.getEventDateStartTime().getTime()));
+		emailAttributes.put("eventEndLocalTime", sdf2.format(eventAssignment.getEventDateEndTime().getTime()));
+		emailAttributes.put("currentTime", sdf.format(eventAssignment.getCreatedDate()));
+		emailAttributes.put("currentLocalTime",sdf1.format((new Date()).getTime())); 
+		emailAttributes.put("rrule", eventAssignment.getRepeatRule());
+		emailAttributes.put("location", address);
+		emailAttributes.put("attachments", attachmentContents);
+
+		mail.setModel(emailAttributes);
+		String emailTemplateFileName = "event_assignment_email_template.txt";
+
+		mail.setBody(emailService.geContentFromTemplate(emailAttributes, emailTemplateFileName));
+		emailService.sendMailWithAttachment(mail);
+
+		
 		return new ResponseEntity<EventAssignment>(currentEventAssignment, HttpStatus.OK);
 	}
 
 	// ------------------- Delete a
 	// EventAssignment-----------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/eventAssignment/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteEventAssignment(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting EventAssignment with id {}", id);

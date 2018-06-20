@@ -26,7 +26,7 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString
-@EqualsAndHashCode(callSuper =false,of = {"code","description"})
+@EqualsAndHashCode(callSuper =false,exclude = {"id"})
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Gender extends RecordDetails implements Serializable {
 

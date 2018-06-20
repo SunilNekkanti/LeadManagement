@@ -38,7 +38,7 @@ public class EventFrequencyController {
 
 	// -------------------Retrieve All
 	// EventFrequencys---------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/eventFrequency/", method = RequestMethod.GET)
 	public ResponseEntity<List<EventFrequency>> listAllEventFrequencys() {
 		List<EventFrequency> eventFrequencys = eventFrequencyService.findAllEventFrequencies();
@@ -52,7 +52,7 @@ public class EventFrequencyController {
 
 	// -------------------Retrieve Single
 	// EventFrequency------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/eventFrequency/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getEventFrequency(@PathVariable("id") int id) {
 		logger.info("Fetching EventFrequency with id {}", id);
@@ -67,7 +67,7 @@ public class EventFrequencyController {
 
 	// -------------------Create a
 	// EventFrequency-------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/eventFrequency/", method = RequestMethod.POST)
 	public ResponseEntity<?> createEventFrequency(@RequestBody EventFrequency eventFrequency,
 			UriComponentsBuilder ucBuilder, @ModelAttribute("username") String username) {
@@ -88,7 +88,7 @@ public class EventFrequencyController {
 
 	// ------------------- Update a EventFrequency
 	// ------------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/eventFrequency/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateEventFrequency(@PathVariable("id") int id,
 			@RequestBody EventFrequency eventFrequency) {
@@ -112,7 +112,7 @@ public class EventFrequencyController {
 
 	// ------------------- Delete a
 	// EventFrequency-----------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/eventFrequency/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteEventFrequency(@PathVariable("id") int id) {
 		logger.info("Fetching & Deleting EventFrequency with id {}", id);

@@ -372,7 +372,7 @@ app.controller(
 							}
 							
 							function  adminOrManager(){
-						    	if($localStorage.loginUser.roleName === 'ADMIN' ||  $localStorage.loginUser.roleName === 'MANAGER'){
+						    	if($localStorage.loginUser.roleName === 'ADMIN' ||  $localStorage.loginUser.roleName === 'MANAGER' ||  $localStorage.loginUser.roleName === 'EVENT_COORDINATOR'){
 						    		return true;
 						    	}else{
 						    		return false;

@@ -43,16 +43,18 @@ email:
 --- 
  logging:
     level:
-        ROOT: INFO
-        org.ehcache.sample: INFO
-        io.github.jhipster: INFO  
-    file: C:/softwares/mavenproject/LeadManagement/logger.log
+        com.pfchoice.springboot.SpringBootCRUDApp: WARN
+  #       org.ehcache.sample: WARN
+   #      io.github.jhipster: WARN  
+ #   file: C:/softwares/mavenproject/LeadManagement/logger.log
  
----       
+---      
+
+management.security.enabled: false 
 
 spring:
   profiles:
-    active: "local,serveremail"
+    active: "server,serveremail"
   main:
     banner-mode: "off"
  
@@ -60,13 +62,19 @@ spring:
                       
 spring:
   profiles: local,default
+  devtools:
+      restart:
+          enabled: true
+      livereload:
+          enabled: true # we use gulp + BrowserSync for livereload
   jpa:
     properties:
        hibernate:
           jdbc:
              time_zone: America/New_York
 envProperties:
-      coordinatorEmail: skumar@pfchoice.com             
+      coordinatorEmail: skumar@pfchoice.com
+      coordinatorName: Sarath     
 datasource:
   leadManagement:
     url: jdbc:mysql://localhost:3306/lead_management?tinyInt1isBit=false&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=false&noAccessToProcedureBodies=true&useLegacyDatetimeCode=false
@@ -91,7 +99,8 @@ spring:
                 jdbc:
                     time_zone: America/New_York
 envProperties:
-      coordinatorEmail: dsoto@pfchoice.com                      
+      coordinatorEmail: dsoto@pfchoice.com
+      coordinatorName: Dynahly Soto                  
 datasource:
   leadManagement:
     url: jdbc:mysql://pras-aws-prod.cp2ok1lxfh49.us-east-1.rds.amazonaws.com:3306/lead_management?tinyInt1isBit=false&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=false&noAccessToProcedureBodies=true&useLegacyDatetimeCode=false
@@ -100,7 +109,7 @@ datasource:
     driverClassName: com.mysql.jdbc.Driver
     defaultSchema:
     maxPoolSize: 10
-    hibernate:
+    hibernate: 
       hbm2ddl.method: none
       show_sql: false
       format_sql: false

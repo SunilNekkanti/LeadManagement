@@ -40,7 +40,7 @@ public class RoleController {
 
 	// -------------------Retrieve All
 	// Roles---------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/role/", method = RequestMethod.GET)
 	public ResponseEntity<Page<Role>> listAllRoles(@PageableDefault(page=0 ,size=100) Pageable pageRequest,
 			@RequestParam(value = "search", required = false) String search) {
@@ -57,7 +57,7 @@ public class RoleController {
 
 	// -------------------Retrieve Single
 	// Role------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/role/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getRole(@PathVariable("id") int id) {
 		logger.info("Fetching Role with id {}", id);

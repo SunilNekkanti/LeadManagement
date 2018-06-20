@@ -36,7 +36,7 @@ public class StateController {
 
 	// -------------------Retrieve All
 	// States---------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_EVENT_COORDINATOR", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/state/", method = RequestMethod.GET)
 	public ResponseEntity<List<State>> listAllStates() {
 		List<State> states = stateService.findAllStates();
@@ -50,7 +50,7 @@ public class StateController {
 
 	// -------------------Retrieve Single
 	// State------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER" })
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/state/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getState(@PathVariable("id") int id) {
 		logger.info("Fetching State with id {}", id);
