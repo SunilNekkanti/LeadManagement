@@ -638,7 +638,7 @@ app.controller(
 						    }
 
 						    function showStatusChangeDetails(){
-						    	if($localStorage.loginUser.roleName != 'EVENT_COORDINATOR' && self.lead.status && self.lead.status.description == 'Converted'){
+						    	if( self.lead.status && self.lead.status.description == 'Converted'){
 						    		return true;
 						    	}else{
 						    		return false;

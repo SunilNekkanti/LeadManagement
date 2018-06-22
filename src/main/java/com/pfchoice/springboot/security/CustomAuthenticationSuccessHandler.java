@@ -20,7 +20,7 @@ import java.util.List;
 public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler
 		implements AuthenticationSuccessHandler {
 
-	private List<String> leadHomePageRoles = Arrays.asList("ROLE_ADMIN", "ROLE_AGENT", "ROLE_CARE_COORDINATOR");
+	private List<String> leadHomePageRoles = Arrays.asList("ROLE_ADMIN", "ROLE_AGENT", "ROLE_CARE_COORDINATOR", "ROLE_EVENT_COORDINATOR");
 
 	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 	 
