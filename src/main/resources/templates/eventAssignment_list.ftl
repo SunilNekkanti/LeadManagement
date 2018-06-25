@@ -283,12 +283,12 @@
 						<div class="row">
 							<div class="form-group col-md-12">
 								<label class="col-md-2 control-label" for="end">End</label>
-								<div class="col-md-3">
+								<div class="col-md-3" >
 									<select class="col-md-8 form-control"
 										ng-model="ctrl.eventAssignmentEndOption" name="end"
 										ng-options="i as i for i in ctrl.eventAssignmentEndOptions"></select>
 								</div>
-								<div ng-show="ctrl.eventAssignmentEndOption=='After'"
+								<div ng-show="ctrl.eventAssignmentEndOption==='After'"
 									class="col-md-1">
 									<input type="text" ng-model="ctrl.eventAssignmentEndCount"
 										id="count" name="eventAssignmentCount"
@@ -303,7 +303,7 @@
 											field is invalid </span>
 									</div>
 								</div>
-								<div ng-show="ctrl.eventAssignmentEndOption=='On date'"
+								<div ng-show="ctrl.eventAssignmentEndOption==='On date'"
 									class="col-md-4">
 									<div class="col-md-9 input-group date" id="appointment"
 										ng-model="ctrl.eventAssignmentUntil" date1-picker>

@@ -435,15 +435,18 @@
               for (var i = 0; i < res.length; i++) {
                 var ruleType = res[i].split("=");
                 if (ruleType.length > 1) {
+                console.log('parseEventAssignmentRule ruleType[0]',ruleType[0]);
                   switch (ruleType[0]) {
                     case "COUNT":
                       self.eventAssignmentEndCount = ruleType[1];
                       self.eventAssignmentEndOption = 'After';
                       break;
                     case "UNTIL":
-                      self.eventAssignmentUntil = ruleType[1];
-                      console.log('self.eventAssignmentUntil'+self.eventAssignmentUntil);
-                      self.eventAssignmentEndOption == 'On date';
+                      var momentObj = moment(ruleType[1],'YYYYMMDDTHHmmss');
+              		  momentObj.subtract(1, 'days').calendar(); 
+                      self.eventAssignmentUntil = momentObj.format('MM/DD/YYYY');
+                      self.eventAssignmentEndOption = 'On date';
+                      console.log('self.eventAssignmentUntil',self.eventAssignmentUntil);
                       break;
                     case 'INTERVAL':
                       self.eventAssignmentInterval = ruleType[1];
