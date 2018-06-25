@@ -349,6 +349,7 @@ public class LeadController {
 							logger.error("leadConsentForm with id {} not found.", id);
 						}else{
 							leadConsentForms.add(leadConsentForm);
+							logger.error("attaching leadConsentForm ****");
 							emailAttributes.put("attachments",leadConsentForms);
 						}
 					}

@@ -414,7 +414,12 @@
               var count = ';COUNT=' + self.eventAssignmentEndCount;
               rrule.push(count);
             } else if (self.eventAssignmentEndOption == 'On date') {
-              var count = ';UNTIL=' + self.eventAssignmentUntil;
+              
+              var momentObj = moment(self.eventAssignmentUntil);
+              momentObj.add(1, 'days').calendar(); 
+              var momentString = momentObj.format('YYYYMMDDTHHmmss'); 
+              console.log('momentString'+momentString);
+              var count = ';UNTIL=' + momentString+'Z';
               rrule.push(count);
             }
 
@@ -437,6 +442,7 @@
                       break;
                     case "UNTIL":
                       self.eventAssignmentUntil = ruleType[1];
+                      console.log('self.eventAssignmentUntil'+self.eventAssignmentUntil);
                       self.eventAssignmentEndOption == 'On date';
                       break;
                     case 'INTERVAL':

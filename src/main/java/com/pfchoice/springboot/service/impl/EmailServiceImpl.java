@@ -180,22 +180,19 @@ public class EmailServiceImpl implements EmailService {
 						ByteArrayOutputStream baos = new ByteArrayOutputStream();
 						ByteArrayOutputStream singedbaos = new ByteArrayOutputStream();
 						PdfReader reader;
-					    try {
-					    	PdfWriter.getInstance(document, baos);
-					    	document.open();
+					    	
 					    	if(fileUpload.getFileName().contains(".jpg") || fileUpload.getFileName().contains(".jpeg") || fileUpload.getFileName().contains(".png")){
+					    		PdfWriter.getInstance(document, baos);
+						    	document.open();
 					    		 Image img =   Image.getInstance(fileUpload.getData());
 					    		 img.setAlignment(Image.ALIGN_LEFT);
 					    		 img.setAbsolutePosition(0f, 0f);
 					    		 img.scalePercent(40, 40);
-
 							     document.add(img);
+							     document.close();
 					    	}
 					       
-					    } catch (Exception e) {
-					    	LOGGER.warning(e.getMessage());
-					    }
-					    document.close();
+					   
 					    if(baos.size() > 1){
 					    	reader = new PdfReader(baos.toByteArray());
 					    }else{
@@ -209,7 +206,7 @@ public class EmailServiceImpl implements EmailService {
 					    
 					    DataSource source = new ByteArrayDataSource(singedbaos.toByteArray(),"application/pdf");
 						attachmentBodyPart.setDataHandler(new DataHandler(source));
-						attachmentBodyPart.setFileName("LeadConsentForm.pdf");
+						attachmentBodyPart.setFileName(fileUpload.getFileName());
 						multipart.addBodyPart(attachmentBodyPart);
 					}
 				}catch(Exception e){
