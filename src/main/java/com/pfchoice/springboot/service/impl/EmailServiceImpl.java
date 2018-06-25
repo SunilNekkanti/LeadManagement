@@ -106,7 +106,7 @@ public class EmailServiceImpl implements EmailService {
          String firstName  = (emailAttributes.get("firstName") ==null)? "":emailAttributes.get("firstName").toString();
          String lastName  = (emailAttributes.get("lastName") ==null)? "":emailAttributes.get("lastName").toString();
          String leadName = lastName+","+firstName;
-         String eventName  = ("".equals(leadName))? (emailAttributes.get("eventName") ==null)? "":emailAttributes.get("eventName").toString():leadName;
+         String eventName  = ("".equals(leadName) || ",".equals(leadName))? (emailAttributes.get("eventName") ==null)? "":emailAttributes.get("eventName").toString():leadName;
          String owner  = (emailAttributes.get("attachmentKey") ==null)? "":emailAttributes.get("attachmentKey").toString();
          
 		String rrule = (emailAttributes.get("rrule") != null && !"".equals(emailAttributes.get("rrule")))
@@ -147,7 +147,7 @@ public class EmailServiceImpl implements EmailService {
 		            + rrule
 		            + "DTSTAMP:"+currentTime+"\n"
 		            + "CATEGORIES:Meeting\n"
-		            + "DESCRIPTION:"+eventName +"\n"
+		            + "DESCRIPTION:"+eventName+"\n"
 		            + "SUMMARY:"+eventName+"\n"
 		            + "PRIORITY:5\n"
 		            + "CLASS:PUBLIC\n"
@@ -176,36 +176,42 @@ public class EmailServiceImpl implements EmailService {
 						BodyPart attachmentBodyPart = new MimeBodyPart();
 						attachmentBodyPart.setContent(mail.getBody(), "text/html");
 						
-						Document document = new Document(PageSize.A4);
-						ByteArrayOutputStream baos = new ByteArrayOutputStream();
-						ByteArrayOutputStream singedbaos = new ByteArrayOutputStream();
-						PdfReader reader;
+						if(fileUpload.getFileName().contains(".pdf") || fileUpload.getFileName().contains(".jpg") || fileUpload.getFileName().contains(".jpeg") || fileUpload.getFileName().contains(".png")){
 					    	
-					    	if(fileUpload.getFileName().contains(".jpg") || fileUpload.getFileName().contains(".jpeg") || fileUpload.getFileName().contains(".png")){
-					    		PdfWriter.getInstance(document, baos);
-						    	document.open();
-					    		 Image img =   Image.getInstance(fileUpload.getData());
-					    		 img.setAlignment(Image.ALIGN_LEFT);
-					    		 img.setAbsolutePosition(0f, 0f);
-					    		 img.scalePercent(40, 40);
-							     document.add(img);
-							     document.close();
-					    	}
-					       
-					   
-					    if(baos.size() > 1){
-					    	reader = new PdfReader(baos.toByteArray());
-					    }else{
-					    	reader = new PdfReader(fileUpload.getData());
-					    }
-					     
-				        PdfStamper stamper = new PdfStamper(reader, singedbaos);
-				        stamper.setEncryption(USER, owner.getBytes(),
-				            PdfWriter.ALLOW_PRINTING, PdfWriter.ENCRYPTION_AES_128 | PdfWriter.DO_NOT_ENCRYPT_METADATA);
-				        stamper.close();
-					    
-					    DataSource source = new ByteArrayDataSource(singedbaos.toByteArray(),"application/pdf");
-						attachmentBodyPart.setDataHandler(new DataHandler(source));
+								Document document = new Document(PageSize.A4);
+								ByteArrayOutputStream baos = new ByteArrayOutputStream();
+								ByteArrayOutputStream singedbaos = new ByteArrayOutputStream();
+								PdfReader reader;
+							    	
+							    	if(fileUpload.getFileName().contains(".jpg") || fileUpload.getFileName().contains(".jpeg") || fileUpload.getFileName().contains(".png")){
+							    		PdfWriter.getInstance(document, baos);
+								    	document.open();
+							    		 Image img =   Image.getInstance(fileUpload.getData());
+							    		 img.setAlignment(Image.ALIGN_LEFT);
+							    		 img.setAbsolutePosition(0f, 0f);
+							    		 img.scalePercent(40, 40);
+									     document.add(img);
+									     document.close();
+							    	}
+							       
+							   
+							    if(baos.size() > 1){
+							    	reader = new PdfReader(baos.toByteArray());
+							    }else{
+							    	reader = new PdfReader(fileUpload.getData());
+							    }
+							     
+						        PdfStamper stamper = new PdfStamper(reader, singedbaos);
+						        stamper.setEncryption(USER, owner.getBytes(),
+						            PdfWriter.ALLOW_PRINTING, PdfWriter.ENCRYPTION_AES_128 | PdfWriter.DO_NOT_ENCRYPT_METADATA);
+						        stamper.close();
+							    
+							    DataSource source = new ByteArrayDataSource(singedbaos.toByteArray(),"application/pdf");
+								attachmentBodyPart.setDataHandler(new DataHandler(source));
+						}else{
+							 DataSource source = new ByteArrayDataSource(fileUpload.getData() ,fileUpload.getContentType());
+							 attachmentBodyPart.setDataHandler(new DataHandler(source));
+						}
 						attachmentBodyPart.setFileName(fileUpload.getFileName());
 						multipart.addBodyPart(attachmentBodyPart);
 					}

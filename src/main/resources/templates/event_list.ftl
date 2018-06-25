@@ -130,7 +130,7 @@
                 </div>
                 <div ng-repeat="attachment in ctrl.event.attachments" class="col-md-3">
 						<a  class="form-control no-border" ng-click="ctrl.readUploadedFile(attachment.id, attachment.contentType)"  style="display:block;">
-          					<span class="glyphicon glyphicon-file"></span>
+          					<span class="glyphicon glyphicon-file">{{attachment.fileName}}</span>
         				</a>
                 </div>
               </div>
