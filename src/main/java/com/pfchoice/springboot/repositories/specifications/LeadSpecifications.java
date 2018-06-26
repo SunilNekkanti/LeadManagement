@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.pfchoice.springboot.model.LeadMembership;
 
+@SuppressWarnings("unused")
 public class LeadSpecifications implements Specification<LeadMembership> {
 
 	private String roleName;
@@ -21,13 +22,14 @@ public class LeadSpecifications implements Specification<LeadMembership> {
 	private String username;
 	private String firstName;
 	private String lastName;
+	private String dob;
 	private Integer selectedGender;
 	private String phoneNo;
 	private Integer selectedLang;
 	private Integer selectedStatus;
 	private	Integer selectedStDetails;
 
-	public LeadSpecifications(Integer userId, String username, String roleName, String firstName, String lastName,
+	public LeadSpecifications(Integer userId, String username, String roleName, String firstName, String lastName,String dob,
 			Integer selectedGender, String phoneNo, Integer selectedLang, Integer selectedStatus,
 			Integer selectedStDetails, String searchTerm) {
 		super();
@@ -42,6 +44,7 @@ public class LeadSpecifications implements Specification<LeadMembership> {
 		this.selectedLang = selectedLang;
 		this.selectedStatus = selectedStatus;
 		this.selectedStDetails = selectedStDetails;
+		this.dob = dob;
 	}
 
 	public Predicate toPredicate(Root<LeadMembership> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
@@ -52,6 +55,7 @@ public class LeadSpecifications implements Specification<LeadMembership> {
 			p.getExpressions()
 					.add(cb.or(cb.like(cb.lower(root.get("firstName")), containsLikePattern),
 							cb.like(cb.lower(root.get("lastName")), containsLikePattern),
+							cb.like(cb.lower(root.get("dob").as(String.class)), containsLikePattern.replace('/','-')),
 							cb.like(root.join("gender").get("description"), containsLikePattern),
 							cb.like(root.join("language").get("description"), containsLikePattern),
 							cb.like(root.join("contact").get("homePhone"), containsLikePattern),
@@ -90,6 +94,10 @@ public class LeadSpecifications implements Specification<LeadMembership> {
 			p.getExpressions().add(cb.and(cb.like(root.get("lastName"), getContainsLikePattern(lastName))));
 		}
 
+		if(dob != null && !"".equals(dob)){
+			p.getExpressions().add(cb.and(cb.like(root.get("dob").as(String.class), getContainsLikePattern(dob.replace('/','-')))));
+		}
+		
 		if(selectedGender != null ){
 			p.getExpressions().add(cb.and(cb.equal(root.join("gender").get("id"), selectedGender)));
 		}

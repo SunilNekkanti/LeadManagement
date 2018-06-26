@@ -92,7 +92,7 @@
                 meta) {
                 return '<a href="javascript:void(0)" class="' + full.id + '" ng-click="ctrl.eventAssignmentEdit(' + full.id + ')">' + data + '</a>';
               }).withClass("text-left"),
-            DTColumnBuilder.newColumn('eventDateStartTime')
+            DTColumnBuilder.newColumn('startDate')
             .withTitle('STARTDATE').withOption(
               'defaultContent', ''),
             DTColumnBuilder.newColumn('event.startTime')

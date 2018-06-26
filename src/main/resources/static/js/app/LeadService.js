@@ -66,12 +66,12 @@ app.service('LeadService',
             }
             
             function loadLeads(pageNo, length, search, order
-                                      ,firstName,lastName,selectedGender, phoneNo,selectedLang,selectedStatus, selectedStDetails) {
+                                      ,firstName,lastName,dob,selectedGender, phoneNo,selectedLang,selectedStatus, selectedStDetails) {
                 var deferred = $q.defer();
                 
                 var pageable = {
                   		 page:pageNo, size:length,sort: order,search: search||'',
-                  		 firstName:firstName ,lastName:lastName,selectedGender:selectedGender, phoneNo:phoneNo
+                  		 firstName:firstName ,lastName:lastName,dob:dob,selectedGender:selectedGender, phoneNo:phoneNo
                   		 ,selectedLang:selectedLang,selectedStatus:selectedStatus, selectedStDetails:selectedStDetails
                   		};
 

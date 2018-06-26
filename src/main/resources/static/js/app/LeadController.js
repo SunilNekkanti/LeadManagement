@@ -145,6 +145,8 @@ app.controller(
 													}).withClass("text-left"),
 									DTColumnBuilder.newColumn('lastName','LASTNAME').withOption(),
 									DTColumnBuilder.newColumn(
+											'dob','DOB').withOption('defaultContent', ''),
+									DTColumnBuilder.newColumn(
 											'gender.description','GENDER'),
 									DTColumnBuilder.newColumn(
 											'contact.homePhone','PHONE').renderWith(
@@ -188,28 +190,33 @@ app.controller(
 										        },
 										        '2': {
 										          html: 'input',
-										          type: 'select',
-										          values: self.filterGenderList,
+										          type: 'text',
 										          time: 500
 										        },
 										        '3': {
 										          html: 'input',
-										          type: 'text',
+										          type: 'select',
+										          values: self.filterGenderList,
 										          time: 500
 										        },
 										        '4': {
 										          html: 'input',
-										          type: 'select',
-										          values: self.filterLanguageList,
+										          type: 'text',
 										          time: 500
 										        },
 										        '5': {
 										          html: 'input',
 										          type: 'select',
-										          values: self.filterStatusList,
+										          values: self.filterLanguageList,
 										          time: 500
 										        },
 										        '6': {
+										          html: 'input',
+										          type: 'select',
+										          values: self.filterStatusList,
+										          time: 500
+										        },
+										        '7': {
 										          html: 'input',
 										          type: 'select',
 										          values: self.filterStatusDetailList,
@@ -263,16 +270,17 @@ app.controller(
 
 								 var firstName      	= aoData[1].value[0]['search'].value || '';
       							 var lastName       	= aoData[1].value[1]['search'].value || '';
-      							 var selectedGender 	= aoData[1].value[2]['search'].value || '';
-      							 var phoneNo        	= aoData[1].value[3]['search'].value || '';
-							     var selectedLang   	= aoData[1].value[4]['search'].value || '';
-							     var selectedStatus   	= aoData[1].value[5]['search'].value || '';
-							     var selectedStDetails  = aoData[1].value[6]['search'].value || '';
+      							 var dob			 	= aoData[1].value[2]['search'].value || '';
+      							 var selectedGender 	= aoData[1].value[3]['search'].value || '';
+      							 var phoneNo        	= aoData[1].value[4]['search'].value || '';
+							     var selectedLang   	= aoData[1].value[5]['search'].value || '';
+							     var selectedStatus   	= aoData[1].value[6]['search'].value || '';
+							     var selectedStDetails  = aoData[1].value[7]['search'].value || '';
 
 								// Then just call your service to get the  records from server side
 								LeadService
 										.loadLeads(page, length, search.value, sortCol+','+sortDir
-										 ,firstName,lastName,selectedGender, phoneNo,selectedLang,selectedStatus, selectedStDetails)
+										 ,firstName,lastName,dob, selectedGender, phoneNo,selectedLang,selectedStatus, selectedStDetails)
 										.then(
 												function(result) {
 													var records = {

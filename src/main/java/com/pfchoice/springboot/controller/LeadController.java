@@ -92,6 +92,7 @@ public class LeadController {
 			@RequestParam(value = "search", required = false) String search,
 			@RequestParam(value = "firstName", required = false) String firstName,
 			@RequestParam(value = "lastName", required = false) String lastName,
+			@RequestParam(value = "dob", required = false) String dob,
 			@RequestParam(value = "selectedGender", required = false) Integer selectedGender,
 			@RequestParam(value = "phoneNo", required = false) String phoneNo,
 			@RequestParam(value = "selectedLang", required = false) Integer selectedLang,
@@ -101,7 +102,7 @@ public class LeadController {
 			@ModelAttribute("roleName") String roleName, @ModelAttribute("username") String username)
 			throws MessagingException, IOException {
 
-		Specification<LeadMembership> spec = new LeadSpecifications(userId, username, roleName, firstName, lastName,
+		Specification<LeadMembership> spec = new LeadSpecifications(userId, username, roleName, firstName, lastName, dob,
 			 selectedGender, phoneNo, selectedLang, selectedStatus, selectedStDetails, search);
 		Page<LeadMembership> leads = leadService.findAllLeadMembershipsByPage(spec, pageRequest);
 		if (leads.getTotalElements() == 0) {
