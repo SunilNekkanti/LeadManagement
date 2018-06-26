@@ -72,26 +72,11 @@ app.controller(
 															meta) {
 														 return '<a href="javascript:void(0)" class="'+full.id+'" ng-click="ctrl.eventEdit('+full.id+')">'+data+'</a>';
 													}).withClass("text-left"),
-									DTColumnBuilder.newColumn('eventDateStartTime')
-											.withTitle('STARTDATE').renderWith(function(data, type) {
-												return $filter('date')(new Date(data), 'MM/dd/yyyy'); //date filter
-											}).withOption(
-													'defaultContent', ''),
-									DTColumnBuilder.newColumn('eventDateStartTime')
-													.withTitle('STARTTIME').renderWith(function(data, type) {
-														return $filter('date')(new Date(data), 'hh:mm a'); //date filter
-													}).withOption(
+									DTColumnBuilder.newColumn('startTime')
+													.withTitle('STARTTIME').withOption(
 															'defaultContent', ''),
-									DTColumnBuilder.newColumn('eventDateEndTime')
-													.withTitle('ENDDATE').renderWith(function(data, type) {
-														return $filter('date')(new Date(data), 'MM/dd/yyyy'); //date filter
-													}).withOption(
-															'defaultContent', ''),
-								
-									DTColumnBuilder.newColumn('eventDateEndTime')
-																	.withTitle('ENDTIME').renderWith(function(data, type) {
-																		return $filter('date')(new Date(data), 'hh:mm a'); //date filter
-																	}).withOption(
+									DTColumnBuilder.newColumn('endTime')
+																	.withTitle('ENDTIME').withOption(
 																			'defaultContent', ''),
 									DTColumnBuilder.newColumn('facilityType.description').withTitle(
 											'FACILITY TYPE').withOption('defaultContent', ''),

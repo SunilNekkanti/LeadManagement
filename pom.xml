@@ -4,7 +4,7 @@
 
 	<groupId>com.pfchoice.springboot</groupId>
 	<artifactId>LeadManagement</artifactId>
-	<version>1.0.119</version>
+	<version>1.0.122</version>
 	<packaging>jar</packaging>
 
 	<name>LeadManagement</name>

@@ -1,6 +1,6 @@
 (function() {
   'use strict';
-  var app = angular.module('my-app', ['ngCookies','datatables', 'datatables.light-columnfilter', 'datatables.fixedheader', 'ui.bootstrap', 'datatables.bootstrap', 'datatables.colreorder', 'datatables.fixedheader', 'datatables.buttons', 'datatables.fixedcolumns', 'ui.router', 'ngStorage', 'ngAnimate', 'ngSanitize', 'btorfs.multiselect', 'oc.lazyLoad', 'ui.select', 'chart.js']);
+  var app = angular.module('my-app', ['ngCookies','moment-picker','datatables','ui.bootstrap', 'datatables.light-columnfilter', 'datatables.fixedheader',  'datatables.bootstrap', 'datatables.colreorder', 'datatables.fixedheader', 'datatables.buttons', 'datatables.fixedcolumns', 'ui.router', 'ngStorage', 'ngAnimate', 'ngSanitize', 'btorfs.multiselect', 'oc.lazyLoad', 'ui.select', 'chart.js']);
   app.config(['ChartJsProvider', function(ChartJsProvider) {
     // Configure all charts
     ChartJsProvider.setOptions({
@@ -11,6 +11,32 @@
       showLines: true
     });
   }]);
+  
+  app.config(['momentPickerProvider', function (momentPickerProvider) {
+        momentPickerProvider.options({
+            /* Picker properties */
+            locale:        'en',
+            format:        'L LTS',
+            minView:       'decade',
+            maxView:       'minute',
+            startView:     'year',
+            autoclose:     true,
+            today:         false,
+            keyboard:      false,
+            
+            /* Extra: Views properties */
+            leftArrow:     '&larr;',
+            rightArrow:    '&rarr;',
+            yearsFormat:   'YYYY',
+            monthsFormat:  'MMM',
+            daysFormat:    'D',
+            hoursFormat:   'HH:[00]',
+            minutesFormat: moment.localeData().longDateFormat('LT').replace(/[aA]/, ''),
+            secondsFormat: 'ss',
+            minutesStep:   30,
+            secondsStep:   1
+        });
+    }]);
 
   app.constant('urls', {
     BASE: '/LeadManagement/',
@@ -471,7 +497,6 @@
             'eventAssignmentDisplay': true,
           },
           resolve: {
-
             events: function($q, EventService) {
               console.log('Load all events');
               var deferred = $q.defer();
@@ -662,6 +687,31 @@
     };
   });
 
+//DatePicker -> NgModel
+  app.directive('timePicker', function() {
+    return {
+      require: 'ngModel',
+      link: function(scope, element, attr, ngModel) {
+        $(element).datetimepicker({
+          locale: 'en-us',
+          format: 'MM/DD/YYYY',
+          parseInputDate: function(data) {
+            if (data instanceof Date) {
+              return moment(data);
+            } else {
+              return moment(new Date(data));
+            }
+          },
+          maxDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
+        });
+
+        $(element).on("dp.change", function(e) {
+          ngModel.$viewValue = moment(e.date).format('MM/DD/YYYY');
+          ngModel.$commitViewValue();
+        });
+      }
+    };
+  });
 
 
   app.directive('fileModel', ['$parse', function($parse) {

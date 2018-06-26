@@ -18,6 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -28,6 +30,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pfchoice.springboot.util.JsonDateAndTimeDeserializer;
 import com.pfchoice.springboot.util.JsonDateAndTimeSerializer;
+import com.pfchoice.springboot.util.JsonTimeDeserializer;
+import com.pfchoice.springboot.util.JsonTimeSerializer;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -70,6 +74,16 @@ public class Event extends RecordDetails implements Serializable {
 	@Column(name = "event_date_endtime", nullable = true)
 	private Date eventDateEndTime;
 
+	@JsonSerialize(using = JsonTimeSerializer.class)
+	@JsonDeserialize(using = JsonTimeDeserializer.class)
+	@Column(name = "starttime", nullable = true)
+	private Date startTime;
+
+	@JsonSerialize(using = JsonTimeSerializer.class)
+	@JsonDeserialize(using = JsonTimeDeserializer.class)
+	@Column(name = "endtime", nullable = true)
+	private Date endTime;
+	
 	@ManyToOne
 	@JoinColumn(name = "facility_type_id", referencedColumnName = "code")
 	private FacilityType facilityType;

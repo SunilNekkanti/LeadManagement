@@ -53,7 +53,7 @@
 				value="{{!ctrl.eventAssignment.id ? 'Add' : 'Update'}}"
 				ng-click="ctrl.submit();$event.preventDefault();"
 				class="btn btn-primary btn-xs floatRight"
-				ng-disabled="myForm.$invalid || myForm.$pristine || ctrl.validEventDate(ctrl.eventAssignment.eventDateStartTime,ctrl.eventAssignment.eventDateEndTime)"
+				ng-disabled="myForm.$invalid || myForm.$pristine"
 				ng-show="ctrl.adminOrManager()" />{{!ctrl.eventAssignment.id ? 'Add'
 			: 'Update'}}
 
@@ -96,55 +96,22 @@
 
 					  <div class="row">
 							<div class="form-group col-md-12">
-								<label class="col-md-2  control-label" for="eventDateTime">StartTime</label>
-								<div class="col-md-4">
-									<div class="input-group date" id="eventDateStartTime1"
-										ng-model="ctrl.eventAssignment.eventDateStartTime"
-										ng-change="ctrl.validEventDate(ctrl.eventAssignment.eventDateStartTime,ctrl.eventAssignment.eventDateEndTime)"
-										date-picker>
-										<input type="text" class="form-control netto-input"
-											name="eventDateStartTime"
-											ng-model="ctrl.eventAssignment.eventDateStartTime"
-											date-picker-input
-											ng-blur="ctrl.validEventDate(ctrl.eventAssignment.eventDateStartTime,ctrl.eventAssignment.eventDateEndTime)"
-											required > <span class="input-group-addon"> <span
-											class="glyphicon glyphicon-calendar"></span>
-										</span>
-									</div>
-									<div class="has-error" ng-show="myForm.$dirty">
-										<span ng-show="myForm.eventDateStartTime.$invalid">This
-											field is invalid </span> <span
-											ng-show="myForm.eventDateEndTime.$error.improper">
-											{{ctrl.errMessage}} </span> <span
-											ng-show="myForm.eventDateStartTime.$error.required">This
-											is a required field</span>
-									</div>
-								</div>
-
-								<label class="col-md-2  control-label" for="eventDateEndTime">EndTime</label>
-								<div class="col-md-4">
-									<div class="input-group date" id="eventDateEndTime1"
-										ng-model="ctrl.eventAssignment.eventDateEndTime"
-										ng-change="ctrl.validEventDate(ctrl.eventAssignment.eventDateStartTime,ctrl.eventAssignment.eventDateEndTime)"
-										date-picker>
-										<input type="text" class="form-control netto-input"
-											name="eventDateEndTime"
-											ng-model="ctrl.eventAssignment.eventDateEndTime"
-											date-picker-input
-											ng-blur="ctrl.validEventDate(ctrl.eventAssignment.eventDateStartTime,ctrl.eventAssignment.eventDateEndTime)"
-											required > <span class="input-group-addon"> <span
-											class="glyphicon glyphicon-calendar"></span>
-										</span>
-									</div>
-									<div class="has-error" ng-show="myForm.$dirty">
-										<span ng-show="myForm.eventDateEndTime.$invalid">This
-											field is invalid </span> <span
-											ng-show="myForm.eventDateEndTime.$error.improper">
-											{{ctrl.errMessage}} </span> <span
-											ng-show="myForm.eventDateEndTime.$error.required">This
-											is a required field</span>
-									</div>
-								</div>
+							
+							 <label class="col-md-2  control-label" for="startDate">StartDate</label>
+			                <div class="col-md-4">
+			                  <div class="input-group"  moment-picker="ctrl.eventAssignment.startDate"  max-view="minute" max-date="ctrl.event.endTime"  ng-model="ctrl.eventAssignment.eventDateStartTime" locale="en" format="L">
+							    <span class="input-group-addon">
+							        <i class="octicon octicon-clock  glyphicon glyphicon-calendar"></i>
+							    </span>
+							    <input class="form-control"  name="startDate" placeholder="Select a time"  ng-model="ctrl.eventAssignment.startDate"  ng-model-options="{ updateOn: 'blur' }" required>
+			                 </div>
+			                   <div class="has-error" ng-show="myForm.$dirty">
+			                        <span ng-show="myForm.startDate.$invalid">This field is invalid </span>
+			                         <span ng-show="myForm.startDate.$error.required">This is a required field</span>
+			                   </div>
+			                </div>
+                
+							
 							</div>
 						</div>
 						

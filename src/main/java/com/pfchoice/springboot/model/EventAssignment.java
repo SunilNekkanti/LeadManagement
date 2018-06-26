@@ -25,6 +25,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pfchoice.springboot.util.JsonDateAndTimeDeserializer;
 import com.pfchoice.springboot.util.JsonDateAndTimeSerializer;
+import com.pfchoice.springboot.util.JsonDateDeserializer;
+import com.pfchoice.springboot.util.JsonDateSerializer;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -61,6 +63,12 @@ public class EventAssignment extends RecordDetails implements Serializable {
 
 	@Column(name = "repeat_rule")
 	private String repeatRule;
+	
+	@JsonSerialize(using = JsonDateSerializer.class)
+	@JsonDeserialize(using = JsonDateDeserializer.class)
+	@Column(name = "startdate", nullable = true)
+	private Date startDate;
+	
 
 	@JsonSerialize(using = JsonDateAndTimeSerializer.class)
 	@JsonDeserialize(using = JsonDateAndTimeDeserializer.class)

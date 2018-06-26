@@ -123,8 +123,10 @@ public class EventController {
 					HttpStatus.NOT_FOUND);
 		}
 		currentEvent.setEventName(event.getEventName());
-		currentEvent.setEventDateStartTime(event.getEventDateStartTime());
-		currentEvent.setEventDateEndTime(event.getEventDateEndTime());
+	//	currentEvent.setEventDateStartTime(event.getEventDateStartTime());
+	//	currentEvent.setEventDateEndTime(event.getEventDateEndTime());
+		currentEvent.setStartTime(event.getStartTime());
+		currentEvent.setEndTime(event.getEndTime());
 		currentEvent.setFacilityType(event.getFacilityType());
 		currentEvent.setContact(event.getContact());
 		currentEvent.setNotes(event.getNotes());

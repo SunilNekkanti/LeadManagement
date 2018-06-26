@@ -2,6 +2,7 @@ package com.pfchoice.springboot.controller;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -201,9 +202,11 @@ public class EventAssignmentController {
 		currentEventAssignment.getRepresentatives().clear();
 		logger.info("eventAssignment.getRepresentatives()" + eventAssignment.getRepresentatives());
 		currentEventAssignment.getRepresentatives().addAll(eventAssignment.getRepresentatives());
+		currentEventAssignment.setStartDate(eventAssignment.getStartDate());
+		
 		eventAssignmentService.updateEventAssignment(currentEventAssignment);
-
-		eventAssignmentService.saveEventAssignment(eventAssignment);
+		
+	//	eventAssignmentService.saveEventAssignment(eventAssignment);
 
 		User user = userService.findById(userId);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
@@ -242,8 +245,12 @@ public class EventAssignmentController {
 		emailAttributes.put("currentUser", user.getName());
 		emailAttributes.put("manager", user.getName());
 		emailAttributes.put("notes", eventNotes);
-		emailAttributes.put("eventStartTime", sdf.format(eventAssignment.getEventDateStartTime().getTime()));
-		emailAttributes.put("eventEndTime", sdf.format(eventAssignment.getEventDateEndTime().getTime()));
+		
+		Date startdatetime = combineDateTime(eventAssignment.getStartDate(), eventAssignment.getEvent().getStartTime());
+		Date enddatetime = combineDateTime(eventAssignment.getStartDate(), eventAssignment.getEvent().getEndTime());
+		
+		emailAttributes.put("eventStartTime", sdf.format(startdatetime.getTime()));
+		emailAttributes.put("eventEndTime", sdf.format(enddatetime.getTime()));
 		emailAttributes.put("eventStartLocalTime", sdf2.format(eventAssignment.getEventDateStartTime().getTime()));
 		emailAttributes.put("eventEndLocalTime", sdf2.format(eventAssignment.getEventDateEndTime().getTime()));
 		emailAttributes.put("currentTime", sdf.format(eventAssignment.getCreatedDate()));
@@ -289,6 +296,23 @@ public class EventAssignmentController {
 
 		eventAssignmentService.deleteAllEventAssignments();
 		return new ResponseEntity<EventAssignment>(HttpStatus.NO_CONTENT);
+	}
+	
+	
+	private Date combineDateTime(Date date, Date time)
+	{
+		Calendar calendarA = Calendar.getInstance();
+		calendarA.setTime(date);
+		Calendar calendarB = Calendar.getInstance();
+		calendarB.setTime(time);
+	 
+		calendarA.set(Calendar.HOUR_OF_DAY, calendarB.get(Calendar.HOUR_OF_DAY));
+		calendarA.set(Calendar.MINUTE, calendarB.get(Calendar.MINUTE));
+		calendarA.set(Calendar.SECOND, calendarB.get(Calendar.SECOND));
+		calendarA.set(Calendar.MILLISECOND, calendarB.get(Calendar.MILLISECOND));
+	 
+		Date result = calendarA.getTime();
+		return result;
 	}
 
 }
