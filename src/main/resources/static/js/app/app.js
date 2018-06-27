@@ -72,7 +72,7 @@
 
     setInterval(function() {
       var now = Date.now();
-      if (now - lastDigestRun > 15 * 60 * 1000) {
+      if (now - lastDigestRun > 30 * 60 * 1000) {
         $state.go('logout');
         $rootScope.displayNavbar = false;
         $rootScope.loginUser = undefined;
@@ -599,6 +599,13 @@
               console.log('Load all  events');
               var deferred = $q.defer();
               EventService.loadAllEvents().then(deferred.resolve, deferred.resolve);
+              return deferred.promise;
+            }],
+            statuses: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+              var LeadStatusService = $injector.get("LeadStatusService");
+              console.log('Load all leadStatuses');
+              var deferred = $q.defer();
+              LeadStatusService.loadAllLeadStatuses().then(deferred.resolve, deferred.resolve);
               return deferred.promise;
             }]
           }

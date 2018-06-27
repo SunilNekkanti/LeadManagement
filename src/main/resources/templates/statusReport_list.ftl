@@ -76,11 +76,11 @@
          <div style="height:600px" ng-if="ctrl.displayTable">
          <tabset>
                  <tab  heading="SummaryByUser"  ng-if="ctrl.displayTable" ng-click="ctrl.setReportType('Summary')"  >
-	                    <table datatable="" id="content" dt-options="ctrl.dtOptions" dt-columns="ctrl.dtSummaryByUserColumns"  dt-instance="ctrl.dtSummaryByUserInstance" dt-disable-deep-watchers="true" class="table table-hover table-responsive  bordered table-striped table-condensed datatable dt-responsive nowrap dataTable row-border hover"
+	                    <table datatable="" id="content" dt-options="ctrl.dtOptions" dt-columns="ctrl.dtSummaryByUserColumns"  dt-instance="ctrl.dtSummaryByUserInstance" dt-disable-deep-watchers="true" class="table table-hover table-responsive  bordered table-striped table-condensed datatable dt-responsive  dataTable row-border hover"
 	                    cellspacing="0" width="100%"></table>
 	 			</tab>
 	 			<tab  heading="Detailed"  ng-if="ctrl.displayTable" ng-click="ctrl.setReportType('Detailed')" >
-	                    <table datatable="" id="content1" dt-options="ctrl.dtOptions" dt-columns="ctrl.dtDetailedColumns"  dt-instance="ctrl.dtDetailedInstance" dt-disable-deep-watchers="true" class="table table-hover table-responsive  bordered table-striped table-condensed datatable dt-responsive nowrap dataTable row-border hover"
+	                    <table datatable="" id="content1" dt-options="ctrl.dtOptions" dt-columns="ctrl.dtDetailedColumns"  dt-instance="ctrl.dtDetailedInstance" dt-disable-deep-watchers="true" class="table table-hover table-responsive  bordered table-striped table-condensed datatable dt-responsive  dataTable row-border hover"
 	                    cellspacing="0" width="100%"></table>
 	 			</tab>
          </tabset>

@@ -44,9 +44,11 @@ public class StatusReportDTO  implements Serializable {
 	
 	private String userName;
 	
+	private String notes;
+	
 	
 	public StatusReportDTO(String lastName, String firstName, String initialInsurance, String planType, String status,
-			String event, Integer count, String userName) {
+			String event, Integer count, String userName, String notes) {
 		super();
 		this.lastName = lastName;
 		this.planType = planType;
@@ -56,6 +58,7 @@ public class StatusReportDTO  implements Serializable {
 		this.event = event;
 		this.count = count;
 		this.userName = userName;
+		this.notes = notes;
 	}
 
 }

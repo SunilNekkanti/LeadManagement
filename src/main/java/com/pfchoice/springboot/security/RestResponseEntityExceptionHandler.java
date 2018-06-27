@@ -16,6 +16,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
         String bodyOfResponse = "There seems to be improper arugment or illega state";
         logger.info("bodyOfResponse"+bodyOfResponse);
+        ex.getStackTrace();
         return handleExceptionInternal(ex, bodyOfResponse, 
           new HttpHeaders(), HttpStatus.CONFLICT, request);
     }

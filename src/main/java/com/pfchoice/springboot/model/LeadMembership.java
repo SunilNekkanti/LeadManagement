@@ -68,7 +68,8 @@ import lombok.ToString;
 	            	     @ColumnResult(name = "status",type = String.class),
 	            		 @ColumnResult(name = "event",type = String.class),
 	            		 @ColumnResult(name = "count",type = Integer.class),
-	            		 @ColumnResult(name = "userName",type = String.class) 
+	            		 @ColumnResult(name = "userName",type = String.class),
+	            		 @ColumnResult(name = "notes",type = String.class) 
 	             }	            
 	        )
 	    }

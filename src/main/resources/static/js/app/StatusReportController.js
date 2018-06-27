@@ -37,18 +37,19 @@
       self.checkBoxChange = checkBoxChange;
       self.dtSummaryByUserColumns = [
 
-        DTColumnBuilder.newColumn('userName').withTitle('USER'),
-        DTColumnBuilder.newColumn('event').withTitle('EVENT'),
-        DTColumnBuilder.newColumn('status').withTitle('LEAD_STATUS'),        
-        DTColumnBuilder.newColumn('count').withTitle('COUNT')
+        DTColumnBuilder.newColumn('userName').withTitle('USER').withOption('sWidth','25%').withOption('defaultContent', ''),
+        DTColumnBuilder.newColumn('event').withTitle('EVENT').withOption('sWidth','25%').withOption('defaultContent', ''),
+        DTColumnBuilder.newColumn('status').withTitle('LEAD_STATUS').withOption('sWidth','25%').withOption('defaultContent', ''),        
+        DTColumnBuilder.newColumn('count').withTitle('COUNT').withOption('sWidth','25%')
       ];
 
       self.dtDetailedColumns = [
-        DTColumnBuilder.newColumn('userName').withTitle('USER'),
-        DTColumnBuilder.newColumn('lastName').withTitle('LASTNAME'),
-        DTColumnBuilder.newColumn('firstName').withTitle('FIRSTNAME'),
-        DTColumnBuilder.newColumn('event').withTitle('EVENT'),
-        DTColumnBuilder.newColumn('status').withTitle('LEAD_STATUS')
+        DTColumnBuilder.newColumn('userName').withTitle('USER').withOption('sWidth','10%'),
+        DTColumnBuilder.newColumn('lastName').withTitle('LASTNAME').withOption('sWidth','15%'),
+        DTColumnBuilder.newColumn('firstName').withTitle('FIRSTNAME').withOption('sWidth','15%'),
+        DTColumnBuilder.newColumn('event').withTitle('EVENT').withOption('sWidth','15%'),
+        DTColumnBuilder.newColumn('status').withTitle('LEAD_STATUS').withOption('sWidth','15%'),
+        DTColumnBuilder.newColumn('notes').withTitle('NOTES').withOption('sWidth','30%').withOption('defaultContent', '')
       ];
 
 
@@ -64,6 +65,14 @@
         .withOption('createdRow', createdRow)
         .withOption('scrollY', 450)
         .withOption('scrollX', '100%')
+        .withButtons([{
+          extend: 'excelHtml5',
+          text: 'Save as Excel',
+          customize: function(xlsx) {
+            var sheet = xlsx.xl.worksheets['sheet1.xml'];
+            $('row:first c', sheet).attr('s', '42');
+          }
+        }])
         .withFnServerData(serverData);
 
       function serverData(sSource, aoData, fnCallback) {
@@ -134,6 +143,7 @@
         self.successMessage = '';
         self.errorMessage = '';
         self.leadStatusDetail = {};
+        self.displayTable = false;
       }
 
       function cancelEdit() {

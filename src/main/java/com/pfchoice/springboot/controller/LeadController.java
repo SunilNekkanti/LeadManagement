@@ -291,9 +291,6 @@ public class LeadController {
 		SimpleDateFormat sdf1 = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
 		String currentLocalTime = sdf1.format((new Date()).getTime());
         Contact cnt = currentLeadMembership.getContact();
-		String address=  Stream.of(cnt.getAddress1(), cnt.getAddress2(), cnt.getCity(), cnt.getStateCode().getShortName(), cnt.getZipCode().toString())
-				          .filter(s -> s != null && !s.isEmpty())
-				          .collect(Collectors.joining(","));
 		
 		final Email mail = new Email();
 		mail.setEmailFrom(loginUser.getContact().getEmail());
@@ -305,7 +302,7 @@ public class LeadController {
 		emailAttributes.put("currentLocalTime", currentLocalTime);
 		emailAttributes.put("firstName", currentLeadMembership.getFirstName());
 		emailAttributes.put("lastName", currentLeadMembership.getLastName());
-		emailAttributes.put("location",	address);
+		
 		
 		
 		if( agntLeadAppointList.size() > 0)  {
@@ -332,6 +329,11 @@ public class LeadController {
 					String careCoordinator = agntLeadAppointment.getCreatedBy();
 					String appointmentLocalTime = sdf1.format(agntLeadAppointment.getAppointmentTime().getTime());
 
+					String address=  Stream.of(cnt.getAddress1(), cnt.getAddress2(), cnt.getCity(), cnt.getStateCode().getShortName(), cnt.getZipCode().toString())
+					          .filter(s -> s != null && !s.isEmpty())
+					          .collect(Collectors.joining(","));
+			
+					emailAttributes.put("location",	address);
 					emailAttributes.put("agent", agentName);
 					emailAttributes.put("careCoordinator", careCoordinator);
 					emailAttributes.put("appointmentStartTime", appointmentTime);
@@ -437,9 +439,6 @@ public class LeadController {
 		SimpleDateFormat sdf1 = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
 		String currentLocalTime = sdf1.format((new Date()).getTime());
         Contact cnt = currentLeadMembership.getContact();
-		String address=  Stream.of(cnt.getAddress1(), cnt.getAddress2(), cnt.getCity(), cnt.getStateCode().getShortName(), cnt.getZipCode().toString())
-				          .filter(s -> s != null && !s.isEmpty())
-				          .collect(Collectors.joining(","));
 		
 		final Email mail = new Email();
 		mail.setEmailFrom(loginUser.getContact().getEmail());
@@ -451,11 +450,15 @@ public class LeadController {
 		emailAttributes.put("currentLocalTime", currentLocalTime);
 		emailAttributes.put("firstName", currentLeadMembership.getFirstName());
 		emailAttributes.put("lastName", currentLeadMembership.getLastName());
-		emailAttributes.put("location",	address);
 		
 		List<AgentLeadAppointment> agntLeadAppointList = currentLeadMembership.getAgentLeadAppointmentList();
 
 		if( agntLeadAppointList.size() > 0)  {
+			
+			String address=  Stream.of(cnt.getAddress1(), cnt.getAddress2(), cnt.getCity(), cnt.getStateCode().getShortName(), cnt.getZipCode().toString())
+			          .filter(s -> s != null && !s.isEmpty())
+			          .collect(Collectors.joining(","));
+	
 			
 				String toEmailIds = agntLeadAppointList.stream().map(la -> la.getUser().getContact().getEmail())
 						.collect(Collectors.joining(";"));
@@ -483,6 +486,7 @@ public class LeadController {
 					String careCoordinator = agntLeadAppointment.getCreatedBy();
 					String appointmentLocalTime = sdf1.format(agntLeadAppointment.getAppointmentTime().getTime());
 
+					emailAttributes.put("location",	address);
 					emailAttributes.put("agent", agentName);
 					emailAttributes.put("careCoordinator", careCoordinator);
 					emailAttributes.put("appointmentStartTime", appointmentTime);
