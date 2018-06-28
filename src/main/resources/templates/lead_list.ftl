@@ -440,7 +440,7 @@
             <span style="display:hidden" ng-show="flase">{{ ctrl.pristine = myForm.$pristine}}</span>
           <div class="row col-sm-12" style="padding-bottom:20px;">
             <div class="form-actions floatCenter col-sm-offset-9">
-              <input type="submit" value="{{!ctrl.lead.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-xs" ng-mousedown="$event.preventDefault();" ng-disabled="ctrl.showAddorUpdateButton() || myForm.$pristine || myForm.$invalid "/>
+              <input type="submit" ng-dblclick="return" value="{{!ctrl.lead.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-xs" ng-mousedown="$event.preventDefault();" ng-disabled="ctrl.showAddorUpdateButton() || myForm.$pristine || myForm.$invalid "/>
               <button type="button" ng-click="ctrl.cancelEdit(); $event.preventDefault();" class="btn btn-warning btn-xs"    >Cancel</button>
               <button type="button" ng-click="ctrl.reset(); $event.preventDefault();" class="btn btn-warning btn-xs"  ng-if="!ctrl.lead.id"  ng-disabled="myForm.$pristine">Reset Form</button>
             </div>
