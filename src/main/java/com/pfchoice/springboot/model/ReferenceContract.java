@@ -13,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pfchoice.springboot.model.Insurance;
 
 import lombok.EqualsAndHashCode;
@@ -32,7 +31,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper =false,of = {"ins","prvdr","contract"})
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+
 public class ReferenceContract extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;

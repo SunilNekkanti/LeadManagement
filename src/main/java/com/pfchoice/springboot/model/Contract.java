@@ -15,8 +15,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,7 +31,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString(exclude={"referenceContract","filesUpload"})
 @EqualsAndHashCode(callSuper =false,of = {"contractNBR","pcpPrvdrNBR"})
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+
 public class Contract extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;

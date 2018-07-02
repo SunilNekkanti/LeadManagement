@@ -18,8 +18,6 @@ import javax.persistence.OneToOne;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,9 +32,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
+@ToString(exclude={"language","insurance", "contact", "role"})
 @EqualsAndHashCode(callSuper =false,exclude = {"id"})
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class User extends RecordDetails implements Serializable {
 

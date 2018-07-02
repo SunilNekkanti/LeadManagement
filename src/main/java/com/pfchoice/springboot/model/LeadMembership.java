@@ -32,7 +32,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pfchoice.springboot.util.JsonDateDeserializer;
@@ -86,7 +85,7 @@ import lombok.ToString;
 				@StoredProcedureParameter(name = "reportType", type = String.class) 
 				})
 		})
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+
 public class LeadMembership extends  RecordDetails  implements Serializable {
 
 	private static final long serialVersionUID = 1L;

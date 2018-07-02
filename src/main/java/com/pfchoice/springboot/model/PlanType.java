@@ -11,8 +11,6 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +27,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper =false,of = {"code","description"})
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+
 public class PlanType extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;

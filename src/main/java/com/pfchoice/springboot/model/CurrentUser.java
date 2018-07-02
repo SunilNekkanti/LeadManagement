@@ -15,8 +15,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,7 +31,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString(exclude={"language","insurance","contact","role"})
 @EqualsAndHashCode(callSuper =false,of = {"username"})
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+
 public class CurrentUser extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;

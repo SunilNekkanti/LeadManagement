@@ -36,8 +36,26 @@ public class JpaConfiguration {
 	@Autowired
 	private Environment environment;
 
-	@Value("${datasource.leadManagement.maxPoolSize:25}")
+	@Value("${spring.datasource.hikari.maxPoolSize}")
 	private int maxPoolSize;
+	
+	@Value("${spring.datasource.hikari.minimumIdle}")
+	private int minimumIdle;
+	
+	@Value("${spring.datasource.hikari.idleTimeout}")
+	private int idleTimeout;
+	
+	@Value("${spring.datasource.hikari.connectionTimeout}")
+	private int connectionTimeout;
+	
+	@Value("${spring.datasource.hikari.maxLifeTime}")
+	private int maxLifeTime;
+	
+	@Value("${spring.datasource.hikari.poolName}")
+	private String poolName;
+	
+	@Value("${spring.datasource.hikari.isAutoCommit}")
+	private boolean isAutoCommit;
 
 	/*
 	 * Populate SpringBoot DataSourceProperties object directly from
@@ -63,6 +81,12 @@ public class JpaConfiguration {
 				.username(dataSourceProperties.getUsername()).password(dataSourceProperties.getPassword())
 				.type(HikariDataSource.class).build();
 		dataSource.setMaximumPoolSize(maxPoolSize);
+		dataSource.setMinimumIdle(minimumIdle);
+		dataSource.setIdleTimeout(idleTimeout);
+		dataSource.setConnectionTimeout(connectionTimeout);
+		dataSource.setMaxLifetime(maxLifeTime);
+		dataSource.setPoolName(poolName);
+		dataSource.setAutoCommit(isAutoCommit);
 		return dataSource;
 	}
 
@@ -93,16 +117,15 @@ public class JpaConfiguration {
 	 */
 	private Properties jpaProperties() {
 		Properties properties = new Properties();
-		properties.put("hibernate.dialect",
-				environment.getRequiredProperty("datasource.leadManagement.hibernate.dialect"));
+		properties.put("hibernate.dialect", environment.getRequiredProperty("spring.jpa.properties.hibernate.dialect"));
 		properties.put("hibernate.hbm2ddl.auto",
-				environment.getRequiredProperty("datasource.leadManagement.hibernate.hbm2ddl.method"));
-		properties.put("hibernate.show_sql",
-				environment.getRequiredProperty("datasource.leadManagement.hibernate.show_sql"));
-		properties.put("hibernate.format_sql",
-				environment.getRequiredProperty("datasource.leadManagement.hibernate.format_sql"));
-		if (StringUtils.isNotEmpty(environment.getRequiredProperty("datasource.leadManagement.defaultSchema"))) {
-			properties.put("hibernate.default_schema", environment.getRequiredProperty("datasource.v.defaultSchema"));
+				environment.getRequiredProperty("spring.jpa.properties.hibernate.hbm2ddl.method"));
+		properties.put("hibernate.show_sql", environment.getRequiredProperty("spring.jpa.properties.hibernate.show_sql"));
+		properties.put("hibernate.format_sql", environment.getRequiredProperty("spring.jpa.properties.hibernate.format_sql"));
+		properties.put("hibernate.enable_lazy_load_no_trans", environment.getRequiredProperty("spring.jpa.properties.hibernate.enable_lazy_load_no_trans"));
+		
+		if (StringUtils.isNotEmpty(environment.getRequiredProperty("spring.datasource.defaultSchema"))) {
+			properties.put("hibernate.default_schema", environment.getRequiredProperty("spring.datasource.defaultSchema"));
 		}
 		return properties;
 	}

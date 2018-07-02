@@ -18,7 +18,7 @@ import org.hibernate.annotations.ParamDef;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.pfchoice.springboot.util.JsonDateAndTimeDeserializer;
 
@@ -38,14 +38,13 @@ import lombok.NoArgsConstructor;
 } )
 @Data
 @NoArgsConstructor
+@JsonIgnoreProperties(value= { "hibernateLazyInitializer", "handler", "createdDate", "updatedDate","createdBy", "updatedBy", "activeInd", "fileId"})
 public  class RecordDetails {
 
-	@JsonIgnore
 	@JsonDeserialize(using = JsonDateAndTimeDeserializer.class)
 	@Column(name = "created_date", updatable = false)
 	protected Date createdDate = new Date();
 
-	@JsonIgnore
 	@JsonDeserialize(using = JsonDateAndTimeDeserializer.class)
 	@Column(name = "updated_date", updatable = false)
 	protected Date updatedDate = new Date();
@@ -56,7 +55,6 @@ public  class RecordDetails {
 	@Column(name = "updated_by")
 	protected String updatedBy ;
 
-	@JsonIgnore
 	@Column(name = "active_ind", insertable = false)
 	protected Character activeInd = new Character('Y');
 

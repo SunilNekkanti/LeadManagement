@@ -20,7 +20,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pfchoice.springboot.util.JsonDateAndTimeDeserializer;
@@ -45,7 +44,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString(exclude={"representatives"})
 @EqualsAndHashCode(callSuper =false,exclude = {"id","representatives"})
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+
 public class EventAssignment extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;

@@ -8,8 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +25,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper =false,exclude = {"id"})
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+
 public class Gender extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;

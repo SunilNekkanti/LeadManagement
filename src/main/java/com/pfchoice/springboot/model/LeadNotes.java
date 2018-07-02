@@ -14,7 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -31,7 +30,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper=false, exclude={"id"})
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+
 public class LeadNotes extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;

@@ -14,8 +14,6 @@ import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +25,7 @@ import lombok.ToString;
  * @author sarath
  */
 @Entity(name = "file_type")
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+
 @Getter
 @Setter
 @NoArgsConstructor

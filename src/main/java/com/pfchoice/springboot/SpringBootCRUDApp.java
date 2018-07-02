@@ -37,9 +37,9 @@ public class SpringBootCRUDApp {
 	 @Bean("leadManagementExecutor")
 	    public Executor asyncExecutor() {
 	        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-	        executor.setCorePoolSize(2);
-	        executor.setMaxPoolSize(5);
-	        executor.setQueueCapacity(10);
+	        executor.setCorePoolSize(50);
+	        executor.setMaxPoolSize(100);
+	        executor.setQueueCapacity(50);
 	        executor.setThreadNamePrefix("LeadManagement-");
 	        executor.initialize();
 	        return executor;

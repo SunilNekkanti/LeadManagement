@@ -7,8 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +23,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper =false,of = {"description"})
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+
 public class Ethinicity extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;

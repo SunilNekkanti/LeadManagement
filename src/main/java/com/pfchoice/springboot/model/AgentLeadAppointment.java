@@ -14,7 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pfchoice.springboot.util.JsonDateAndTimeDeserializer;
@@ -38,7 +37,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString( exclude = {"user", "lead", "prvdr","planType","insurance"})
 @EqualsAndHashCode(callSuper =false,of = {"lead","appointmentTime"})
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+
 public class AgentLeadAppointment extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;

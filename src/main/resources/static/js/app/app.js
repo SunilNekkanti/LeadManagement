@@ -91,7 +91,9 @@
   app.controller('NavbarController', ['$rootScope', '$scope', '$state', '$stateParams', 'UserService', '$localStorage', '$window', '$timeout', '$cookies', function($rootScope, $scope, $state, $stateParams, UserService, $localStorage, $window, $timeout,$cookies) {
     $rootScope.displayNavbar = false;
     loginUser();
-
+    $scope.dropDownClick = function($event) {
+    angular.element(document).triggerHandler('click');
+    };
     function loginUser() {
       if ($localStorage.loginUser === undefined) {
 

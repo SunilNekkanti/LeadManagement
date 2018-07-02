@@ -37,12 +37,10 @@
           self.eventAssignmentEndOptions = ['Never', 'After', 'On date'];
           self.eventAssignmentEndOption = 'Never';
           self.eventAssignment.frequency = 'DAILY';
-          self.eventAssignmentOnWeekDays = [];
           self.onDayorThe = true;
           self.selectedWeekDays = [];
           self.eventAssignmentEndCount = 1;
           self.eventAssignmentUntil = new Date();
-          self.eventAssignmentMonths = [];
           self.eventAssignmentMonth = {};
           self.users = [];
           self.display = $stateParams.eventAssignmentDisplay || false;
@@ -80,6 +78,8 @@
           self.successMessage = '';
           self.errorMessage = '';
           self.done = false;
+          self.eventAssignmentOnWeekDays = getAllEventWeekDays() || [];
+          self.eventAssignmentMonths = getAllEventMonths() || [];
           self.validEventDate = validEventDate;
           self.cancelEdit = cancelEdit;
           self.onlyIntegers = /^\d+$/;

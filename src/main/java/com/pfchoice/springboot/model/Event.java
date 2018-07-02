@@ -18,14 +18,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pfchoice.springboot.util.JsonDateAndTimeDeserializer;
@@ -50,7 +47,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString(exclude={"facilityType","contact","attachments","eventAssignments"})
 @EqualsAndHashCode(callSuper =false,of = {"eventName","eventDateStartTime","eventDateEndTime"})
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+
 public class Event extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;

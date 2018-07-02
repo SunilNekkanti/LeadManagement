@@ -15,11 +15,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,9 +30,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
-@EqualsAndHashCode(callSuper =false,of = {"name","planType"})
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+@ToString(exclude={"planType","contact"})
+@EqualsAndHashCode(callSuper =false,of = {"name"})
 public class Insurance extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -55,8 +49,7 @@ public class Insurance extends RecordDetails implements Serializable {
 	@JoinColumn(name = "plan_Type_id", referencedColumnName = "plan_type_id")
 	private PlanType planType;
 
-	@NotFound(action = NotFoundAction.IGNORE)
-	@OneToOne(cascade =  CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(optional= true, cascade =  CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "insurance_contacts", joinColumns = {
 			@JoinColumn(name = "ins_id", referencedColumnName = "Insurance_Id", nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "contact_id", referencedColumnName = "cnt_id", nullable = false, updatable = false, unique = true) })

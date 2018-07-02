@@ -11,8 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +22,7 @@ import lombok.ToString;
  * @author sarath
  */
 @Entity(name = "file")
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+
 @Getter
 @Setter
 @NoArgsConstructor

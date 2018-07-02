@@ -22,8 +22,6 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,7 +39,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString( exclude = { "languages" })
 @EqualsAndHashCode(callSuper =false,exclude = {"id","languages"})
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+
 public class Provider extends RecordDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;

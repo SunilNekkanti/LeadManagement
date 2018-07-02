@@ -13,8 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,9 +27,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(exclude={"stateCode" })
+@ToString(exclude = {"stateCode"})
 @EqualsAndHashCode(callSuper =false,exclude = {"id" })
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+
 public class Contact extends RecordDetails implements Serializable  {
 
 	private static final long serialVersionUID = 1L;
