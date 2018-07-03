@@ -41,7 +41,7 @@ app.controller('LeadStatusDetailController',
           ];
      
         
-        self.dtOptions = DTOptionsBuilder.newOptions()
+        self.dtOptions = DTOptionsBuilder.newOptions().withBootstrap()
         .withDisplayLength(20)
 		.withOption('bServerSide', true)
 				.withOption("bLengthChange", false)

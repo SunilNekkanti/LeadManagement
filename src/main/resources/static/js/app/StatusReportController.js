@@ -53,7 +53,7 @@
       ];
 
 
-      self.dtOptions = DTOptionsBuilder.newOptions()
+      self.dtOptions = DTOptionsBuilder.newOptions().withBootstrap()
         .withDisplayLength(500)
         .withDOM('ft')
         .withOption('bServerSide', true)

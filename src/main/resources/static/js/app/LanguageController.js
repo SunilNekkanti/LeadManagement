@@ -47,7 +47,7 @@ app.controller('LanguageController',
           ];
      
         
-        self.dtOptions = DTOptionsBuilder.newOptions()
+        self.dtOptions = DTOptionsBuilder.newOptions().withBootstrap()
 		.withOption(
 				'ajax',
 				{

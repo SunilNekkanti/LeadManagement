@@ -167,17 +167,11 @@
 						<div class="row">
 							<div class="form-group col-md-12"
 								ng-show="ctrl.eventAssignment.frequency=='WEEKLY'">
-
-								<div class="btn-group col-md-offset-2" role="group">
-									<label ng-repeat="item in ctrl.eventAssignmentOnWeekDays"
-										btn-checkbox="item.shortName" class="item btn btn-default "
-										id="{{item.shortName}}" ng-change="ctrl.sync(bool, item)"
-										ng-model="bool" ng-checked="ctrl.isChecked(item.id)">
-										<div ng-show="false">
-											{{bool=ctrl.isChecked(item.id)||false}}</div> {{item.shortName}}
-									</label>
-								</div>
-
+								<div class="col-md-offset-2" >
+									<div class="btn-group" ng-repeat="weekDay in ctrl.eventAssignmentOnWeekDays">
+										 <label class="btn btn-default"  ng-model="ctrl.checkEventAssignmentOnWeekDays[weekDay.shortName]" uib-btn-checkbox >{{weekDay.shortName}}</label>
+									</div>
+								</div>	
 							</div>
 						</div>
 

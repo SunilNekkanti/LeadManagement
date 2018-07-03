@@ -117,7 +117,7 @@ spring:
         minimumIdle: 3
         poolName: "LEAD_DB_POOL"
         isAutoCommit: false
-envProperties:
+envProperties: 
       coordinatorEmail: dsoto@pfchoice.com
       coordinatorName: Dynahly Soto                  
  

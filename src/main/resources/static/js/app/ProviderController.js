@@ -55,7 +55,7 @@ app.controller('ProviderController',
           ];
      
         
-        self.dtOptions = DTOptionsBuilder.newOptions()
+        self.dtOptions = DTOptionsBuilder.newOptions().withBootstrap()
 		.withOption(
 				'ajax',
 				{

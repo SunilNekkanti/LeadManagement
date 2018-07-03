@@ -24,6 +24,7 @@
           DTOptionsBuilder, DTColumnBuilder) {
 
           var self = this;
+       //   $scope.checkEventAssignmentOnWeekDays  = [];
           self.eventAssignment = {};
           self.eventAssignment.event ={};
           self.eventAssignments = [];
@@ -68,8 +69,6 @@
           self.addLead = addLead;
           self.adminOrManager = adminOrManager;
           self.eventAssignmentEdit = eventAssignmentEdit;
-          self.sync = sync;
-          self.isChecked = isChecked;
           self.dtInstance = {};
           self.eventAssignmentId = null;
           self.reset = reset;
@@ -79,6 +78,7 @@
           self.errorMessage = '';
           self.done = false;
           self.eventAssignmentOnWeekDays = getAllEventWeekDays() || [];
+          self.checkEventAssignmentOnWeekDays = {'MO':false, 'TU':false,'WE':false, 'TH':false,'FR':false,'SA':false,'SU':false};
           self.eventAssignmentMonths = getAllEventMonths() || [];
           self.validEventDate = validEventDate;
           self.cancelEdit = cancelEdit;
@@ -106,7 +106,7 @@
             DTColumnBuilder.newColumn('repeatRule').withTitle('Rule').withOption('defaultContent', '')
           ];
 
-          self.dtOptions = DTOptionsBuilder.newOptions()
+          self.dtOptions = DTOptionsBuilder.newOptions().withBootstrap()
             .withDisplayLength(20)
             .withOption('bServerSide', true)
             .withOption("bLengthChange", false)
@@ -119,6 +119,16 @@
 
             .withFnServerData(serverData);
 
+	    $scope.$watchCollection('ctrl.checkEventAssignmentOnWeekDays', function (newv ,oldv) {
+				 self.selectedWeekDays= [];
+				    angular.forEach(self.eventAssignmentOnWeekDays, function (weekDay) {
+				      if (self.checkEventAssignmentOnWeekDays !== undefined && self.checkEventAssignmentOnWeekDays[weekDay.shortName]) {
+				       self.selectedWeekDays.push(weekDay);
+				      }
+				    });
+			  });
+	  
+	  
 
           function createdRow(row, data, dataIndex) {
             // Recompiling so we can bind Angular directive
@@ -403,7 +413,6 @@
               var momentObj = moment(self.eventAssignmentUntil);
               momentObj.add(1, 'days').calendar(); 
               var momentString = momentObj.format('YYYYMMDDTHHmmss'); 
-              console.log('momentString'+momentString);
               var count = ';UNTIL=' + momentString+'Z';
               rrule.push(count);
             }
@@ -420,7 +429,6 @@
               for (var i = 0; i < res.length; i++) {
                 var ruleType = res[i].split("=");
                 if (ruleType.length > 1) {
-                console.log('parseEventAssignmentRule ruleType[0]',ruleType[0]);
                   switch (ruleType[0]) {
                     case "COUNT":
                       self.eventAssignmentEndCount = ruleType[1];
@@ -431,7 +439,6 @@
               		  momentObj.subtract(1, 'days').calendar(); 
                       self.eventAssignmentUntil = momentObj.format('MM/DD/YYYY');
                       self.eventAssignmentEndOption = 'On date';
-                      console.log('self.eventAssignmentUntil',self.eventAssignmentUntil);
                       break;
                     case 'INTERVAL':
                       self.eventAssignmentInterval = ruleType[1];
@@ -564,15 +571,7 @@
             }
           }
 
-          function isChecked(id) {
-            var match = false;
-            for (var i = 0; i < self.selectedWeekDays.length; i++)
-              if (self.selectedWeekDays[i].id == id) {
-                match = true;
-                break;
-              }
-            return match;
-          };
+	
 
           function addLead() {
             var params = {
@@ -583,24 +582,15 @@
 
           }
 
-          function sync(bool, item) {
-
-            if (bool) {
-              // add item
-              self.selectedWeekDays.push(item);
-            } else {
-              // remove item
-              for (var i = 0; i < self.selectedWeekDays.length; i++) {
-                if (self.selectedWeekDays[i].id == item.id) {
-                  self.selectedWeekDays.splice(i, 1);
-                }
-              }
-            }
-          };
-
           function findWeekDaysByShortNames(shortNames) {
             self.selectedWeekDays = self.eventAssignmentOnWeekDays.filter(function(weekday) {
               return shortNames.indexOf(weekday.shortName) > -1;
+            });
+            self.selectedWeekDays.forEach(function(weekday){
+            var index = self.eventAssignmentOnWeekDays.map(a => a.shortName).indexOf(weekday.shortName);
+	            if( index > -1){
+	           		 self.checkEventAssignmentOnWeekDays[weekday.shortName] = true;
+	            }
             });
           }
 
@@ -608,6 +598,11 @@
             self.eventAssignmentOnWeekDay = self.eventAssignmentOnWeekDays.filter(function(weekday) {
               return shortName.indexOf(weekday.shortName) > -1;
             })[0];
+            
+            var index = self.eventAssignmentOnWeekDays.map( a => a.shortName).indexOf(self.eventAssignmentOnWeekDay.shortName);
+            if( index > -1){
+		        self.checkEventAssignmentOnWeekDays[self.eventAssignmentOnWeekDay.shortName] = true;
+            }
           }
 
           function adminOrManager() {

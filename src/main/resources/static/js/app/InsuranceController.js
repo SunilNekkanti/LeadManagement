@@ -50,7 +50,7 @@ app.controller('InsuranceController',
           ];
      
         
-        self.dtOptions = DTOptionsBuilder.newOptions()
+        self.dtOptions = DTOptionsBuilder.newOptions().withBootstrap()
 		.withOption(
 				'ajax',
 				{

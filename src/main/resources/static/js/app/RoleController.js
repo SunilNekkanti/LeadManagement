@@ -35,7 +35,7 @@ app.controller('RoleController',
           ];
      
         
-        self.dtOptions = DTOptionsBuilder.newOptions()
+        self.dtOptions = DTOptionsBuilder.newOptions().withBootstrap()
 		.withOption('bServerSide', true)
 				.withOption("bLengthChange", false)
 				.withOption("bPaginate", true)
