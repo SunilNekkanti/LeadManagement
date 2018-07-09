@@ -143,7 +143,7 @@ public class EmailServiceImpl implements EmailService {
 		            + "LOCATION:"+location+"\n"
 		            + "TRANSP:OPAQUE\n"
 		            + "SEQUENCE:0\n"
-		            + "UID:ABCDXXXXXEEEEEEEEEEEEEEDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDFFFFFFFFFFFFFFFFFFFFFFFF\n"
+		            + "UID:"+currentTime+"@pfchoice.com\n"
 		            + rrule
 		            + "DTSTAMP:"+currentTime+"\n"
 		            + "CATEGORIES:Meeting\n"

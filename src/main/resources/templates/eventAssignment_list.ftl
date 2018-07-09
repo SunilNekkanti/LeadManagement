@@ -78,14 +78,23 @@
 
 						<div class="row">
 							<div class="form-group col-sm-12">
-								<label class="col-md-2  control-label" for="eventAssignmentName"
+								<label class="col-md-3  control-label" for="eventAssignmentName"
 									require>Name </label>
-								<div class="col-sm-10">
-									<select class="form-control"
-										ng-model="ctrl.eventAssignment.event" name="eventName"
-										ng-options="event as event.eventName for event in ctrl.events track by event.eventName"
-										ng-change="ctrl.updateEventTimes()"
-										ng-blur="ctrl.updateEventTimes()" required></select>
+								<div class="col-sm-9">
+								
+										
+									 <ui-select
+										ng-model="ctrl.eventAssignment.event"
+										theme="bootstrap" ng-disabled="disabled" style="width: 350px;" required>
+									<ui-select-match
+										placeholder="Select or search an event in the list...">{{$select.selected.eventName}}</ui-select-match>
+									<ui-select-choices
+										repeat="event in ctrl.events | filter: $select.search"
+										refresh="ctrl.refreshEvents($select.search)"  refresh-delay="0" >
+									<span
+										ng-bind-html="event.eventName | highlight: $select.search"></span>
+									</ui-select-choices> </ui-select>
+										
 									<div class="has-error" ng-show="myForm.$dirty">
 										<span ng-show="myForm.eventName.$error.required">This
 											is a required field</span>
@@ -97,7 +106,7 @@
 					  <div class="row">
 							<div class="form-group col-md-12">
 							
-							 <label class="col-md-2  control-label" for="startDate">StartDate</label>
+							 <label class="col-md-3  control-label" for="startDate">StartDate</label>
 			                <div class="col-md-4">
 			                  <div class="input-group"  moment-picker="ctrl.eventAssignment.startDate"  max-view="minute" max-date="ctrl.event.endTime"  ng-model="ctrl.eventAssignment.eventDateStartTime" locale="en" format="L">
 							    <span class="input-group-addon">
@@ -117,13 +126,9 @@
 						
 					 <div class="row">
 							<div class="form-group col-md-12">
-								<label class="col-md-2  control-label" for="agent">Representatives</label>
-								<div class="col-md-10">
-									<select ng-model="ctrl.eventAssignment.representatives"
-										class="form-control" name="eventAssignmentRepresentatives"
-										ng-options="agent as agent.name for agent in ctrl.users   track by agent.name"
-										multiple="true"  required>
-									</select>
+								<label class="col-md-3  control-label" for="agent">Representatives</label>
+								<div class="col-md-9">
+								    <multiselect name="eventAssignmentRepresentatives" ng-model="ctrl.eventAssignment.representatives"   placeholder="Choose representatives"   options="ctrl.users" id-prop="id" display-prop="name" show-search="true" show-select-all="true" show-unselect-all="true" search-limit="10" ng-required="true"></multiselect>
 									<div class="has-error" ng-show="myForm.$dirty">
 										<span
 											ng-show="myForm.eventAssignmentRepresentatives.$error.required">This

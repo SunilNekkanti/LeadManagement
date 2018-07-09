@@ -55,7 +55,7 @@ public class EventController {
 
 	@Secured({ "ROLE_ADMIN", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/event/", method = RequestMethod.GET)
-	public ResponseEntity<Page<Event>> listAllEvents(@PageableDefault(page=0 ,size=100) Pageable pageRequest,
+	public ResponseEntity<Page<Event>> listAllEvents(@PageableDefault(page=0 ,size=20) Pageable pageRequest,
 			@RequestParam(value = "search", required = false) String search, @ModelAttribute("userId") Integer userId,
 			@ModelAttribute("roleName") String roleName) {
 

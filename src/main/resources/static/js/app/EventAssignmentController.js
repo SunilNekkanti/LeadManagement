@@ -449,9 +449,10 @@
                       findWeekDaysByShortNames(ruleType[1]);
                       break;
                     case 'BYSETPOS':
-                      self.eventAssignmentOnWeek = $filter('filter')(self.eventAssignmentOnWeeks, {
-                        id: parseInt(ruleType[1])
-                      }, true)[0];
+                      var  eventAssignmentOnWeeks = $filter('filter')(self.eventAssignmentOnWeeks, {
+                        id:  ruleType[1]
+                      });
+                      self.eventAssignmentOnWeek = (eventAssignmentOnWeeks !== undefined)? eventAssignmentOnWeeks[0] :'';
                       self.onDayorThe = false;
                       break;
                     case 'BYMONTH':
@@ -614,14 +615,22 @@
           }
 
           function eventAssignmentEdit(id) {
-            $state.go('main.eventAssignment.edit');
-            editEventAssignment(id);
+           var  trans =  $state.go('main.eventAssignment.edit',{}, {reload:false}).transition;
+		    trans.onSuccess({}, function() { editEventAssignment(id);  }, { priority: -1 });
           }
 
           function setDate(year, month, day) {
             self.eventAssignment.eventAssignmentDateTime = new Date(year, month, day);
           };
 
+		 self.refreshEvents = function (searchFilter){
+          EventService.loadEvents(0, 20, searchFilter, null)
+											.then(
+											    function(result)   {
+													      self.events = result.data.content ;
+													  });
+      }
+      
 
         }
 

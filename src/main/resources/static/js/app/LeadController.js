@@ -160,7 +160,9 @@ app.controller(
 									DTColumnBuilder.newColumn(
 											'status.description','STATUS'),
 									DTColumnBuilder.newColumn(
-													'statusDetail.description','STATUS_DETAIL').withOption('defaultContent', '')];
+													'statusDetail.description','STATUS_DETAIL').withOption('defaultContent', ''),
+									DTColumnBuilder.newColumn(
+													'lastNotes','NOTES').withClass("text-left").withOption('defaultContent', '')];
 
 							self.dtOptions = DTOptionsBuilder.newOptions().withBootstrap()
 									 .withDisplayLength(20)
@@ -759,6 +761,13 @@ app.controller(
 									}
 							   }
 							}
+							
+							 self.refreshEvents = function (searchFilter){
+          												EventService.loadEvents(0, 20, searchFilter, null)
+															.then( function(result)   {
+													      		self.events = result.data.content ;
+													  		});
+      						}
 
 	}
 ]);

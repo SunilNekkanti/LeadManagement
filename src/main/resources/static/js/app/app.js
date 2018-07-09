@@ -153,7 +153,7 @@
         'modules': [{
           serie: true,
           name: 'main',
-          files: ['js/app/RoleService.js', 'js/app/UserService.js', 'js/app/CountyService.js', 'js/app/GenderService.js', 'js/app/InsuranceService.js', 'js/app/StateService.js', 'js/app/LanguageService.js', 'js/app/PlanTypeService.js', 'js/app/BestTimeToCallService.js']
+          files: ['js/app/RoleService.js', 'js/app/UserService.js', 'js/app/CountyService.js','js/app/ProviderService.js',  'js/app/GenderService.js', 'js/app/InsuranceService.js', 'js/app/StateService.js', 'js/app/LanguageService.js', 'js/app/PlanTypeService.js', 'js/app/BestTimeToCallService.js']
         }, {
           serie: true,
           name: 'main.user',
@@ -161,7 +161,7 @@
         }, {
           serie: true,
           name: 'main.lead',
-          files: ['js/app/LeadService.js', 'js/app/LeadStatusService.js', 'js/app/LeadStatusDetailService.js', 'js/app/ProviderService.js', 'js/app/EventService.js', 'js/app/FileUploadService.js', 'js/app/LeadController.js']
+          files: ['js/app/LeadService.js', 'js/app/LeadStatusService.js', 'js/app/LeadStatusDetailService.js', 'js/app/EventService.js', 'js/app/FileUploadService.js', 'js/app/LeadController.js']
         }, {
           serie: true,
           name: 'main.facilityType',
@@ -267,6 +267,13 @@
               InsuranceService.loadAllInsurances().then(deferred.resolve, deferred.resolve);
               return deferred.promise;
             }],
+            providers: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+              var ProviderService = $injector.get("ProviderService");
+              console.log('Load all providers');
+              var deferred = $q.defer();
+              ProviderService.loadAllProviders().then(deferred.resolve, deferred.resolve);
+              return deferred.promise;
+            }],
             bestTimeToCalls: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
               var BestTimeToCallService = $injector.get("BestTimeToCallService");
               console.log('Load all bestTimeToCalls');
@@ -348,20 +355,7 @@
             'leadDisplay': true
           },
           resolve: {
-              events: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
-              var EventService = $injector.get("EventService");
-              console.log('Load all  events');
-              var deferred = $q.defer();
-              EventService.loadAllEvents().then(deferred.resolve, deferred.resolve);
-              return deferred.promise;
-            }],
-            providers: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
-              var ProviderService = $injector.get("ProviderService");
-              console.log('Load all providers');
-              var deferred = $q.defer();
-              ProviderService.loadAllProviders().then(deferred.resolve, deferred.resolve);
-              return deferred.promise;
-            }]
+            
           }
         })
         .state('main.role', {
@@ -484,7 +478,7 @@
             'eventAssignmentDisplay': false
           },
           resolve: {
-            loadMyService: ['$ocLazyLoad', function($ocLazyLoad) {
+          loadMyService: ['$ocLazyLoad', function($ocLazyLoad) {
               return $ocLazyLoad.load('main.eventAssignment');
             }]
           }
@@ -499,41 +493,30 @@
             'eventAssignmentDisplay': true,
           },
           resolve: {
-            events: function($q, EventService) {
-              console.log('Load all events');
-              var deferred = $q.defer();
-              EventService.loadAllEvents().then(deferred.resolve, deferred.resolve);
-              console.log('deferred.promise' + deferred.promise);
-              return deferred.promise;
-            },
-            users: function($q, UserService) {
-              console.log('Load all users');
-              var deferred = $q.defer();
-              UserService.loadAllUsers().then(deferred.resolve, deferred.resolve);
-              console.log('deferred.promise' + deferred.promise);
-              return deferred.promise;
-            },
-            eventMonths: function($q, EventMonthService) {
+             eventMonths: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+              var EventMonthService = $injector.get("EventMonthService");
               console.log('Load all eventMonths');
               var deferred = $q.defer();
               EventMonthService.loadAllEventMonths().then(deferred.resolve, deferred.resolve);
               console.log('deferred.promise' + deferred.promise);
               return deferred.promise;
-            },
-            eventWeekDays: function($q, EventWeekDayService) {
+            }],
+             eventWeekDays: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+              var EventWeekDayService = $injector.get("EventWeekDayService");
               console.log('Load all eventWeekDays');
               var deferred = $q.defer();
               EventWeekDayService.loadAllEventWeekDays().then(deferred.resolve, deferred.resolve);
               console.log('deferred.promise' + deferred.promise);
               return deferred.promise;
-            },
-            eventWeekNumbers: function($q, EventWeekNumberService) {
+            }],
+             eventWeekNumbers: ['loadMyService', '$q', '$injector', function(loadMyService, $q, $injector) {
+              var EventWeekNumberService = $injector.get("EventWeekNumberService");
               console.log('Load all eventWeekNumbers');
               var deferred = $q.defer();
               EventWeekNumberService.loadAllEventWeekNumbers().then(deferred.resolve, deferred.resolve);
               console.log('deferred.promise' + deferred.promise);
               return deferred.promise;
-            }
+            }]
           }
         })
         .state('main.provider', {

@@ -158,11 +158,11 @@ public class EventAssignmentController {
 		emailAttributes.put("currentUser", user.getName());
 		emailAttributes.put("manager", user.getName());
 		emailAttributes.put("notes", eventNotes);
-		emailAttributes.put("eventStartTime", sdf.format(eventAssignment.getEventDateStartTime().getTime()));
-		emailAttributes.put("eventEndTime", sdf.format(eventAssignment.getEventDateEndTime().getTime()));
+		emailAttributes.put("eventStartTime", sdf.format(eventAssignment.getEvent().getStartTime().getTime()));
+		emailAttributes.put("eventEndTime", sdf.format(eventAssignment.getEvent().getEndTime().getTime()));
 		emailAttributes.put("currentTime", sdf.format(eventAssignment.getCreatedDate()));
-		emailAttributes.put("eventStartLocalTime", sdf2.format(eventAssignment.getEventDateStartTime().getTime()));
-		emailAttributes.put("eventEndLocalTime", sdf2.format(eventAssignment.getEventDateEndTime().getTime()));
+		emailAttributes.put("eventStartLocalTime", sdf2.format(eventAssignment.getEvent().getStartTime().getTime()));
+		emailAttributes.put("eventEndLocalTime", sdf2.format(eventAssignment.getEvent().getEndTime().getTime()));
 		emailAttributes.put("currentLocalTime",sdf1.format((new Date()).getTime())); 
 		emailAttributes.put("rrule", eventAssignment.getRepeatRule());
 		emailAttributes.put("location", address);

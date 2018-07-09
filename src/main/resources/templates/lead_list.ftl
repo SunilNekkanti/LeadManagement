@@ -32,12 +32,22 @@
                 <div class="col-sm-6">
                   <div class="form-group col-sm-12">
                     <label for="agentEvent">Event </label>
-                     <select ng-model="ctrl.lead.event" class="form-control" name="eventName" ng-options="event.eventName for event in ctrl.events  | orderBy:'eventName'  track by event.eventName" required>
-                      <option></option>
-                     </select>
-                     <div class="has-error" ng-show="myForm.$dirty">
-                      <span ng-show="myForm.eventName.$error.required">This is a required field</span>
-                    </div>
+                	 <ui-select ng-model="ctrl.lead.event" name="eventName"
+									theme="bootstrap" ng-disabled="disabled" style="width: 350px;" required>
+						<ui-select-match
+							placeholder="Select or search an event in the list...">{{$select.selected.eventName}}</ui-select-match>
+						<ui-select-choices
+							repeat="event in ctrl.events | filter: $select.search"
+							refresh="ctrl.refreshEvents($select.search)"  refresh-delay="0" >
+						<span
+							ng-bind-html="event.eventName | highlight: $select.search"></span>
+						</ui-select-choices> </ui-select>
+							
+						<div class="has-error" ng-show="myForm.$dirty">
+							<span ng-show="myForm.eventName.$error.required">This
+								is a required field</span>
+						</div>
+									
                   </div>
                 </div>
 
@@ -440,7 +450,7 @@
             <span style="display:hidden" ng-show="flase">{{ ctrl.pristine = myForm.$pristine}}</span>
           <div class="row col-sm-12" style="padding-bottom:20px;">
             <div class="form-actions floatCenter col-sm-offset-9">
-              <input type="submit" ng-dblclick="return" value="{{!ctrl.lead.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-xs" ng-mousedown="$event.preventDefault();" ng-disabled="ctrl.showAddorUpdateButton() || myForm.$pristine || myForm.$invalid "/>
+              <input type="submit" ng-dblclick="return" value="{{!ctrl.lead.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-xs" ng-disabled="ctrl.showAddorUpdateButton() || myForm.$pristine || myForm.$invalid "/>
               <button type="button" ng-click="ctrl.cancelEdit(); $event.preventDefault();" class="btn btn-warning btn-xs"    >Cancel</button>
               <button type="button" ng-click="ctrl.reset(); $event.preventDefault();" class="btn btn-warning btn-xs"  ng-if="!ctrl.lead.id"  ng-disabled="myForm.$pristine">Reset Form</button>
             </div>
