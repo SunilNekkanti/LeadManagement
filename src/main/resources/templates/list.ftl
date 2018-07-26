@@ -3,7 +3,7 @@
   <div class="panel panel-success" ng-if="!ctrl.display">
     <!-- Default panel contents -->
     <div class="panel-heading"><span class="user">List of Users </span>
-      <button type="button" ng-click="ctrl.addUser();$event.preventDefault();" ng-hide="ctrl.displayEditButton" class="btn btn-success custom-width floatRight"> Add </button>
+      <button type="button" ng-click="ctrl.addUser();$event.preventDefault();" ng-hide="ctrl.displayEditButton" class="btn btn-success btn-xs custom-width floatRight"> Add </button>
       <button type="button" ng-click="ctrl.editUser(ctrl.userId);$event.preventDefault();" ng-show="ctrl.displayEditButton" class="btn btn-primary custom-width floatRight">Edit</button>
       <button type="button" ng-click="ctrl.removeUser(ctrl.userId);$event.preventDefault();" ng-show="ctrl.displayEditButton" class="btn btn-danger custom-width floatRight">Remove</button>
     </div>

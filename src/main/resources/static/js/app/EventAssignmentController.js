@@ -320,7 +320,7 @@
 
           function addEventAssignment() {
 
-            $state.go('main.eventAssignment.edit');
+            $state.go('main.eventAssignment.edit', {}, {reload:false});
             self.successMessage = '';
             self.errorMessage = '';
             self.users = getAllAgents();
@@ -354,9 +354,11 @@
             self.errorMessage = '';
             self.eventAssignment = {};
             self.display = false;
+            reset();
             $state.go('main.eventAssignment', {}, {
               reload: false,inherit:true,notify:false
             });
+            
           }
 
 
@@ -615,8 +617,10 @@
           }
 
           function eventAssignmentEdit(id) {
-           var  trans =  $state.go('main.eventAssignment.edit',{}, {reload:false}).transition;
-		    trans.onSuccess({}, function() { editEventAssignment(id);  }, { priority: -1 });
+           var  trans =  $state.go('main.eventAssignment.edit',{}, {reload:'main.eventAssignment.edit'}).transition;
+		     editEventAssignment(id);
+		    
+		    
           }
 
           function setDate(year, month, day) {

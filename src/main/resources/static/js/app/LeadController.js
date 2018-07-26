@@ -494,9 +494,8 @@ app.controller(
 									self.planTypes = getAllPlanTypes();
 									self.display = true;
 								}else{
-									var trans =  $state.go('main.lead.edit',{},{reload:'main.lead.edit'}).transition;
-									 trans.onSuccess({}, function() {
-										 self.providers = getAllProviders();
+								  $state.go('main.lead.edit',{},{reload:false}).transition;
+									self.providers = getAllProviders();
 											self.users = getAllAgents();
 											self.events = getAllEvents();
 											self.genders = getAllGenders();
@@ -508,7 +507,6 @@ app.controller(
 											self.insurances = getAllInsurances();
 											self.planTypes = getAllPlanTypes();
 											self.display = true;
-									 }, { priority: -1 });
 								}
 
 							}
@@ -728,8 +726,17 @@ app.controller(
 
 							function leadEdit(id){
 								var params = {'leadDisplay':true};
-								var trans =  $state.go('main.lead.edit',{},{reload:'main.lead.edit'}).transition;
-								trans.onSuccess({}, function() { editLead(id); });
+								var trans =  $state.go('main.lead.edit',{},{reload:false}).transition;
+								
+								if(trans !== undefined){
+							        trans.onSuccess({}, function() {
+							          editLead(id);
+							        }, {
+							          priority: -1
+							        });
+								}else{
+									editLead(id);
+								}
 							}
 
 							function clearFiles(){

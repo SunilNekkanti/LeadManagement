@@ -9,7 +9,9 @@ server:
   compression:
      enabled: true
      mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
-  
+  session:
+        cookie:
+            http-only: true  
 ---
 
 spring:
@@ -36,7 +38,6 @@ email:
  
 ---      
 
-management.security.enabled: false 
 
 spring:
   http:
@@ -93,6 +94,8 @@ envProperties:
                       
 spring:
   profiles: server
+  jackson:
+      serialization.indent_output: false
   jpa:
     open-in-view: false
     properties:

@@ -1,7 +1,7 @@
 (function() {
   'use strict';
   var app = angular.module('my-app', ['ngCookies','moment-picker','datatables','ui.bootstrap', 'datatables.light-columnfilter', 'datatables.fixedheader',  'datatables.bootstrap', 'datatables.colreorder', 'datatables.fixedheader', 'datatables.buttons', 'datatables.fixedcolumns', 'ui.router', 'ngStorage', 'ngAnimate', 'ngSanitize', 'btorfs.multiselect', 'oc.lazyLoad', 'ui.select', 'chart.js']);
-  app.config(['ChartJsProvider', function(ChartJsProvider) {
+  app.config(['ChartJsProvider','momentPickerProvider', function(ChartJsProvider,momentPickerProvider) {
     // Configure all charts
     ChartJsProvider.setOptions({
       chartColors: ['#46BFBD', '#00ADF9', '#DCDCDC', '#FDB45C', '#FF5252', '#949FB1', '#4D5360', '#FF8A80']
@@ -10,10 +10,8 @@
     ChartJsProvider.setOptions('line', {
       showLines: true
     });
-  }]);
-  
-  app.config(['momentPickerProvider', function (momentPickerProvider) {
-        momentPickerProvider.options({
+    
+    momentPickerProvider.options({
             /* Picker properties */
             locale:        'en',
             format:        'L LTS',
@@ -36,7 +34,10 @@
             minutesStep:   30,
             secondsStep:   1
         });
-    }]);
+        
+  }]);
+  
+ 
 
   app.constant('urls', {
     BASE: '/LeadManagement/',

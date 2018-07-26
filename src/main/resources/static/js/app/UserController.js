@@ -44,7 +44,7 @@ app.controller('UserController',
             DTColumnBuilder.newColumn('name').withTitle('USERNAME').renderWith(
 					function(data, type, full,
 							meta) {
-						 return '<a href="javascript:void(0)" class="'+full.id+'" ng-click="ctrl.userEdit('+full.id+')">'+data+'</a>';
+						 return '<a href="javascript:void(0)" class="'+full.id+'" ng-click="ctrl.editUser('+full.id+')">'+data+'</a>';
 					}).withClass("text-left"),
             DTColumnBuilder.newColumn('role.role').withTitle('ROLE').withOption('defaultContent', ''),
             DTColumnBuilder.newColumn('contact.mobilePhone').withTitle('MOBILE').renderWith( 
@@ -271,18 +271,14 @@ app.controller('UserController',
         }
        
         function addUser() {
-        	var params = {'userDisplay':true};
-			var trans =  $state.go('main.user.edit',params).transition;
-			trans.onSuccess({}, function() { 
-				   self.successMessage='';
-		            self.errorMessage='';
-		            self.languages = getAllLanguages();
-		            self.roles = getAllRoles();
-		            self.counties = getAllCounties();
-		            self.insurances = getAllInsurances();
-		            self.states = getAllStates();
-		            self.display =true;
-			}, { priority: -1 });
+		   self.successMessage='';
+            self.errorMessage='';
+            self.languages = getAllLanguages();
+            self.roles = getAllRoles();
+            self.counties = getAllCounties();
+            self.insurances = getAllInsurances();
+            self.states = getAllStates();
+            self.display =true;
 			
          
         }

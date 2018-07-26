@@ -288,13 +288,11 @@ app.controller(
 							function addEvent() {
 								self.successMessage = '';
 								self.errorMessage = '';
-								var trans =  $state.go('main.event.edit').transition;
-								trans.onSuccess({}, function() {
-									self.users = getAllAgents();
-									self.states = getAllStates();
-									self.facilityTypes = getAllFacilityTypes();
-									self.display = true;
-								});
+								var trans =  $state.go('main.event.edit',{},{reload:'main.event.edit'}).transition;
+					            self.users = getAllAgents();
+								self.states = getAllStates();
+								self.facilityTypes = getAllFacilityTypes();
+								self.display = true;
 							}
 
 							function reset() {
@@ -396,12 +394,9 @@ app.controller(
 
 							
 							function eventEdit(id){
-							//	var params = {"id":id,"eventDisplay":true};
-								var trans =  $state.go('main.event.edit').transition;
-								trans.onSuccess({}, function() {
+								var trans =  $state.go('main.event.edit', {} ,{reload:'main.event.edit'}).transition;
+							     editEvent(id);
 								
-								editEvent(id);
-								});
 							}
 							
 							function addLead( ){

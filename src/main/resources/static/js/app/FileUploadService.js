@@ -55,9 +55,8 @@ var app = angular.module('my-app');
             
              
             var deffered = $q.defer();
-             		
             $http.post(urls.FILE_UPLOADER, fileFormData, {
-                transformRequest: angular.identity,
+             //   transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
 
             }).success(function (response) {
