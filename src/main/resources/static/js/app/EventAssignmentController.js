@@ -54,7 +54,7 @@
           self.removeEventAssignment = removeEventAssignment;
           self.editEventAssignment = editEventAssignment;
           self.updateEventTimes = updateEventTimes;
-          self.getAllAgents = getAllAgents;
+          self.getAllNonAgents = getAllNonAgents;
           self.getAllEvents = getAllEvents;
           self.getAllEventWeekNumbers = getAllEventWeekNumbers;
           self.getAllEventMonths = getAllEventMonths;
@@ -293,7 +293,7 @@
 
             self.successMessage = '';
             self.errorMessage = '';
-            self.users = getAllAgents();
+            self.users = getAllNonAgents();
             self.events = getAllEvents();
             self.eventAssignmentMonths = getAllEventMonths();
             self.eventAssignmentOnWeekDays = getAllEventWeekDays();
@@ -323,7 +323,7 @@
             $state.go('main.eventAssignment.edit', {}, {reload:false});
             self.successMessage = '';
             self.errorMessage = '';
-            self.users = getAllAgents();
+            self.users = getAllNonAgents();
             self.events = getAllEvents();
             self.eventAssignmentMonths = getAllEventMonths();
             self.eventAssignmentMonth = self.eventAssignmentMonths[0];
@@ -541,9 +541,9 @@
             return EventAssignmentService.getAllEventAssignments();
           }
 
-          function getAllAgents() {
+          function getAllNonAgents() {
             return UserService
-              .getAllUsers();
+              .getAllUsers().filter(function(user){ return user.role.role != 'AGENT' });
           }
 
           function getAllEvents() {

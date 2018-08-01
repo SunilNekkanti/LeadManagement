@@ -307,8 +307,21 @@ public class LeadController {
 		
 		if( agntLeadAppointList.size() > 0)  {
 			
-				String toEmailIds = agntLeadAppointList.stream().map(la -> la.getUser().getContact().getEmail())
-						.collect(Collectors.joining(";"));
+				StringBuffer sbtoEmailId = new StringBuffer();
+						
+				sbtoEmailId.append(agntLeadAppointList.stream().map(la -> la.getUser().getContact().getEmail())
+						.collect(Collectors.joining(";")));
+				if(currentLeadMembership.getEvent() != null && currentLeadMembership.getEvent().getEventAssignments()!= null )
+				currentLeadMembership.getEvent().getEventAssignments().forEach(  ea -> 
+					{
+						sbtoEmailId.append(
+						 ea.getRepresentatives().parallelStream().map(rep -> rep.getContact().getEmail()).collect(Collectors.joining(";"))
+						 );
+					}
+				 );
+				String toEmailIds = sbtoEmailId.toString();
+						
+				
 				AgentLeadAppointment agntLeadAppointment = agntLeadAppointList.stream()
 						.filter(ala -> ala.getActiveInd() == 'Y').findAny().get();
 				
