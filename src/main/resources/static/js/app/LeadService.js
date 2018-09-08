@@ -142,7 +142,7 @@ app.service('LeadService',
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
-                            console.error('Error while updating Lead with id :'+id);
+                            console.error('Error while updating Lead with id :'+id+ ':',errResponse);
                             deferred.reject(errResponse);
                         }
                     );

@@ -4,13 +4,17 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -19,6 +23,7 @@ import javax.mail.MessagingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -85,7 +90,7 @@ public class LeadController {
 
 	// -------------------Retrieve All
 	// LeadMemberships---------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
+//	@Secured({ "ROLE_ADMIN", "ROLE_AGENT", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/lead/", method = RequestMethod.GET)
 	public ResponseEntity<Page<LeadMembership>> listAllLeadMemberships(
 			@PageableDefault(page=0 ,size=100) Pageable pageRequest,
@@ -130,7 +135,7 @@ public class LeadController {
 
 	// -------------------Create a
 	// LeadMembership-------------------------------------------
-	@Secured({ "ROLE_ADMIN", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
+//	@Secured({ "ROLE_ADMIN", "ROLE_CARE_COORDINATOR", "ROLE_MANAGER","ROLE_EVENT_COORDINATOR" })
 	@RequestMapping(value = "/lead/", method = RequestMethod.POST)
 	public ResponseEntity<?> createLeadMembership(@RequestBody LeadMembership lead, UriComponentsBuilder ucBuilder,
 			@ModelAttribute("userId") Integer userId, 
@@ -167,7 +172,6 @@ public class LeadController {
         
 		lead.setLeadNotes(leadNotes);
 		leadService.saveLeadMembership(lead);
-		
 		SimpleDateFormat sdf1 = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
 		String currentLocalTime = sdf1.format((new Date()).getTime());
 		
@@ -244,7 +248,20 @@ public class LeadController {
 		currentLeadMembership.setEvent(lead.getEvent());
         
 		List<LeadNotes> leadNotes = new ArrayList<>();
-		if (lead.getLeadNotes() != null) {
+		List<LeadNotes> instLeadNotes = lead.getLeadNotes();
+		Optional.ofNullable(instLeadNotes)
+        .orElseGet(Collections::emptyList)
+        .parallelStream().filter(Objects::nonNull).filter(ln -> !"".equals(ln.getNotes().trim())).forEach(ln -> {
+				ln.setLead(currentLeadMembership);
+				leadNotes.add(ln);
+        });
+		
+		 currentUserLeadNotes =  Optional.ofNullable(instLeadNotes)
+        .orElseGet(Collections::emptyList)
+        .parallelStream().filter(ln ->   ln.getUser().getId().intValue() == userId.intValue()).map(LeadNotes::getNotes) 
+        .toArray(String[]::new).toString();
+        
+		/*if (lead.getLeadNotes() != null) {
 			for (LeadNotes ln : lead.getLeadNotes()) {
 				if (!"".equals(ln.getNotes().trim())) {
 					 if(ln.getUser().getId().intValue() == userId.intValue()){
@@ -254,7 +271,7 @@ public class LeadController {
 					leadNotes.add(ln);
 				}
 			}
-		}
+		}*/
 
 		if (leadNotes.size() > 0) {
 			currentLeadMembership.getLeadNotes().clear();
@@ -266,12 +283,18 @@ public class LeadController {
 		if (!"New".equalsIgnoreCase(lead.getStatus().getDescription())) {
 			  agntLeadAppointList = lead.getAgentLeadAppointmentList();
 			currentLeadMembership.getAgentLeadAppointmentList().clear();
-			//currentLeadMembership.getAgentLeadAppointmentList().addAll(agntLeadAppointList);
-			for (AgentLeadAppointment ala : agntLeadAppointList) {
+			Optional.ofNullable(agntLeadAppointList)
+	        .orElseGet(Collections::emptyList)
+	        .parallelStream().forEach(ala -> {
+	        	ala.setLead(currentLeadMembership);
+				finalAgentLeadAppointList.add(ala);
+	        });
+			
+			/*for (AgentLeadAppointment ala : agntLeadAppointList) {
 			
 					ala.setLead(currentLeadMembership);
 					finalAgentLeadAppointList.add(ala);
-			}
+			}*/
 			if (finalAgentLeadAppointList.size() > 0) {
 				currentLeadMembership.getAgentLeadAppointmentList().clear();
 				currentLeadMembership.getAgentLeadAppointmentList().addAll(finalAgentLeadAppointList);
@@ -279,9 +302,15 @@ public class LeadController {
 			
 		}
 
-
+        try {
 		leadService.updateLeadMembership(currentLeadMembership);
-
+        }catch(DataIntegrityViolationException e){
+        	logger.error("Unable to update. LeadMembership with id {} not found.", id);
+			return new ResponseEntity(
+					new CustomErrorType( "pls change appointment time in agent section"),
+					HttpStatus.NOT_FOUND);
+        }
+		
 		Calendar cal = Calendar.getInstance();
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
@@ -355,6 +384,7 @@ public class LeadController {
 					emailAttributes.put("notes", currentUserLeadNotes);					
 					emailAttributes.put("appointmentLocalTime", appointmentLocalTime);
 					emailAttributes.put("attachmentKey", attachmentKey);
+					emailAttributes.put("uid", agntLeadAppointment.getId()+"agentAssignment@pfchoice.com");
 					
 					Set<FileUploadContent> leadConsentForms = new HashSet<>();
 					FileUpload  fileupload = currentLeadMembership.getFileUpload();
@@ -389,8 +419,15 @@ public class LeadController {
 					mail.setModel(emailAttributes);
 					mail.setSubject("Updated Lead details for "+currentLeadMembership.getLastName()+","+currentLeadMembership.getFirstName());
 					mail.setEmailTo(toEmailIds);
+					try {
+						emailService.sendMail(mail);
+				        }catch(Exception e){
+				        	logger.error("Unable to send email for lead Membership with id", id);
+							return new ResponseEntity(
+									new CustomErrorType( e.getMessage()),
+									HttpStatus.NOT_FOUND);
+				        }
 					
-					emailService.sendMail(mail);
 				}
 				
 		} else {
@@ -404,7 +441,14 @@ public class LeadController {
 			mail.setSubject("Updated Lead details for "+currentLeadMembership.getLastName()+","+currentLeadMembership.getFirstName());
 			mail.setEmailTo(toEmailIds);
 			
-			emailService.sendMail(mail);
+			try {
+				emailService.sendMail(mail);
+		        }catch(Exception e){
+		        	logger.error("Unable to send email for lead Membership with id", id);
+					return new ResponseEntity(
+							new CustomErrorType( e.getMessage()),
+							HttpStatus.NOT_FOUND);
+		        }
 		}
 
 		return new ResponseEntity<LeadMembership>(currentLeadMembership, HttpStatus.OK);
@@ -508,6 +552,7 @@ public class LeadController {
 					emailAttributes.put("notes", currentUserLeadNotes);					
 					emailAttributes.put("appointmentLocalTime", appointmentLocalTime);
 					emailAttributes.put("attachmentKey", attachmentKey);
+					emailAttributes.put("uid", agntLeadAppointment.getId()+"agentAssignment@pfchoice.com");
 					
 					Set<FileUploadContent> leadConsentForms = new HashSet<>();
 					FileUpload  fileupload = currentLeadMembership.getFileUpload();

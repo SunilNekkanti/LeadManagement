@@ -81,6 +81,11 @@ public class AgentLeadAppointment extends RecordDetails implements Serializable 
 	@JsonDeserialize(using = JsonDateDeserializer.class)
 	@Column(name = "effective_from")
 	private Date effectiveFrom;
+	
+	@JsonSerialize(using = JsonDateSerializer.class)
+	@JsonDeserialize(using = JsonDateDeserializer.class)
+	@Column(name = "effective_to")
+	private Date effectiveTo;
 
 	@Column(name = "transportation", insertable = false)
 	private Character transportation = new Character('N');

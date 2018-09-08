@@ -2,7 +2,9 @@ package com.pfchoice.springboot.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -152,7 +154,35 @@ public class FileUploadContentController {
 		List<FileUploadContent> fileUploadContenters = new ArrayList<>();
 		List<FileUpload> fileUploaders = new ArrayList<>();
 
-		for (MultipartFile fileUploadContent : files) {
+		Stream<MultipartFile> filesList = Arrays.stream(files);
+		filesList.parallel().forEach(fileUploadContent -> {
+			logger.info("fileUploadContent.getOriginalFilename() :" + fileUploadContent.getOriginalFilename());
+			if (fileUploadContent != null && !"".equals(fileUploadContent.getOriginalFilename())) {
+
+				String fileName = fileUploadContent.getOriginalFilename();
+
+				try {
+					logger.info("fileName is : " + fileName);
+					FileUploadContent fileUploadContenter = new FileUploadContent();
+					fileUploadContenter.setFileName(fileName);
+					fileUploadContenter.setContentType(fileUploadContent.getContentType());
+					fileUploadContenter.setData(fileUploadContent.getBytes());
+					fileUploadContentService.saveFileUploadContent(fileUploadContenter);
+					
+					FileUpload fileupload = new FileUpload();
+					fileupload.setId(fileUploadContenter.getId());
+					fileupload.setFileName(fileUploadContenter.getFileName());
+					fileupload.setContentType(fileUploadContenter.getContentType());
+					fileUploaders.add(fileupload);
+					fileUploadContenters.add(fileUploadContenter);
+
+				} catch (IOException e) {
+					logger.warn(e.getCause().getMessage());
+				}
+			}
+
+		} );
+/*		for (MultipartFile fileUploadContent : files) {
 			logger.info("fileUploadContent.getOriginalFilename() :" + fileUploadContent.getOriginalFilename());
 			if (fileUploadContent != null && !"".equals(fileUploadContent.getOriginalFilename())) {
 
@@ -179,7 +209,7 @@ public class FileUploadContentController {
 				}
 
 			}
-		}
+		}*/
 		return fileUploaders;
 
 	}

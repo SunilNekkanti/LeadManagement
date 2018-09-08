@@ -15,18 +15,18 @@ server:
 ---
 
 spring:
-    profiles: serveremail
-email: 
-     host: smtpout.secureserver.net
-     port: 3535
-     username: leadmanagement@infocusonline.net
-     cc: leadmanagement@infocusonline.net
-     password: pfc20!7
-     properties: 
-        mail.smtp.auth: true 
-        mail.smtp.starttls.enable: true
-        mail.transport.protocol: smtp
-        mail.debug: false
+  profiles: serveremail
+  mail: 
+    host: smtpout.secureserver.net
+    port: 3535
+    username: leadmanagement@infocusonline.net
+    cc: leadmanagement@infocusonline.net
+    password: pfc20!7
+    properties: 
+      mail.smtp.auth: true 
+      mail.smtp.starttls.enable: true
+      mail.transport.protocol: smtp
+      mail.debug: false
 --- 
 
  logging:

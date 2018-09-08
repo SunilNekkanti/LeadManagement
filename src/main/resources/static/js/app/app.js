@@ -67,7 +67,7 @@
     STATUS_REPORT_SERVICE_API: '/LeadManagement/api/statusReport/'
   });
 
-  app.run(function($rootScope, $state) {
+  app.run(function($rootScope, $state, $localStorage) {
     $rootScope.$state = $state;
     var lastDigestRun = new Date();
 

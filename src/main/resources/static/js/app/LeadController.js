@@ -395,8 +395,8 @@ app.controller(
 												function(errResponse) {
 													console
 															.error('Error while updating Lead');
-													self.errorMessage = 'Error while updating Lead '
-															+ errResponse.data;
+													self.errorMessage = 'Error while updating Lead: '
+															+ errResponse.data.errorMessage;
 													self.successMessage = '';
 												});
 							}
@@ -420,7 +420,7 @@ app.controller(
 															.error('Error while removing lead '
 																	+ id
 																	+ ', Error :'
-																	+ errResponse.data);
+																	+ errResponse.data.error);
 												});
 							}
 							function editLead(id) {
@@ -594,7 +594,11 @@ app.controller(
 						        }
 
 						    function showAgentAssignment(){
-						    	if(   $localStorage.loginUser.roleName != 'EVENT_COORDINATOR'){
+						    
+						    	if(   (self.lead.status &&
+						    	 (self.lead.status.description === 'Agent' || self.lead.status.description === 'Converted' || self.lead.status.description === 'Disenrolled')
+						    	 || self.lead.agentLeadAppointmentList.length > 0
+						    	 ) ){
 						    		return true;
 						    	}else{
 						    		return false;
@@ -646,7 +650,7 @@ app.controller(
 						    }
 
 						    function showStatusChangeDetails(){
-						    	if( self.lead.status && self.lead.status.description == 'Converted'){
+						    	if( self.lead.status && (self.lead.status.description == 'Converted' || self.lead.status.description == 'Disenrolled')){
 						    		return true;
 						    	}else{
 						    		return false;

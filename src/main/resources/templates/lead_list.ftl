@@ -28,7 +28,7 @@
           <div class="panel panel-success">
             <div class="panel-heading">Source</div>
             <div class="panel-body">
-              <div class="row">
+              <div class="row-fluid">
                 <div class="col-sm-6">
                   <div class="form-group col-sm-12">
                     <label for="agentEvent">Event </label>
@@ -61,7 +61,7 @@
           <div class="panel panel-success">
             <div class="panel-heading">Lead Info</div>
             <div class="panel-body">
-              <div class="row">
+              <div class="row-fluid">
                 <div class="col-sm-6">
                   <div class="form-group col-sm-12">
                     <label for="firstName"> First Name </label>
@@ -86,7 +86,7 @@
                 </div>
               </div>
 
-              <div class="row">
+              <div class="row-fluid">
                 <div class="col-sm-6">
                   <div class="form-group col-sm-12">
                     <label for="gender">Gender</label>
@@ -111,7 +111,7 @@
                 </div>
               </div>
 
-              <div class="row">
+              <div class="row-fluid">
                 <div class="col-sm-6">
                   <div class="form-group col-sm-12">
                     <label for="planType">Plan Type</label>
@@ -134,7 +134,7 @@
                 </div>
               </div>
 
-              <div class="row">
+              <div class="row-fluid">
                 <div class="col-sm-6">
                   <div class="form-group col-sm-12">
                     <label for="language">Language</label>
@@ -169,7 +169,7 @@
             <div class="panel-heading">Contact Info</div>
             <div class="panel-body">
 
-              <div class="row">
+              <div class="row-fluid">
                 <div class="col-sm-6">
                   <div class="form-group col-sm-12">
                     <label for="address1">Address 1</label>
@@ -189,7 +189,7 @@
                 </div>
               </div>
 
-              <div class="row">
+              <div class="row-fluid">
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
                     <label for="	Last Name "> City / State / Zip</label>
@@ -224,7 +224,7 @@
               </div>
 
 		 
-              <div class="row">
+              <div class="row-fluid">
                 <div class="col-sm-6">
                   <div class="form-group col-sm-12">
                     <label for="homePhone">Home Phone</label>
@@ -244,7 +244,7 @@
 
               </div>
 
-              <div class="row">
+              <div class="row-fluid">
                 <div class="col-sm-6">
                   <div class="form-group col-sm-12">
                     <label for="bestTimeToCall">Best Time to Call</label>
@@ -277,7 +277,7 @@
           <div class="panel panel-success">
             <div class="panel-heading">Additional Details</div>
             <div class="panel-body">
-              <div class="row col-md-6">
+              <div class="row-fluid col-md-6">
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
                     <label for="agree consent form">Agree Consent Form </label>
@@ -297,11 +297,14 @@
               </div>
               
               
-              <div class="row col-md-6" ng-if="(ctrl.loginUserRole === 'EVENT_COORDINATOR'  || !((ctrl.lead.status && ctrl.lead.status.description === 'Agent') ||ctrl.lead.agentLeadAppointmentList.length > 0))">
+              <div class="row-fluid col-md-6" ng-if="(ctrl.loginUserRole === 'EVENT_COORDINATOR'  || !((ctrl.lead.status && ctrl.lead.status.description === 'Agent') ||ctrl.lead.agentLeadAppointmentList.length > 0))">
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
                     <label for="leadcreation">Notes </label>
-                    <textarea name="leadcreationnotes" class="form-control" id="notes" ng-model="ctrl.notes"></textarea>
+                     <div class="has-error" ng-show="myForm.$dirty">
+                      <span ng-show="myForm.leadcreationnotes.$error.required">This is a required field</span>
+                    </div>       
+                    <textarea name="leadcreationnotes" class="form-control" id="notes" ng-model="ctrl.notes" required></textarea>
                     <textarea name="leadcreationnoteshistory" disabled class="form-control" id="notes" ng-model="ctrl.lead.notesHistory"></textarea>
                   </div>
                 </div>
@@ -310,47 +313,50 @@
           </div>
         </div>
         
-    <div class="col-sm-12 agentInfo"  ng-show="(ctrl.lead.status && (ctrl.lead.status.description == 'Agent' || ctrl.lead.status.description == 'Converted'))||ctrl.lead.agentLeadAppointmentList.length > 0 ">
+ 
+    <div class="col-sm-12 agentInfo"  ng-if="ctrl.showAgentAssignment()">
           <div class="panel panel-success">
             <div class="panel-heading">Agent Assignment</div>
             <div class="panel-body">
-              <div class="row col-md-6">
-                <div class="col-sm-12">
+            
+              <div class="row-fluid col-md-6">
+                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
-                    <label for="	First Name ">Agent Name</label>
-                    <select ng-model="ctrl.selectedAgentLeadAppointment.user"  name="agentAssignment" ng-disabled="ctrl.loginUserRole === 'AGENT'"  class="form-control" ng-options="(agent.name + '('+agent.role.role+ ')') for agent in ctrl.users  | orderBy:'name'  track by agent.name"   ng-required="ctrl.lead.status.description=='Agent'">
-                      <option></option>
-                    </select>
-                    	<div class="has-error" ng-show="myForm.$dirty">
-                         <span ng-show="myForm.agentAssignment.$error.required">This is a required field</span>
-                      </div>
+                    <label for="agentAssignment">Agent Name</label>
+                     <select class="form-control" name="agentAssignment" ng-model="ctrl.selectedAgentLeadAppointment.user" ng-options="(agent.name + '('+agent.role.role+ ')') for agent in ctrl.users  | orderBy:'name'  track by agent.id"  required="(ctrl.lead.status.description=='Agent' || ctrl.lead.status.description=='Converted' || ctrl.lead.status.description=='Disenrolled')">
+                     </select>
+                      <div class="has-error" ng-show="myForm.$dirty">
+                      <span ng-show="myForm.agentAssignment.$error.required">This is a required field</span>
+                    </div>   
                   </div>
-                </div>
+                  </div> 
 
-                <div class="col-sm-12">
+                  <div class="col-sm-12">
                   <div class="form-group col-sm-12">
                     <label for="appointmentnotes">Appointment </label>
-                     <div class="input-group date" id="appointment" name="appointmentTime" ng-model="ctrl.selectedAgentLeadAppointment.appointmentTime" ng-required="ctrl.lead.status.description=='Agent'" name="appointmentTime" date-picker >
-                      <input type="datetime" class="form-control netto-input" ng-model="ctrl.selectedAgentLeadAppointment.appointmentTime" date-picker-input>
+                     <div class="input-group date"  id="appointment"   ng-model="ctrl.selectedAgentLeadAppointment.appointmentTime" date-picker >
+                      <input type="datetime" class="form-control netto-input" ng-model="ctrl.selectedAgentLeadAppointment.appointmentTime" date-picker-input  ng-required="ctrl.showAgentAssignment()" name="appointmentTime">
                       <span class="input-group-addon">
 		           								<span class="glyphicon glyphicon-calendar"></span>
                       </span>
-                       <div class="has-error" ng-show="myForm.$dirty">
+                     </div>
+                     <div class="has-error" ng-show="myForm.$dirty">
                         <span ng-show="myForm.appointmentTime.$invalid">This field is invalid </span>
                          <span ng-show="myForm.appointmentTime.$error.required">This is a required field</span>
                       </div>
-                    </div>
-                    
                   </div>
-                </div>
+              </div>
               </div>
 
-              <div class="row col-md-6" ng-if="ctrl.loginUserRole !== 'AGENT'">
+              <div class="row-fluid col-md-6" ng-if="ctrl.loginUserRole !== 'AGENT'">
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
                     <label for="	Last Name ">Notes </label>
-                    <textarea name="notes" class="form-control" id="notes" ng-model="ctrl.notes"></textarea>
-                    <textarea name="notes" disabled class="form-control" id="notes" ng-model="ctrl.lead.notesHistory"></textarea>
+                     <div class="has-error" ng-show="myForm.$dirty">
+                      <span ng-show="myForm.notes1.$error.required">This is a required field</span>
+                    </div>       
+                    <textarea name="notes" class="form-control" id="notes" ng-model="ctrl.notes"  required ></textarea>
+                    <textarea name="notes1" disabled class="form-control" id="notes1" ng-model="ctrl.lead.notesHistory"></textarea>
                   </div>
                 </div>
               </div>
@@ -362,7 +368,7 @@
           <div class="panel panel-success">
             <div class="panel-heading">Status</div>
             <div class="panel-body">
-            	<div class="row">
+            	<div class="row-fluid">
                 	<div class="col-sm-6">
                   		<div class="form-group col-sm-12">
                   			<label class="control-label" for="selectbasic">Status</label>
@@ -386,9 +392,12 @@
                		
                		<div class="col-sm-6" ng-if="ctrl.showStatusNotes()">
                   		<div class="form-group col-sm-12">
+                  		 	<div class="has-error" ng-show="myForm.$dirty">
+                      			<span ng-show="myForm.notes.$error.required">This is a required field</span>
+                   			 </div>       
                   			 <label class="control-label" for="statusNotes">Notes</label>	
-                  			 <textarea name="notes" class="form-control" id="notes" ng-model="ctrl.notes" ></textarea>
-                    		 <textarea name="notes" disabled class="form-control" id="notes" ng-model="ctrl.lead.notesHistory"></textarea>	
+                  			 <textarea name="notes" class="form-control" id="notes" ng-model="ctrl.notes" required></textarea>
+                    		 <textarea name="notes1" disabled class="form-control" id="notes1" ng-model="ctrl.lead.notesHistory"></textarea>	
                   		</div>
                		</div> 
                		
@@ -405,36 +414,65 @@
             <div class="panel-heading">PCP Details</div>
             <div class="panel-body">
 
-
-              <div class="row">
-                <div class="col-sm-4">
+              <div class="row-fluid">
+                <div class="col-sm-3">
                   <div class="form-group col-sm-12">
                     <label for="PCP">PCP </label>
-                    <select class="form-control" ng-model="ctrl.selectedAgentLeadAppointment.prvdr" ng-options="prvdr.name for prvdr in ctrl.providers | orderBy:'name' track by prvdr.name" required="ctrl.lead.status.id && ctrl.lead.status.id == 2"></select>
+                    <select class="form-control" name="pcp" ng-model="ctrl.selectedAgentLeadAppointment.prvdr" ng-options="prvdr.name for prvdr in ctrl.providers | orderBy:'name' track by prvdr.name" required="ctrl.lead.status.id && ctrl.lead.status.id == 2"></select>
+                      <div class="has-error" ng-show="myForm.$dirty">
+                      <span ng-show="myForm.pcp.$error.required">This is a required field</span>
+                    </div>                    
                   </div>
                 </div>
 
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                   <div class="form-group col-sm-12">
 
                     <label for="effectiveDate">Effective From</label>
                     <div class="input-group date" ng-model="ctrl.selectedAgentLeadAppointment.effectiveFrom" date1-picker>
-                      <input type="text" class="form-control netto-input" ng-model="ctrl.selectedAgentLeadAppointment.effectiveFrom" date-picker-input required="ctrl.lead.status.id && ctrl.lead.status.id == 2">
+                      <input type="text" name="effectiveFrom" class="form-control netto-input" ng-model="ctrl.selectedAgentLeadAppointment.effectiveFrom" date-picker-input  ng-required="ctrl.showStatusChangeDetails()">
                       <span class="input-group-addon">
 			           							<span class="glyphicon glyphicon-calendar"></span>
                       </span>
                     </div>
+                    <div class="has-error" ng-show="myForm.$dirty">
+                      <span ng-show="myForm.effectiveFrom.$error.required">This is a required field</span>
+                    </div> 
                   </div>
                 </div>
-                <div class="col-sm-4">
+                
+                <div class="col-sm-3" ng-if="ctrl.lead.status.description == 'Disenrolled'">
+                  <div class="form-group col-sm-12">
+
+                    <label for="effectiveDate">Effective To</label>
+                    <div class="input-group date" ng-model="ctrl.selectedAgentLeadAppointment.effectiveTo" date1-picker>
+                      <input type="text" name="effectiveTo" class="form-control netto-input" ng-model="ctrl.selectedAgentLeadAppointment.effectiveTo" date-picker-input  ng-required="ctrl.showStatusChangeDetails() &&   ctrl.lead.status.description == 'Disenrolled'">
+                      <span class="input-group-addon">
+			           							<span class="glyphicon glyphicon-calendar"></span>
+                      </span>
+                    </div>
+                    <div class="has-error" ng-show="myForm.$dirty">
+                      <span ng-show="myForm.effectiveTo.$error.required">This is a required field</span>
+                    </div> 
+                  </div>
+                </div>
+                
+                <div class="col-sm-3">
                   <div class="form-group col-sm-12">
                     <label for="plan">Plan</label>
                       <div ng-if="(ctrl.loggedUserInsId == 0)">
-                      <select class=" form-control" ng-model="ctrl.selectedAgentLeadAppointment.insurance"  ng-options="insurance.name for insurance in ctrl.insurances | orderBy:'description' track by insurance.name"></select>
+                      <select name="plan"  class="form-control" ng-model="ctrl.selectedAgentLeadAppointment.insurance"  ng-options="insurance.name for insurance in ctrl.insurances | orderBy:'description' track by insurance.name"  required="ctrl.loggedUserInsId == 0" > 
+                       </select>
                       </div>
                       <div  ng-if="(ctrl.loggedUserInsId != 0)">
-                      <select class=" form-control" ng-model="ctrl.selectedAgentLeadAppointment.insurance" ng-init="ctrl.selectedAgentLeadAppointment.insurance = ctrl.selectedAgentLeadAppointment.insurance||(ctrl.insurances | orderBy:'description' | filter :{id:ctrl.loggedUserInsId})[0]"  ng-options="insurance.name for insurance in ctrl.insurances  | filter :{id:ctrl.loggedUserInsId} | orderBy:'description' track by insurance.name"></select>
+                      <select  name="plan" class="form-control" ng-model="ctrl.selectedAgentLeadAppointment.insurance" ng-init="ctrl.selectedAgentLeadAppointment.insurance = ctrl.selectedAgentLeadAppointment.insurance||(ctrl.insurances | orderBy:'description' | filter :{id:ctrl.loggedUserInsId})[0]" 
+                       ng-options="insurance.name for insurance in ctrl.insurances  | filter :{id:ctrl.loggedUserInsId} | orderBy:'description' track by insurance.name"  required="tctrl.loggedUserInsId != 0">
+                       </select>
                       </div>
+                      
+                       <div class="has-error" ng-show="myForm.$dirty">
+                      <span ng-show="myForm.plan.$error.required">This is a required field</span>
+                    </div> 
                     
                   </div>
                 </div>
@@ -446,11 +484,14 @@
 
           </div>
         </div>
+       
+         
             <span style="display:hidden" ng-show="flase">{{ ctrl.invalid = myForm.$inValid}}</span>
             <span style="display:hidden" ng-show="flase">{{ ctrl.pristine = myForm.$pristine}}</span>
-          <div class="row col-sm-12" style="padding-bottom:20px;">
+          <div class="row-fluid col-sm-12" style="padding-bottom:20px;">
+        
             <div class="form-actions floatCenter col-sm-offset-9">
-              <input type="submit" ng-dblclick="return" value="{{!ctrl.lead.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-xs" ng-disabled="ctrl.showAddorUpdateButton() || myForm.$pristine || myForm.$invalid "/>
+              <input type="submit" ng-dblclick="return" value="{{!ctrl.lead.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-xs" ng-disabled="(ctrl.showAddorUpdateButton() || myForm.$pristine || myForm.$invalid) "/>
               <button type="button" ng-click="ctrl.cancelEdit(); $event.preventDefault();" class="btn btn-warning btn-xs"    >Cancel</button>
               <button type="button" ng-click="ctrl.reset(); $event.preventDefault();" class="btn btn-warning btn-xs"  ng-if="!ctrl.lead.id"  ng-disabled="myForm.$pristine">Reset Form</button>
             </div>
@@ -461,7 +502,8 @@
     </div>
    </div>
 
-
+ 
+ 
 </div>
 
   

@@ -52,7 +52,9 @@
         DTColumnBuilder.newColumn('notes').withTitle('NOTES').withOption('sWidth','30%').withOption('defaultContent', '')
       ];
 
-
+      self.xls;
+     (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) ? self.xls = 'csv' : self.xls = 'excel';
+    
       self.dtOptions = DTOptionsBuilder.newOptions().withBootstrap()
         .withDisplayLength(500)
         .withDOM('ft')
@@ -72,6 +74,10 @@
             var sheet = xlsx.xl.worksheets['sheet1.xml'];
             $('row:first c', sheet).attr('s', '42');
           }
+         },
+         {
+            extend: 'csvHtml5',
+            text: 'Copy all data'
         }])
         .withFnServerData(serverData);
 

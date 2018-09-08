@@ -138,14 +138,13 @@ public class EventAssignmentController {
 				          .filter(s -> s != null && !s.isEmpty())
 				          .collect(Collectors.joining(","));
 		
-		Set<FileUpload> attachments = eventAssignment.getEvent().getAttachments();
+		Set<FileUpload> attachments = (eventAssignment.getEvent().getAttachments() != null)?eventAssignment.getEvent().getAttachments():new HashSet<>() ;
 		Set<FileUploadContent> attachmentContents = new HashSet<>();
-		if (attachments != null && !attachments.isEmpty()) {
-			for (FileUpload fileupload : attachments) {
-				FileUploadContent fileUploadContent = fileUploadContentService.findById(fileupload.getId());
-				attachmentContents.add(fileUploadContent);
-			}
-		}
+		attachments.parallelStream().forEach(fileupload -> {
+			FileUploadContent fileUploadContent = fileUploadContentService.findById(fileupload.getId());
+			attachmentContents.add(fileUploadContent);
+		} );	
+		
 		Email mail = new Email();
 		mail.setEmailTo(toEmailIds);
 		mail.setEmailFrom("leadmanagement@infocusonline.net");
@@ -167,6 +166,7 @@ public class EventAssignmentController {
 		emailAttributes.put("rrule", eventAssignment.getRepeatRule());
 		emailAttributes.put("location", address);
 		emailAttributes.put("attachments", attachmentContents);
+		emailAttributes.put("uid", eventAssignment.getId()+"eventAssignment@pfchoice.com");
 
 		mail.setModel(emailAttributes);
 		String emailTemplateFileName = "event_assignment_email_template.txt";
@@ -225,14 +225,13 @@ public class EventAssignmentController {
 		String address=  Stream.of(cnt.getAddress1(), cnt.getAddress2(), cnt.getCity(), cnt.getStateCode().getShortName(), cnt.getZipCode().toString())
 				          .filter(s -> s != null && !s.isEmpty())
 				          .collect(Collectors.joining(","));
-		Set<FileUpload> attachments = eventAssignment.getEvent().getAttachments();
+		Set<FileUpload> attachments = (eventAssignment.getEvent().getAttachments() != null)? eventAssignment.getEvent().getAttachments():new HashSet<>();
 		Set<FileUploadContent> attachmentContents = new HashSet<>();
-		if (attachments != null && !attachments.isEmpty()) {
-			for (FileUpload fileupload : attachments) {
-				FileUploadContent fileUploadContent = fileUploadContentService.findById(fileupload.getId());
-				attachmentContents.add(fileUploadContent);
-			}
-		}
+		
+		attachments.parallelStream().forEach( fileupload -> {
+			FileUploadContent fileUploadContent = fileUploadContentService.findById(fileupload.getId());
+			attachmentContents.add(fileUploadContent);
+		});
 		Email mail = new Email();
 		mail.setEmailTo(toEmailIds);
 		mail.setEmailFrom("leadmanagement@infocusonline.net");
@@ -258,7 +257,7 @@ public class EventAssignmentController {
 		emailAttributes.put("rrule", eventAssignment.getRepeatRule());
 		emailAttributes.put("location", address);
 		emailAttributes.put("attachments", attachmentContents);
-
+		emailAttributes.put("uid", eventAssignment.getId()+"eventAssignment@pfchoice.com");
 		mail.setModel(emailAttributes);
 		String emailTemplateFileName = "event_assignment_email_template.txt";
 

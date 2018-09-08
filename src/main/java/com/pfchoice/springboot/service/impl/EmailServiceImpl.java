@@ -2,6 +2,7 @@ package com.pfchoice.springboot.service.impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -108,10 +109,12 @@ public class EmailServiceImpl implements EmailService {
          String leadName = lastName+","+firstName;
          String eventName  = ("".equals(leadName) || ",".equals(leadName))? (emailAttributes.get("eventName") ==null)? "":emailAttributes.get("eventName").toString():leadName;
          String owner  = (emailAttributes.get("attachmentKey") ==null)? "":emailAttributes.get("attachmentKey").toString();
-         
+         String uid =  (emailAttributes.get("uid") !=null)? emailAttributes.get("uid").toString():"111111111";
 		String rrule = (emailAttributes.get("rrule") != null && !"".equals(emailAttributes.get("rrule")))
 				? "RRULE:" + emailAttributes.get("rrule").toString() + "\n" : "";
-		Set<FileUploadContent> attachments =  (Set<FileUploadContent>) emailAttributes.get("attachments");
+		Set<FileUploadContent> attachments =  ((Set<FileUploadContent>) emailAttributes.get("attachments") != null )?(Set<FileUploadContent>) emailAttributes.get("attachments"): new HashSet<FileUploadContent>() ;
+		
+		
 		 StringBuffer sb = new StringBuffer();
 
 		    StringBuffer buffer = sb.append(
@@ -143,7 +146,7 @@ public class EmailServiceImpl implements EmailService {
 		            + "LOCATION:"+location+"\n"
 		            + "TRANSP:OPAQUE\n"
 		            + "SEQUENCE:0\n"
-		            + "UID:"+currentTime+"@pfchoice.com\n"
+		            + "UID:"+uid+"\n"
 		            + rrule
 		            + "DTSTAMP:"+currentTime+"\n"
 		            + "CATEGORIES:Meeting\n"
@@ -170,56 +173,55 @@ public class EmailServiceImpl implements EmailService {
 			// Set text message part
 			multipart.addBodyPart(messageBodyPart);
 
-			if( attachments != null && attachments.size()> 0) {
+			attachments.parallelStream().forEach(fileUpload -> {
 				try {
-					for( FileUploadContent fileUpload: attachments) { 
-						BodyPart attachmentBodyPart = new MimeBodyPart();
-						attachmentBodyPart.setContent(mail.getBody(), "text/html");
+					BodyPart attachmentBodyPart = new MimeBodyPart();
+					attachmentBodyPart.setContent(mail.getBody(), "text/html");
+					
+					if(fileUpload.getFileName().contains(".pdf") || fileUpload.getFileName().contains(".jpg") || fileUpload.getFileName().contains(".jpeg") || fileUpload.getFileName().contains(".png")){
 						
-						if(fileUpload.getFileName().contains(".pdf") || fileUpload.getFileName().contains(".jpg") || fileUpload.getFileName().contains(".jpeg") || fileUpload.getFileName().contains(".png")){
-					    	
-								Document document = new Document(PageSize.A4);
-								ByteArrayOutputStream baos = new ByteArrayOutputStream();
-								ByteArrayOutputStream singedbaos = new ByteArrayOutputStream();
-								PdfReader reader;
-							    	
-							    	if(fileUpload.getFileName().contains(".jpg") || fileUpload.getFileName().contains(".jpeg") || fileUpload.getFileName().contains(".png")){
-							    		PdfWriter.getInstance(document, baos);
-								    	document.open();
-							    		 Image img =   Image.getInstance(fileUpload.getData());
-							    		 img.setAlignment(Image.ALIGN_LEFT);
-							    		 img.setAbsolutePosition(0f, 0f);
-							    		 img.scalePercent(40, 40);
-									     document.add(img);
-									     document.close();
-							    	}
-							       
-							   
-							    if(baos.size() > 1){
-							    	reader = new PdfReader(baos.toByteArray());
-							    }else{
-							    	reader = new PdfReader(fileUpload.getData());
-							    }
-							     
-						        PdfStamper stamper = new PdfStamper(reader, singedbaos);
-						        stamper.setEncryption(USER, owner.getBytes(),
-						            PdfWriter.ALLOW_PRINTING, PdfWriter.ENCRYPTION_AES_128 | PdfWriter.DO_NOT_ENCRYPT_METADATA);
-						        stamper.close();
-							    
-							    DataSource source = new ByteArrayDataSource(singedbaos.toByteArray(),"application/pdf");
-								attachmentBodyPart.setDataHandler(new DataHandler(source));
-						}else{
-							 DataSource source = new ByteArrayDataSource(fileUpload.getData() ,fileUpload.getContentType());
-							 attachmentBodyPart.setDataHandler(new DataHandler(source));
-						}
-						attachmentBodyPart.setFileName(fileUpload.getFileName());
-						multipart.addBodyPart(attachmentBodyPart);
+							Document document = new Document(PageSize.A4);
+							ByteArrayOutputStream baos = new ByteArrayOutputStream();
+							ByteArrayOutputStream singedbaos = new ByteArrayOutputStream();
+							PdfReader reader;
+						    	
+					    	if(fileUpload.getFileName().contains(".jpg") || fileUpload.getFileName().contains(".jpeg") || fileUpload.getFileName().contains(".png")){
+					    		PdfWriter.getInstance(document, baos);
+						    	document.open();
+					    		 Image img =   Image.getInstance(fileUpload.getData());
+					    		 img.setAlignment(Image.ALIGN_LEFT);
+					    		 img.setAbsolutePosition(0f, 0f);
+					    		 img.scalePercent(40, 40);
+							     document.add(img);
+							     document.close();
+					    	}
+						       
+						   
+						    if(baos.size() > 1){
+						    	reader = new PdfReader(baos.toByteArray());
+						    }else{
+						    	reader = new PdfReader(fileUpload.getData());
+						    }
+						    
+					        PdfStamper stamper = new PdfStamper(reader, singedbaos);
+					        stamper.setEncryption(USER, owner.getBytes(),
+					            PdfWriter.ALLOW_PRINTING, PdfWriter.ENCRYPTION_AES_128 | PdfWriter.DO_NOT_ENCRYPT_METADATA);
+					        stamper.close();
+						    
+						    
+						    DataSource source = new ByteArrayDataSource(singedbaos.toByteArray(),"application/pdf");
+							attachmentBodyPart.setDataHandler(new DataHandler(source));
+						
+					}else{
+						 DataSource source = new ByteArrayDataSource(fileUpload.getData() ,fileUpload.getContentType());
+						 attachmentBodyPart.setDataHandler(new DataHandler(source));
 					}
+					attachmentBodyPart.setFileName(fileUpload.getFileName());
+					multipart.addBodyPart(attachmentBodyPart);
 				}catch(Exception e){
 					e.printStackTrace();
-				}
-		
-			}
+				}	
+			});
 			
 			// file attachment
 			BodyPart calendarBodyPart = new MimeBodyPart();
