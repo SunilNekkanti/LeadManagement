@@ -10,8 +10,8 @@ server:
      enabled: true
      mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
   session:
-        cookie:
-            http-only: true  
+    cookie:
+      http-only: true  
 ---
 
 spring:

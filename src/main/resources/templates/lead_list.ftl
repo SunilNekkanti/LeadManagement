@@ -170,7 +170,7 @@
             <div class="panel-body">
 
               <div class="row-fluid">
-                <div class="col-sm-6">
+                <div class="col-sm-12">
                   <div class="form-group col-sm-12">
                     <label for="address1">Address 1</label>
                     <input type="text" ng-model="ctrl.lead.contact.address1" id="address1" name="address1" class="username form-control input-sm" placeholder="Enter Address" ng-required="!ctrl.lead.contact.homePhone" ng-minlength="6" ng-maxlength="100" />
@@ -179,12 +179,6 @@
                       <span ng-show="myForm.address1.$error.minlength">Minimum length required is 5</span>
                       <span ng-show="myForm.address1.$invalid">This field is invalid </span>
                     </div>
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group col-sm-12">
-                    <label for="addres2">Address 2</label>
-                    <input type="text" ng-model="ctrl.lead.contact.address2" id="addres2" class="username form-control input-sm" placeholder="Enter Address" ng-maxlength="10" />
                   </div>
                 </div>
               </div>
@@ -237,7 +231,7 @@
 
                 <div class="col-sm-6">
                   <div class="form-group col-sm-12">
-                    <label for="mobilePhone">Mobile Phone</label>
+                    <label for="mobilePhone">Emergency Contact #</label>
                     <input type="text" ng-model="ctrl.lead.contact.mobilePhone" id="mobilePhone" class="username form-control input-sm" placeholder="Enter Mobile phone" phone-input ng-minlength="10" />
                   </div>
                 </div>
@@ -297,7 +291,7 @@
               </div>
               
               
-              <div class="row-fluid col-md-6" ng-if="(ctrl.loginUserRole === 'EVENT_COORDINATOR'  || !((ctrl.lead.status && ctrl.lead.status.description === 'Agent') ||ctrl.lead.agentLeadAppointmentList.length > 0))">
+              <div class="row-fluid col-md-6" ng-if="(ctrl.loginUserRole == 'EVENT_COORDINATOR'  || !((ctrl.lead.status && ctrl.lead.status.description == 'Agent') ||ctrl.lead.agentLeadAppointmentList.length > 0))">
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
                     <label for="leadcreation">Notes </label>
@@ -348,15 +342,16 @@
               </div>
               </div>
 
-              <div class="row-fluid col-md-6" ng-if="ctrl.loginUserRole !== 'AGENT'">
+              <div class="row-fluid col-md-6" ng-if="ctrl.loginUserRole != 'AGENT'">
                 <div class="col-sm-12">
                   <div class="form-group col-sm-12">
                     <label for="	Last Name ">Notes </label>
                      <div class="has-error" ng-show="myForm.$dirty">
-                      <span ng-show="myForm.notes1.$error.required">This is a required field</span>
+                      <span ng-show="myForm.notes.$error.required">This is a required field</span>
                     </div>       
-                    <textarea name="notes" class="form-control" id="notes" ng-model="ctrl.notes"  required ></textarea>
-                    <textarea name="notes1" disabled class="form-control" id="notes1" ng-model="ctrl.lead.notesHistory"></textarea>
+                    <textarea name="notes" class="form-control" id="notess" ng-model="ctrl.notes"  required ></textarea>
+                    <textarea name="notes1" disabled class="form-control" id="notess1" ng-model="ctrl.lead.notesHistory"></textarea>
+                    
                   </div>
                 </div>
               </div>
